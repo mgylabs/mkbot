@@ -1,5 +1,5 @@
 # Discord Bot
-Discord Bot developed by Michael Kwon and Mycroft Kang
+Discord Bot developed by Michael Kwon and Mycroft Kang  
 API provided by: https://discordapp.com/developers/applications
 
 >  This project is managed by @MGYLBot.
@@ -8,6 +8,12 @@ API provided by: https://discordapp.com/developers/applications
 * TTS voices
 * Message Deleter
 * Chat Bot
+
+## Development Guide
+
+```
+pip install -r requirements.txt
+```
 
 ## How to Push into Master
 
