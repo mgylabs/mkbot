@@ -11,9 +11,21 @@ API provided by: https://discordapp.com/developers/applications
 
 ## Development Guide
 
+1. Enter the following command in terminal.
+
 ```
 pip install -r requirements.txt
 ```
+
+2. Make a `APIKey.py` at `src/` directory.
+
+```python
+# src/APIKey.py
+DISCORD_TOKEN = 'Your Bot TOKEN'
+```
+Do not push `APIKey.py`.
+
+For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
 ## How to Push into Master
 
