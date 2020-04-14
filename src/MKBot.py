@@ -1,22 +1,31 @@
 import discord
+from discord.ext import commands
 import asyncio
 from APIKey import DISCORD_TOKEN
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as', self.user)
+client = commands.Bot(command_prefix='??')
 
-    async def on_message(self, message):
-        # don't respond to ourselves
-        if message.author == self.user:
-            return
+@client.event
+async def on_ready():
+    print('Logged in')
 
-        print('{}: {}'.format(message.author, message.content))
+@client.command(pass_context = True)
+async def delete(ctx, amount):
+    channel = ctx.message.channel
+    messages = []
+
+    if type(amount) == int:
+        await channel.purge(limit=int(amount))
+        await channel.send('%d Messages deleted' %amount)
+        await asyncio.sleep(3)
+        await channel.purge(limit=1)
+    
+    elif amount == 'all':
+        async for message in channel.history(limit=200):
+            messages.append(message)
         
-        if message.content == 'ping':
-            await message.channel.send('pong')
-        elif message.content == 'Hello':
-            await message.channel.send('Hello, {}!'.format(message.author))
+        amount = len(messages)
+        await channel.purge(limit=amount)
+        await channel.send('%d Messages deleted' %amount) 
 
-client = MyClient()
 client.run(DISCORD_TOKEN)
