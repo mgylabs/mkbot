@@ -9,7 +9,13 @@ API provided by: https://discordapp.com/developers/applications
 * [x] Message Deleter
 * [ ] Chat Bot
 
+## Auto Deploy
+
+* `Merge Request`를 통해 master 브랜치로 병합되면, 소스코드가 **MK Bot(Server)** 운영서버로 자동 배포됩니다.
+
 ## Development Guide
+
+* 소스코드를 Test 할 목적으로 Bot을 실행하려면, **MK Bot(Dev)** 계정을 사용해야 합니다.
 
 1. Enter the following command in terminal.
 
@@ -27,8 +33,8 @@ Do not push `APIKey.py`.
 
 For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
-## How to Push into Dev
->  모든 변경사항은 새로운 브랜치를 만들어 push 한 뒤, Dev 브랜치로 Merge Request를 생성해야 합니다.
+## How to Push into master
+>  모든 변경사항은 새로운 브랜치를 만들어 push 한 뒤, master 브랜치로 Merge Request를 생성해야 합니다.
 
 1.  Create a new branch.
 2.  Push into the branch.

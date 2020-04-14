@@ -1,0 +1,19 @@
+stages:
+  - deploy
+
+before_script:
+  - git config --global user.email 'taet777@naver.com'
+  - git config --global user.name 'Mycroft Kang'
+
+production:
+  stage: deploy
+  script:
+  - echo "$API_KEY_PY" > "src/APIKey.py"
+  - git add -f src/APIKey.py
+  - git commit -m "Add APIKey"
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - master
