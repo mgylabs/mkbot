@@ -1,0 +1,7 @@
+DiscordBot/
+*.pyc
+
+APIKey.py
+test*
+
+.vscode/

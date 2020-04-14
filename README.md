@@ -1,5 +1,5 @@
 # Discord Bot
-Discord Bot developed by Michael Kwon and Mycroft Kang
+Discord Bot developed by Michael Kwon and Mycroft Kang  
 API provided by: https://discordapp.com/developers/applications
 
 >  This project is managed by @MGYLBot.
@@ -8,6 +8,24 @@ API provided by: https://discordapp.com/developers/applications
 * TTS voices
 * Message Deleter
 * Chat Bot
+
+## Development Guide
+
+1. Enter the following command in terminal.
+
+```
+pip install -r requirements.txt
+```
+
+2. Make a `APIKey.py` at `src/` directory.
+
+```python
+# src/APIKey.py
+DISCORD_TOKEN = 'Your Bot TOKEN'
+```
+Do not push `APIKey.py`.
+
+For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
 ## How to Push into Master
 
