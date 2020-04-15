@@ -59,33 +59,30 @@ async def delete(ctx, amount):
         await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
-async def tts(ctx, content):
+async def tts(ctx, string):
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
 
     url = "kakaoi-newtone-openapi.kakao.com"
     headers = {
-        'Host': 'kakaoi-newtone-openapi.kakao.com/v1/synthesize',
         'Content-Type': 'application/xml',
-        'X-DSS-Service': 'DICTATION',
         'Authorization': 'KakaoAK '+KAKAO_REST_TOKEN,
     }
-    data = {'<speak>그는 그렇게 말했습니다.<voice name': '"MAN_DIALOG_BRIGHT">잘 지냈어? 나도 잘 지냈어.</voice><voice name="WOMAN_DIALOG_BRIGHT" speechStyle="SS_ALT_FAST_1">금요일이 좋아요.</voice></speak>'}
+    data = '<speak>{}</speak>'.format(string).encode('utf-8')
     response = requests.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
     
-    #join the voice channel and play
+    # join the voice channel and play
+    with open('temp.mp3', 'wb') as f:
+        f.write(response.content)
+
     if voice_channel != None:
         vc = await voice_channel.connect()
-        vc.play(discord.FFmmpegPCMAudio('response'))
-        if not vc.is_playing():
+        vc.play(discord.FFmpegPCMAudio('temp.mp3'))
+        while vc.is_playing():
             await asyncio.sleep(3)
         vc.stop()
         await vc.disconnect()
     else:
         await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
-
-
-
-
 
 client.run(DISCORD_TOKEN)

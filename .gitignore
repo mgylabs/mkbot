@@ -4,4 +4,6 @@ DiscordBot/
 APIKey.py
 test*
 
+*.mp3
+
 .vscode/
