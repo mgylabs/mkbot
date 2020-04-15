@@ -31,6 +31,8 @@ DISCORD_TOKEN = 'Your Bot TOKEN'
 ```
 Do not push `APIKey.py`.
 
+> :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
+
 For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
 ## How to Push into master
@@ -39,7 +41,7 @@ For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-
 1.  Create a new branch.
 2.  Push into the branch.
 3.  Create a new Merge Request.
-4.  When you add a `AutoMerge` label to the Merge Request, @MGYLBot will automatically merge it when requirements are met.
+4.  When you add a ~AutoMerge label to the Merge Request, @MGYLBot will automatically merge it when requirements are met.
 
 [Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGLabsBot/-/wikis/Auto-Merge)
 * See also, !3  
