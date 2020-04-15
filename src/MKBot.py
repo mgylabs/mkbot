@@ -85,8 +85,4 @@ async def tts(ctx, content):
     else:
         await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
 
-
-
-
-
 client.run(DISCORD_TOKEN)
