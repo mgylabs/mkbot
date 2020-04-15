@@ -18,7 +18,7 @@ async def join(ctx):
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
     await voice_channel.connect()
-    await channel.send('joined %s' %voice_channel.name)
+    await channel.send('joined {}'.format(voice_channel.name))
     await asyncio.sleep(3)
     await channel.purge(limit=10, check=user_bot)
 
@@ -28,7 +28,7 @@ async def leave(ctx):
     voice_channel = ctx.author.voice.channel
     vc = await voice_channel.connect()
     await vc.disconnect()
-    await channel.send('leaved %s' %voice_channel.name)
+    await channel.send('leaved {}'.format(voice_channel.name))
     await asyncio.sleep(3)
     await channel.purge(limit=10, check=user_bot)
 
@@ -45,7 +45,7 @@ async def delete(ctx, amount):
 
     if amount.isdigit():
         await channel.purge(limit=int(amount)+1)
-        await channel.send('%s Messages deleted' %amount)
+        await channel.send('{} Messages deleted'.format(amount))
         await asyncio.sleep(3)
         await channel.purge(limit=10, check=user_bot)
     
@@ -55,7 +55,7 @@ async def delete(ctx, amount):
         
         amount = len(messages)
         await channel.purge(limit=amount)
-        await channel.send('%s Messages deleted' %amount) 
+        await channel.send('{} Messages deleted'.format(amount)) 
         await asyncio.sleep(3)
         await channel.purge(limit=10, check=user_bot)
 
@@ -72,7 +72,6 @@ async def tts(ctx, string):
     data = '<speak>{}</speak>'.format(string).encode('utf-8')
     response = requests.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
     
-    # join the voice channel and play
     with open('temp.mp3', 'wb') as f:
         f.write(response.content)
 
