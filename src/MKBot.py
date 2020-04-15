@@ -26,7 +26,8 @@ async def join(ctx):
 async def leave(ctx):
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
-    await voice_channel.disconnect()
+    vc = await voice_channel.connect()
+    await vc.disconnect()
     await channel.send('leaved %s' %voice_channel.name)
     await asyncio.sleep(3)
     await channel.purge(limit=10, check=user_bot)
@@ -35,7 +36,7 @@ async def leave(ctx):
 async def joinhere(ctx):
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
-    await voice_channel.move_to(voice_channel.id)
+    await voice_channel.connect().move_to(voice_channel.id)
 
 @client.command(pass_context = True)
 async def delete(ctx, amount):
@@ -75,12 +76,12 @@ async def tts(ctx, content):
     
     #join the voice channel and play
     if voice_channel != None:
-        vc = await voice_channel.connect()
-        vc.play(discord.FFmmpegPCMAudio('response'))
-        if not vc.is_playing():
+        voice_client = await voice_channel.connect()
+        voice_client.play(discord.FFmmpegPCMAudio('response'))
+        if not voice_client.is_playing():
             await asyncio.sleep(3)
-        vc.stop()
-        await vc.disconnect()
+        voice_client.stop()
+        await voice_client.disconnect()
     else:
         await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
 
