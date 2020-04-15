@@ -43,7 +43,7 @@ async def delete(ctx, amount):
     messages = []
 
     if amount.isdigit:
-        await channel.purge(limit=int(amount))
+        await channel.purge(limit=int(amount)+1)
         await channel.send('%s Messages deleted' %amount)
         await asyncio.sleep(3)
         await channel.purge(limit=10, check=user_bot)
