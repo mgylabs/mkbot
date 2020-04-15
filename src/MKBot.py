@@ -81,8 +81,8 @@ async def tts(ctx, string):
         vc.play(discord.FFmpegPCMAudio('temp.mp3'))
         while vc.is_playing():
             await asyncio.sleep(3)
-        voice_client.stop()
-        await voice_client.disconnect()
+        vc.stop()
+        await vc.disconnect()
     else:
         await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
 
