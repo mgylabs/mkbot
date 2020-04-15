@@ -46,7 +46,7 @@ async def tts(ctx, content):
     
     #join the voice channel and play
     if voice_channel != None:
-        vc = await voice_channel.connect
+        vc = await voice_channel.connect()
         vc.play(discord.FFmmpegPCMAudio('response'))
         if not vc.is_playing():
             await asyncio.sleep(3)
