@@ -31,6 +31,8 @@ DISCORD_TOKEN = 'Your Bot TOKEN'
 ```
 Do not push `APIKey.py`.
 
+> :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
+
 For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
 ## How to Push into master
