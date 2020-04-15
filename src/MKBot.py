@@ -4,7 +4,7 @@ from discord.ext import commands
 import requests
 from APIKey import DISCORD_TOKEN, KAKAO_REST_TOKEN
 
-client = commands.Bot(command_prefix='??')
+client = commands.Bot(command_prefix='$$')
 
 def user_bot(m):
     return m.author == client.user
@@ -20,7 +20,7 @@ async def join(ctx):
     await voice_channel.connect()
     await channel.send('joined %s' %voice_channel.name)
     await asyncio.sleep(3)
-    await channel.purge(limit=1, check=user_bot)
+    await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
 async def leave(ctx):
@@ -29,7 +29,7 @@ async def leave(ctx):
     await voice_channel.disconnect()
     await channel.send('leaved %s' %voice_channel.name)
     await asyncio.sleep(3)
-    await channel.purge(limit=1, check=user_bot)
+    await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
 async def joinhere(ctx):
@@ -44,9 +44,9 @@ async def delete(ctx, amount):
 
     if amount.isdigit:
         await channel.purge(limit=int(amount))
-        await channel.send('%d Messages deleted' %amount)
+        await channel.send('%s Messages deleted' %amount)
         await asyncio.sleep(3)
-        await channel.purge(limit=1, check=user_bot)
+        await channel.purge(limit=10, check=user_bot)
     
     elif amount == 'all':
         async for message in channel.history(limit=200):
@@ -54,9 +54,9 @@ async def delete(ctx, amount):
         
         amount = len(messages)
         await channel.purge(limit=amount)
-        await channel.send('%d Messages deleted' %amount) 
+        await channel.send('%s Messages deleted' %amount) 
         await asyncio.sleep(3)
-        await channel.purge(limit=1, check=user_bot)
+        await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
 async def tts(ctx, content):
