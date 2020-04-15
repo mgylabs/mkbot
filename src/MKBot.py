@@ -6,9 +6,36 @@ from APIKey import DISCORD_TOKEN, KAKAO_REST_TOKEN
 
 client = commands.Bot(command_prefix='??')
 
+def user_bot(m):
+    return m.author == client.user
+
 @client.event
 async def on_ready():
     print('Logged in')
+
+@client.command(pass_context = True)
+async def join(ctx):
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    await voice_channel.connect()
+    await channel.send('joined %s' %voice_channel.name)
+    await asyncio.sleep(3)
+    await channel.purge(limit=1, check=user_bot)
+
+@client.command(pass_context = True)
+async def leave(ctx):
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    await voice_channel.disconnect()
+    await channel.send('leaved %s' %voice_channel.name)
+    await asyncio.sleep(3)
+    await channel.purge(limit=1, check=user_bot)
+
+@client.command(pass_context = True)
+async def joinhere(ctx):
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    await voice_channel.move_to(voice_channel.id)
 
 @client.command(pass_context = True)
 async def delete(ctx, amount):
@@ -19,7 +46,7 @@ async def delete(ctx, amount):
         await channel.purge(limit=int(amount))
         await channel.send('%d Messages deleted' %amount)
         await asyncio.sleep(3)
-        await channel.purge(limit=1)
+        await channel.purge(limit=1, check=user_bot)
     
     elif amount == 'all':
         async for message in channel.history(limit=200):
@@ -28,6 +55,8 @@ async def delete(ctx, amount):
         amount = len(messages)
         await channel.purge(limit=amount)
         await channel.send('%d Messages deleted' %amount) 
+        await asyncio.sleep(3)
+        await channel.purge(limit=1, check=user_bot)
 
 @client.command(pass_context = True)
 async def tts(ctx, content):
@@ -54,6 +83,7 @@ async def tts(ctx, content):
         await vc.disconnect()
     else:
         await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
+
 
 
 
