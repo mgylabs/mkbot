@@ -67,7 +67,7 @@ async def tts(ctx, string):
         'Content-Type': 'application/xml',
         'Authorization': 'KakaoAK '+KAKAO_REST_TOKEN,
     }
-    data = '<speak>{}</speak>'.format(string).encode('utf-8')
+    data = '<speak><voice name="WOMAN_DIALOG_BRIGH">{}</voice></speak>'.format(string).encode('utf-8')
     response = requests.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
     
     with open('temp.mp3', 'wb') as f:
