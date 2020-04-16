@@ -5,7 +5,7 @@ API provided by: https://discordapp.com/developers/applications
 >  This project is managed by @MGYLBot.
 
 ## Features
-* [ ] TTS voices
+* [x] TTS voices
 * [x] Message Deleter
 * [ ] Chat Bot
 
@@ -28,8 +28,11 @@ pip install -r requirements.txt
 ```python
 # src/APIKey.py
 DISCORD_TOKEN = 'Your Bot TOKEN'
+KAKAO_REST_TOKEN = 'Your KakaoTalk REST API Token'
 ```
 Do not push `APIKey.py`.
+
+> :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
 
 For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
 
@@ -39,7 +42,7 @@ For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-
 1.  Create a new branch.
 2.  Push into the branch.
 3.  Create a new Merge Request.
-4.  When you add a `AutoMerge` label to the Merge Request, @MGYLBot will automatically merge it when requirements are met.
+4.  When you add a ~AutoMerge label to the Merge Request, @MGYLBot will automatically merge it when requirements are met.
 
 [Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGLabsBot/-/wikis/Auto-Merge)
 * See also, !3  

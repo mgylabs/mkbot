@@ -1,24 +1,48 @@
+import asyncio
 import discord
 from discord.ext import commands
-import asyncio
-from APIKey import DISCORD_TOKEN
+import requests
+from APIKey import DISCORD_TOKEN, KAKAO_REST_TOKEN
 
-client = commands.Bot(command_prefix='??')
+client = commands.Bot(command_prefix='.')
+
+def user_bot(m):
+    return m.author == client.user
 
 @client.event
 async def on_ready():
     print('Logged in')
 
 @client.command(pass_context = True)
+async def join(ctx):
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    await voice_channel.connect()
+    await channel.send('joined {}'.format(voice_channel.name))
+    await asyncio.sleep(3)
+    await channel.purge(limit=10, check=user_bot)
+
+@client.command(pass_context = True)
+async def leave(ctx):
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    for x in client.voice_clients:
+        if(x.guild == ctx.message.guild):
+            await x.disconnect()
+            await channel.send('leaved {}'.format(voice_channel.name))
+            await asyncio.sleep(3)
+            await channel.purge(limit=10, check=user_bot)
+
+@client.command(pass_context = True)
 async def delete(ctx, amount):
     channel = ctx.message.channel
     messages = []
 
-    if type(amount) == int:
-        await channel.purge(limit=int(amount))
-        await channel.send('%d Messages deleted' %amount)
+    if amount.isdigit():
+        await channel.purge(limit=int(amount)+1)
+        await channel.send('{} Messages deleted'.format(amount))
         await asyncio.sleep(3)
-        await channel.purge(limit=1)
+        await channel.purge(limit=10, check=user_bot)
     
     elif amount == 'all':
         async for message in channel.history(limit=200):
@@ -26,6 +50,35 @@ async def delete(ctx, amount):
         
         amount = len(messages)
         await channel.purge(limit=amount)
-        await channel.send('%d Messages deleted' %amount) 
+        await channel.send('{} Messages deleted'.format(amount)) 
+        await asyncio.sleep(3)
+        await channel.purge(limit=10, check=user_bot)
+
+@client.command(pass_context = True)
+async def tts(ctx, string):
+    channel = ctx.message.channel
+    url = "kakaoi-newtone-openapi.kakao.com"
+    headers = {
+        'Content-Type': 'application/xml',
+        'Authorization': 'KakaoAK '+KAKAO_REST_TOKEN,
+    }
+    data = '<speak><voice name="WOMAN_DIALOG_BRIGH">{}</voice></speak>'.format(string).encode('utf-8')
+    response = requests.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
+    
+    with open('temp.mp3', 'wb') as f:
+        f.write(response.content)
+
+    if ctx.voice_client == None:
+        if ctx.author.voice:
+            await ctx.author.voice.channel.connect()
+        else:
+            await ctx.send('You are not in any voice channel. Please join a voice channel to use TTS')
+            raise commands.CommandError("Author not connected to a voice channel.")
+    
+    ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
+    await ctx.message.delete()
+    await ctx.send('MK Bot said, "{}" on behalf of {}'.format(string, ctx.author))
+    await asyncio.sleep(3)
+    await channel.purge(limit=10, check=user_bot)
 
 client.run(DISCORD_TOKEN)
