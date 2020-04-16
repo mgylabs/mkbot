@@ -5,7 +5,7 @@ API provided by: https://discordapp.com/developers/applications
 >  This project is managed by @MGYLBot.
 
 ## Features
-* [ ] TTS voices
+* [x] TTS voices
 * [x] Message Deleter
 * [ ] Chat Bot
 
@@ -28,6 +28,7 @@ pip install -r requirements.txt
 ```python
 # src/APIKey.py
 DISCORD_TOKEN = 'Your Bot TOKEN'
+KAKAO_REST_TOKEN = 'Your KakaoTalk REST API Token'
 ```
 Do not push `APIKey.py`.
 
