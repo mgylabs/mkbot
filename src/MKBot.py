@@ -4,7 +4,7 @@ from discord.ext import commands
 import requests
 from APIKey import DISCORD_TOKEN, KAKAO_REST_TOKEN
 
-client = commands.Bot(command_prefix='$$')
+client = commands.Bot(command_prefix='.')
 
 def user_bot(m):
     return m.author == client.user
@@ -62,8 +62,6 @@ async def delete(ctx, amount):
 @client.command(pass_context = True)
 async def tts(ctx, string):
     channel = ctx.message.channel
-    voice_channel = ctx.author.voice.channel
-
     url = "kakaoi-newtone-openapi.kakao.com"
     headers = {
         'Content-Type': 'application/xml',
@@ -76,14 +74,15 @@ async def tts(ctx, string):
     with open('temp.mp3', 'wb') as f:
         f.write(response.content)
 
-    if voice_channel != None:
-        vc = await voice_channel.connect()
-        vc.play(discord.FFmpegPCMAudio('temp.mp3'))
-        while vc.is_playing():
-            await asyncio.sleep(3)
-        vc.stop()
-        await vc.disconnect()
-    else:
-        await channel.send('You are not in any voice channel. Please join a voice channel to use TTS')
+    if ctx.voice_client == None:
+        if ctx.author.voice:
+            await ctx.author.voice.channel.connect()
+        else:
+            await ctx.send('You are not in any voice channel. Please join a voice channel to use TTS')
+            raise commands.CommandError("Author not connected to a voice channel.")
+    
+    ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
+    await ctx.message.delete()
+    await ctx.send('MK Bot said, "{}" on behalf of {}'.format(string, ctx.author))
 
 client.run(DISCORD_TOKEN)
