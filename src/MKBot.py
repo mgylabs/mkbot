@@ -26,11 +26,12 @@ async def join(ctx):
 async def leave(ctx):
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
-    vc = await voice_channel.connect()
-    await vc.disconnect()
-    await channel.send('leaved {}'.format(voice_channel.name))
-    await asyncio.sleep(3)
-    await channel.purge(limit=10, check=user_bot)
+    for x in client.voice_clients:
+        if(x.guild == ctx.message.guild):
+            await x.disconnect()
+            await channel.send('leaved {}'.format(voice_channel.name))
+            await asyncio.sleep(3)
+            await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
 async def joinhere(ctx):
@@ -83,5 +84,7 @@ async def tts(ctx, string):
     ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
     await ctx.message.delete()
     await ctx.send('MK Bot said, "{}" on behalf of {}'.format(string, ctx.author))
+    await asyncio.sleep(3)
+    await channel.purge(limit=10, check=user_bot)
 
 client.run(DISCORD_TOKEN)
