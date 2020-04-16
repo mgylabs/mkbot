@@ -34,12 +34,6 @@ async def leave(ctx):
             await channel.purge(limit=10, check=user_bot)
 
 @client.command(pass_context = True)
-async def joinhere(ctx):
-    channel = ctx.message.channel
-    voice_channel = ctx.author.voice.channel
-    await voice_channel.connect().move_to(voice_channel.id)
-
-@client.command(pass_context = True)
 async def delete(ctx, amount):
     channel = ctx.message.channel
     messages = []
