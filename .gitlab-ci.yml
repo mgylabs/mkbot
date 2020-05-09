@@ -1,19 +1,71 @@
 stages:
+  - build
   - deploy
 
-before_script:
-  - git config --global user.email 'taet777@naver.com'
-  - git config --global user.name 'Mycroft Kang'
-
-production:
-  stage: deploy
-  script:
-  - echo "$API_KEY_PY" > "src/APIKey.py"
-  - git add -f src/APIKey.py
-  - git commit -m "Add APIKey"
-  - apt-get update -qy
-  - apt-get install -y ruby-dev
-  - gem install dpl
-  - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_PRODUCTION_API_KEY
+.shared_windows_runners:
+  tags:
+  - shared-windows
+  - windows
+  - windows-1809
   only:
   - master
+
+build-console:
+  extends:
+  - .shared_windows_runners
+  stage: build
+  script:
+  - cd src\console
+  - dir C:\Windows\Microsoft.NET\Framework
+  - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild MKBot.sln /p:Configuration=Release
+  - cd ..\..
+  - mkdir build
+  - mv src\console\MKBot\bin\Release\*.exe build
+  artifacts:
+    paths:
+    - build\
+
+build-bot:
+  extends:
+  - .shared_windows_runners
+  stage: build
+  script:
+  - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
+  - dir
+  - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
+  - dir $Env:LOCALAPPDATA\Programs\Python
+  - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
+  - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
+  - python -V
+  - pip install -r requirements.txt
+  - mkdir build
+  - cd src\bot
+  - pyinstaller --icon=$Env:CI_BUILDS_DIR\src\console\MKBot\Resources\mkbot_on.ico app.py
+  - mv dist\app $Env:CI_BUILDS_DIR\build
+  artifacts:
+    paths:
+    - build\
+
+production:
+  extends:
+  - .shared_windows_runners
+  stage: deploy
+  script:
+  - Invoke-WebRequest -Uri https://sourceforge.net/projects/nsis/files/latest/download -OutFile setup.exe
+  - setup /S
+  - $Env:Path += ";C:\Program Files (x86)\NSIS\"
+  - makensis.exe package\MKBot.nsi
+  artifacts:
+    name: "$Env:CI_COMMIT_REF_NAME"
+    paths:
+    - package\*.exe
+
+pages:
+  stage: deploy
+  script:
+    - echo "pages"
+  artifacts:
+    paths:
+      - public
+  only:
+    - tags

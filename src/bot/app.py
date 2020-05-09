@@ -2,10 +2,11 @@ import asyncio
 import discord
 from discord.ext import commands
 import requests
-from APIKey import DISCORD_TOKEN, KAKAO_REST_TOKEN
+from APIKey import TOKEN
 from MGCert import MGCertificate
 
 client = commands.Bot(command_prefix='//')
+cert = MGCertificate('../data/mgcert.json')
 
 def user_bot(m):
     return m.author == client.user
@@ -18,7 +19,7 @@ async def on_ready():
 
 
 @client.command(pass_context = True)
-@MGCertificate.verify
+@cert.verify
 async def join(ctx):
     """
     명령어를 입력한 유저가 있는 음성 채널을 입장합니다
@@ -30,7 +31,7 @@ async def join(ctx):
     await channel.send('joined {}'.format(voice_channel.name))
 
 @client.command(pass_context = True)
-@MGCertificate.verify
+@cert.verify
 async def leave(ctx):
     """
     명령어를 입력한 유저가 있는 음성채널을 퇴장합니다
@@ -44,7 +45,7 @@ async def leave(ctx):
             await channel.send('leaved {}'.format(voice_channel.name))
 
 @client.command(pass_context = True)
-@MGCertificate.verify
+@cert.verify
 async def delete(ctx, amount):
     """
     메세지를 삭제합니다.
@@ -69,7 +70,7 @@ async def delete(ctx, amount):
         await channel.send('{} Messages deleted'.format(amount)) 
 
 @client.command(pass_context = True)
-@MGCertificate.verify
+@cert.verify
 async def tts(ctx, string, voice='-M'):
     """
     TTS 목소리를 사용할 수 있습니다.
@@ -81,7 +82,7 @@ async def tts(ctx, string, voice='-M'):
     url = "kakaoi-newtone-openapi.kakao.com"
     headers = {
         'Content-Type': 'application/xml',
-        'Authorization': 'KakaoAK '+KAKAO_REST_TOKEN,
+        'Authorization': 'KakaoAK '+TOKEN['KAKAO_REST_TOKEN'],
     }
 
     if voice.upper() == '-M':
@@ -109,4 +110,4 @@ async def tts(ctx, string, voice='-M'):
     await ctx.message.delete()
     await ctx.send('MK Bot said, "{}" on behalf of {}'.format(string, ctx.author))
 
-client.run(DISCORD_TOKEN)
+client.run(TOKEN['DISCORD_TOKEN'])
