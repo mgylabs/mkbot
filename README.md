@@ -7,7 +7,9 @@ API provided by: https://discordapp.com/developers/applications
 ## Features
 * [x] TTS voices
 * [x] Message Deleter
-* [ ] Chat Bot
+* [x] Local Hosting
+
+![docs/preview.png](docs/preview.png)
 
 ## Auto Deploy
 
@@ -23,14 +25,21 @@ API provided by: https://discordapp.com/developers/applications
 pip install -r requirements.txt
 ```
 
-2. Make a `APIKey.py` at `src/` directory.
-
-```python
-# src/APIKey.py
-DISCORD_TOKEN = 'Your Bot TOKEN'
-KAKAO_REST_TOKEN = 'Your KakaoTalk REST API Token'
+2. Make `config.json`, `mgcert.json` at `src/data` directory.
+* config.json
+```json
+{
+    "KAKAO_REST_TOKEN":"Your Bot TOKEN",
+    "DISCORD_TOKEN":"Your KakaoTalk REST API Token"
+}
 ```
-Do not push `APIKey.py`.
+* mgcert.json
+```json
+{
+    "trusted_users":["username"]
+}
+```
+Do not push `src/data/config.json`, `src/data/mgcert.json`.
 
 > :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
 
