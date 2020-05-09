@@ -9,6 +9,7 @@ stages:
   - windows-1809
   only:
   - master
+  - tags
 
 build-console:
   extends:
@@ -37,11 +38,12 @@ build-bot:
   - dir $Env:LOCALAPPDATA\Programs\Python
   - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
   - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
+  - python -m pip install --upgrade pip
   - python -V
   - pip install -r requirements.txt
   - mkdir build
   - cd src\bot
-  - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.py
+  - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.spec
   - mv dist\app $Env:CI_PROJECT_DIR\build
   artifacts:
     paths:
@@ -59,6 +61,9 @@ production:
     name: "$Env:CI_COMMIT_REF_NAME"
     paths:
     - package\*.exe
+  only:
+    - master
+    - tags
 
 pages:
   stage: deploy
