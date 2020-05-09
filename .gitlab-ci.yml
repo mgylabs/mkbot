@@ -30,6 +30,7 @@ build-bot:
   - .shared_windows_runners
   stage: build
   script:
+  - echo "$Env:CI_PROJECT_DIR"
   - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
   - dir
   - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
@@ -40,8 +41,8 @@ build-bot:
   - pip install -r requirements.txt
   - mkdir build
   - cd src\bot
-  - pyinstaller --icon=$Env:CI_BUILDS_DIR\src\console\MKBot\Resources\mkbot_on.ico app.py
-  - mv dist\app $Env:CI_BUILDS_DIR\build
+  - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.py
+  - mv dist\app $Env:CI_PROJECT_DIR\build
   artifacts:
     paths:
     - build\
@@ -51,8 +52,7 @@ production:
   - .shared_windows_runners
   stage: deploy
   script:
-  - Invoke-WebRequest -Uri https://sourceforge.net/projects/nsis/files/latest/download -OutFile setup.exe
-  - setup /S
+  - choco install nsis -y
   - $Env:Path += ";C:\Program Files (x86)\NSIS\"
   - makensis.exe package\MKBot.nsi
   artifacts:
