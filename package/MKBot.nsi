@@ -85,11 +85,11 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)К┼■(Л²─) Л≥└Л═└М·┬ Л═°Й╠╟К░≤Л≈┬Л┼╣К▀┬К▀╓."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)╢б(ю╨) ©оюЭхВ а╕╟е╣г╬З╫ю╢о╢ы."
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)Л²└(К╔╪) Л═°Й╠╟М∙≤Л▀°Й╡═Л┼╣К▀┬Й╧▄?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)ю╩(╦╕) а╕╟его╫ц╟з╫ю╢о╠Н?" IDYES +2
   Abort
 FunctionEnd
 
