@@ -104,5 +104,6 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot"
   SetAutoClose true
 SectionEnd

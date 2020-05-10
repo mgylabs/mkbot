@@ -4,67 +4,69 @@ stages:
 
 .shared_windows_runners:
   tags:
-  - shared-windows
-  - windows
-  - windows-1809
+    - shared-windows
+    - windows
+    - windows-1809
   only:
-  - master
-  - tags
+    - master
 
 build-console:
   extends:
-  - .shared_windows_runners
+    - .shared_windows_runners
   stage: build
   script:
-  - cd src\console
-  - dir C:\Windows\Microsoft.NET\Framework
-  - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild MKBot.sln /p:Configuration=Release
-  - cd ..\..
-  - mkdir build
-  - mv src\console\MKBot\bin\Release\*.exe build
+    - cd src\console
+    - dir C:\Windows\Microsoft.NET\Framework
+    - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild MKBot.sln /p:Configuration=Release
+    - cd ..\..
+    - mkdir build
+    - mv src\console\MKBot\bin\Release\*.exe build
   artifacts:
+    expire_in: 1h
     paths:
     - build\
 
 build-bot:
   extends:
-  - .shared_windows_runners
+    - .shared_windows_runners
   stage: build
   script:
-  - echo "$Env:CI_PROJECT_DIR"
-  - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
-  - dir
-  - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
-  - dir $Env:LOCALAPPDATA\Programs\Python
-  - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
-  - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
-  - python -m pip install --upgrade pip
-  - python -V
-  - pip install -r requirements.txt
-  - mkdir build
-  - cd src\bot
-  - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.spec
-  - mv dist\app $Env:CI_PROJECT_DIR\build
+    - echo "$Env:CI_PROJECT_DIR"
+    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
+    - dir
+    - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
+    - dir $Env:LOCALAPPDATA\Programs\Python
+    - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
+    - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
+    - python -m pip install --upgrade pip
+    - python -V
+    - pip install -r requirements.txt
+    - mkdir build
+    - cd src\bot
+    - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.spec
+    - mv dist\app $Env:CI_PROJECT_DIR\build
   artifacts:
+    expire_in: 1h
     paths:
     - build\
 
 production:
   extends:
-  - .shared_windows_runners
+    - .shared_windows_runners
   stage: deploy
   script:
-  - choco install nsis -y
-  - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-  - makensis.exe package\MKBot.nsi
+    - choco install nsis -y
+    - $Env:Path += ";C:\Program Files (x86)\NSIS\"
+    - makensis.exe package\MKBot.nsi
+    - mv package\*.exe .\
   artifacts:
-    name: "$Env:CI_COMMIT_REF_NAME"
+    name: "MKBot"
+    expire_in: 1 week
     paths:
     - package\*.exe
   only:
     - master
-    - tags
-
+    
 pages:
   stage: deploy
   script:

@@ -21,13 +21,13 @@ namespace MKBot
 
             if (!createnew)
             {
-                MessageBox.Show("이미 실행 중 입니다.");
+                MessageBox.Show("프로그램이 이미 실행 중 입니다.");
                 return;
             }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new TrayApp());
         }
     }
 }

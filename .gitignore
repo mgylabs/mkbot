@@ -391,3 +391,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 src/data/
+package/vc.py
