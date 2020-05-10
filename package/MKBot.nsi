@@ -85,11 +85,11 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)´Â(Àº) ¿ÏÀüÈ÷ Á¦°ÅµÇ¾ú½À´Ï´Ù."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)ëŠ”(ì€) ì™„ì „íˆ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤."
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)À»(¸¦) Á¦°ÅÇÏ½Ã°Ú½À´Ï±î?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)ì„(ë¥¼) ì œê±°í•˜ì‹œê² ìŠµë‹ˆê¹Œ?" IDYES +2
   Abort
 FunctionEnd
 
@@ -104,6 +104,6 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot"
+  DeleteRegValue HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot"
   SetAutoClose true
 SectionEnd
