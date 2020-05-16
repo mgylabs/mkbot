@@ -53,7 +53,7 @@ Function RunMDF
 FunctionEnd
 
 Section "Apps" SEC01
-  ExecWait taskkill /f /im "Mulgyeol Software Update.exe"
+  ExecWait 'taskkill /f /im "Mulgyeol Software Update.exe"'
   SetOutPath "$INSTDIR"
   File /nonfatal /a /r "..\build\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
