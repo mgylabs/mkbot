@@ -5,6 +5,7 @@ import win32event
 import win32service
 import win32serviceutil
 import win32api
+import subprocess
 
 class MulgyeolUpdateService(win32serviceutil.ServiceFramework):
     _svc_name_ = "MulgyeolUpdateService"
@@ -15,7 +16,7 @@ class MulgyeolUpdateService(win32serviceutil.ServiceFramework):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         socket.setdefaulttimeout(60)
-        self.filepath = os.getenv('LOCALAPPDATA')+'\\Programs\\MK Bot\\data\\pipe.txt'
+        self.filepath = os.getenv('LOCALAPPDATA')+'\\Programs\\MK Bot\\pipe\\pipe.txt'
 
     def SvcStop(self):
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
@@ -31,9 +32,11 @@ class MulgyeolUpdateService(win32serviceutil.ServiceFramework):
         with open(self.filepath, 'rt') as f:
             res = f.read()
         if res == '1':
-            win32api.ShellExecute(None, "open", "schtasks.exe", '/RUN /TN MKBotUpdate', None, 0)
-            with open(self.filepath, 'wt') as f:
-                f.write('0')
+            # win32api.ShellExecute(None, "open", "schtasks.exe", '/RUN /TN MKBotUpdate', None, 0)
+            ecode = subprocess.call([os.getenv('LOCALAPPDATA')+'\\Programs\\MK Bot\\Update\\Mulgyeol Software Update.exe'])
+            if ecode == 1:
+                with open(self.filepath, 'wt') as f:
+                    f.write('0')
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:

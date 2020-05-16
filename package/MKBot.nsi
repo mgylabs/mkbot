@@ -59,6 +59,8 @@ Section "Apps" SEC01
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
+  SetOutPath "$INSTDIR\pipe"
+  File /nonfatal /a /r "pipe\*"
   SetOutPath "$INSTDIR\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"

@@ -1,7 +1,7 @@
 from packaging import version
 import requests
 import json
-import os
+import os, sys
 import zipfile
 import win32api
 
@@ -30,6 +30,8 @@ class updater:
             _zip.extractall(os.getenv('USERPROFILE')+'\\Downloads')
 
             win32api.ShellExecute(None, "open", os.getenv('USERPROFILE')+'\\Downloads\\MKBotSetup.exe', "/S", None, 0)
-
+        else:
+            sys.exit(1)
+        
 ut = updater()
 ut.run()
