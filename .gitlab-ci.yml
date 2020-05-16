@@ -1,5 +1,6 @@
 stages:
   - build
+  - version
   - deploy
 
 .shared_windows_runners:
@@ -9,6 +10,7 @@ stages:
     - windows-1809
   only:
     - master
+    - tags
 
 build-console:
   extends:
@@ -50,22 +52,72 @@ build-bot:
     paths:
     - build\
 
-production:
+version-beta:
+  image: python:latest
+  stage: version
+  script:
+    - python package/vc.py -b
+  needs:
+    - project: mgylabs/discord-bot
+      job: version-beta
+      ref: master
+      artifacts: true
+  artifacts:
+    paths:
+      - output/
+  only:
+    - master
+
+version-stable:
+  image: python:latest
+  stage: version
+  script:
+    - python package/vc.py -r
+  needs:
+    - project: mgylabs/discord-bot
+      job: version-beta
+      ref: master
+      artifacts: true
+  artifacts:
+    paths:
+      - output/
+  only:
+    - tags
+
+pre-release:
   extends:
     - .shared_windows_runners
   stage: deploy
   script:
+    - export ver=$(echo output/last_version.txt)
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-    - makensis.exe package\MKBot.nsi
+    - makensis.exe /PRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\*.exe .\
   artifacts:
-    name: "MKBot"
+    name: "MKBot-beta"
     expire_in: 1 week
     paths:
     - .\*.exe
   only:
     - master
+
+stable-release:
+  extends:
+    - .shared_windows_runners
+  stage: deploy
+  script:
+    - export ver=$(echo output/last_version.txt)
+    - choco install nsis -y
+    - $Env:Path += ";C:\Program Files (x86)\NSIS\"
+    - makensis.exe /PRODUCT_VERSION=$ver package\MKBot.nsi
+    - mv package\*.exe .\
+  artifacts:
+    name: "MKBot"
+    paths:
+    - .\*.exe
+  only:
+    - tags
     
 pages:
   stage: deploy
