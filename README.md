@@ -8,6 +8,7 @@ API provided by: https://discordapp.com/developers/applications
 * [x] TTS voices
 * [x] Message Deleter
 * [x] Local Hosting
+* [x] User Access Control
 
 ![docs/preview.png](docs/preview.png)
 
@@ -36,7 +37,8 @@ pip install -r requirements.txt
 * mgcert.json
 ```json
 {
-    "trusted_users":["username"]
+    "admin_users":["admin_username#0000"],
+    "trusted_users":["trusted_username#0000"]
 }
 ```
 Do not push `src/data/config.json`, `src/data/mgcert.json`.
