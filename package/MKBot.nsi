@@ -53,6 +53,7 @@ Function RunMDF
 FunctionEnd
 
 Section "Apps" SEC01
+  ExecWait taskkill /f /im "Mulgyeol Software Update.exe"
   SetOutPath "$INSTDIR"
   File /nonfatal /a /r "..\build\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
@@ -62,6 +63,10 @@ Section "Apps" SEC01
   SetOverwrite off
   File /nonfatal /a /r "data\*"
   SetOverwrite on
+  ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
+  Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
+  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
+  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe start'
 SectionEnd
 
 Section -AdditionalIcons
@@ -94,6 +99,9 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
+  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
+  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'
   Delete "$SMPROGRAMS\MK Bot\Uninstall.lnk"
   Delete "$SMPROGRAMS\MK Bot\Website.lnk"
   Delete "$DESKTOP\MK Bot.lnk"
