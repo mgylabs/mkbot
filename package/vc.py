@@ -53,5 +53,3 @@ if '-b' in sys.argv:
     build()
 elif '-r' in sys.argv:
     release()
-
-build()

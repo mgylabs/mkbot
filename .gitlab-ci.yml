@@ -57,11 +57,11 @@ version-beta:
   stage: version
   script:
     - python package/vc.py -b
-  # needs:
-  #   - project: mgylabs/discord-bot
-  #     job: version-beta
-  #     ref: master
-  #     artifacts: true
+  needs:
+    - project: mgylabs/discord-bot
+      job: version-beta
+      ref: master
+      artifacts: true
   artifacts:
     paths:
       - output/
@@ -89,10 +89,10 @@ pre-release:
     - .shared_windows_runners
   stage: deploy
   script:
-    - export ver=$(echo output/last_version.txt)
+    - $ver=cat output/last_version.txt
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-    - makensis.exe /PRODUCT_VERSION=$ver package\MKBot.nsi
+    - makensis.exe /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\*.exe .\
   artifacts:
     name: "MKBot-beta"
@@ -107,10 +107,10 @@ stable-release:
     - .shared_windows_runners
   stage: deploy
   script:
-    - export ver=$(echo output/last_version.txt)
+    - $ver=cat output/last_version.txt
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-    - makensis.exe /PRODUCT_VERSION=$ver package\MKBot.nsi
+    - makensis.exe /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\*.exe .\
   artifacts:
     name: "MKBot"
