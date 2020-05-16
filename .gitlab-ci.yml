@@ -52,6 +52,33 @@ build-bot:
     paths:
     - build\
 
+build-msu:
+  extends:
+    - .shared_windows_runners
+  stage: build
+  script:
+    - echo "$Env:CI_PROJECT_DIR"
+    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
+    - dir
+    - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
+    - dir $Env:LOCALAPPDATA\Programs\Python
+    - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
+    - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
+    - python -m pip install --upgrade pip
+    - python -V
+    - pip install -r requirements_msu.txt
+    - mkdir build
+    - cd src\msu
+    - pyinstaller --icon=$Env:CI_PROJECT_DIR\package\mkbot_install.ico "Mulgyeol Software Update.py"
+    - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\Update
+    - mv MKBotUpdate.xml $Env:CI_PROJECT_DIR\build\Update
+    - pyinstaller -F --hidden-import=win32timezone MulgyeolUpdateService.py
+    - mv dist/MulgyeolUpdateService.exe $Env:CI_PROJECT_DIR\build\Update
+  artifacts:
+    expire_in: 1h
+    paths:
+    - build\
+
 version-beta:
   image: python:latest
   stage: version
