@@ -57,11 +57,11 @@ version-beta:
   stage: version
   script:
     - python package/vc.py -b
-  needs:
-    - project: mgylabs/discord-bot
-      job: version-beta
-      ref: master
-      artifacts: true
+  # needs:
+  #   - project: mgylabs/discord-bot
+  #     job: version-beta
+  #     ref: master
+  #     artifacts: true
   artifacts:
     paths:
       - output/
