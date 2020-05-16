@@ -1,5 +1,5 @@
 !define PRODUCT_NAME "MK Bot"
-!define PRODUCT_VERSION "1.0.0"
+; !define PRODUCT_VERSION "1.0.0"
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
 !define PRODUCT_WEB_SITE "https://www.mgylabs.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\MK Bot.exe"
