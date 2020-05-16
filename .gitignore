@@ -391,3 +391,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 src/data/
+package/vc.py
+
+env/
+src/msu/build
+src/msu/dist
+src/msu/*.spec
