@@ -117,7 +117,7 @@ pre-release:
     - $ver=cat output/last_version.txt
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-    - makensis.exe /DPRODUCT_VERSION=$ver package\MKBot.nsi
+    - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\*.exe .\
   artifacts:
     name: "MKBot-beta"

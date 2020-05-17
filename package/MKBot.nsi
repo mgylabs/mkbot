@@ -87,14 +87,19 @@ Section -Post
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot" "$INSTDIR\MK Bot.exe"
 SectionEnd
 
+Function .onInstSuccess
+    IfSilent +1 +3
+		SetOutPath "$INSTDIR"
+		Exec "$INSTDIR\MK Bot"
+FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "${PRODUCT_NAME}´Â(Àº) ¿ÏÀüÈ÷ Á¦°ÅµÇ¾ú½À´Ï´Ù." /SD IDOK
+  MessageBox MB_ICONINFORMATION|MB_OK "${PRODUCT_NAME}ëŠ”(ì€) ì™„ì „íˆ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤." /SD IDOK
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}À»(¸¦) Á¦°ÅÇÏ½Ã°Ú½À´Ï±î?" /SD IDYES IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}ì„(ë¥¼) ì œê±°í•˜ì‹œê² ìŠµë‹ˆê¹Œ?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
