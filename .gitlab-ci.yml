@@ -46,7 +46,7 @@ build-bot:
     - pip install -r requirements.txt
     - mkdir build
     - cd src\bot
-    - pyinstaller --icon=$Env:CI_PROJECT_DIR\src\console\MKBot\Resources\mkbot_on.ico app.spec
+    - pyinstaller app.spec
     - mv dist\app $Env:CI_PROJECT_DIR\build
   artifacts:
     expire_in: 1h

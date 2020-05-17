@@ -31,11 +31,15 @@ def build():
         final = last_ver
 
     last = '.'.join(map(str, final))
+    cur['version'] = last
 
     os.makedirs('output', exist_ok=True)
 
     with open('output/last_version.txt', 'wt') as f:
         f.write(last)
+    
+    with open('package/info/version.json', 'wt') as f:
+        json.dump(cur, f)
 
 def release():
     with open('output/last_version.txt', 'rt') as f:
@@ -44,7 +48,15 @@ def release():
     os.makedirs('.public', exist_ok=True)
 
     with open('.public/version.json', 'wt') as f:
-        json.dump({"name":"MK Bot","last-version":info}, f) 
+        json.dump({"name":"MK Bot","last-version":info}, f)
+
+    with open('package/info/version.json', 'rt') as f:
+        cur = json.load(f)
+
+    cur['version'] = info
+
+    with open('package/info/version.json', 'wt') as f:
+        json.dump(cur, f)
 
 if '-b' in sys.argv:
     build()
