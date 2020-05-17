@@ -16,6 +16,7 @@ namespace MKBot
 
         private bool online = false;
         private bool isupdate = false;
+        private bool existnew = false;
         private ProcessStartInfo psi = new ProcessStartInfo();
         private Process process = new Process();
 
@@ -39,10 +40,40 @@ namespace MKBot
             this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
             this.contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("설정", null, Setting), new ToolStripMenuItem("MGCert", null, MGCert), new ToolStripMenuItem("업데이트", null, checkupdate), new ToolStripMenuItem("종료", null, Exit)});
+            new ToolStripMenuItem("설정", null, Setting), new ToolStripMenuItem("MGCert", null, MGCert), new ToolStripMenuItem("업데이트", null, clickcheckupdate), new ToolStripMenuItem("종료", null, Exit)});
         }
 
-        private void checkupdate(object sender, EventArgs e)
+        private void showToast(string title, string text)
+        {
+            this.notifyIcon1.BalloonTipTitle = title;
+            this.notifyIcon1.BalloonTipText = text;
+            this.notifyIcon1.ShowBalloonTip(0);
+        }
+
+        private int Run_msu(string argv = "")
+        {
+            ProcessStartInfo psi2 = new ProcessStartInfo();
+            Process p2 = new Process();
+
+            psi2.FileName = "Update\\Mulgyeol Software Update.exe";
+            psi2.Arguments = argv;
+            psi2.WorkingDirectory = "Update";
+            psi2.CreateNoWindow = true;
+            psi2.UseShellExecute = false;
+            p2.StartInfo = psi2;
+
+            p2.Start();
+            p2.WaitForExit();
+            int result = p2.ExitCode;
+            return result;
+        }
+
+        private void clickcheckupdate(object sender, EventArgs e)
+        {
+            checkupdate();
+        }
+
+        private void checkupdate()
         {
             isupdate = true;
             if (online)
@@ -50,18 +81,14 @@ namespace MKBot
                 process.Kill();
             }
             this.notifyIcon1.Icon = Properties.Resources.mkbot_update;
-            using (StreamWriter outputFile = new StreamWriter(@"pipe\pipe.txt"))
+
+            int result = Run_msu();
+
+            if (result == 1)
             {
-                outputFile.Write("1");
-            }
-            while (true)
-            {
-                string text = File.ReadAllText(@"pipe\pipe.txt");
-                if (text.Equals("0"))
-                {
-                    this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-                    break;
-                }
+                this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
+                isupdate = false;
+                showToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전 입니다.");
             }
         }
 
@@ -71,6 +98,11 @@ namespace MKBot
             {
                 if (!online)
                 {
+                    int reuslt = Run_msu("/c");
+                    if (reuslt == 0)
+                    {
+                        this.existnew = true;
+                    }
                     process.Start();
                     this.notifyIcon1.Icon = Properties.Resources.mkbot_on;
                     online = true;
@@ -84,8 +116,15 @@ namespace MKBot
 
         private void ProcessExited(object sender, EventArgs e)
         {
-            this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-            online = false;
+            if (this.existnew)
+            {
+                checkupdate();
+            }
+            else
+            {
+                this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
+                online = false;
+            }
         }
 
         private void Setting(object source, EventArgs e)

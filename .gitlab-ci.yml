@@ -1,6 +1,7 @@
 stages:
   - build
   - version
+  - package
   - deploy
 
 .shared_windows_runners:
@@ -71,9 +72,6 @@ build-msu:
     - cd src\msu
     - pyinstaller --icon=$Env:CI_PROJECT_DIR\package\mkbot_install.ico "Mulgyeol Software Update.py"
     - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\Update
-    - mv MKBotUpdate.xml $Env:CI_PROJECT_DIR\build\Update
-    - pyinstaller -F --hidden-import=win32timezone MulgyeolUpdateService.py
-    - mv dist/MulgyeolUpdateService.exe $Env:CI_PROJECT_DIR\build\Update
   artifacts:
     expire_in: 1h
     paths:
@@ -107,14 +105,14 @@ version-stable:
       artifacts: true
   artifacts:
     paths:
-      - output/
+      - .public/
   only:
     - tags
 
 pre-release:
   extends:
     - .shared_windows_runners
-  stage: deploy
+  stage: package
   script:
     - $ver=cat output/last_version.txt
     - choco install nsis -y
@@ -132,7 +130,7 @@ pre-release:
 stable-release:
   extends:
     - .shared_windows_runners
-  stage: deploy
+  stage: package
   script:
     - $ver=cat output/last_version.txt
     - choco install nsis -y
@@ -150,6 +148,12 @@ pages:
   stage: deploy
   script:
     - echo "pages"
+    - mv .public/version.json public
+  needs:
+    - job: version-stable
+      artifacts: true
+    - job: stable-release
+      artifacts: false
   artifacts:
     paths:
       - public

@@ -41,13 +41,10 @@ def release():
     with open('output/last_version.txt', 'rt') as f:
         info = f.readline()
 
-    with open('public/version.json', 'rt') as f:
-        public = json.load(f)
-    
-    public['last-version'] = info
+    os.makedirs('.public', exist_ok=True)
 
-    with open('public/version.json', 'wt') as f:
-        json.dump(public, f) 
+    with open('.public/version.json', 'wt') as f:
+        json.dump({"name":"MK Bot","last-version":info}, f) 
 
 if '-b' in sys.argv:
     build()

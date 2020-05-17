@@ -4,10 +4,10 @@
 !define PRODUCT_WEB_SITE "https://www.mgylabs.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\MK Bot.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_UNINST_ROOT_KEY "HKCU"
 
 Unicode true
-;RequestExecutionLevel user
+RequestExecutionLevel user
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
@@ -39,7 +39,7 @@ Unicode true
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "MKBotSetup.exe"
 InstallDir "$LOCALAPPDATA\Programs\MK Bot"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+InstallDirRegKey HKCU "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
@@ -59,16 +59,14 @@ Section "Apps" SEC01
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
-  SetOutPath "$INSTDIR\pipe"
-  File /nonfatal /a /r "pipe\*"
   SetOutPath "$INSTDIR\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
   SetOverwrite on
-  ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
-  Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
-  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
-  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe start'
+  ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
+  ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
+  ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
+  ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe start'
 SectionEnd
 
 Section -AdditionalIcons
@@ -79,31 +77,32 @@ SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\app\app.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\MK Bot.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\MK Bot.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot" "$INSTDIR\MK Bot.exe"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot" "$INSTDIR\MK Bot.exe"
 SectionEnd
 
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)는(은) 완전히 제거되었습니다."
+  MessageBox MB_ICONINFORMATION|MB_OK "${PRODUCT_NAME}는(은) 완전히 제거되었습니다." /SD IDOK
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)을(를) 제거하시겠습니까?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}을(를) 제거하시겠습니까?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
 Section Uninstall
-  Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
-  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
-  ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'
+  ExecWait 'taskkill /f /im "MK Bot.exe"'
+  ;Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
+  ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
+  ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'
   Delete "$SMPROGRAMS\MK Bot\Uninstall.lnk"
   Delete "$SMPROGRAMS\MK Bot\Website.lnk"
   Delete "$DESKTOP\MK Bot.lnk"
@@ -113,7 +112,7 @@ Section Uninstall
   RMDir /r /REBOOTOK $INSTDIR
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-  DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
-  DeleteRegValue HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot"
+  DeleteRegKey HKCU "${PRODUCT_DIR_REGKEY}"
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot"
   SetAutoClose true
 SectionEnd

@@ -16,6 +16,12 @@ class updater:
     def check_update(self):
         return self.last > self.cur
 
+    def isnewversion(self):
+        if self.check_update():
+            sys.exit(0)
+        else:
+            sys.exit(1)
+
     def run(self):
         if self.check_update():
             win32api.ShellExecute(None, "open", "taskkill", '/f /im "MK Bot.exe"', None, 0)
@@ -34,4 +40,7 @@ class updater:
             sys.exit(1)
         
 ut = updater()
-ut.run()
+if '/c' in sys.argv:
+    ut.isnewversion()
+else:
+    ut.run()
