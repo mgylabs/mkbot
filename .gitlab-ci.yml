@@ -104,8 +104,10 @@ version-stable:
       ref: master
       artifacts: true
   artifacts:
+    expire_in: 3h
     paths:
       - .public/
+      - output/
   only:
     - tags
 
