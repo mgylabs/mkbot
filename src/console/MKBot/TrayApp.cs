@@ -61,7 +61,10 @@ namespace MKBot
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
             p2.StartInfo = psi2;
-
+            if (argv.Equals("")) 
+            {
+                this.notifyIcon1.Visible = false;
+            }
             p2.Start();
             p2.WaitForExit();
             int result = p2.ExitCode;
@@ -80,12 +83,13 @@ namespace MKBot
             {
                 process.Kill();
             }
-            this.notifyIcon1.Icon = Properties.Resources.mkbot_update;
 
+            this.notifyIcon1.Icon = Properties.Resources.mkbot_update;
             int result = Run_msu();
 
             if (result == 1)
             {
+                this.notifyIcon1.Visible = true;
                 this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
                 isupdate = false;
                 showToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전 입니다.");
@@ -98,14 +102,14 @@ namespace MKBot
             {
                 if (!online)
                 {
+                    this.notifyIcon1.Icon = Properties.Resources.mkbot_on;
+                    process.Start();
+                    online = true;
                     int reuslt = Run_msu("/c");
                     if (reuslt == 0)
                     {
                         this.existnew = true;
                     }
-                    process.Start();
-                    this.notifyIcon1.Icon = Properties.Resources.mkbot_on;
-                    online = true;
                 }
                 else
                 {
@@ -116,15 +120,13 @@ namespace MKBot
 
         private void ProcessExited(object sender, EventArgs e)
         {
+            this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
+            online = false;
             if (this.existnew)
             {
                 checkupdate();
             }
-            else
-            {
-                this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-                online = false;
-            }
+
         }
 
         private void Setting(object source, EventArgs e)

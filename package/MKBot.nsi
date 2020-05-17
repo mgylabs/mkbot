@@ -44,7 +44,8 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Function .onInit
-  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\MK Bot"  
+  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\MK Bot"
+  Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
 FunctionEnd
 
 Function RunMDF
@@ -53,12 +54,13 @@ Function RunMDF
 FunctionEnd
 
 Section "Apps" SEC01
-  ExecWait 'taskkill /f /im "Mulgyeol Software Update.exe"'
   SetOutPath "$INSTDIR"
   File /nonfatal /a /r "..\build\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
+  SetOutPath "$INSTDIR\info"
+  File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
@@ -101,10 +103,10 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}을(를) 제거하시겠습니까?" /SD IDYES IDYES +2
   Abort
+  Exec 'taskkill /f /im "MK Bot.exe"'
 FunctionEnd
 
 Section Uninstall
-  ExecWait 'taskkill /f /im "MK Bot.exe"'
   ;Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'

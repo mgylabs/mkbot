@@ -7,7 +7,7 @@ import win32api
 
 class updater:
     def __init__(self):
-        with open('../data/version.json', 'rt') as f:
+        with open('../info/version.json', 'rt') as f:
             self.cur = version.parse(json.load(f)['version'])
 
         res = requests.get('https://mgylabs.gitlab.io/discord-bot/version.json')

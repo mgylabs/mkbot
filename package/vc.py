@@ -11,7 +11,7 @@ def isnewupdate(base, last):
     return base[:-1] != last[:-1]
 
 def build():
-    with open('package/data/version.json', 'rt') as f:
+    with open('package/info/version.json', 'rt') as f:
         cur = json.load(f)
 
     if isfile('output/last_version.txt'):
