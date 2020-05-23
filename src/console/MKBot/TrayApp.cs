@@ -92,7 +92,7 @@ namespace MKBot
                 this.notifyIcon1.Visible = true;
                 this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
                 isupdate = false;
-                showToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전 입니다.");
+                showToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전입니다.");
             }
         }
 
