@@ -30,13 +30,13 @@ def build():
         last_ver[3] += 1
         final = last_ver
 
-    last = '.'.join(map(str, final))
-    cur['version'] = last
+    new_ver = '.'.join(map(str, final))
+    cur['version'] = new_ver
 
     os.makedirs('output', exist_ok=True)
 
     with open('output/last_version.txt', 'wt') as f:
-        f.write(last)
+        f.write(new_ver)
     
     with open('package/info/version.json', 'wt') as f:
         json.dump(cur, f)
@@ -50,15 +50,17 @@ def release():
     with open('.public/version.json', 'wt') as f:
         json.dump({"name":"MK Bot","last-version":info}, f)
 
-    with open('package/info/version.json', 'rt') as f:
-        cur = json.load(f)
+    # with open('package/info/version.json', 'rt') as f:
+    #     cur = json.load(f)
 
-    cur['version'] = info
+    # cur['version'] = info
 
-    with open('package/info/version.json', 'wt') as f:
-        json.dump(cur, f)
+    # with open('package/info/version.json', 'wt') as f:
+    #     json.dump(cur, f)
 
 if '-b' in sys.argv:
     build()
 elif '-r' in sys.argv:
     release()
+
+print(isnewupdate([1, 0, 1, 0], [1, 0, 0, 0]))

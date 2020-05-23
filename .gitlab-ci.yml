@@ -81,12 +81,9 @@ version-beta:
   image: python:latest
   stage: version
   script:
+    - mkdir output
+    - curl --output output/last_version.txt -L "https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/master/raw/output/last_version.txt?job=version-beta"
     - python package/vc.py -b
-  needs:
-    - project: mgylabs/discord-bot
-      job: version-beta
-      ref: master
-      artifacts: true
   artifacts:
     paths:
       - output/
