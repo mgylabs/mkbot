@@ -5,7 +5,7 @@ import requests
 from APIKey import TOKEN
 from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
-import datetime
+import datetime, sys
 
 client = commands.Bot(command_prefix='//')
 cert = MGCertificate('../data/mgcert.json')
@@ -136,4 +136,8 @@ async def logout(ctx):
     print('Logged out')
     await client.logout()
 
-client.run(TOKEN['DISCORD_TOKEN'])
+try:
+    client.run(TOKEN['DISCORD_TOKEN'])
+except discord.errors.LoginFailure as e:
+    print(e)
+    sys.exit(1)

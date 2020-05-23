@@ -22,6 +22,7 @@ namespace MKBot
 
         public TrayApp()
         {
+            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
             psi.FileName = "app\\app.exe";
             psi.WorkingDirectory = "app";
             psi.CreateNoWindow = true;
@@ -50,7 +51,7 @@ namespace MKBot
             this.notifyIcon1.ShowBalloonTip(0);
         }
 
-        private int Run_msu(string argv = "")
+        private int Run_msu(string argv = "", bool wait=true)
         {
             ProcessStartInfo psi2 = new ProcessStartInfo();
             Process p2 = new Process();
@@ -66,9 +67,13 @@ namespace MKBot
                 this.notifyIcon1.Visible = false;
             }
             p2.Start();
-            p2.WaitForExit();
-            int result = p2.ExitCode;
-            return result;
+            if (wait)
+            {
+                p2.WaitForExit();
+                int result = p2.ExitCode;
+                return result;
+            }
+            return 0;
         }
 
         private void clickcheckupdate(object sender, EventArgs e)
@@ -124,9 +129,13 @@ namespace MKBot
             online = false;
             if (this.existnew)
             {
-                checkupdate();
+                Run_msu(wait: false);
+                Application.Exit();
             }
-
+            if (process.ExitCode == 1)
+            {
+                showToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하십시오.");
+            }
         }
 
         private void Setting(object source, EventArgs e)
