@@ -45,7 +45,6 @@ ShowUnInstDetails show
 
 Function .onInit
   StrCpy $INSTDIR "$LOCALAPPDATA\Programs\MK Bot"
-  Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
 FunctionEnd
 
 Function RunMDF
@@ -54,6 +53,7 @@ Function RunMDF
 FunctionEnd
 
 Section "Apps" SEC01
+  nsExec::Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
   SetOutPath "$INSTDIR"
   File /nonfatal /a /r "..\build\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
@@ -80,6 +80,7 @@ SectionEnd
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\MK Bot.exe"
+  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\MK Bot.exe"
@@ -103,7 +104,7 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}을(를) 제거하시겠습니까?" /SD IDYES IDYES +2
   Abort
-  Exec 'taskkill /f /im "MK Bot.exe"'
+  nsExec::Exec 'taskkill /f /im "MK Bot.exe"'
 FunctionEnd
 
 Section Uninstall
