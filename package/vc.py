@@ -62,5 +62,3 @@ if '-b' in sys.argv:
     build()
 elif '-r' in sys.argv:
     release()
-
-print(isnewupdate([1, 0, 1, 0], [1, 0, 0, 0]))
