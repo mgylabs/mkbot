@@ -62,7 +62,7 @@ async def delete(ctx, amount):
     await ctx.message.delete()
 
     if amount.isdigit():
-        await channel.purge(limit=int(amount)+1)
+        await channel.purge(limit=int(amount))
         await channel.send(embed=replyformat.get(ctx, '{} Messages deleted'.format(amount, ctx.author.id)))
     
     elif amount == 'all':
