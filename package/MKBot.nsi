@@ -58,7 +58,9 @@ Section "Apps" SEC01
   File "msu.exe"
   IfSilent +1 +2
   Exec "$INSTDIR\msu.exe /start MKBotSetup.exe"
-  File /nonfatal /a /r "..\build\*"
+  File /nonfatal /a /r "..\build\MKBot.exe"
+  SetOutPath "$INSTDIR\app"
+  File /nonfatal /a /r "..\build\app\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
