@@ -9,8 +9,7 @@ test*
 src/bot/build/
 src/bot/dist/
 
-.vscode/
-
+build/
 
 # Created by https://www.gitignore.io/api/csharp,windows,visualstudio
 # Edit at https://www.gitignore.io/?templates=csharp,windows,visualstudio
@@ -393,7 +392,8 @@ $RECYCLE.BIN/
 src/data/
 package/vc.py
 
-env/
+.env/
 src/msu/build
 src/msu/dist
 src/msu/*.spec
+package/MKBotSetup.exe

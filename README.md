@@ -18,20 +18,18 @@ API provided by: https://discordapp.com/developers/applications
 
 ## Development Guide
 
-* 소스코드를 Test 할 목적으로 Bot을 실행하려면, **MK Bot(Dev)** 계정을 사용해야 합니다.
-
 1. Enter the following command in terminal.
 
-```
-pip install -r requirements.txt
+```bat
+.\scripts\env.bat
 ```
 
 2. Make `config.json`, `mgcert.json` at `src/data` directory.
 * config.json
 ```json
 {
-    "KAKAO_REST_TOKEN":"Your Bot TOKEN",
-    "DISCORD_TOKEN":"Your KakaoTalk REST API Token"
+    "KAKAO_REST_TOKEN":"Your KakaoTalk REST API Token",
+    "DISCORD_TOKEN":"Your Bot TOKEN"
 }
 ```
 * mgcert.json

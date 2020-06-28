@@ -56,9 +56,9 @@ namespace MKBot
             ProcessStartInfo psi2 = new ProcessStartInfo();
             Process p2 = new Process();
 
-            psi2.FileName = "Update\\Mulgyeol Software Update.exe";
+            psi2.FileName = "app\\Mulgyeol Software Update.exe";
             psi2.Arguments = argv;
-            psi2.WorkingDirectory = "Update";
+            psi2.WorkingDirectory = "app";
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
             p2.StartInfo = psi2;

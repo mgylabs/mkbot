@@ -5,14 +5,17 @@ import requests
 from APIKey import TOKEN
 from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
-import datetime, sys
+import datetime
+import sys
 
-client = commands.Bot(command_prefix='//')
+client = commands.Bot(command_prefix=commands.when_mentioned)
 cert = MGCertificate('../data/mgcert.json')
 replyformat = None
 
+
 def user_bot(m):
     return m.author == client.user
+
 
 @client.event
 async def on_ready():
@@ -22,7 +25,8 @@ async def on_ready():
     activity = discord.Game(name="//help로 도움말을 이용하세요", type=3)
     await client.change_presence(status=discord.Status.online, activity=activity)
 
-@client.command(pass_context = True)
+
+@client.command(pass_context=True)
 @cert.verify()
 async def join(ctx):
     """
@@ -32,9 +36,10 @@ async def join(ctx):
     voice_channel = ctx.author.voice.channel
     await voice_channel.connect()
     await ctx.message.delete()
-    await channel.send(embed=replyformat.get(ctx, 'joined {}'.format(voice_channel.name, ctx.author.id)))
+    await channel.send(embed=replyformat.get(ctx, 'joined {}'.format(voice_channel.name)))
 
-@client.command(pass_context = True)
+
+@client.command(pass_context=True)
 @cert.verify()
 async def leave(ctx):
     """
@@ -46,9 +51,10 @@ async def leave(ctx):
     for x in client.voice_clients:
         if(x.guild == ctx.message.guild):
             await x.disconnect()
-            await channel.send(embed=replyformat.get(ctx, 'leaved {}'.format(voice_channel.name, ctx.author.id)))
+            await channel.send(embed=replyformat.get(ctx, 'leaved {}'.format(voice_channel.name)))
 
-@client.command(pass_context = True)
+
+@client.command(pass_context=True)
 @cert.verify()
 async def delete(ctx, amount):
     """
@@ -63,17 +69,18 @@ async def delete(ctx, amount):
 
     if amount.isdigit():
         await channel.purge(limit=int(amount))
-        await channel.send(embed=replyformat.get(ctx, '{} Messages deleted'.format(amount, ctx.author.id)))
-    
+        await channel.send(embed=replyformat.get(ctx, '{} Messages deleted'.format(amount)))
+
     elif amount == 'all':
         async for message in channel.history(limit=200):
             messages.append(message)
-        
+
         amount = len(messages)
         await channel.purge(limit=amount)
-        await channel.send(embed=replyformat.get(ctx, '{} Messages deleted'.format(amount, ctx.author.id)))
+        await channel.send(embed=replyformat.get(ctx, '{} Messages deleted'.format(amount)))
 
-@client.command(pass_context = True)
+
+@client.command(pass_context=True)
 @cert.verify()
 async def tts(ctx, *args):
     """
@@ -97,8 +104,9 @@ async def tts(ctx, *args):
             await ctx.author.voice.channel.connect()
         else:
             await ctx.send(embed=replyformat.get(ctx, "Usage Error", "You are not in any voice channel. Please join a voice channel to use TTS."))
-            raise commands.CommandError("Author not connected to a voice channel.")
-    
+            raise commands.CommandError(
+                "Author not connected to a voice channel.")
+
     if args[0][0] == '-':
         voice = args[0]
         string = ' '.join(args[1:])
@@ -112,21 +120,26 @@ async def tts(ctx, *args):
     else:
         string = ' '.join(args)
         vs = 'MAN_DIALOG_BRIGHT'
-    
-    data = '<speak><voice name="{}">{}</voice></speak>'.format(vs, string).encode('utf-8')
-    response = requests.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
-    
+
+    data = '<speak><voice name="{}">{}</voice></speak>'.format(
+        vs, string).encode('utf-8')
+    response = requests.post(
+        'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
+
     with open('temp.mp3', 'wb') as f:
         f.write(response.content)
 
     ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
 
     await ctx.message.delete()
-    embed = replyformat.get(ctx, string, '[MK Bot](https://gitlab.com/mgylabs/discord-bot) said on behalf of <@{}>'.format(ctx.author.id))
-    embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+    embed = replyformat.get(
+        ctx, string, '[MK Bot](https://gitlab.com/mgylabs/discord-bot) said on behalf of <@{}>'.format(ctx.author.id))
+    embed.set_author(name=ctx.message.author.name,
+                     icon_url=ctx.message.author.avatar_url)
     await ctx.send(embed=embed)
 
-@client.command(pass_context = True)
+
+@client.command(pass_context=True)
 @cert.verify(level=Level.ADMIN_USERS)
 async def logout(ctx):
     """

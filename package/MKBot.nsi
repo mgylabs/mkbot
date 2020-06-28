@@ -2,7 +2,7 @@
 ; !define PRODUCT_VERSION "1.0.0"
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
 !define PRODUCT_WEB_SITE "https://www.mgylabs.com"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\MK Bot.exe"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\MKBot.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
 
@@ -49,16 +49,19 @@ FunctionEnd
 
 Function RunMDF
   SetOutPath "$INSTDIR"
-  Exec "$INSTDIR\MK Bot"
+  Exec "$INSTDIR\MKBot.exe"
 FunctionEnd
 
 Section "Apps" SEC01
-  nsExec::Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
+  ; nsExec::Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
   SetOutPath "$INSTDIR"
+  File "msu.exe"
+  IfSilent +1 +2
+  Exec "$INSTDIR\msu.exe /start MKBotSetup.exe"
   File /nonfatal /a /r "..\build\*"
   CreateDirectory "$SMPROGRAMS\MK Bot"
-  CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
-  CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MK Bot.exe"
+  CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+  CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   SetOutPath "$INSTDIR\info"
   File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\data"
@@ -79,21 +82,21 @@ SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\MK Bot.exe"
+  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\MKBot.exe"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\MK Bot.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\MKBot.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot" "$INSTDIR\MK Bot.exe"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MK Bot" "$INSTDIR\MKBot.exe"
 SectionEnd
 
 Function .onInstSuccess
     IfSilent +1 +3
 		SetOutPath "$INSTDIR"
-		Exec "$INSTDIR\MK Bot"
+		Exec "$INSTDIR\MKBot.exe"
 FunctionEnd
 
 Function un.onUninstSuccess
@@ -104,7 +107,7 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}을(를) 제거하시겠습니까?" /SD IDYES IDYES +2
   Abort
-  nsExec::Exec 'taskkill /f /im "MK Bot.exe"'
+  nsExec::Exec 'taskkill /f /im "MKBot.exe"'
 FunctionEnd
 
 Section Uninstall
