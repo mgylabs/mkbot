@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": ".env\\Scripts\\python.exe",
+    "python.terminal.executeInFileDir": true,
+    "python.terminal.launchArgs": [],
+    "python.autoComplete.extraPaths": [
+        "src\\bot",
+        "src\\msu"
+    ],
+    "editor.formatOnSave": true
+}

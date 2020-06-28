@@ -35,9 +35,9 @@ build-bot:
   stage: build
   script:
     - echo "$Env:CI_PROJECT_DIR"
-    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
+    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe -OutFile python-3.7.7-amd64.exe
     - dir
-    - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
+    - Start-Process -FilePath "python-3.7.7-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
     - dir $Env:LOCALAPPDATA\Programs\Python
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
@@ -59,19 +59,20 @@ build-msu:
   stage: build
   script:
     - echo "$Env:CI_PROJECT_DIR"
-    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile python-3.7.5-amd64.exe
+    - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe -OutFile python-3.7.7-amd64.exe
     - dir
-    - Start-Process -FilePath "python-3.7.5-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
+    - Start-Process -FilePath "python-3.7.7-amd64.exe" -ArgumentList "/quiet Include_test=0 Shortcuts=0" -Wait
     - dir $Env:LOCALAPPDATA\Programs\Python
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
+    - $Env:botpackage = "$Env:LOCALAPPDATA\Programs\Python\Python37\Lib\site-packages\discord"
     - python -m pip install --upgrade pip
     - python -V
-    - pip install -r requirements_msu.txt
+    - pip install -r requirements.txt
     - mkdir build
     - cd src\msu
     - pyinstaller --icon=$Env:CI_PROJECT_DIR\package\mkbot_install.ico "Mulgyeol Software Update.py"
-    - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\Update
+    - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\app
   artifacts:
     expire_in: 1h
     paths:
@@ -119,12 +120,12 @@ pre-release:
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
     - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
-    - mv package\*.exe .\
+    - mv package\MKBotSetup.exe .\
   artifacts:
     name: "MKBot-beta"
     expire_in: 1 week
     paths:
-    - .\*.exe
+    - .\MKBotSetup.exe
   only:
     - master
 
@@ -137,11 +138,12 @@ stable-release:
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
     - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
-    - mv package\*.exe .\
+    - mv package\MKBotSetup.exe .\
   artifacts:
     name: "MKBot"
+    expire_in: 2 yrs
     paths:
-    - .\*.exe
+    - .\MKBotSetup.exe
   only:
     - tags
     

@@ -2,10 +2,9 @@
 import os
 block_cipher = None
 
-
 a = Analysis(['app.py'],
              pathex=[os.curdir],
-             binaries=[(os.getenv('LOCALAPPDATA')+'\\Programs\\Python\\Python37\\Lib\\site-packages\\discord\\bin\\libopus-0.x64.dll', '.' )],
+             binaries=[(os.getenv('botpackage')+'\\bin\\libopus-0.x64.dll', '.' )],
              datas=[],
              hiddenimports=["_cffi_backend"],
              hookspath=[],

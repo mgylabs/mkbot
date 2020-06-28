@@ -1,14 +1,19 @@
 import json
-import sys, os
+import sys
+import os
+
 
 def isfile(filename):
     return os.path.isfile(filename)
 
+
 def version(v):
     return list(map(int, (v.split("."))))
 
+
 def isnewupdate(base, last):
     return base[:-1] != last[:-1]
+
 
 def build():
     with open('package/info/version.json', 'rt') as f:
@@ -37,9 +42,10 @@ def build():
 
     with open('output/last_version.txt', 'wt') as f:
         f.write(new_ver)
-    
+
     with open('package/info/version.json', 'wt') as f:
         json.dump(cur, f)
+
 
 def release():
     with open('output/last_version.txt', 'rt') as f:
@@ -48,7 +54,8 @@ def release():
     os.makedirs('.public', exist_ok=True)
 
     with open('.public/version.json', 'wt') as f:
-        json.dump({"name":"MK Bot","last-version":info}, f)
+        json.dump({"name": "MK Bot", "last-version": info,
+                   "tags": os.getenv('CI_COMMIT_TAG')}, f)
 
     # with open('package/info/version.json', 'rt') as f:
     #     cur = json.load(f)
@@ -57,6 +64,7 @@ def release():
 
     # with open('package/info/version.json', 'wt') as f:
     #     json.dump(cur, f)
+
 
 if '-b' in sys.argv:
     build()
