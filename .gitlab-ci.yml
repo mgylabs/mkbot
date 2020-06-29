@@ -1,4 +1,8 @@
+include:
+  template: Jobs/Code-Quality.gitlab-ci.yml
+
 stages:
+  - test
   - build
   - version
   - package
@@ -9,13 +13,10 @@ stages:
     - shared-windows
     - windows
     - windows-1809
-  only:
-    - master
-    - tags
 
-build-console:
+.build-console:
   extends:
-    - .shared_windows_runners
+      - .shared_windows_runners
   stage: build
   script:
     - cd src\console
@@ -24,12 +25,8 @@ build-console:
     - cd ..\..
     - mkdir build
     - mv src\console\MKBot\bin\Release\*.exe build
-  artifacts:
-    expire_in: 1h
-    paths:
-    - build\
 
-build-bot:
+.build-bot:
   extends:
     - .shared_windows_runners
   stage: build
@@ -49,12 +46,8 @@ build-bot:
     - cd src\bot
     - pyinstaller app.spec
     - mv dist\app $Env:CI_PROJECT_DIR\build
-  artifacts:
-    expire_in: 1h
-    paths:
-    - build\
 
-build-msu:
+.build-msu:
   extends:
     - .shared_windows_runners
   stage: build
@@ -73,10 +66,60 @@ build-msu:
     - cd src\msu
     - pyinstaller --icon=$Env:CI_PROJECT_DIR\package\mkbot_install.ico "Mulgyeol Software Update.py"
     - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\app
+
+build-console:
+  extends:
+    - .build-console
   artifacts:
     expire_in: 1h
     paths:
     - build\
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: $CI_COMMIT_TAG
+
+test-build-console:
+  extends:
+    - .build-console
+  rules:
+    - changes:
+      - src/console/*
+
+build-bot:
+  extends:
+    - .build-bot
+  artifacts:
+    expire_in: 1h
+    paths:
+    - build\
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: $CI_COMMIT_TAG
+
+test-build-bot:
+  extends:
+    - .build-bot
+  rules:
+    - changes:
+      - src/bot/*
+
+build-msu:
+  extends:
+    - .build-msu
+  artifacts:
+    expire_in: 1h
+    paths:
+    - build\
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: $CI_COMMIT_TAG
+
+test-build-msu:
+  extends:
+    - .build-msu
+  rules:
+    - changes:
+      - src/msu/*
 
 version-beta:
   image: python:latest
@@ -111,7 +154,7 @@ version-stable:
   only:
     - tags
 
-pre-release:
+.release:
   extends:
     - .shared_windows_runners
   stage: package
@@ -121,6 +164,10 @@ pre-release:
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
     - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\MKBotSetup.exe .\
+
+pre-release:
+  extends:
+    - .release
   artifacts:
     name: "MKBot-beta"
     expire_in: 1 week
@@ -131,14 +178,7 @@ pre-release:
 
 stable-release:
   extends:
-    - .shared_windows_runners
-  stage: package
-  script:
-    - $ver=cat output/last_version.txt
-    - choco install nsis -y
-    - $Env:Path += ";C:\Program Files (x86)\NSIS\"
-    - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
-    - mv package\MKBotSetup.exe .\
+    - .release
   artifacts:
     name: "MKBot"
     expire_in: 2 yrs
