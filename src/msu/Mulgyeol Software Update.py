@@ -23,28 +23,31 @@ class updater:
 
     def isnewversion(self):
         if self.check_update():
-            sys.exit(0)
-        else:
-            sys.exit(1)
-
-    def run(self):
-        if self.check_update():
-            win32api.ShellExecute(None, "open", "taskkill",
-                                  '/f /im "MKBot.exe"', None, 0)
             r = requests.get(
                 'https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
 
             download_file_name = os.getenv(
-                'USERPROFILE')+'\\Downloads\\MKBotSetup.zip'
+                'TEMP')+'\\mkbot-update\\MKBotSetup.zip'
+
+            os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
 
             with open(download_file_name, 'wb') as f:
                 f.write(r.content)
 
             _zip = zipfile.ZipFile(download_file_name)
-            _zip.extractall(os.getenv('USERPROFILE')+'\\Downloads')
+            _zip.extractall(os.getenv('TEMP')+'\\mkbot-update')
+            sys.exit(0)
+        else:
+            sys.exit(1)
 
+    def run(self, autorun=False):
+        if self.check_update():
+            if autorun:
+                param = '/S /autorun'
+            else:
+                param = '/S'
             win32api.ShellExecute(None, "open", os.getenv(
-                'USERPROFILE')+'\\Downloads\\MKBotSetup.exe', "/S", None, 0)
+                'TEMP')+'\\mkbot-update\\MKBotSetup.exe', param, None, 0)
         else:
             sys.exit(1)
 
@@ -52,5 +55,7 @@ class updater:
 ut = updater()
 if '/c' in sys.argv:
     ut.isnewversion()
+elif '/autorun' in sys.argv:
+    ut.run(True)
 else:
-    ut.run()
+    ut.run(False)

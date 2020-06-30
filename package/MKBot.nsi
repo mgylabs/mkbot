@@ -9,6 +9,7 @@
 Unicode true
 RequestExecutionLevel user
 ; MUI 1.67 compatible ------
+!include "FileFunc.nsh"
 !include "MUI.nsh"
 
 ; MUI Settings
@@ -48,6 +49,10 @@ Function .onInit
 FunctionEnd
 
 Function RunMDF
+  ${GetParameters} $1
+  ClearErrors
+  ${GetOptions} $1 '/autorun' $R0
+  IfErrors +3 0
   SetOutPath "$INSTDIR"
   Exec "$INSTDIR\MKBot.exe"
 FunctionEnd

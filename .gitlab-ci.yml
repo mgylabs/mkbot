@@ -1,6 +1,11 @@
 include:
   template: Jobs/Code-Quality.gitlab-ci.yml
 
+code_quality:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  interruptible: true
+
 stages:
   - test
   - build
@@ -81,9 +86,12 @@ build-console:
 test-build-console:
   extends:
     - .build-console
-  rules:
-    - changes:
-      - src/console/*
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - src/console/**/*
+  interruptible: true
 
 build-bot:
   extends:
@@ -99,9 +107,12 @@ build-bot:
 test-build-bot:
   extends:
     - .build-bot
-  rules:
-    - changes:
-      - src/bot/*
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - src/bot/**/*
+  interruptible: true
 
 build-msu:
   extends:
@@ -117,9 +128,12 @@ build-msu:
 test-build-msu:
   extends:
     - .build-msu
-  rules:
-    - changes:
-      - src/msu/*
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - src/msu/**/*
+  interruptible: true
 
 version-beta:
   image: python:latest
@@ -158,12 +172,25 @@ version-stable:
   extends:
     - .shared_windows_runners
   stage: package
-  script:
+  before_script:
     - $ver=cat output/last_version.txt
+  script:
     - choco install nsis -y
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
     - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\MKBotSetup.exe .\
+
+test-pre-release:
+  extends:
+    - .release
+  before_script:
+    - $ver="test-version"
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - package/*.nsi
+  interruptible: true
 
 pre-release:
   extends:
