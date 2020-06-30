@@ -27,7 +27,9 @@ namespace MKBot
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TrayApp());
+            TrayApp app = new TrayApp();
+            Application.ApplicationExit += new EventHandler(app.Application_Exit);
+            Application.Run(app);
         }
     }
 }

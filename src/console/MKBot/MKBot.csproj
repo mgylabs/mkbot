@@ -47,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>mkbot_on.ico</ApplicationIcon>
@@ -108,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mkbot_on.ico" />
-    <None Include="Resources\mkbot_update.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

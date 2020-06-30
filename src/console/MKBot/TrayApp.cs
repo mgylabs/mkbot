@@ -15,143 +15,200 @@ namespace MKBot
         private ContextMenuStrip contextMenuStrip1;
 
         private bool online = false;
-        private bool isupdate = false;
-        private bool existnew = false;
-        private ProcessStartInfo psi = new ProcessStartInfo();
-        private Process process = new Process();
+        private bool checking_update = false;
+        private bool can_update = false;
+        private ProcessStartInfo psi1 = new ProcessStartInfo();
+        private Process app_process = new Process();
+        private ProcessStartInfo psi2 = new ProcessStartInfo();
+        private Process msu_process = new Process();
+
+        private ToolStripMenuItem UpdateMenu;
 
         public TrayApp()
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
-            psi.FileName = "app\\app.exe";
-            psi.WorkingDirectory = "app";
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = false;
-            process.StartInfo = psi;
-            process.EnableRaisingEvents = true;
-            process.Exited += new EventHandler(ProcessExited);
+            psi1.FileName = "app\\app.exe";
+            psi1.WorkingDirectory = "app";
+            psi1.CreateNoWindow = true;
+            psi1.UseShellExecute = false;
+            app_process.StartInfo = psi1;
+            app_process.EnableRaisingEvents = true;
+            app_process.Exited += new EventHandler(ProcessExited_app);
 
-            this.notifyIcon1 = new NotifyIcon();
-            this.contextMenuStrip1 = new ContextMenuStrip();
-
-            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyIcon1.MouseClick += new MouseEventHandler(this.notifyIcon1_MouseClick);
-            this.notifyIcon1.Text = "MK Bot";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-
-            this.contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("설정", null, Setting), new ToolStripMenuItem("MGCert", null, MGCert), new ToolStripMenuItem("업데이트", null, clickcheckupdate), new ToolStripMenuItem("종료", null, Exit)});
-        }
-
-        private void showToast(string title, string text)
-        {
-            this.notifyIcon1.BalloonTipTitle = title;
-            this.notifyIcon1.BalloonTipText = text;
-            this.notifyIcon1.ShowBalloonTip(0);
-        }
-
-        private int Run_msu(string argv = "", bool wait=true)
-        {
-            ProcessStartInfo psi2 = new ProcessStartInfo();
-            Process p2 = new Process();
-
-            psi2.FileName = "app\\Mulgyeol Software Update.exe";
-            psi2.Arguments = argv;
+            psi2.FileName = "app\\Mulgyeol Software Update.exe";           
             psi2.WorkingDirectory = "app";
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
-            p2.StartInfo = psi2;
-            if (argv.Equals("")) 
-            {
-                this.notifyIcon1.Visible = false;
-            }
-            p2.Start();
-            if (wait)
-            {
-                p2.WaitForExit();
-                int result = p2.ExitCode;
-                return result;
-            }
-            return 0;
+            msu_process.StartInfo = psi2;
+            msu_process.EnableRaisingEvents = true;
+            msu_process.Exited += new EventHandler(ProcessExited_msu);
+
+            notifyIcon1 = new NotifyIcon();
+            contextMenuStrip1 = new ContextMenuStrip();
+
+            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
+            notifyIcon1.Text = "MK Bot";
+            notifyIcon1.Visible = true;
+            notifyIcon1.Icon = Properties.Resources.mkbot_off;
+
+            UpdateMenu = new ToolStripMenuItem("업데이트 확인", null, Click_Update);
+
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
+            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), UpdateMenu, new ToolStripMenuItem("종료", null, Click_Exit)});
         }
 
-        private void clickcheckupdate(object sender, EventArgs e)
-        {
-            checkupdate();
-        }
-
-        private void checkupdate()
-        {
-            isupdate = true;
-            if (online)
-            {
-                process.Kill();
-            }
-
-            this.notifyIcon1.Icon = Properties.Resources.mkbot_update;
-            int result = Run_msu();
-
-            if (result == 1)
-            {
-                this.notifyIcon1.Visible = true;
-                this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-                isupdate = false;
-                showToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전입니다.");
-            }
-        }
-
+        //UI
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            if ((!isupdate)&&(e.Button == MouseButtons.Left))
+            if ((!checking_update) && (e.Button == MouseButtons.Left))
             {
                 if (!online)
                 {
-                    this.notifyIcon1.Icon = Properties.Resources.mkbot_on;
-                    process.Start();
+                    notifyIcon1.Icon = Properties.Resources.mkbot_on;
+                    app_process.Start();
                     online = true;
-                    int reuslt = Run_msu("/c");
-                    if (reuslt == 0)
+                    if (!can_update)
                     {
-                        this.existnew = true;
+                        Run_msu("/c");
                     }
                 }
                 else
                 {
-                    process.Kill();
+                    app_process.Kill();
                 }
             }
         }
 
-        private void ProcessExited(object sender, EventArgs e)
-        {
-            this.notifyIcon1.Icon = Properties.Resources.mkbot_off;
-            online = false;
-            if (this.existnew)
-            {
-                Run_msu(wait: false);
-                Application.Exit();
-            }
-            if (process.ExitCode == 1)
-            {
-                showToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하십시오.");
-            }
-        }
-
-        private void Setting(object source, EventArgs e)
+        private void Click_Setting(object source, EventArgs e)
         {
             Process.Start("data\\config.json");
         }
 
-        private void MGCert(object source, EventArgs e)
+        private void Click_MGCert(object source, EventArgs e)
         {
             Process.Start("data\\mgcert.json");
         }
 
-        private void Exit(object source, EventArgs e)
+        private void Click_Update(object sender, EventArgs e)
         {
-            this.notifyIcon1.Visible = false;
+            if (can_update)
+            {
+                if (online)
+                {
+                    app_process.Kill();
+                } 
+                else
+                {
+                    Run_msu("/autorun");
+                }
+            }
+            else
+            {
+                checking_update = true;
+                UpdateMenu.Enabled = false;
+                UpdateMenu.Text = "업데이트 다운로드 중...";
+                Run_msu("/c");
+            }
+        }
+
+        private void Click_Exit(object source, EventArgs e)
+        {
+            notifyIcon1.Visible = false;
+            if (can_update)
+            {
+                if (online)
+                {
+                    app_process.Kill();
+                }
+                else
+                {
+                    Run_msu();
+                }
+            }
             Application.Exit();
+        }
+
+        private void ShowToast(string title, string text)
+        {
+            notifyIcon1.BalloonTipTitle = title;
+            notifyIcon1.BalloonTipText = text;
+            notifyIcon1.ShowBalloonTip(0);
+        }
+
+        //background
+        private void Run_msu(string argv = "")
+        {
+            UpdateMenu.Enabled = false;
+            UpdateMenu.Text = "업데이트 다운로드 중...";
+            psi2.Arguments = argv;
+            try
+            {
+                if (msu_process.HasExited)
+                {
+                    msu_process.Start();
+                }
+            }
+            catch (Exception)
+            {
+                msu_process.Start();
+            }
+            if (!argv.Equals("/c"))
+            {
+                notifyIcon1.Visible = false;
+                Application.Exit();
+            }
+        }
+
+        private void ProcessExited_msu(object sender, EventArgs e)
+        {
+            if (msu_process.ExitCode == 0)
+            {
+                can_update = true;
+                UpdateMenu.Enabled = true;
+                UpdateMenu.Text = "다시 시작 및 업데이트";
+                if (checking_update)
+                {
+                    ShowToast("Mulgyeol Software Update", "최신 업데이트를 적용하려면 MK Bot을(를) 다시 시작하세요.");
+                    checking_update = false;
+                }
+            }
+            else if (msu_process.ExitCode == 1)
+            {
+                UpdateMenu.Enabled = true;
+                UpdateMenu.Text = "업데이트 확인";
+                if (checking_update)
+                {
+                    ShowToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전입니다.");
+                    checking_update = false;
+                }
+            }
+        }
+
+        private void ProcessExited_app(object sender, EventArgs e)
+        {
+            notifyIcon1.Icon = Properties.Resources.mkbot_off;
+            online = false;
+            if (can_update)
+            {
+                Run_msu();
+            }
+            if (app_process.ExitCode == 1)
+            {
+                ShowToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하세요.");
+            }
+        }
+
+        internal void Application_Exit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!app_process.HasExited)
+                {
+                    app_process.Kill();
+                }
+            }
+            catch (Exception) { }
         }
     }
 }
