@@ -40,22 +40,7 @@ class updater:
         else:
             sys.exit(1)
 
-    def run(self, autorun=False):
-        if self.check_update():
-            if autorun:
-                param = '/S /autorun'
-            else:
-                param = '/S'
-            win32api.ShellExecute(None, "open", os.getenv(
-                'TEMP')+'\\mkbot-update\\MKBotSetup.exe', param, None, 0)
-        else:
-            sys.exit(1)
-
 
 ut = updater()
 if '/c' in sys.argv:
     ut.isnewversion()
-elif '/autorun' in sys.argv:
-    ut.run(True)
-else:
-    ut.run(False)
