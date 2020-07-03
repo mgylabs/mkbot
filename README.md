@@ -1,8 +1,8 @@
 # Discord Bot
-Discord Bot developed by Michael Kwon and Mycroft Kang  
+Discord Bot developed by Mulgyeol Labs  
 API provided by: https://discordapp.com/developers/applications
 
->  This project is managed by @MGYLBot.
+>  This project is managed by @myftbot
 
 ## Features
 * [x] TTS voices
@@ -51,6 +51,6 @@ For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-
 1.  Create a new branch.
 2.  Push into the branch.
 3.  Create a new Merge Request.
-4.  When you add a ~AutoMerge label to the Merge Request, @MGYLBot will automatically merge it when requirements are met.
+4.  When you add a ~AutoMerge label to the Merge Request, @myftbot will automatically merge it when requirements are met.
 
 [Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGLabsBot/-/wikis/Auto-Merge)

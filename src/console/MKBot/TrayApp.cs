@@ -100,7 +100,7 @@ namespace MKBot
                 } 
                 else
                 {
-                    Run_msu("/autorun");
+                    Run_setup(true);
                 }
             }
             else
@@ -123,10 +123,10 @@ namespace MKBot
                 }
                 else
                 {
-                    Run_msu();
+                    Run_setup(false);
                 }
             }
-            Application.Exit();
+            Environment.Exit(0);
         }
 
         private void ShowToast(string title, string text)
@@ -137,7 +137,7 @@ namespace MKBot
         }
 
         //background
-        private void Run_msu(string argv = "")
+        private void Run_msu(string argv = "/c")
         {
             UpdateMenu.Enabled = false;
             UpdateMenu.Text = "업데이트 다운로드 중...";
@@ -153,11 +153,22 @@ namespace MKBot
             {
                 msu_process.Start();
             }
-            if (!argv.Equals("/c"))
+        }
+
+        private void Run_setup(bool autorun)
+        {
+            string param;
+            if (autorun)
             {
-                notifyIcon1.Visible = false;
-                Application.Exit();
+                param = "/S /autorun";
             }
+            else
+            {
+                param = "/S";
+            }
+            notifyIcon1.Visible = false;
+            Process.Start(Environment.GetEnvironmentVariable("TEMP") + "\\mkbot-update\\MKBotSetup.exe", param);
+            Environment.Exit(0);
         }
 
         private void ProcessExited_msu(object sender, EventArgs e)
@@ -191,7 +202,7 @@ namespace MKBot
             online = false;
             if (can_update)
             {
-                Run_msu();
+                Run_setup(true);
             }
             if (app_process.ExitCode == 1)
             {

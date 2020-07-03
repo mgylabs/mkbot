@@ -49,16 +49,12 @@ Function .onInit
 FunctionEnd
 
 Function RunMDF
-  ${GetParameters} $1
-  ClearErrors
-  ${GetOptions} $1 '/autorun' $R0
-  IfErrors +3 0
   SetOutPath "$INSTDIR"
   Exec "$INSTDIR\MKBot.exe"
 FunctionEnd
 
 Section "Apps" SEC01
-  ; nsExec::Exec 'taskkill /f /im "Mulgyeol Software Update.exe"'
+  nsExec::Exec 'taskkill /f /im "MKBot.exe"'
   SetOutPath "$INSTDIR"
   File "msu.exe"
   IfSilent +1 +2
@@ -101,9 +97,12 @@ Section -Post
 SectionEnd
 
 Function .onInstSuccess
-    IfSilent +1 +3
-		SetOutPath "$INSTDIR"
-		Exec "$INSTDIR\MKBot.exe"
+  ${GetParameters} $1
+  ClearErrors
+  ${GetOptions} $1 '/autorun' $R0
+  IfErrors +3 0
+  SetOutPath "$INSTDIR"
+  Exec "$INSTDIR\MKBot.exe"
 FunctionEnd
 
 Function un.onUninstSuccess
