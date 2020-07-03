@@ -26,7 +26,10 @@ def build():
         last = cur['version']
 
     cur_ver = version(cur['version'])
-    last_ver = version(last)
+    try:
+        last_ver = version(last)
+    except:
+        last_ver = cur_ver
 
     if isnewupdate(cur_ver, last_ver):
         cur_ver[3] += 1
