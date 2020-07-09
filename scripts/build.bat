@@ -8,8 +8,8 @@ set botpackage=..\..\.env\Lib\site-packages\discord
 pyinstaller app.spec
 move dist\app ..\..\build
 cd ..\console
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild MKBot.sln /p:Configuration=Release
-move MKBot\bin\Release\*.exe ..\..\build
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild console.sln /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None
+move bin\Release\* ..\..\build
 cd ..\msu
 pyinstaller --icon=..\..\package\mkbot_install.ico "Mulgyeol Software Update.py"
 move "dist\Mulgyeol Software Update" ..\..\build\Update

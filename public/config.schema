@@ -1,0 +1,39 @@
+{
+    "title": "MK Bot Configuration Schema",
+    "type": "object",
+    "required": [
+        "KAKAO_REST_TOKEN",
+        "DISCORD_TOKEN"
+    ],
+    "properties": {
+        "KAKAO_REST_TOKEN": {
+            "type": "string",
+            "title": "KAKAO API TOKEN"
+        },
+        "DISCORD_TOKEN": {
+            "type": "string",
+            "title": "DISCORD BOT TOKEN"
+        },
+        "COMMAND_PREFIX": {
+            "type": "string",
+            "title": "명령어 접두사를 설정합니다.",
+            "default": "."
+        },
+        "MESSAGE_COLOR": {
+            "type": "string",
+            "title": "Bot 응답 메시지 색상을 설정합니다.",
+            "default": "#FAA61A",
+            "examples": [
+                "#7289DA"
+            ]
+        },
+        "ALLOW_DM": {
+            "type": "boolean",
+            "title": "DM 허용 여부를 설정합니다.",
+            "default": true,
+            "examples": [
+                false
+            ]
+        }
+    }
+}

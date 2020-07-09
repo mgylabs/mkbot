@@ -24,6 +24,8 @@ namespace MKBot
 
         private ToolStripMenuItem UpdateMenu;
 
+        private Form Infowin = new InfoForm();
+
         public TrayApp()
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
@@ -55,7 +57,20 @@ namespace MKBot
             UpdateMenu = new ToolStripMenuItem("업데이트 확인", null, Click_Update);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), UpdateMenu, new ToolStripMenuItem("종료", null, Click_Exit)});
+            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
+        }
+
+        private void Click_info(object sender, EventArgs e)
+        {
+            Console.WriteLine(Infowin.Visible);
+            if (Infowin.Visible)
+            {
+                Infowin.Activate();
+            }
+            else
+            {
+                Infowin.ShowDialog();
+            }
         }
 
         //UI
