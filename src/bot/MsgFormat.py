@@ -1,10 +1,20 @@
 import discord
 import datetime
+from APIKey import TOKEN
 
 
-class Color:
-    Yellow = 0xFAA61A
-    Blue = 0x7289DA
+Msg_Color = None
+
+
+def get_color():
+    global Msg_Color
+    if Msg_Color == None:
+        c = TOKEN.get('MESSAGE_COLOR', '#FAA61A')
+        c = c.replace('#', '')
+        Msg_Color = int(c, 16)
+        return Msg_Color
+    else:
+        return Msg_Color
 
 
 class MsgFormatter:
@@ -13,7 +23,7 @@ class MsgFormatter:
 
     def get(self, ctx, title, description='', show_req_user=True):
         embed = discord.Embed(title=title, description=description +
-                              '\n\nPowered by [MK Bot](https://gitlab.com/mgylabs/discord-bot)', color=Color.Yellow, timestamp=datetime.datetime.utcnow())
+                              '\n\nPowered by [MK Bot](https://gitlab.com/mgylabs/discord-bot)', color=get_color(), timestamp=datetime.datetime.utcnow())
         if show_req_user:
             embed.add_field(name='Requested by',
                             value='<@{}>'.format(ctx.author.id))

@@ -4,7 +4,6 @@ import json
 import os
 import sys
 import zipfile
-import win32api
 
 
 class updater:

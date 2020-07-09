@@ -397,3 +397,4 @@ src/msu/build
 src/msu/dist
 src/msu/*.spec
 package/MKBotSetup.exe
+src/info

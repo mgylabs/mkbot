@@ -1,4 +1,8 @@
 {
-    "KAKAO_REST_TOKEN":"Your Token",
-    "DISCORD_TOKEN":"Your Token"
+    "$schema": "https://mgylabs.gitlab.io/discord-bot/config.schema",
+    "KAKAO_REST_TOKEN": "Your Token",
+    "DISCORD_TOKEN": "Your Token",
+    "COMMAND_PREFIX": ".",
+    "MESSAGE_COLOR": "#FAA61A",
+    "ALLOW_DM": true
 }

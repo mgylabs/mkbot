@@ -1,13 +1,4 @@
-include:
-  template: Jobs/Code-Quality.gitlab-ci.yml
-
-code_quality:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  interruptible: true
-
 stages:
-  - test
   - build
   - version
   - package
@@ -25,11 +16,12 @@ stages:
   stage: build
   script:
     - cd src\console
+    - nuget restore console.sln
     - dir C:\Windows\Microsoft.NET\Framework
-    - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild MKBot.sln /p:Configuration=Release
+    - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild console.sln /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None
     - cd ..\..
     - mkdir build
-    - mv src\console\MKBot\bin\Release\*.exe build
+    - mv src\console\bin\Release\* build
 
 .build-bot:
   extends:

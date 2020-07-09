@@ -7,8 +7,19 @@ from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
 import datetime
 import sys
+import re
 
-client = commands.Bot(command_prefix=commands.when_mentioned)
+PREFIX = None
+
+
+def get_prefix():
+    global PREFIX
+    if PREFIX == None:
+        PREFIX = TOKEN.get('COMMAND_PREFIX', '.')
+    return PREFIX
+
+
+client = commands.Bot(command_prefix=get_prefix())
 cert = MGCertificate('../data/mgcert.json')
 replyformat = None
 
@@ -22,7 +33,8 @@ async def on_ready():
     print('Logged in')
     global replyformat
     replyformat = MsgFormatter(client.user.avatar_url)
-    activity = discord.Game(name="//help로 도움말을 이용하세요", type=3)
+    activity = discord.Game(
+        name=f"{get_prefix()}help로 도움말을 이용하세요", type=3)
     await client.change_presence(status=discord.Status.online, activity=activity)
 
 
@@ -148,6 +160,23 @@ async def logout(ctx):
     await ctx.send(embed=replyformat.get(ctx, "Logs out of Discord and closes all connections"))
     print('Logged out')
     await client.logout()
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if (message.channel.type.value == 1) and (not TOKEN.get('ALLOW_DM', True)):
+        return
+
+    if client.user.mentioned_in(message):
+        text = re.sub('<@!?\d+> ', '', message.content)
+        if text == 'ping':
+            await message.channel.send(message.author.mention+' pong')
+    else:
+        await client.process_commands(message)
+
 
 try:
     client.run(TOKEN['DISCORD_TOKEN'])
