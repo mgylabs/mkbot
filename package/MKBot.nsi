@@ -62,15 +62,16 @@ Section "Apps" SEC01
   File /nonfatal /a "..\build\*"
   SetOutPath "$INSTDIR\app"
   File /nonfatal /a /r "..\build\app\*"
-  CreateDirectory "$SMPROGRAMS\MK Bot"
-  CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
-  CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   SetOutPath "$INSTDIR\info"
   File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
   SetOverwrite on
+  SetOutPath "$INSTDIR"
+  CreateDirectory "$SMPROGRAMS\MK Bot"
+  CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+  CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
@@ -113,13 +114,13 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "${PRODUCT_NAME}을(를) 제거하시겠습니까?" /SD IDYES IDYES +2
   Abort
-  nsExec::Exec 'taskkill /f /im "MKBot.exe"'
 FunctionEnd
 
 Section Uninstall
   ;Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'
+  nsExec::Exec 'taskkill /f /im "MKBot.exe"'
   Delete "$SMPROGRAMS\MK Bot\Uninstall.lnk"
   Delete "$SMPROGRAMS\MK Bot\Website.lnk"
   Delete "$DESKTOP\MK Bot.lnk"

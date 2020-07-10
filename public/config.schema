@@ -34,6 +34,14 @@
             "examples": [
                 false
             ]
+        },
+        "AUTO_CONNECT": {
+            "type": "boolean",
+            "title": "자동 연결 여부를 설정합니다.",
+            "default": false,
+            "examples": [
+                true
+            ]
         }
     }
 }
