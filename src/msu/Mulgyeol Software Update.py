@@ -10,9 +10,12 @@ class updater:
     def __init__(self):
         with open('../info/version.json', 'rt') as f:
             self.cur = version.parse(json.load(f)['version'])
-
-        res = requests.get(
-            'https://mgylabs.gitlab.io/discord-bot/version.json')
+        try:
+            res = requests.get(
+                'https://mgylabs.gitlab.io/discord-bot/version.json')
+            res.raise_for_status()
+        except:
+            sys.exit(1)
         data = res.json()
         self.last = version.parse(data['last-version'])
         self.tags = data['tags']
@@ -22,8 +25,11 @@ class updater:
 
     def isnewversion(self):
         if self.check_update():
-            r = requests.get(
-                'https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
+            try:
+                r = requests.get(
+                    'https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
+            except:
+                sys.exit(1)
 
             download_file_name = os.getenv(
                 'TEMP')+'\\mkbot-update\\MKBotSetup.zip'

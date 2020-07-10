@@ -147,6 +147,12 @@ version-stable:
   script:
     - python package/vc.py -r
   needs:
+    - job: build-bot
+      artifacts: false
+    - job: build-msu
+      artifacts: false
+    - job: build-console
+      artifacts: false
     - project: mgylabs/discord-bot
       job: version-beta
       ref: master

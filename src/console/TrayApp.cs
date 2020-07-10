@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MKBot
@@ -23,12 +20,16 @@ namespace MKBot
         private Process msu_process = new Process();
 
         private ToolStripMenuItem UpdateMenu;
-
-        private Form Infowin = new InfoForm();
+        private Form Infowin;
 
         public TrayApp()
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            Infowin = new InfoForm();
+
+            var jsonString = File.ReadAllText("data\\config.json");
+            JObject configjson = JObject.Parse(jsonString);
+
             psi1.FileName = "app\\app.exe";
             psi1.WorkingDirectory = "app";
             psi1.CreateNoWindow = true;
@@ -58,18 +59,16 @@ namespace MKBot
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
             new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
-        }
-
-        private void Click_info(object sender, EventArgs e)
-        {
-            Console.WriteLine(Infowin.Visible);
-            if (Infowin.Visible)
+            
+            bool autoconnect = false;
+            if (configjson["AUTO_CONNECT"] != null)
             {
-                Infowin.Activate();
+               autoconnect = (bool)configjson["AUTO_CONNECT"];
             }
-            else
+            
+            if (autoconnect)
             {
-                Infowin.ShowDialog();
+                notifyIcon1_MouseClick(new object(), new MouseEventArgs(MouseButtons.Left, 1, 1, 1, 1));
             }
         }
 
@@ -127,19 +126,29 @@ namespace MKBot
             }
         }
 
+        private void Click_info(object sender, EventArgs e)
+        {
+            Console.WriteLine(Infowin.Visible);
+            if (Infowin.Visible)
+            {
+                Infowin.Activate();
+            }
+            else
+            {
+                Infowin.ShowDialog();
+            }
+        }
+
         private void Click_Exit(object source, EventArgs e)
         {
             notifyIcon1.Visible = false;
+            if (online)
+            {
+                app_process.Kill();
+            }
             if (can_update)
             {
-                if (online)
-                {
-                    app_process.Kill();
-                }
-                else
-                {
-                    Run_setup(false);
-                }
+                Run_setup(false);
             }
             Environment.Exit(0);
         }

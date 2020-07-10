@@ -26,7 +26,7 @@ exe = EXE(pyz,
           strip=False,
           icon=os.getenv('CI_PROJECT_DIR')+'\\src\\console\\Resources\\mkbot_on.ico',
           upx=True,
-          console=True )
+          console=False )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

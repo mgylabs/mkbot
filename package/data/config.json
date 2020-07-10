@@ -4,5 +4,6 @@
     "DISCORD_TOKEN": "Your Token",
     "COMMAND_PREFIX": ".",
     "MESSAGE_COLOR": "#FAA61A",
-    "ALLOW_DM": true
+    "ALLOW_DM": true,
+    "AUTO_CONNECT": false
 }
