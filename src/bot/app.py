@@ -15,7 +15,7 @@ PREFIX = None
 def get_prefix():
     global PREFIX
     if PREFIX == None:
-        PREFIX = TOKEN.get('COMMAND_PREFIX', '.')
+        PREFIX = TOKEN.get('commandPrefix', '.')
     return PREFIX
 
 
@@ -108,7 +108,7 @@ async def tts(ctx, *args):
     url = "kakaoi-newtone-openapi.kakao.com"
     headers = {
         'Content-Type': 'application/xml',
-        'Authorization': 'KakaoAK '+TOKEN['KAKAO_REST_TOKEN'],
+        'Authorization': 'KakaoAK '+TOKEN['kakaoToken'],
     }
 
     if ctx.voice_client == None:
@@ -167,7 +167,10 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if (message.channel.type.value == 1) and (not TOKEN.get('ALLOW_DM', True)):
+    if (message.channel.type.value == 1) and (not TOKEN.get('allowDM', True)):
+        return
+
+    if not cert.isAdminUser(str(message.author)):
         return
 
     if client.user.mentioned_in(message):
@@ -179,7 +182,7 @@ async def on_message(message):
 
 
 try:
-    client.run(TOKEN['DISCORD_TOKEN'])
+    client.run(TOKEN['discordToken'])
 except discord.errors.LoginFailure as e:
     print(e)
     sys.exit(1)

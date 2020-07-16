@@ -9,7 +9,7 @@ Msg_Color = None
 def get_color():
     global Msg_Color
     if Msg_Color == None:
-        c = TOKEN.get('MESSAGE_COLOR', '#FAA61A')
+        c = TOKEN.get('messageColor', '#FAA61A')
         c = c.replace('#', '')
         Msg_Color = int(c, 16)
         return Msg_Color

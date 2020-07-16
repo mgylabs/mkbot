@@ -28,6 +28,7 @@ class updater:
             try:
                 r = requests.get(
                     'https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
+                r.raise_for_status()
             except:
                 sys.exit(1)
 

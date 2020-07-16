@@ -1,33 +1,34 @@
 {
+    "$schema": "https://json-schema.org/draft/2019-09/schema#",
     "title": "MK Bot Configuration Schema",
     "type": "object",
     "required": [
-        "KAKAO_REST_TOKEN",
-        "DISCORD_TOKEN"
+        "discordToken"
     ],
     "properties": {
-        "KAKAO_REST_TOKEN": {
-            "type": "string",
-            "title": "KAKAO API TOKEN"
-        },
-        "DISCORD_TOKEN": {
+        "discordToken": {
             "type": "string",
             "title": "DISCORD BOT TOKEN"
         },
-        "COMMAND_PREFIX": {
+        "kakaoToken": {
+            "type": "string",
+            "title": "KAKAO API TOKEN"
+        },
+        "commandPrefix": {
             "type": "string",
             "title": "명령어 접두사를 설정합니다.",
             "default": "."
         },
-        "MESSAGE_COLOR": {
+        "messageColor": {
             "type": "string",
             "title": "Bot 응답 메시지 색상을 설정합니다.",
             "default": "#FAA61A",
+            "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
             "examples": [
                 "#7289DA"
             ]
         },
-        "ALLOW_DM": {
+        "allowDM": {
             "type": "boolean",
             "title": "DM 허용 여부를 설정합니다.",
             "default": true,
@@ -35,7 +36,7 @@
                 false
             ]
         },
-        "AUTO_CONNECT": {
+        "connectOnStart": {
             "type": "boolean",
             "title": "자동 연결 여부를 설정합니다.",
             "default": false,

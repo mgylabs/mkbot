@@ -38,7 +38,7 @@ namespace MKBot
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
 
-            psi2.FileName = "app\\Mulgyeol Software Update.exe";           
+            psi2.FileName = "app\\Mulgyeol Software Update.exe";
             psi2.WorkingDirectory = "app";
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
@@ -59,13 +59,13 @@ namespace MKBot
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
             new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
-            
+
             bool autoconnect = false;
-            if (configjson["AUTO_CONNECT"] != null)
+            if (configjson["connectOnStart"] != null)
             {
-               autoconnect = (bool)configjson["AUTO_CONNECT"];
+                autoconnect = (bool)configjson["connectOnStart"];
             }
-            
+
             if (autoconnect)
             {
                 notifyIcon1_MouseClick(new object(), new MouseEventArgs(MouseButtons.Left, 1, 1, 1, 1));
@@ -111,7 +111,7 @@ namespace MKBot
                 if (online)
                 {
                     app_process.Kill();
-                } 
+                }
                 else
                 {
                     Run_setup(true);

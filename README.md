@@ -14,7 +14,7 @@ API provided by: https://discordapp.com/developers/applications
 
 ## Development Guide
 
-~"Category::Bot" ~"Category::MSU"
+~"Category:Bot" ~"Category:MSU" ~"Category:Console"
 
 1. Enter the following commands in terminal.
 
@@ -23,47 +23,22 @@ API provided by: https://discordapp.com/developers/applications
 .\scripts\prepare.bat
 ```
 
-2. Edit `config.json`, `mgcert.json` at `src/data` directory.
+2. Edit `config.json`, `mgcert.json` at `src\data` and `src\console\bin\Debug\data` directory.
+
 * config.json
 ```json
 {
-    "KAKAO_REST_TOKEN":"Your KakaoTalk REST API Token",
-    "DISCORD_TOKEN":"Your Bot TOKEN"
+    "discordToken":"Your Bot TOKEN",
+    "kakaoToken":"Your KakaoTalk REST API Token"
 }
 ```
 * mgcert.json
 ```json
 {
-    "admin_users":["admin_username#0000"],
-    "trusted_users":["trusted_username#0000"]
+    "adminUsers":["admin_username#0000"],
+    "trustedUsers":["trusted_username#0000"]
 }
 ```
-----
-
-~"Category::Console"
-
-1. Enter the following command in terminal.
-
-```bat
-.\scripts\prepare.bat
-```
-
-2. Edit `config.json`, `mgcert.json` at `src\console\bin\Debug\data` directory.
-* config.json
-```json
-{
-    "KAKAO_REST_TOKEN":"Your KakaoTalk REST API Token",
-    "DISCORD_TOKEN":"Your Bot TOKEN"
-}
-```
-* mgcert.json
-```json
-{
-    "admin_users":["admin_username#0000"],
-    "trusted_users":["trusted_username#0000"]
-}
-```
-
 ----
 
 > :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
@@ -78,4 +53,4 @@ For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-
 3.  Create a new Merge Request.
 4.  When you add a ~AutoMerge label to the Merge Request, @myftbot will automatically merge it when requirements are met.
 
-[Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGLabsBot/-/wikis/Auto-Merge)
+[Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGYLBot/-/wikis/Auto-Merge)
