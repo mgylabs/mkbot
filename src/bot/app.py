@@ -7,7 +7,9 @@ from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
 import datetime
 import sys
+import os
 import re
+import api
 
 PREFIX = None
 
@@ -21,6 +23,7 @@ def get_prefix():
 
 client = commands.Bot(command_prefix=get_prefix())
 cert = MGCertificate('../data/mgcert.json')
+client.__dict__.update({'MGCert': cert})
 replyformat = None
 
 
@@ -167,19 +170,22 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if (message.channel.type.value == 1) and (not TOKEN.get('allowDM', True)):
+    if (message.channel.type.value == 1) and (TOKEN.get('disabledPrivateChannel', False)):
         return
 
-    if not cert.isAdminUser(str(message.author)):
-        return
-
-    if client.user.mentioned_in(message):
+    if client.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
         text = re.sub('<@!?\d+> ', '', message.content)
         if text == 'ping':
             await message.channel.send(message.author.mention+' pong')
     else:
         await client.process_commands(message)
 
+exts = api.get_enabled_extensions()
+if len(exts) > 0:
+    if getattr(sys, 'frozen', False):
+        sys.path.append(os.getenv('USERPROFILE')+'\\.mkbot')
+    for i in exts:
+        client.load_extension(i)
 
 try:
     client.run(TOKEN['discordToken'])

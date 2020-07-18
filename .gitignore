@@ -1,10 +1,9 @@
 *.pyc
 
-test*
-
 *.log
 *.mp3
-
+test_*
+!test/*
 src/bot/build/
 src/bot/dist/
 
@@ -397,3 +396,4 @@ src/msu/dist
 src/msu/*.spec
 package/MKBotSetup.exe
 src/info
+src/bot/extensions

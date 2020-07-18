@@ -1,4 +1,5 @@
 import asyncio
+from discord.ext import commands
 from functools import wraps
 import logging
 import json
@@ -11,7 +12,7 @@ formatter = logging.Formatter(
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
-file_handler = logging.FileHandler('MK Bot.log', mode='a')
+file_handler = logging.FileHandler('MK Bot.log', mode='a', encoding='utf-8')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
@@ -40,8 +41,8 @@ class MGCertificate:
     def __init__(self, name):
         with open(name, 'rt') as f:
             data = json.load(f)
-        self.admin_users: list = data['adminUsers']
-        self.cert_users: list = data['trustedUsers']
+        self.admin_users: list = data.get('adminUsers', [])
+        self.trusted_users: list = data.get('trustedUsers', [])
 
     def isTrustedUser(self, username):
         return self.getUserLevel(username) == Level.TRUSTED_USERS
@@ -49,13 +50,21 @@ class MGCertificate:
     def isAdminUser(self, username):
         return self.getUserLevel(username) == Level.ADMIN_USERS
 
+    def isCertUser(self, username):
+        return self.getUserLevel(username) < 3
+
     def getUserLevel(self, username):
         if username in self.admin_users:
             return Level.ADMIN_USERS
-        elif username in self.cert_users:
+        elif len(self.trusted_users) == 0:
+            return Level.TRUSTED_USERS
+        elif username in self.trusted_users:
             return Level.TRUSTED_USERS
         else:
-            return Level.ADMIN_USERS
+            return Level.ALL_USERS
+
+    def bind(self, func, level=Level.TRUSTED_USERS, name=None, cls=None, **attrs):
+        return commands.command(name, cls, **attrs)(self.verify(level)(func))
 
     def verify(self, level=Level.TRUSTED_USERS):
         def deco(func):
@@ -71,8 +80,8 @@ class MGCertificate:
                     embed.add_field(name='Command tried', value='{} ({})'.format(
                         ctx.command.name, Level.get_description(level)))
                     await ctx.send(embed=embed)
-                    logger.critical('{} tried to command that needs "{}" permission.'.format(
-                        req_user, Level.get_description(level)))
+                    logger.critical('"{}" tried to command "{}" that needs "{}" permission.'.format(
+                        req_user, ctx.command.name, Level.get_description(level)))
                     raise Exception('Untrusted user')
 
                 return await func(ctx, *args, **kwargs)

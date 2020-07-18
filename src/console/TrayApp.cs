@@ -58,7 +58,7 @@ namespace MKBot
             UpdateMenu = new ToolStripMenuItem("업데이트 확인", null, Click_Update);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
+            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
 
             bool autoconnect = false;
             if (configjson["connectOnStart"] != null)
@@ -82,7 +82,8 @@ namespace MKBot
                     notifyIcon1.Icon = Properties.Resources.mkbot_on;
                     app_process.Start();
                     online = true;
-                    if (!can_update)
+                    var random = new Random();
+                    if ((!can_update) && (random.Next(1,3) == 1))
                     {
                         Run_msu("/c");
                     }
@@ -102,6 +103,11 @@ namespace MKBot
         private void Click_MGCert(object source, EventArgs e)
         {
             Process.Start("data\\mgcert.json");
+        }
+
+        private void Click_Extensions(object sender, EventArgs e)
+        {
+            Process.Start(Environment.GetEnvironmentVariable("USERPROFILE") + "\\.mkbot\\extensions\\extensions.json");
         }
 
         private void Click_Update(object sender, EventArgs e)
@@ -128,7 +134,6 @@ namespace MKBot
 
         private void Click_info(object sender, EventArgs e)
         {
-            Console.WriteLine(Infowin.Visible);
             if (Infowin.Visible)
             {
                 Infowin.Activate();

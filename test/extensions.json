@@ -1,0 +1,14 @@
+{
+    "extensions": [
+        {
+            "id": "test_hello",
+            "main": "hello",
+            "enabled": false
+        },
+        {
+            "id": "test_bye",
+            "main": "bye",
+            "enabled": true
+        }
+    ]
+}

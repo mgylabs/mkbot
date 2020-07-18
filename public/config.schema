@@ -28,12 +28,12 @@
                 "#7289DA"
             ]
         },
-        "allowDM": {
+        "disabledPrivateChannel": {
             "type": "boolean",
-            "title": "DM 허용 여부를 설정합니다.",
-            "default": true,
+            "title": "DM 사용 안 함 여부를 설정합니다.",
+            "default": false,
             "examples": [
-                false
+                true
             ]
         },
         "connectOnStart": {

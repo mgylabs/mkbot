@@ -4,6 +4,6 @@
     "kakaoToken": "Your Token",
     "commandPrefix": ".",
     "messageColor": "#FAA61A",
-    "allowDM": true,
+    "disabledPrivateChannel": false,
     "connectOnStart": false
 }

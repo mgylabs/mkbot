@@ -12,6 +12,8 @@ RequestExecutionLevel user
 !include "FileFunc.nsh"
 !include "MUI.nsh"
 
+BrandingText "Mulgyeol Labs"
+
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "mkbot_install.ico"
@@ -72,6 +74,8 @@ Section "Apps" SEC01
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+  SetOutPath "$PROFILE\.mkbot\extensions"
+  File "..\extensions\extensions.json"
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
