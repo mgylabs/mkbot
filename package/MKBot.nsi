@@ -75,7 +75,7 @@ Section "Apps" SEC01
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   SetOutPath "$PROFILE\.mkbot\extensions"
-  File "..\extensions\extensions.json"
+  File /nonfatal /a /r "..\extensions\*"
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'

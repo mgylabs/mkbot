@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "MK Bot Extensions schema",
+    "default": {},
+    "required": [
+        "extensions"
+    ],
+    "properties": {
+        "extensions": {
+            "$id": "#/properties/extensions",
+            "type": "array",
+            "title": "The extensions schema",
+            "default": [
+                {
+                    "id": "extension_id",
+                    "enabled": true
+                }
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/extensions/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/extensions/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "default": {
+                            "id": "extension_id",
+                            "enabled": true
+                        },
+                        "required": [
+                            "id",
+                            "enabled"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/extensions/items/anyOf/0/properties/id",
+                                "type": "string",
+                                "title": "extension id",
+                                "examples": []
+                            },
+                            "enabled": {
+                                "$id": "#/properties/extensions/items/anyOf/0/properties/enabled",
+                                "type": "boolean",
+                                "title": "enabled",
+                                "default": true,
+                                "examples": [
+                                    false
+                                ]
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": true
+}

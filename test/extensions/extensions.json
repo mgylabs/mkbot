@@ -1,0 +1,10 @@
+{
+    "extensions": {
+        "test_hello": {
+            "main": "hello"
+        },
+        "test_bye": {
+            "main": "bye"
+        }
+    }
+}

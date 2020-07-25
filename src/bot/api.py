@@ -10,5 +10,7 @@ def get_enabled_extensions():
         loc = ''
 
     with open(loc+'extensions\\extensions.json', 'rt') as f:
+        default_exts = json.load(f)['extensions']
+    with open('..\\data\\extensions.json', 'rt') as f:
         exts = json.load(f)['extensions']
-    return ['extensions.{}.{}'.format(x['id'], x['main']) for x in exts if x.get('enabled', False) and ('id' in x) and ('main' in x)]
+    return ['extensions.{}.{}'.format(x['id'], default_exts[x['id']]['main']) for x in exts if x.get('enabled', False) and ('id' in x)]

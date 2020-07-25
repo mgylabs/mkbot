@@ -83,7 +83,7 @@ namespace MKBot
                     app_process.Start();
                     online = true;
                     var random = new Random();
-                    if ((!can_update) && (random.Next(1,3) == 1))
+                    if ((!can_update) && (random.Next(1, 3) == 1))
                     {
                         Run_msu("/c");
                     }
@@ -107,7 +107,7 @@ namespace MKBot
 
         private void Click_Extensions(object sender, EventArgs e)
         {
-            Process.Start(Environment.GetEnvironmentVariable("USERPROFILE") + "\\.mkbot\\extensions\\extensions.json");
+            Process.Start("data\\extensions.json");
         }
 
         private void Click_Update(object sender, EventArgs e)
