@@ -3,7 +3,7 @@
 *.log
 *.mp3
 test_*
-!test/*
+!test/**/*
 src/bot/build/
 src/bot/dist/
 
