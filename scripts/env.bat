@@ -1,3 +1,3 @@
 python -m venv .env
-.env\Scripts\activate
+call .env\Scripts\activate
 pip install -r requirements.txt
