@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 
-def setup(bot):
+def setup(bot:commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
     async def delete(ctx, amount):

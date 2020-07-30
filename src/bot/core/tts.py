@@ -4,7 +4,7 @@ import requests
 from .utils.token import TOKEN
 
 
-def setup(bot):
+def setup(bot:commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
     async def tts(ctx, *args):
