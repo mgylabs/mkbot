@@ -1,12 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
+import sys
+sys.path.append(os.curdir)
+from core_ext import core_extensions
+
 block_cipher = None
 
 a = Analysis(['app.py'],
              pathex=[os.curdir],
-             binaries=[(os.getenv('botpackage')+'\\bin\\libopus-0.x64.dll', '.' )],
+             binaries=[(os.getenv('botpackage') +
+                        '\\bin\\libopus-0.x64.dll', '.')],
              datas=[],
-             hiddenimports=["_cffi_backend"],
+             hiddenimports=["_cffi_backend", *core_extensions],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -15,7 +20,7 @@ a = Analysis(['app.py'],
              cipher=block_cipher,
              noarchive=False)
 pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
+          cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
           [],
@@ -24,9 +29,10 @@ exe = EXE(pyz,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
-          icon=os.getenv('CI_PROJECT_DIR')+'\\src\\console\\Resources\\mkbot_on.ico',
+          icon=os.getenv('CI_PROJECT_DIR') +
+          '\\src\\console\\Resources\\mkbot_on.ico',
           upx=True,
-          console=False )
+          console=True)
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

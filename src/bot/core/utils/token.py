@@ -1,3 +1,4 @@
+import os
 import json
 
 with open('../data/config.json', 'rt', encoding='utf-8') as f:

@@ -1,6 +1,6 @@
 import discord
 import datetime
-from APIKey import TOKEN
+from core.utils.token import TOKEN
 
 
 Msg_Color = None
@@ -18,7 +18,10 @@ def get_color():
 
 
 class MsgFormatter:
-    def __init__(self, avatar_url):
+    def __init__(self, avatar_url=None):
+        self.avatar_url = avatar_url
+
+    def set_avatar_url(self, avatar_url):
         self.avatar_url = avatar_url
 
     def get(self, ctx, title, description='', show_req_user=True):
