@@ -21,10 +21,11 @@ def requests_API(method, link, datadict=None):
 
 
 def pre_release():
-    mr_iid = os.getenv('CI_MERGE_REQUEST_IID')
-    if mr_iid != None:
+    mr_data = requests_API(
+        'GET', '/projects/{}/merge_requests?state=merged&not[labels][]=workflow::verification&not[labels][]=workflow::production&target_branch=master'.format(project_id)).json()
+    for d in mr_data:
         requests_API(
-            'PUT', '/projects/{}/merge_requests/{}'.format(project_id, mr_iid), {'add_labels': 'workflow::verification'})
+            'PUT', '/projects/{}/merge_requests/{}'.format(project_id, d['iid']), {'add_labels': 'workflow::verification'})
 
 
 def stable_release():
