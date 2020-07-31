@@ -3,5 +3,6 @@ core_extensions = (
     'core.join',
     'core.leave',
     'core.logout',
-    'core.tts'
+    'core.tts',
+    'core.poll'
 )
