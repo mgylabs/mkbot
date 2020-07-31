@@ -10,8 +10,9 @@ import sys
 import os
 import re
 import api
-import traceback
+import time
 
+stime = time.time()
 PREFIX = None
 
 
@@ -30,7 +31,7 @@ client.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
 
 @client.event
 async def on_ready():
-    print('Logged in')
+    print('Logged in within', time.time() - stime)
     global replyformat
     replyformat.set_avatar_url(client.user.avatar_url)
     activity = discord.Game(
@@ -49,24 +50,23 @@ async def on_message(message):
     if client.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
         text = re.sub('<@!?\d+> ', '', message.content)
         if text == 'ping':
-            await message.channel.send(message.author.mention+' pong')
+            await message.channel.send(message.author.mention + ' pong')
     else:
         await client.process_commands(message)
 
 
-for cext in core_extensions:
-    client.load_extension(cext)
+for i in core_extensions:
+    client.load_extension(i)
 
 try:
     exts = api.get_enabled_extensions()
     if len(exts) > 0:
         if getattr(sys, 'frozen', False):
-            sys.path.append(os.getenv('USERPROFILE')+'\\.mkbot')
+            sys.path.append(os.getenv('USERPROFILE') + '\\.mkbot')
         for i in exts:
             client.load_extension(i)
 except Exception as e:
     print(e)
-    traceback.print_exc()
 
 
 try:

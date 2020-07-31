@@ -19,7 +19,7 @@ API provided by: https://discordapp.com/developers/applications
 1. Enter the following commands in terminal.
 
 ```bat
-.\scripts\env.bat
+.\scripts\venv.bat
 .\scripts\prepare.bat
 ```
 

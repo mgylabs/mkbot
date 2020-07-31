@@ -1,8 +1,26 @@
 stages:
+  - analysis
   - build
   - version
   - package
   - deploy
+  - release
+
+pylint:
+  stage: analysis
+  image: python:3.7
+  script:
+  - python -m pip install --upgrade pip
+  - pip install -r requirements.txt
+  - pylint src --exit-zero --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
+  only:
+    refs:
+      - merge_requests
+      - master
+    changes:
+      - src/bot/**/*
+      - src/msu/**/*
+  interruptible: true
 
 .shared_windows_runners:
   tags:
@@ -131,9 +149,11 @@ version-beta:
   image: python:latest
   stage: version
   script:
+    - pip install requests
     - mkdir output
     - curl --output output/last_version.txt -L "https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/master/raw/output/last_version.txt?job=version-beta"
     - python package/vc.py -b
+    - python package/tool.py -b
   artifacts:
     paths:
       - output/
@@ -145,7 +165,9 @@ version-stable:
   image: python:latest
   stage: version
   script:
+    - pip install requests
     - python package/vc.py -r
+    - python package/tool.py -r
   needs:
     - job: build-bot
       artifacts: false
@@ -227,3 +249,16 @@ pages:
       - public
   only:
     - tags
+
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo 'running release_job'
+  release:
+     name: 'MK Bot $CI_COMMIT_TAG'
+     tag_name: '$CI_COMMIT_TAG'
+     description: 'No contents'
+     ref: '$CI_COMMIT_TAG'

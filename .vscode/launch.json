@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: app.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\src\\bot\\app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}\\src\\bot",
+            "pythonPath": "${command:python.interpreterPath}"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

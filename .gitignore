@@ -391,6 +391,7 @@ src/data/
 package/vc.py
 
 .env/
+.venv/
 src/msu/build
 src/msu/dist
 src/msu/*.spec

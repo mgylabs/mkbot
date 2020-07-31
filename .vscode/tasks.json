@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": ".env\\Scripts\\activate && scripts\\build.bat",
+            "command": ".venv\\Scripts\\activate && scripts\\build.bat",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}"

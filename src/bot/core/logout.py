@@ -1,9 +1,9 @@
 from discord.ext import commands
 
 
-def setup(bot:commands.Bot):
+def setup(bot: commands.Bot):
     @commands.command()
-    @bot.MGCert.verify(2)
+    @bot.MGCert.verify(1)
     async def logout(ctx):
         """
         봇을 종료합니다. (관리자 권한 필요)

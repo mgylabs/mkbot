@@ -4,7 +4,7 @@ import requests
 from .utils.token import TOKEN
 
 
-def setup(bot:commands.Bot):
+def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
     async def tts(ctx, *args):
@@ -26,10 +26,9 @@ def setup(bot:commands.Bot):
                 raise commands.CommandError(
                     "Author not connected to a voice channel.")
 
-        url = "kakaoi-newtone-openapi.kakao.com"
         headers = {
             'Content-Type': 'application/xml',
-            'Authorization': 'KakaoAK '+TOKEN['kakaoToken'],
+            'Authorization': 'KakaoAK ' + TOKEN['kakaoToken'],
         }
 
         if args[0][0] == '-':
