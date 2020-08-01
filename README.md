@@ -1,4 +1,4 @@
-# Discord Bot
+# MK Bot
 Discord Bot developed by Mulgyeol Labs  
 API provided by: https://discordapp.com/developers/applications
 
@@ -29,7 +29,8 @@ API provided by: https://discordapp.com/developers/applications
 ```json
 {
     "discordToken":"Your Bot TOKEN",
-    "kakaoToken":"Your KakaoTalk REST API Token"
+    "kakaoToken":"Your KakaoTalk REST API Token",
+    "__DEBUG_MODE__": true
 }
 ```
 * mgcert.json
