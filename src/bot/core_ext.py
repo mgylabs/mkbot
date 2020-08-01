@@ -4,5 +4,6 @@ core_extensions = (
     'core.leave',
     'core.logout',
     'core.tts',
-    'core.poll'
+    'core.poll',
+    'core.roulette'
 )
