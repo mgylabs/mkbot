@@ -52,6 +52,9 @@ async def on_message(message):
         if text == 'ping':
             await message.channel.send(message.author.mention + ' pong')
     else:
+        if TOKEN.get('__DEBUG_MODE__', False):
+            for i in core_extensions:
+                client.reload_extension(i)
         await client.process_commands(message)
 
 
