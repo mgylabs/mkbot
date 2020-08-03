@@ -24,12 +24,13 @@ namespace MKBot
 
         public TrayApp()
         {
+#if !DEBUG
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+#endif
             Infowin = new InfoForm();
-
             var jsonString = File.ReadAllText("data\\config.json");
             JObject configjson = JObject.Parse(jsonString);
-
+            
             psi1.FileName = "app\\app.exe";
             psi1.WorkingDirectory = "app";
             psi1.CreateNoWindow = true;

@@ -23,7 +23,7 @@ API provided by: https://discordapp.com/developers/applications
 .\scripts\prepare.bat
 ```
 
-2. Edit `config.json`, `mgcert.json` at `src\data` and `src\console\bin\Debug\data` directory.
+2. Edit `config.json`, `mgcert.json` at `src\data` directory.
 
 * config.json
 ```json
