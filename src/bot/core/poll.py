@@ -7,7 +7,7 @@ def setup(bot: commands.Bot):
     async def poll(ctx, question, *candidates):
         """
         투표 명령어입니다.
-        //poll "어느걸 고를래?" a b c : a, b, c 세 개의 후보를 가진 투표를 생성합니다. (, 사용은 안됩니다)
+        {commandPrefix}poll "어느걸 고를래?" a b c : a, b, c 세 개의 후보를 가진 투표를 생성합니다. (, 사용은 안됩니다)
         reaction 기능으로 투표를 할 수 있습니다.
         """
         channel = ctx.message.channel

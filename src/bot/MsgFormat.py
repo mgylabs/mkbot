@@ -1,6 +1,6 @@
 import discord
 import datetime
-from core.utils.token import TOKEN
+from core.utils.config import CONFIG
 
 
 Msg_Color = None
@@ -9,7 +9,7 @@ Msg_Color = None
 def get_color():
     global Msg_Color
     if Msg_Color == None:
-        c = TOKEN.get('messageColor', '#FAA61A')
+        c = CONFIG.messageColor
         c = c.replace('#', '')
         Msg_Color = int(c, 16)
         return Msg_Color

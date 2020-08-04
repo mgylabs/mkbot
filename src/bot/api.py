@@ -7,7 +7,7 @@ def get_enabled_extensions():
     if getattr(sys, 'frozen', False):
         loc = os.getenv('USERPROFILE')+'\\.mkbot\\'
     else:
-        loc = ''
+        loc = '..\\..\\'
 
     with open(loc+'extensions\\extensions.json', 'rt') as f:
         default_exts = json.load(f)['extensions']

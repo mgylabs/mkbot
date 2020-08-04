@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import requests
-from .utils.token import TOKEN
+from .utils.config import CONFIG
 
 
 def setup(bot: commands.Bot):
@@ -10,12 +10,12 @@ def setup(bot: commands.Bot):
     async def tts(ctx, *args):
         """
         TTS 목소리를 사용할 수 있습니다.
-        //tts [option] "내용" : 내용에 있는 내용을 말합니다. 내용에 띄어쓰기가 있는 경우에도 큰 따옴표로 감싸지 않아도 됩니다.
+        {commandPrefix}tts [option] "내용" : 내용에 있는 내용을 말합니다. 내용에 띄어쓰기가 있는 경우에도 큰 따옴표로 감싸지 않아도 됩니다.
 
         *사용예시*
-        //tts "내용"
-        //tts -m "내용"
-        //tts -w "내용": -m 은 남성 목소리로 말하고 -w 는 여성 목소리로 말합니다. 기본은 남성입니다.
+        {commandPrefix}tts "내용"
+        {commandPrefix}tts -m "내용"
+        {commandPrefix}tts -w "내용": -m 은 남성 목소리로 말하고 -w 는 여성 목소리로 말합니다. 기본은 남성입니다.
         """
 
         if ctx.voice_client == None:
@@ -28,7 +28,7 @@ def setup(bot: commands.Bot):
 
         headers = {
             'Content-Type': 'application/xml',
-            'Authorization': 'KakaoAK ' + TOKEN['kakaoToken'],
+            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken,
         }
 
         if args[0][0] == '-':
@@ -39,7 +39,7 @@ def setup(bot: commands.Bot):
             elif voice.upper() == '-W':
                 vs = 'WOMAN_DIALOG_BRIGH'
             else:
-                await ctx.send(embed=bot.replyformat.get(ctx, "Usage Error", "Invalid parameter. For more information, type `//help tts`."))
+                await ctx.send(embed=bot.replyformat.get(ctx, "Usage Error", f"Invalid parameter. For more information, type `{CONFIG.commandPrefix}help tts`."))
                 raise commands.CommandError("Error")
         else:
             string = ' '.join(args)

@@ -4,6 +4,7 @@ from functools import wraps
 import logging
 import json
 from MsgFormat import MsgFormatter
+from core.utils.config import CONFIG
 
 logger = logging.getLogger('Logger')
 logger.setLevel(logging.DEBUG)
@@ -68,6 +69,10 @@ class MGCertificate:
 
     def verify(self, level=Level.TRUSTED_USERS):
         def deco(func):
+            if func.__doc__ != None:
+                func.__doc__ = func.__doc__.format(
+                    commandPrefix=CONFIG.commandPrefix)
+
             @wraps(func)
             async def outerfunc(ctx, *args, **kwargs):
                 req_user = str(ctx.author)
@@ -85,6 +90,5 @@ class MGCertificate:
                     raise Exception('Untrusted user')
 
                 return await func(ctx, *args, **kwargs)
-
             return outerfunc
         return deco

@@ -2,7 +2,7 @@ import asyncio
 import discord
 from discord.ext import commands
 import requests
-from core.utils.token import TOKEN
+from core.utils.config import CONFIG
 from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
 from core_ext import core_extensions
@@ -19,7 +19,7 @@ PREFIX = None
 def get_prefix():
     global PREFIX
     if PREFIX == None:
-        PREFIX = TOKEN.get('commandPrefix', '.')
+        PREFIX = CONFIG.commandPrefix
     return PREFIX
 
 
@@ -34,8 +34,12 @@ async def on_ready():
     print('Logged in within', time.time() - stime)
     global replyformat
     replyformat.set_avatar_url(client.user.avatar_url)
+    if CONFIG.__DEBUG_MODE__:
+        name = "DEBUG"
+    else:
+        name = f"{get_prefix()}help로 도움말을 이용하세요"
     activity = discord.Game(
-        name=f"{get_prefix()}help로 도움말을 이용하세요", type=3)
+        name=name, type=3)
     await client.change_presence(status=discord.Status.online, activity=activity)
 
 
@@ -44,7 +48,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if (message.channel.type.value == 1) and (TOKEN.get('disabledPrivateChannel', False)):
+    if (message.channel.type.value == 1) and (CONFIG.disabledPrivateChannel):
         return
 
     if client.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
@@ -52,7 +56,7 @@ async def on_message(message):
         if text == 'ping':
             await message.channel.send(message.author.mention + ' pong')
     else:
-        if TOKEN.get('__DEBUG_MODE__', False):
+        if CONFIG.__DEBUG_MODE__:
             for i in core_extensions:
                 client.reload_extension(i)
         await client.process_commands(message)
@@ -66,6 +70,8 @@ try:
     if len(exts) > 0:
         if getattr(sys, 'frozen', False):
             sys.path.append(os.getenv('USERPROFILE') + '\\.mkbot')
+        else:
+            sys.path.append('..\\..')
         for i in exts:
             client.load_extension(i)
 except Exception as e:
@@ -73,7 +79,7 @@ except Exception as e:
 
 
 try:
-    client.run(TOKEN['discordToken'])
+    client.run(CONFIG.discordToken)
 except discord.errors.LoginFailure as e:
     print(e)
     sys.exit(1)

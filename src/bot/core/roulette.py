@@ -12,8 +12,8 @@ def setup(bot: commands.Bot):
         Play roulette
 
         Examples:
-        roulette "Player" @user1 @user2 @user3
-        rou "title" "item 1" "item 2"
+        {commandPrefix}roulette "Player" @user1 @user2 @user3
+        {commandPrefix}rou "title" "item 1" "item 2"
 
         Note:
         This bot cannot be added to items.

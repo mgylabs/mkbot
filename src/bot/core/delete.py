@@ -7,8 +7,8 @@ def setup(bot: commands.Bot):
     async def delete(ctx, amount):
         """
         메세지를 삭제합니다.
-        //delete amount : amount 만큼의 최근 메세지를 삭제합니다.
-        //delete all : 모든 메세지(최대 200개)를 삭제합니다.
+        {commandPrefix}delete amount : amount 만큼의 최근 메세지를 삭제합니다.
+        {commandPrefix}delete all : 모든 메세지(최대 200개)를 삭제합니다.
         """
         channel = ctx.message.channel
         messages = []
