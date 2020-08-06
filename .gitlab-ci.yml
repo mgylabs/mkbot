@@ -53,7 +53,7 @@ pylint:
     - dir $Env:LOCALAPPDATA\Programs\Python
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\"
     - $Env:Path += ";$Env:LOCALAPPDATA\Programs\Python\Python37\Scripts\"
-    - $Env:botpackage = "$Env:LOCALAPPDATA\Programs\Python\Python37\Lib\site-packages\discord"
+    - $Env:botpackage = "$Env:LOCALAPPDATA\Programs\Python\Python37\Lib\site-packages"
     - python -m pip install --upgrade pip
     - python -V
     - pip install -r requirements.txt

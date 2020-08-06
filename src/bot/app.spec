@@ -9,8 +9,10 @@ block_cipher = None
 a = Analysis(['app.py'],
              pathex=[os.curdir],
              binaries=[(os.getenv('botpackage') +
-                        '\\bin\\libopus-0.x64.dll', '.')],
-             datas=[],
+                        '\\discord\\bin\\libopus-0.x64.dll', '.')],
+             datas=[(os.getenv('botpackage') +
+                     '\\langdetect\\utils\\messages.properties', 'langdetect\\utils'),
+                    (os.getenv('botpackage') + '\\langdetect\\profiles', 'langdetect\\profiles')],
              hiddenimports=["_cffi_backend", *core_extensions],
              hookspath=[],
              runtime_hooks=[],

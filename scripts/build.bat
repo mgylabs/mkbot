@@ -5,7 +5,7 @@ set CI_PROJECT_DIR=%cd%
 xcopy /I /Y /E package\data build\data
 xcopy /I /Y package\info build\info
 cd src\bot
-set botpackage=..\..\.venv\Lib\site-packages\discord
+set botpackage=..\..\.venv\Lib\site-packages
 pyinstaller app.spec
 move dist\app ..\..\build
 cd ..\console
