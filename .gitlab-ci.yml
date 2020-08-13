@@ -195,7 +195,7 @@ version-stable:
   before_script:
     - $ver=cat output/last_version.txt
   script:
-    - choco install nsis -y
+    - choco install -y nsis --version=3.05
     - $Env:Path += ";C:\Program Files (x86)\NSIS\"
     - makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
     - mv package\MKBotSetup.exe .\
