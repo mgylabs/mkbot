@@ -11,6 +11,7 @@ RequestExecutionLevel user
 ; MUI 1.67 compatible ------
 !include "FileFunc.nsh"
 !include "MUI.nsh"
+!include shortcut-properties.nsh
 
 BrandingText "Mulgyeol Labs"
 
@@ -62,10 +63,13 @@ Section "Apps" SEC01
   IfSilent +1 +2
   Exec "$INSTDIR\msu.exe /start MKBotSetup.exe"
   File /nonfatal /a "..\build\*"
+  File "MKBot.VisualElementsManifest.xml"
   SetOutPath "$INSTDIR\app"
   File /nonfatal /a /r "..\build\app\*"
   SetOutPath "$INSTDIR\info"
   File /nonfatal /a /r "info\*"
+  SetOutPath "$INSTDIR\resources"
+  File /nonfatal /a /r "..\resources\*"
   SetOutPath "$INSTDIR\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
@@ -73,6 +77,7 @@ Section "Apps" SEC01
   SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\MK Bot"
   CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+  !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\MK Bot\MK Bot.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
   CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
   SetOutPath "$PROFILE\.mkbot\extensions"
   File /nonfatal /a /r "..\extensions\*"

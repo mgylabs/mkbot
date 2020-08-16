@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.AccessControl;
 using System.Windows.Forms;
+using Windows.UI.Notifications;
 
 namespace MKBot
 {
@@ -22,10 +26,15 @@ namespace MKBot
         private ToolStripMenuItem UpdateMenu;
         private Form Infowin;
 
+        private string DirectoryPath;
+
         public TrayApp()
         {
-#if !DEBUG
-            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+#if DEBUG
+            DirectoryPath = Path.GetFullPath(Environment.CurrentDirectory+"\\..");
+#else
+            DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
+            Environment.CurrentDirectory = DirectoryPath;
 #endif
             Infowin = new InfoForm();
             var jsonString = File.ReadAllText("data\\config.json");
@@ -60,7 +69,9 @@ namespace MKBot
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
             new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
-
+#if !DEBUG
+            Run_msu("/c");
+#endif
             bool autoconnect = false;
             if (configjson["connectOnStart"] != null)
             {
@@ -159,14 +170,119 @@ namespace MKBot
             Environment.Exit(0);
         }
 
-        private void ShowToast(string title, string text)
+        private void ShowToast(string title, string text, string type="action=None")
         {
-            notifyIcon1.BalloonTipTitle = title;
-            notifyIcon1.BalloonTipText = text;
-            notifyIcon1.ShowBalloonTip(0);
+            ToastContent toastContent = new ToastContent()
+            {
+                // Arguments when the user taps body of toast
+                Launch = type,
+
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = title,
+                                HintMaxLines = 1
+                            },
+                            new AdaptiveText()
+                            {
+                                Text = text
+                            }
+                        },
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = DirectoryPath+"\\resources\\MKBot_on.png",
+                            HintCrop = ToastGenericAppLogoCrop.None
+                        }
+                    }
+                }
+            };
+
+            // And create the toast notification
+            var toast = new ToastNotification(toastContent.GetXml());
+            toast.Activated += Toast_Activated;
+            // And then show it
+            DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
+        }
+
+        private void ShowUpdateToast(string title = "Mulgyeol Software Update", string text = "최신 업데이트를 적용하려면 MK Bot을(를) 다시 시작하세요.", string type = "action=None")
+        {
+            ToastContent toastContent = new ToastContent()
+            {
+                // Arguments when the user taps body of toast
+                Launch = type,
+
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = title,
+                                HintMaxLines = 1
+                            },
+                            new AdaptiveText()
+                            {
+                                Text = text
+                            }
+                        },
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = DirectoryPath+"\\resources\\MKBot_install.png",
+                            HintCrop = ToastGenericAppLogoCrop.None
+                        }
+                    }
+                },
+                Actions = new ToastActionsCustom()
+                {
+                    Buttons =
+                    {
+                        new ToastButton("지금 업데이트", "action=install")
+                        {
+                            ActivationType = ToastActivationType.Foreground
+                        },
+
+                        new ToastButton("나중에", "action=later")
+                        {
+                            ActivationType = ToastActivationType.Foreground
+                        }
+                    }
+                }
+            };
+
+            // And create the toast notification
+            var toast = new ToastNotification(toastContent.GetXml());
+            toast.Activated += Toast_Activated;
+            // And then show it
+            DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
 
         //background
+        private void Toast_Activated(ToastNotification sender, object arguments)
+        {
+            ToastActivatedEventArgs strArgs = arguments as ToastActivatedEventArgs;
+            QueryString args = QueryString.Parse(strArgs.Arguments);
+
+            switch (args["action"])
+            {
+                case "install":
+                    Install_update();
+                    break;
+                case "openConfig":
+                    Process.Start("data\\config.json");
+                    break;
+                default:
+                    Console.WriteLine("default");
+                    break;
+            }
+        }
+
         private void Run_msu(string argv = "/c")
         {
             UpdateMenu.Enabled = false;
@@ -182,6 +298,21 @@ namespace MKBot
             catch (Exception)
             {
                 msu_process.Start();
+            }
+        }
+
+        private void Install_update()
+        {
+            if (can_update)
+            {
+                if (online)
+                {
+                    app_process.Kill();
+                }
+                else
+                {
+                    Run_setup(true);
+                }
             }
         }
 
@@ -208,11 +339,8 @@ namespace MKBot
                 can_update = true;
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "다시 시작 및 업데이트";
-                if (checking_update)
-                {
-                    ShowToast("Mulgyeol Software Update", "최신 업데이트를 적용하려면 MK Bot을(를) 다시 시작하세요.");
-                    checking_update = false;
-                }
+                ShowUpdateToast();
+                checking_update = false;
             }
             else if (msu_process.ExitCode == 1)
             {
@@ -236,7 +364,7 @@ namespace MKBot
             }
             if (app_process.ExitCode == 1)
             {
-                ShowToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하세요.");
+                ShowToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하세요.", "action=openConfig");
             }
         }
 

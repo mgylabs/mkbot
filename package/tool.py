@@ -32,7 +32,7 @@ def stable_release():
     tag_name = os.getenv('CI_COMMIT_TAG')
 
     mr_data = requests_API(
-        'GET', '/projects/{}/merge_requests?state=merged&labels=workflow::verification&target_branch=master'.format(project_id)).json()
+        'GET', '/projects/{}/merge_requests?state=merged&labels=workflow::verification&target_branch=master&sort=asc'.format(project_id)).json()
 
     data_dict = {}
     for d in mr_data:

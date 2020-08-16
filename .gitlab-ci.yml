@@ -36,10 +36,11 @@ pylint:
     - cd src\console
     - nuget restore console.sln
     - dir C:\Windows\Microsoft.NET\Framework
-    - C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild console.sln /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None
+    - '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe" console.sln /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None'
     - cd ..\..
     - mkdir build
     - mv src\console\bin\Release\* build
+    - rm -Force build\*.pdb
 
 .build-bot:
   extends:
@@ -235,30 +236,19 @@ stable-release:
     - tags
     
 pages:
+  image: python:latest
   stage: deploy
   script:
     - echo "pages"
     - mv .public/version.json public
+    - python package/hash.py
   needs:
     - job: version-stable
       artifacts: true
     - job: stable-release
-      artifacts: false
+      artifacts: true
   artifacts:
     paths:
       - public
   only:
     - tags
-
-release_job:
-  stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  rules:
-    - if: $CI_COMMIT_TAG
-  script:
-    - echo 'running release_job'
-  release:
-     name: 'MK Bot $CI_COMMIT_TAG'
-     tag_name: '$CI_COMMIT_TAG'
-     description: 'No contents'
-     ref: '$CI_COMMIT_TAG'

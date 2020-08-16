@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,7 +25,8 @@ namespace MKBot
                 MessageBox.Show("프로그램이 이미 실행 중 입니다.");
                 return;
             }
-
+            DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>("com.mgylabs.mkbot");
+            DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             TrayApp app = new TrayApp();
