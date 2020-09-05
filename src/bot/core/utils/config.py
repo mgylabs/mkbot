@@ -10,6 +10,7 @@ class Settings:
         self.messageColor = "#FAA61A"
         self.disabledPrivateChannel = False
         self.connectOnStart = False
+        self.gitlabToken = ''
         self.__DEBUG_MODE__ = False
         self.__dict__.update(data)
 
@@ -31,6 +32,16 @@ def invoke():
                           f, indent=4, ensure_ascii=False)
 
     return TOKEN
+
+
+def add_data(key, value):
+    with open('../data/config.json', 'rt', encoding='utf-8') as f:
+        TOKEN = json.load(f)
+
+    TOKEN[key] = value
+
+    with open('../data/config.json', 'wt', encoding='utf-8') as f:
+        json.dump(TOKEN, f, indent=4, ensure_ascii=False)
 
 
 CONFIG = Settings(invoke())

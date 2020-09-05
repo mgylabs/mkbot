@@ -398,3 +398,4 @@ src/msu/*.spec
 package/MKBotSetup.exe
 src/info
 src/bot/extensions
+extensions/twitch_highlights

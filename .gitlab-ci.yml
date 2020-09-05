@@ -10,9 +10,10 @@ pylint:
   stage: analysis
   image: python:3.7
   script:
-  - python -m pip install --upgrade pip
-  - pip install -r requirements.txt
-  - pylint src --exit-zero --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install -U mulgyeol-oauthlib --index-url https://${DEPLOY_USER}:${DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple
+    - pylint src --exit-zero --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
   only:
     refs:
       - merge_requests
@@ -30,7 +31,7 @@ pylint:
 
 .build-console:
   extends:
-      - .shared_windows_runners
+    - .shared_windows_runners
   stage: build
   script:
     - cd src\console
@@ -58,6 +59,7 @@ pylint:
     - python -m pip install --upgrade pip
     - python -V
     - pip install -r requirements.txt
+    - pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple
     - mkdir build
     - cd src\bot
     - pyinstaller app.spec
@@ -89,7 +91,7 @@ build-console:
   artifacts:
     expire_in: 1h
     paths:
-    - build\
+      - build\
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
     - if: $CI_COMMIT_TAG
@@ -110,7 +112,7 @@ build-bot:
   artifacts:
     expire_in: 1h
     paths:
-    - build\
+      - build\
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
     - if: $CI_COMMIT_TAG
@@ -131,7 +133,7 @@ build-msu:
   artifacts:
     expire_in: 1h
     paths:
-    - build\
+      - build\
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
     - if: $CI_COMMIT_TAG
@@ -220,7 +222,7 @@ pre-release:
     name: "MKBot-beta"
     expire_in: 1 week
     paths:
-    - .\MKBotSetup.exe
+      - .\MKBotSetup.exe
   only:
     - master
 
@@ -231,10 +233,10 @@ stable-release:
     name: "MKBot"
     expire_in: 2 yrs
     paths:
-    - .\MKBotSetup.exe
+      - .\MKBotSetup.exe
   only:
     - tags
-    
+
 pages:
   image: python:latest
   stage: deploy

@@ -9,8 +9,9 @@ from core_ext import core_extensions
 import sys
 import os
 import re
-import api
+import core.utils.api
 import time
+import traceback
 
 stime = time.time()
 PREFIX = None
@@ -66,16 +67,18 @@ for i in core_extensions:
     client.load_extension(i)
 
 try:
-    exts = api.get_enabled_extensions()
+    exts = core.utils.api.get_enabled_extensions()
     if len(exts) > 0:
-        if getattr(sys, 'frozen', False):
-            sys.path.append(os.getenv('USERPROFILE') + '\\.mkbot')
-        else:
-            sys.path.append('..\\..')
         for i in exts:
-            client.load_extension(i)
+            if getattr(sys, 'frozen', False):
+                sys.path.append(os.getenv('USERPROFILE') +
+                                f'\\.mkbot\\extensions\\{i[0]}')
+            else:
+                sys.path.append(f'..\\..\\extensions\\{i[0]}')
+            client.load_extension(i[1])
 except Exception as e:
-    print(e)
+    # print(e)
+    traceback.print_exc()
 
 
 try:

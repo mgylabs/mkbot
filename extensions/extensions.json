@@ -1,3 +1,10 @@
 {
-    "extensions": {}
+    "extensions": {
+        "twitch_highlights": {
+            "cwd": "src",
+            "main": "extension",
+            "auth": true,
+            "project_id": "19626926"
+        }
+    }
 }
