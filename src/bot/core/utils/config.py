@@ -19,7 +19,7 @@ def invoke():
     with open('../data/config.json', 'rt', encoding='utf-8') as f:
         TOKEN = json.load(f)
 
-    sch_url = 'https://mgylabs.gitlab.io/discord-bot/config.schema'
+    sch_url = 'https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema'
 
     if TOKEN.get('$schema', None) != sch_url:
         with open('../data/config.json', 'wt', encoding='utf-8') as f:
@@ -44,4 +44,11 @@ def add_data(key, value):
         json.dump(TOKEN, f, indent=4, ensure_ascii=False)
 
 
+def get_mkbot_version():
+    with open('../info/version.json', 'rt') as f:
+        ver = json.load(f)['version']
+    return ver
+
+
 CONFIG = Settings(invoke())
+VERSION = get_mkbot_version()

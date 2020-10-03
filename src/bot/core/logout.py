@@ -6,7 +6,7 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(1)
     async def logout(ctx):
         """
-        봇을 종료합니다. (관리자 권한 필요)
+        봇을 종료합니다. (required Admin permission)
         """
         await ctx.send(embed=bot.replyformat.get(ctx, "Logs out of Discord and closes all connections"))
         print('Logged out')

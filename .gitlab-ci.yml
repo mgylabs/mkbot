@@ -12,7 +12,7 @@ pylint:
   script:
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
-    - pip install -U mulgyeol-oauthlib --index-url https://${DEPLOY_USER}:${DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple
+    - if [ -n "$DEPLOY_TOKEN" ]; then pip install -U mulgyeol-oauthlib --index-url https://${DEPLOY_USER}:${DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple; fi
     - pylint src --exit-zero --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
   only:
     refs:
@@ -59,7 +59,7 @@ pylint:
     - python -m pip install --upgrade pip
     - python -V
     - pip install -r requirements.txt
-    - pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple
+    - if (Test-Path Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
     - mkdir build
     - cd src\bot
     - pyinstaller app.spec
@@ -154,7 +154,7 @@ version-beta:
   script:
     - pip install requests
     - mkdir output
-    - curl --output output/last_version.txt -L "https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/master/raw/output/last_version.txt?job=version-beta"
+    - curl --output output/last_version.txt -L "https://gitlab.com/mgylabs/mulgyeol-mkbot/-/jobs/artifacts/master/raw/output/last_version.txt?job=version-beta"
     - python package/vc.py -b
     - python package/tool.py -b
   artifacts:
@@ -178,7 +178,7 @@ version-stable:
       artifacts: false
     - job: build-console
       artifacts: false
-    - project: mgylabs/discord-bot
+    - project: mgylabs/mulgyeol-mkbot
       job: version-beta
       ref: master
       artifacts: true

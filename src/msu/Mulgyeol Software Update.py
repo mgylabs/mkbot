@@ -14,7 +14,7 @@ class updater:
             self.cur = version.parse(json.load(f)['version'])
         try:
             res = requests.get(
-                'https://mgylabs.gitlab.io/discord-bot/version.json')
+                'https://mgylabs.gitlab.io/mulgyeol-mkbot/version.json')
             res.raise_for_status()
         except:
             sys.exit(1)
@@ -30,7 +30,7 @@ class updater:
     def download(self):
         try:
             r = requests.get(
-                'https://gitlab.com/mgylabs/discord-bot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
+                'https://gitlab.com/mgylabs/mulgyeol-mkbot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.tags))
             r.raise_for_status()
         except:
             sys.exit(1)

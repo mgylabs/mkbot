@@ -25,17 +25,17 @@ namespace MKBot
 
         private void InfoForm_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/discord-bot/-/wikis/home");
+            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/discord-bot/-/releases");
+            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/releases");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/discord-bot/-/issues");
+            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/issues");
         }
     }
 }

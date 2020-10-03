@@ -1,5 +1,5 @@
 {
-    "$schema": "https://mgylabs.gitlab.io/discord-bot/config.schema",
+    "$schema": "https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema",
     "discordToken": "Your Token",
     "kakaoToken": "Your Token",
     "commandPrefix": ".",

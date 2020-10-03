@@ -2,10 +2,11 @@ import asyncio
 import discord
 from discord.ext import commands
 import requests
-from core.utils.config import CONFIG
+from core.utils.config import CONFIG, VERSION
 from MGCert import MGCertificate, Level
 from MsgFormat import MsgFormatter
 from core_ext import core_extensions
+from command_help import CommandHelp
 import sys
 import os
 import re
@@ -14,33 +15,25 @@ import time
 import traceback
 
 stime = time.time()
-PREFIX = None
 
-
-def get_prefix():
-    global PREFIX
-    if PREFIX == None:
-        PREFIX = CONFIG.commandPrefix
-    return PREFIX
-
-
-client = commands.Bot(command_prefix=get_prefix())
-cert = MGCertificate('../data/mgcert.json')
 replyformat = MsgFormatter()
+client = commands.Bot(command_prefix=CONFIG.commandPrefix,
+                      help_command=CommandHelp(replyformat))
+cert = MGCertificate('../data/mgcert.json')
 client.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
 
 
 @client.event
 async def on_ready():
     print('Logged in within', time.time() - stime)
-    global replyformat
     replyformat.set_avatar_url(client.user.avatar_url)
-    if CONFIG.__DEBUG_MODE__:
-        name = "DEBUG"
+    if getattr(sys, 'frozen', False):
+        name = f"MK Bot {VERSION} Stable"
+        activity_type = discord.ActivityType.listening
     else:
-        name = f"{get_prefix()}help로 도움말을 이용하세요"
-    activity = discord.Game(
-        name=name, type=3)
+        name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ else "IN DEV"
+        activity_type = discord.ActivityType.playing
+    activity = discord.Activity(name=name, type=activity_type)
     await client.change_presence(status=discord.Status.online, activity=activity)
 
 
@@ -77,7 +70,6 @@ try:
                 sys.path.append(f'..\\..\\extensions\\{i[0]}')
             client.load_extension(i[1])
 except Exception as e:
-    # print(e)
     traceback.print_exc()
 
 

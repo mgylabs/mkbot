@@ -48,7 +48,7 @@ def stable_release():
                 break
 
     requests_API(
-        'PUT', '/projects/{}/badges/{}'.format(project_id, 79762), {'image_url': 'https://img.shields.io/badge/Stable Release-{}-skyblue?logo=Azure+Pipelines&logoColor=white'.format(tag_name)})
+        'PUT', '/projects/{}/badges/{}'.format(project_id, 79762), {'image_url': 'https://img.shields.io/badge/Stable Release-{}-00aced?logo=Azure+Pipelines&logoColor=white'.format(tag_name.replace('-', '--'))})
 
 
 try:

@@ -14,12 +14,12 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(1)
     async def install(ctx: commands.Context, ext_id: str, option=None):
         """
-        Install extensions
+        Install extensions (required Admin permission)
 
         Usage:
-        - 설치
+        - install
         {commandPrefix}install name
-        - 업데이트
+        - update
         {commandPrefix}install name -U
         """
         name = ext_id.replace('-', '_')

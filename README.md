@@ -1,16 +1,22 @@
 # MK Bot
+
 Discord Bot developed by Mulgyeol Labs  
 API provided by: https://discordapp.com/developers/applications
 
->  This project is managed by @myftbot
+> This project is managed by @myftbot
 
 ## Features
-* [x] TTS voices
-* [x] Message Deleter
-* [x] Local Hosting
-* [x] User Access Control
+
+- [x] TTS voices
+- [x] Message Deleter
+- [x] Local Hosting
+- [x] User Access Control
 
 ![docs/preview.png](docs/preview.png)
+
+## Installing
+
+See [here](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/releases) for downloading stable release
 
 ## Development Guide
 
@@ -25,29 +31,34 @@ API provided by: https://discordapp.com/developers/applications
 
 2. Edit `config.json`, `mgcert.json` at `src\data` directory.
 
-* config.json
+- config.json
+
 ```json
 {
-    "discordToken":"Your Bot TOKEN",
-    "kakaoToken":"Your KakaoTalk REST API Token",
-    "__DEBUG_MODE__": true
+  "discordToken": "Your Bot TOKEN",
+  "kakaoToken": "Your KakaoTalk REST API Token",
+  "__DEBUG_MODE__": true
 }
 ```
-* mgcert.json
+
+- mgcert.json
+
 ```json
 {
-    "adminUsers":["admin_username#0000"],
-    "trustedUsers":["trusted_username#0000"]
+  "adminUsers": ["admin_username#0000"],
+  "trustedUsers": ["trusted_username#0000"]
 }
 ```
-----
+
+---
 
 > :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
 
-For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/discord-bot/-/wikis/home).
+For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home).
 
 ## How to Push into master
->  You should create a personal fork or create another branches there when you push changes, and then create Merge Requests to master branch.
+
+> You should create a personal fork or create another branches there when you push changes, and then create Merge Requests to master branch.
 
 1.  Create a new branch.
 2.  Push into the branch.

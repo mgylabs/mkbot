@@ -1,4 +1,4 @@
 {
-    "$schema": "https://mgylabs.gitlab.io/discord-bot/extensions.schema",
+    "$schema": "https://mgylabs.gitlab.io/mulgyeol-mkbot/extensions.schema",
     "extensions": []
 }
