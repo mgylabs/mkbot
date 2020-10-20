@@ -47,7 +47,7 @@ pylint:
   extends:
     - .shared_windows_runners
   stage: build
-  script:
+  before_script:
     - echo "$Env:CI_PROJECT_DIR"
     - Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe -OutFile python-3.7.7-amd64.exe
     - dir
@@ -84,6 +84,7 @@ pylint:
     - cd src\msu
     - pyinstaller --icon=$Env:CI_PROJECT_DIR\package\mkbot_install.ico "Mulgyeol Software Update.py"
     - mv "dist\Mulgyeol Software Update" $Env:CI_PROJECT_DIR\build\app
+    - cd $Env:CI_PROJECT_DIR
 
 build-console:
   extends:
@@ -109,6 +110,8 @@ test-build-console:
 build-bot:
   extends:
     - .build-bot
+  script:
+    - echo "Build"
   artifacts:
     expire_in: 1h
     paths:
@@ -120,13 +123,12 @@ build-bot:
 test-build-bot:
   extends:
     - .build-bot
-  after_script:
+  script:
     - mv package\data build
     - mkdir $Env:USERPROFILE\.mkbot
     - mv extensions $Env:USERPROFILE\.mkbot
     - cd .\build\app
     - .\app.exe --dry-run
-    - python .\package\tool.py -e $LASTEXITCODE
   only:
     refs:
       - merge_requests
