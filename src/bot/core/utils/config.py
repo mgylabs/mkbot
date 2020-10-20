@@ -45,9 +45,12 @@ def add_data(key, value):
 
 
 def get_mkbot_version():
-    with open('../info/version.json', 'rt') as f:
-        ver = json.load(f)['version']
-    return ver
+    try:
+        with open('../info/version.json', 'rt') as f:
+            ver = json.load(f)['version']
+        return ver
+    except:
+        return None
 
 
 CONFIG = Settings(invoke())

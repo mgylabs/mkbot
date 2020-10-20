@@ -56,6 +56,8 @@ try:
         pre_release()
     elif '-r' in sys.argv:
         stable_release()
+    elif '-e' in sys.argv:
+        sys.exit(int(sys.argv[2]))
 except Exception as e:
     import traceback
     traceback.print_exc()

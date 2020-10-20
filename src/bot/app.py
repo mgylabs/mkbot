@@ -15,6 +15,7 @@ import time
 import traceback
 
 stime = time.time()
+errorlevel = 0
 
 replyformat = MsgFormatter()
 client = commands.Bot(command_prefix=CONFIG.commandPrefix,
@@ -23,16 +24,23 @@ cert = MGCertificate('../data/mgcert.json')
 client.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
 
 
+def is_development_mode():
+    return not getattr(sys, 'frozen', False)
+
+
 @client.event
 async def on_ready():
     print('Logged in within', time.time() - stime)
     replyformat.set_avatar_url(client.user.avatar_url)
-    if getattr(sys, 'frozen', False):
-        name = f"MK Bot {VERSION} Stable"
-        activity_type = discord.ActivityType.listening
-    else:
+    if is_development_mode():
         name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ else "IN DEV"
         activity_type = discord.ActivityType.playing
+    elif VERSION == None:
+        name = "MK Bot Test Mode"
+        activity_type = discord.ActivityType.playing
+    else:
+        name = f"MK Bot {VERSION} Stable"
+        activity_type = discord.ActivityType.listening
     activity = discord.Activity(name=name, type=activity_type)
     await client.change_presence(status=discord.Status.online, activity=activity)
 
@@ -57,24 +65,31 @@ async def on_message(message):
 
 
 for i in core_extensions:
-    client.load_extension(i)
+    try:
+        client.load_extension(i)
+    except Exception as e:
+        traceback.print_exc()
+        errorlevel += 1
 
 try:
     exts = core.utils.api.get_enabled_extensions()
     if len(exts) > 0:
         for i in exts:
-            if getattr(sys, 'frozen', False):
+            if is_development_mode():
+                sys.path.append(f'..\\..\\extensions\\{i[0]}')
+            else:
                 sys.path.append(os.getenv('USERPROFILE') +
                                 f'\\.mkbot\\extensions\\{i[0]}')
-            else:
-                sys.path.append(f'..\\..\\extensions\\{i[0]}')
             client.load_extension(i[1])
 except Exception as e:
     traceback.print_exc()
 
 
-try:
-    client.run(CONFIG.discordToken)
-except discord.errors.LoginFailure as e:
-    print(e)
-    sys.exit(1)
+if '--dry-run' in sys.argv:
+    sys.exit(errorlevel)
+else:
+    try:
+        client.run(CONFIG.discordToken)
+    except discord.errors.LoginFailure as e:
+        print(e)
+        sys.exit(1)

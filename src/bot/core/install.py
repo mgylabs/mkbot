@@ -14,7 +14,7 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(1)
     async def install(ctx: commands.Context, ext_id: str, option=None):
         """
-        Install extensions (required Admin permission)
+        Install extensions (Requires Admin Permission)
 
         Usage:
         - install

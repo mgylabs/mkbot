@@ -13,7 +13,7 @@ pylint:
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
     - if [ -n "$DEPLOY_TOKEN" ]; then pip install -U mulgyeol-oauthlib --index-url https://${DEPLOY_USER}:${DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple; fi
-    - pylint src --exit-zero --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
+    - pylint src -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -r y -f colorized
   only:
     refs:
       - merge_requests
@@ -120,11 +120,20 @@ build-bot:
 test-build-bot:
   extends:
     - .build-bot
+  after_script:
+    - mv package\data build
+    - mkdir $Env:USERPROFILE\.mkbot
+    - mv extensions $Env:USERPROFILE\.mkbot
+    - cd .\build\app
+    - .\app.exe --dry-run
+    - python .\package\tool.py -e $LASTEXITCODE
   only:
     refs:
       - merge_requests
     changes:
       - src/bot/**/*
+    variables:
+      - $DEPLOY_TOKEN
   interruptible: true
 
 build-msu:

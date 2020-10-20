@@ -13,9 +13,16 @@ namespace MKBot
         {
             InitializeComponent();
             button1.Select();
-            var jsonString = File.ReadAllText("info\\version.json");
-            JObject json = JObject.Parse(jsonString);
-            label1.Text = "Mulgyeol MK Bot\nVersion "+json["version"]+"\nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+            try
+            {
+                var jsonString = File.ReadAllText("info\\version.json");
+                JObject json = JObject.Parse(jsonString);
+                label1.Text = "Mulgyeol MK Bot\nVersion "+json["version"]+"\nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+            }
+            catch
+            {
+                label1.Text = "Mulgyeol MK Bot\nTest Mode \nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

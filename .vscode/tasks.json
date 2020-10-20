@@ -11,10 +11,21 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "build for test",
+            "type": "shell",
+            "command": ".venv\\Scripts\\activate && scripts\\build.bat",
+            "args": [
+                "--restore-data"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "package",

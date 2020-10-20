@@ -65,10 +65,10 @@ namespace MKBot
             notifyIcon1.Visible = true;
             notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
-            UpdateMenu = new ToolStripMenuItem("업데이트 확인", null, Click_Update);
+            UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("설정", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("정보", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("종료", null, Click_Exit)});
+            new ToolStripMenuItem("Settings", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("About", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("Exit", null, Click_Exit)});
 #if !DEBUG
             Run_msu("/c");
 #endif
@@ -139,7 +139,6 @@ namespace MKBot
             {
                 checking_update = true;
                 UpdateMenu.Enabled = false;
-                UpdateMenu.Text = "업데이트 다운로드 중...";
                 Run_msu("/c");
             }
         }
@@ -209,7 +208,7 @@ namespace MKBot
             DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
 
-        private void ShowUpdateToast(string title = "Mulgyeol Software Update", string text = "최신 업데이트를 적용하려면 MK Bot을(를) 다시 시작하세요.", string type = "action=None")
+        private void ShowUpdateToast(string title = "Mulgyeol Software Update", string text = "Restart MK Bot to apply the latest update.", string type = "action=None")
         {
             ToastContent toastContent = new ToastContent()
             {
@@ -243,12 +242,12 @@ namespace MKBot
                 {
                     Buttons =
                     {
-                        new ToastButton("지금 업데이트", "action=install")
+                        new ToastButton("Update Now", "action=install")
                         {
                             ActivationType = ToastActivationType.Foreground
                         },
 
-                        new ToastButton("나중에", "action=later")
+                        new ToastButton("Later", "action=later")
                         {
                             ActivationType = ToastActivationType.Foreground
                         }
@@ -286,7 +285,7 @@ namespace MKBot
         private void Run_msu(string argv = "/c")
         {
             UpdateMenu.Enabled = false;
-            UpdateMenu.Text = "업데이트 다운로드 중...";
+            UpdateMenu.Text = "Downloading Update...";
             psi2.Arguments = argv;
             try
             {
@@ -338,17 +337,17 @@ namespace MKBot
             {
                 can_update = true;
                 UpdateMenu.Enabled = true;
-                UpdateMenu.Text = "다시 시작 및 업데이트";
+                UpdateMenu.Text = "Restart to Update";
                 ShowUpdateToast();
                 checking_update = false;
             }
             else if (msu_process.ExitCode == 1)
             {
                 UpdateMenu.Enabled = true;
-                UpdateMenu.Text = "업데이트 확인";
+                UpdateMenu.Text = "Check for Updates...";
                 if (checking_update)
                 {
-                    ShowToast("Mulgyeol Software Update", "소프트웨어가 이미 최신 버전입니다.");
+                    ShowToast("Mulgyeol Software Update", "There are currently no updates available.");
                     checking_update = false;
                 }
             }
@@ -364,7 +363,7 @@ namespace MKBot
             }
             if (app_process.ExitCode == 1)
             {
-                ShowToast("TOKEN 값이 올바르지 않습니다.", "설정을 클릭하여 올바른 TOKEN 값을 설정하세요.", "action=openConfig");
+                ShowToast("An invalid token was provided.", "Review your settings for configured token.", "action=openConfig");
             }
         }
 
