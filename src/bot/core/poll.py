@@ -4,7 +4,7 @@ from discord.ext import commands
 def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
-    async def poll(ctx, question, *candidates):
+    async def poll(ctx: commands.Context, question, *candidates):
         """
         투표 명령어입니다.
         {commandPrefix}poll "어느걸 고를래?" a b c : a, b, c 세 개의 후보를 가진 투표를 생성합니다. (, 사용은 안됩니다)

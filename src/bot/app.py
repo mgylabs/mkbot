@@ -1,9 +1,8 @@
 import asyncio
 import discord
 from discord.ext import commands
-import requests
 from core.utils.config import CONFIG, VERSION
-from MGCert import MGCertificate, Level
+from MGCert import MGCertificate
 from MsgFormat import MsgFormatter
 from core_ext import core_extensions
 from command_help import CommandHelp

@@ -11,5 +11,9 @@
         "--ignore",
         "E402"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "python.analysis.extraPaths": [
+        "src\\bot",
+        "src\\msu"
+    ]
 }

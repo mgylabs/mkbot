@@ -8,7 +8,7 @@ from langdetect import detect
 def setup(bot: commands.Bot):
     @commands.command(aliases=['trans'])
     @bot.MGCert.verify(2)
-    async def translate(ctx, msg, targetLang='en'):
+    async def translate(ctx: commands.Context, msg, targetLang='en'):
         """
         입력한 문장을 원하는 언어로 번역하는 명령어입니다.
         번역 가능 언어:

@@ -4,7 +4,7 @@ from discord.ext import commands
 def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
-    async def join(ctx):
+    async def join(ctx: commands.Context):
         """
         명령어를 입력한 유저가 있는 음성 채널을 입장합니다
         """

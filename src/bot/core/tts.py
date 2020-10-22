@@ -7,7 +7,7 @@ from .utils.config import CONFIG
 def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
-    async def tts(ctx, *args):
+    async def tts(ctx: commands.Context, *args):
         """
         TTS 목소리를 사용할 수 있습니다.
         {commandPrefix}tts [option] "내용" : 내용에 있는 내용을 말합니다. 내용에 띄어쓰기가 있는 경우에도 큰 따옴표로 감싸지 않아도 됩니다.

@@ -4,7 +4,7 @@ from discord.ext import commands
 def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(1)
-    async def logout(ctx):
+    async def logout(ctx: commands.Context):
         """
         봇을 종료합니다. (Requires Admin Permission)
         """

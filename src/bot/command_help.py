@@ -7,7 +7,7 @@ class CommandHelp(commands.DefaultHelpCommand):
     formatter = None
 
     def __init__(self, formatter):
-        super().__init__(paginator=commands.Paginator(None, None))
+        super().__init__(no_category="General", paginator=commands.Paginator(None, None))
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
 
@@ -49,4 +49,4 @@ class CommandHelp(commands.DefaultHelpCommand):
         description = "> MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://gitlab.com/mgylabs/mulgyeol-mkbot"
         version_desc = f'Version {VERSION}' if VERSION != None else "Test Mode"
         for page in self.paginator.pages:
-            await self.context.send(f'Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}')
+            await self.context.send(f'Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2020')

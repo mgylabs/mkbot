@@ -22,7 +22,7 @@ namespace MKBot
 
             if (!createnew)
             {
-                MessageBox.Show("프로그램이 이미 실행 중 입니다.");
+                MessageBox.Show("Mulgyeol MK Bot is already running.");
                 return;
             }
             DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>("com.mgylabs.mkbot");

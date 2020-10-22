@@ -4,7 +4,7 @@ from discord.ext import commands
 def setup(bot: commands.Bot):
     @commands.command()
     @bot.MGCert.verify(2)
-    async def delete(ctx, amount):
+    async def delete(ctx: commands.Context, amount):
         """
         메세지를 삭제합니다.
         {commandPrefix}delete amount : amount 만큼의 최근 메세지를 삭제합니다.

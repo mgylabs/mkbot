@@ -33,9 +33,9 @@ class Level:
             return Level.Description.ADMIN_USERS
 
     class Description:
-        ALL_USERS = '모든 사용자'  # 3
-        TRUSTED_USERS = '신뢰할 수 있는 사용자'  # 2
-        ADMIN_USERS = '관리자'  # 1
+        ALL_USERS = 'all users'  # 3
+        TRUSTED_USERS = 'trusted users'  # 2
+        ADMIN_USERS = 'admin users'  # 1
 
 
 class MGCertificate:
@@ -79,7 +79,7 @@ class MGCertificate:
 
                 if self.getUserLevel(req_user) > level:
                     replyformat = MsgFormatter(ctx.me.avatar_url)
-                    embed = replyformat.get(ctx, "Permission denied", '사용자 <@{}>은(는) {} 목록에 등록되어 있지 않습니다. 이 시도를 보고합니다.'.format(
+                    embed = replyformat.get(ctx, "Permission denied", '<@{}> is not in the {}. This incident will be reported.'.format(
                         ctx.author.id, Level.get_description(level)), False)
                     embed.add_field(name='User', value=str(ctx.author))
                     embed.add_field(name='Command tried', value='{} ({})'.format(
