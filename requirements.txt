@@ -2,7 +2,7 @@ autopep8==1.5.3
 discord.py==1.5.1
 langdetect==1.0.8
 packaging==20.3
-PyInstaller==3.6
+PyInstaller==4.0
 pylint==2.4.4
 PyNaCl==1.4.0
 requests==2.23.0

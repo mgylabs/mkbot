@@ -8,17 +8,10 @@ block_cipher = None
 
 a = Analysis(['app.py'],
              pathex=[os.curdir],
-             binaries=[(os.getenv('botpackage') +
-                        '\\discord\\bin\\libopus-0.x64.dll', '.')],
-             datas=[(os.getenv('botpackage') +
-                     '\\langdetect\\utils\\messages.properties', 'langdetect\\utils'),
-                    (os.getenv('botpackage') +
-                     '\\langdetect\\profiles', 'langdetect\\profiles'),
-                    (os.getenv('botpackage') + '\\mulgyeol_oauth\\static',
-                     'mulgyeol_oauth\\static'),
-                    (os.getenv('botpackage') + '\\mulgyeol_oauth\\templates', 'mulgyeol_oauth\\templates')],
-             hiddenimports=['_cffi_backend', *core_extensions],
-             hookspath=[],
+             binaries=[],
+             datas=[],
+             hiddenimports=[*core_extensions],
+             hookspath=['..\\hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
