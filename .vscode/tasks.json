@@ -15,17 +15,20 @@
             "group": "build"
         },
         {
-            "label": "build for test",
+            "label": "build and test",
             "type": "shell",
             "command": ".venv\\Scripts\\activate && scripts\\build.bat",
             "args": [
-                "--restore-data"
+                "--test-bot"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [],
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "package",

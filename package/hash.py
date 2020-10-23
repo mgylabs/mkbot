@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 
 
 def file_hash():
@@ -11,7 +12,12 @@ def file_hash():
     with open('public/version.json', 'rt') as f:
         data = json.load(f)
 
-    data['sha1'] = sha1Hash.hexdigest()
+    tag_name = os.getenv('CI_COMMIT_TAG')
+
+    if '-rc' in tag_name:
+        data['canary']['sha1'] = sha1Hash.hexdigest()
+    else:
+        data['sha1'] = sha1Hash.hexdigest()
 
     with open('public/version.json', 'wt') as f:
         json.dump(data, f)

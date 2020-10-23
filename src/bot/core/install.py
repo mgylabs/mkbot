@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 from .utils.config import CONFIG, add_data
 from .utils import api
-from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow
+from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow  # pylint: disable=import-error
 import requests
 import os
 import zipfile

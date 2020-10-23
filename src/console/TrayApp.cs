@@ -32,6 +32,7 @@ namespace MKBot
         {
 #if DEBUG
             DirectoryPath = Path.GetFullPath(Environment.CurrentDirectory+"\\..");
+            Environment.CurrentDirectory = DirectoryPath + "\\build";
 #else
             DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
             Environment.CurrentDirectory = DirectoryPath;
@@ -53,8 +54,6 @@ namespace MKBot
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
             msu_process.StartInfo = psi2;
-            msu_process.EnableRaisingEvents = true;
-            msu_process.Exited += new EventHandler(ProcessExited_msu);
 
             notifyIcon1 = new NotifyIcon();
             contextMenuStrip1 = new ContextMenuStrip();
@@ -62,16 +61,28 @@ namespace MKBot
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
             notifyIcon1.Text = "MK Bot";
-            notifyIcon1.Visible = true;
-            notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
             UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
             new ToolStripMenuItem("Settings", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("About", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("Exit", null, Click_Exit)});
-#if !DEBUG
-            Run_msu("/c");
-#endif
+
+            Run_msu("/s");
+            msu_process.WaitForExit();
+
+            if (msu_process.ExitCode == 0)
+            {
+                Run_setup(true);
+            }
+            else
+            {
+                msu_process.Exited += new EventHandler(ProcessExited_msu);
+                msu_process.EnableRaisingEvents = true;
+                notifyIcon1.Visible = true;
+                notifyIcon1.Icon = Properties.Resources.mkbot_off;
+                Run_msu("/c");
+            }
+
             bool autoconnect = false;
             if (configjson["connectOnStart"] != null)
             {
@@ -284,8 +295,11 @@ namespace MKBot
 
         private void Run_msu(string argv = "/c")
         {
-            UpdateMenu.Enabled = false;
-            UpdateMenu.Text = "Downloading Update...";
+            if (argv == "/c")
+            {
+                UpdateMenu.Enabled = false;
+                UpdateMenu.Text = "Checking for Updates...";
+            }
             psi2.Arguments = argv;
             try
             {
@@ -345,6 +359,7 @@ namespace MKBot
             {
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Check for Updates...";
+
                 if (checking_update)
                 {
                     ShowToast("Mulgyeol Software Update", "There are currently no updates available.");

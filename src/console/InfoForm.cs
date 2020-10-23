@@ -17,7 +17,18 @@ namespace MKBot
             {
                 var jsonString = File.ReadAllText("info\\version.json");
                 JObject json = JObject.Parse(jsonString);
-                label1.Text = "Mulgyeol MK Bot\nVersion "+json["version"]+"\nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+
+                string[] version_array = json["version"].ToString().Split('-');
+                string version_str = version_array[0];
+                if (version_array.Length > 1 && version_array[1] == "dev")
+                {
+                    version_str += " Canary";
+                }
+                else
+                {
+                    version_str += " Stable";
+                }
+                label1.Text = "Mulgyeol MK Bot\nVersion "+version_str+"\nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
             }
             catch
             {

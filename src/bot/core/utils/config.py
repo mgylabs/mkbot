@@ -11,8 +11,30 @@ class Settings:
         self.disabledPrivateChannel = False
         self.connectOnStart = False
         self.gitlabToken = ''
+        self.canaryUpdate = False
         self.__DEBUG_MODE__ = False
         self.__dict__.update(data)
+
+
+class Version:
+    def __init__(self, version_str):
+        version_str = version_str.split('-')
+        self.base_version = version_str[0]
+        self.tuple_version = tuple(self.base_version.split('.'))
+        self.short_version = '.'.join(self.tuple_version[:3])
+        self.canary = True if (
+            len(version_str) > 1 and version_str[1] == 'dev') else False
+
+    def is_canary(self) -> bool:
+        return self.canary
+
+    def __str__(self) -> str:
+        if self.tuple_version[3] == '0':
+            return f"{self.short_version} Test Mode"
+        elif self.is_canary():
+            return f"{self.base_version} Canary"
+        else:
+            return f"{self.base_version} Stable"
 
 
 def invoke():
@@ -48,7 +70,7 @@ def get_mkbot_version():
     try:
         with open('../info/version.json', 'rt') as f:
             ver = json.load(f)['version']
-        return ver
+        return Version(ver)
     except:
         return None
 
