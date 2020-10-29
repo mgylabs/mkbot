@@ -10,30 +10,30 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(2)
     async def translate(ctx: commands.Context, msg, targetLang='en'):
         """
-        입력한 문장을 원하는 언어로 번역하는 명령어입니다.
-        번역 가능 언어:
-                        한국어	kr
-                        영어	en
-                        일본어	jp
-                        중국어	cn
-                        베트남어	vi
-                        인도네시아어	id
-                        아랍어	ar
-                        뱅갈어	bn
-                        독일어	de
-                        스페인어	es
-                        프랑스어	fr
-                        힌디어	hi
-                        이탈리아어	it
-                        말레이시아어	ms
-                        네덜란드어	nl
-                        포르투갈어	pt
-                        러시아어	ru
-                        태국어	th
-                        터키어	tr
+        Command that translates sentence entered to desired language 
+        Language list:
+                        Korean	       kr
+                        English	       en
+                        Japanese	   jp
+                        Chinese	       cn
+                        Vietnamese	   vi
+                        Inodonesian	   id
+                        Arabic	       ar
+                        Bengali	       bn
+                        German	       de
+                        Spanish	       es
+                        French	       fr
+                        Hindi	       hi
+                        Italian	       it
+                        Malay	       ms
+                        Dutch	       nl
+                        Portuguese	   pt
+                        Russian	       ru
+                        Thai	       th
+                        Turkish	       tr
 
-        {commandPrefix}translate "번역하면 무슨 뜻?" english
-        {commandPrefix}translate "번역하면 무슨 뜻?" en
+        {commandPrefix}translate "What does it mean in English?" english
+        {commandPrefix}translate "What does it mean in English?" en
         """
         channel = ctx.message.channel
         srcLang = detect(msg)
@@ -66,7 +66,7 @@ def setup(bot: commands.Bot):
             srcLang = langDetectDict[srcLang]
 
         if not srcLang in languages.values():
-            await channel.send(embed=bot.replyformat.get(ctx, '번역 실패: 입력 언어 감지 실패', '감지된 언어가 지원되지 않습니다. \n ** 감지된 언어: ' + srcLang + ' **\n//help translate로 지원언어 목록을 확인하세요'))
+            await channel.send(embed=bot.replyformat.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
             raise commands.CommandError(
                 "srcLanguage detected is not supported")
 
@@ -74,7 +74,7 @@ def setup(bot: commands.Bot):
             targetLang = languages[targetLang.lower()]
 
         elif not targetLang in languages.values():
-            await channel.send(embed=bot.replyformat.get(ctx, '번역 실패: 출력 언어 없음', '입력한 출력언어를 찾을 수 없습니다!'))
+            await channel.send(embed=bot.replyformat.get(ctx, 'Translation Fail: Target language not existing', 'Cannot find target language inputted'))
             raise commands.CommandError("targetlang not identified")
 
         headers = {
@@ -88,6 +88,6 @@ def setup(bot: commands.Bot):
         response = requests.get(
             'https://kapi.kakao.com/v1/translation/translate', headers=headers, params=params)
 
-        await channel.send(embed=bot.replyformat.get(ctx, '번역 성공: ' + srcLang + ' => ' + targetLang, msg + '\n\n' + response.json()['translated_text'][0][0]))
+        await channel.send(embed=bot.replyformat.get(ctx, 'Translation Successful: ' + srcLang + ' => ' + targetLang, msg + '\n\n' + response.json()['translated_text'][0][0]))
 
     bot.add_command(translate)

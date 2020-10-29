@@ -6,17 +6,17 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(2)
     async def poll(ctx: commands.Context, question, *candidates):
         """
-        투표 명령어입니다.
-        {commandPrefix}poll "어느걸 고를래?" a b c : a, b, c 세 개의 후보를 가진 투표를 생성합니다. (, 사용은 안됩니다)
-        reaction 기능으로 투표를 할 수 있습니다.
+        Poll command
+        {commandPrefix}poll "choose which?" a b c : a, b, c Generate a poll with three candidates. (do not use ,)
+        you can vote using reactions
         """
         channel = ctx.message.channel
 
         if len(candidates) <= 1:
-            await channel.send(embed=bot.replyformat.get(ctx, '후보가 2개 이상은 있어야 합니다!'))
+            await channel.send(embed=bot.replyformat.get(ctx, 'You need more than two candidates!'))
             return
         elif len(candidates) > 10:
-            await channel.send(embed=bot.replyformat.get(ctx, '후보를 10개 넘게는 만들 수 없습니다!'))
+            await channel.send(embed=bot.replyformat.get(ctx, 'You cannot make more than 10 candidates!'))
             return
         else:
             # reactions for 1, 2, 3... 10

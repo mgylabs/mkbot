@@ -6,7 +6,7 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(2)
     async def join(ctx: commands.Context):
         """
-        명령어를 입력한 유저가 있는 음성 채널을 입장합니다
+        Joins voice channel that the user who typed the command is in
         """
         channel = ctx.message.channel
         voice_channel = ctx.author.voice.channel

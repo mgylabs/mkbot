@@ -6,9 +6,9 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(2)
     async def delete(ctx: commands.Context, amount):
         """
-        메세지를 삭제합니다.
-        {commandPrefix}delete amount : amount 만큼의 최근 메세지를 삭제합니다.
-        {commandPrefix}delete all : 모든 메세지(최대 200개)를 삭제합니다.
+        Deletes messages
+        {commandPrefix}delete amount : deletes 'amount' number of messages
+        {commandPrefix}delete all : deletes all(maximum 200) messages
         """
         channel = ctx.message.channel
         messages = []

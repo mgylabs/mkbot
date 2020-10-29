@@ -9,13 +9,13 @@ def setup(bot: commands.Bot):
     @bot.MGCert.verify(2)
     async def tts(ctx: commands.Context, *args):
         """
-        TTS 목소리를 사용할 수 있습니다.
-        {commandPrefix}tts [option] "내용" : 내용에 있는 내용을 말합니다. 내용에 띄어쓰기가 있는 경우에도 큰 따옴표로 감싸지 않아도 됩니다.
+        TTS voice available
+        {commandPrefix}tts [option] "Content" : Says the content in "content". You do not have to use Quotation marks even if there are spaces included in content.
 
-        *사용예시*
-        {commandPrefix}tts "내용"
-        {commandPrefix}tts -m "내용"
-        {commandPrefix}tts -w "내용": -m 은 남성 목소리로 말하고 -w 는 여성 목소리로 말합니다. 기본은 남성입니다.
+        *Example*
+        {commandPrefix}tts "Conetne"
+        {commandPrefix}tts -m "Content"
+        {commandPrefix}tts -w "Content": -m speaks in male voice and -w speaks in female voice. Default voice is male.
         """
 
         if ctx.voice_client == None:
