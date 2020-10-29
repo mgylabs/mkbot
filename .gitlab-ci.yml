@@ -64,6 +64,7 @@ pylint:
     - cd src\bot
     - pyinstaller app.spec
     - mv dist\app $Env:CI_PROJECT_DIR\build
+    - cd $Env:CI_PROJECT_DIR
 
 .build-msu:
   extends:
