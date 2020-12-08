@@ -37,7 +37,7 @@ def setup(bot: commands.Bot):
             if voice.upper() == '-M':
                 vs = 'MAN_DIALOG_BRIGHT'
             elif voice.upper() == '-W':
-                vs = 'WOMAN_DIALOG_BRIGH'
+                vs = 'WOMAN_DIALOG_BRIGHT'
             else:
                 await ctx.send(embed=bot.replyformat.get(ctx, "Usage Error", f"Invalid parameter. For more information, type `{CONFIG.commandPrefix}help tts`."))
                 raise commands.CommandError("Error")
