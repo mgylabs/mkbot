@@ -32,48 +32,58 @@ def instance_already_running():
 
 
 class VersionInfo:
-    def __init__(self, version, tags, sha):
-        self.version = version
-        self.tags = tags
-        self.sha = sha
+    def __init__(self, label, url):
+        _, self.rtype, self.version, self.sha = label.split('-')
+        self.version = version.parse(self.version)
+        self.url = url
 
 
 class Updater:
     def __init__(self, enabled_canary=False):
         with open('../info/version.json', 'rt') as f:
-            self.current_version = version.parse(json.load(f)['version'])
+            current_data = json.load(f)
 
-        if self.current_version.release[3] == 0:
+        self.current_version = version.parse(current_data['version'])
+
+        if current_data.get('commit', None) == None:
             sys.exit(1)
 
         res = requests.get(
-            'https://mgylabs.gitlab.io/mulgyeol-mkbot/version.json')
+            'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest')
+
         res.raise_for_status()
         data = res.json()
+
+        asset = None
+        for d in data['assets']:
+            if d['label'].startswith('mkbotsetup-'):
+                asset = d
+                break
+
+        if asset == None:
+            sys.exit(1)
 
         self.setupPath = os.getenv('TEMP') + '\\mkbot-update\\MKBotSetup.exe'
         self.enabled_canary = enabled_canary
 
-        self.last_stable = VersionInfo(version.parse(
-            data['last-version']), data['tags'], data['sha1'])
+        self.last_stable = VersionInfo(
+            asset['label'], asset['browser_download_url'])
 
-        canary_data: dict = data.get('canary', {})
-        if (canary_data.get('last-version') and canary_data.get('tags') and canary_data.get('sha1')):
-            self.last_canary = VersionInfo(version.parse(
-                canary_data['last-version']), canary_data['tags'], canary_data['sha1'])
-        else:
-            self.last_canary = None
+        # TODO: canary update
+        # if self.enabled_canary:
+        #     self.last_canary = VersionInfo()
+        # else:
+        #     self.last_canary = None
 
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        elif self.enabled_canary and self.last_canary and self.last_canary.version > self.current_version:
-            self.target = self.last_canary
+        # elif self.enabled_canary and self.last_canary and self.last_canary.version > self.current_version:
+        #     self.target = self.last_canary
         else:
             sys.exit(1)
 
     def download(self):
-        r = requests.get(
-            'https://gitlab.com/mgylabs/mulgyeol-mkbot/-/jobs/artifacts/{}/download?job=stable-release'.format(self.target.tags))
+        r = requests.get(self.target.url)
         r.raise_for_status()
 
         download_file_name = os.getenv(

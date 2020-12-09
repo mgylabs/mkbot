@@ -17,11 +17,11 @@ class Settings:
 
 
 class Version:
-    def __init__(self, version_str):
+    def __init__(self, version_str, commit):
         version_str = version_str.split('-')
+        self.commit = commit
         self.base_version = version_str[0]
         self.tuple_version = tuple(self.base_version.split('.'))
-        self.short_version = '.'.join(self.tuple_version[:3])
         self.canary = True if (
             len(version_str) > 1 and version_str[1] == 'dev') else False
 
@@ -29,9 +29,9 @@ class Version:
         return self.canary
 
     def __str__(self) -> str:
-        if self.tuple_version[3] == '0':
-            return f"{self.short_version} Test Mode"
-        elif self.is_canary():
+        if self.commit == None:
+            return f"{self.base_version} Test Mode"
+        if self.is_canary():
             return f"{self.base_version} Canary"
         else:
             return f"{self.base_version} Stable"
@@ -69,8 +69,8 @@ def add_data(key, value):
 def get_mkbot_version():
     try:
         with open('../info/version.json', 'rt') as f:
-            ver = json.load(f)['version']
-        return Version(ver)
+            d = json.load(f)
+        return Version(d['version'], d['commit'])
     except:
         return None
 

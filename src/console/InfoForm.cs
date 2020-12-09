@@ -28,11 +28,11 @@ namespace MKBot
                 {
                     version_str += " Stable";
                 }
-                label1.Text = "Mulgyeol MK Bot\nVersion "+version_str+"\nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+                label1.Text = "Mulgyeol MK Bot\nVersion " + version_str + "\nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
             }
             catch
             {
-                label1.Text = "Mulgyeol MK Bot\nTest Mode \nCopyright © 2020 Mulgyeol Labs. All Rights Reserved.";
+                label1.Text = "Mulgyeol MK Bot\nTest Mode \nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
             }
         }
 
