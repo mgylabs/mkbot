@@ -31,7 +31,7 @@ jobs:
       shell: pwsh
     - name: Lint with pylint
       run: |
-        pylint src -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -f colorized
+        pylint src -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
     - name: Version
       run: |
         python package/vc.py -gb
