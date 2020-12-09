@@ -99,8 +99,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(290, 45);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Mulgyeol MK Bot\r\nVersion 1.0.4\r\nCopyright © 2020 Mulgyeol Labs. All Rights Reserv" +
-    "ed.";
+            this.label1.Text = "Mulgyeol MK Bot\r\nVersion 1.0.4\r\nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
             // 
             // button1
             // 

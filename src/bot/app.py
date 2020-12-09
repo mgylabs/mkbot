@@ -20,7 +20,7 @@ errorlevel = 0
 
 replyformat = MsgFormatter()
 bot = commands.Bot(command_prefix=CONFIG.commandPrefix,
-                      help_command=CommandHelp(replyformat))
+                   help_command=CommandHelp(replyformat))
 cert = MGCertificate('../data/mgcert.json')
 bot.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
 
@@ -85,7 +85,8 @@ for i in core_extensions:
         bot.load_extension(i)
     except Exception as e:
         traceback.print_exc()
-        errorlevel += 1
+        if i != "core.install":
+            errorlevel += 1
 
 try:
     exts = core.utils.api.get_enabled_extensions()
@@ -102,13 +103,14 @@ except Exception as e:
 
 print('Mulgyeol MK Bot')
 print(f'Version {VERSION}' if VERSION != None else 'Test Mode')
-print('Copyright © 2020 Mulgyeol Labs. All Rights Reserved.\n')
+print('Copyright (c) 2020 Mulgyeol Labs. All rights reserved.\n')
 
 if instance_already_running():
     print('The discord token provided is already in use by MK Bot.')
     sys.exit(0)
 
 if '--dry-run' in sys.argv:
+    print("Test succeeded")
     sys.exit(errorlevel)
 else:
     try:

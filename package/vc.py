@@ -1,7 +1,9 @@
 import json
 import sys
 import os
+from typing import ChainMap
 import requests
+import yaml
 
 
 def isfile(filename):
@@ -87,7 +89,67 @@ def release():
         json.dump(last_version_data, f)
 
 
+def github_build():
+    with open('package/info/version.json', 'rt') as f:
+        package_version_data = json.load(f)
+
+    package_version_data['commit'] = os.getenv('GITHUB_SHA')
+
+    with open('package/info/version.json', 'wt') as f:
+        json.dump(package_version_data, f)
+
+
+def create_temp_changelog():
+    changelogs = []
+    index_box = {}
+    templog = []
+
+    for dirpath, _, filenames in os.walk('changelogs/unreleased'):
+        for name in filenames:
+            with open(os.path.join(dirpath, name), 'rt') as f:
+                t: dict = yaml.safe_load(f)
+                if t != None:
+                    t = {k: v for k, v in t.items() if v != None}
+                    changelogs.append(t)
+
+    for ch in changelogs:
+        if ch.get('pull_request', None) != None:
+            string = f"* {ch.get('title', '')}. #{ch.get('pull_request')}"
+        else:
+            string = f"* {ch.get('title', '')}."
+        if ch['type'] in index_box:
+            index_box[ch.get('type', 'others')].append(string)
+        else:
+            index_box[ch.get('type', 'others')] = [string]
+
+    for k, v in index_box.items():
+        templog.append(f'## {k.capitalize()}')
+        templog += v
+        templog.append('\n')
+
+    with open('temp_changelog.md', 'wt') as f:
+        f.write('\n'.join(templog))
+
+
+def github_release():
+    with open('package/info/version.json', 'rt') as f:
+        package_version_data = json.load(f)
+
+    package_version_data['version'] = package_version_data['version'].replace(
+        '-dev', '')
+    package_version_data['commit'] = os.getenv('GITHUB_SHA')
+
+    with open('package/info/version.json', 'wt') as f:
+        json.dump(package_version_data, f)
+
+    create_temp_changelog()
+
+
 if '-b' in sys.argv:
     build()
 elif '-r' in sys.argv:
     release()
+elif '-gb' in sys.argv:
+    github_build()
+elif '-gr' in sys.argv:
+    github_release()
