@@ -45,12 +45,15 @@ jobs:
         TAG_NAME: ${{ github.ref }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        rm -Force changelogs\unreleased\*.yml
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add CHANGELOG.md
         git add changelogs\unreleased
-        git commit -m "Update CHANGELOG.md for ${Env:TAG_NAME}"
-        git push https://${Env:GITHUB_ACTOR}:${Env:GITHUB_TOKEN}@github.com/${Env:GITHUB_REPOSITORY}.git
+        git commit -m "Update CHANGELOG.md for $(${Env:TAG_NAME}.Substring(10))"
+        git push -u https://${Env:GITHUB_ACTOR}:${Env:GITHUB_TOKEN}@github.com/${Env:GITHUB_REPOSITORY}.git HEAD:refs/heads/update-changelog-for-$(${Env:TAG_NAME}.Substring(10)) --force
+        python package/ghtool.py -cp
+      shell: pwsh
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
