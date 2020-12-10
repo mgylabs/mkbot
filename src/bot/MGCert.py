@@ -1,4 +1,5 @@
 import asyncio
+import discord
 from discord.ext import commands
 from functools import wraps
 import logging
@@ -74,7 +75,12 @@ class MGCertificate:
                     commandPrefix=CONFIG.commandPrefix)
 
             @wraps(func)
-            async def outerfunc(ctx, *args, **kwargs):
+            async def outerfunc(*args, **kwargs):
+                if isinstance(args[0], commands.context.Context):
+                    ctx = args[0]
+                else:
+                    ctx = args[1]
+
                 req_user = str(ctx.author)
 
                 if self.getUserLevel(req_user) > level:
@@ -89,6 +95,6 @@ class MGCertificate:
                         req_user, ctx.command.name, Level.get_description(level)))
                     raise Exception('Untrusted user')
 
-                return await func(ctx, *args, **kwargs)
+                return await func(*args, **kwargs)
             return outerfunc
         return deco
