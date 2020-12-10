@@ -15,5 +15,8 @@
     "python.analysis.extraPaths": [
         "src\\bot",
         "src\\msu"
-    ]
+    ],
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH}${workspaceFolder}\\scripts"
+    }
 }
