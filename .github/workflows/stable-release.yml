@@ -40,6 +40,17 @@ jobs:
         mv package\MKBotSetup.exe .\
         Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
       shell: pwsh
+    - name: Update CHANGELOG
+      env:
+        TAG_NAME: ${{ github.ref }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add CHANGELOG.md
+        git add changelogs\unreleased
+        git commit -m "Update CHANGELOG.md for ${Env:TAG_NAME}"
+        git push https://${Env:GITHUB_ACTOR}:${Env:GITHUB_TOKEN}@github.com/${Env:GITHUB_REPOSITORY}.git
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1

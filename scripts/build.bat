@@ -41,7 +41,7 @@ move "dist\Mulgyeol Software Update" ..\..\build\Update
 cd %CI_PROJECT_DIR%\build
 xcopy /q /I /Y /E Update\* app
 del *.pdb
-del /q Update
+rmdir /q /s Update
 
 @ If /i "%1" == "--test-bot" (
     cd %CI_PROJECT_DIR%

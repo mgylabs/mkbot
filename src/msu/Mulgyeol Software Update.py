@@ -32,8 +32,8 @@ def instance_already_running():
 
 
 class VersionInfo:
-    def __init__(self, label, url):
-        _, self.rtype, self.version, self.sha = label.split('-')
+    def __init__(self, name, url):
+        _, self.rtype, self.version, self.sha = name.split('-')
         self.version = version.parse(self.version)
         self.url = url
 
@@ -56,7 +56,7 @@ class Updater:
 
         asset = None
         for d in data['assets']:
-            if d['label'].startswith('mkbotsetup-'):
+            if d['name'].startswith('mkbotsetup-'):
                 asset = d
                 break
 
@@ -67,7 +67,7 @@ class Updater:
         self.enabled_canary = enabled_canary
 
         self.last_stable = VersionInfo(
-            asset['label'], asset['browser_download_url'])
+            asset['name'], asset['browser_download_url'])
 
         # TODO: canary update
         # if self.enabled_canary:
@@ -133,6 +133,8 @@ def main():
     elif '/c' in sys.argv:
         ut = Updater(enabled_canary)
         ut.run()
+    else:
+        sys.exit(1)
 
 
 try:
