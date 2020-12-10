@@ -48,12 +48,12 @@ namespace MKBot
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/releases");
+            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/releases");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/issues");
+            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/issues");
         }
     }
 }

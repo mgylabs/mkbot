@@ -26,7 +26,7 @@ class MsgFormatter:
 
     def get(self, ctx, title, description='', show_req_user=True):
         embed = discord.Embed(title=title, description=description +
-                              '\n\nPowered by [MK Bot](https://gitlab.com/mgylabs/mulgyeol-mkbot)', color=get_color(), timestamp=datetime.datetime.utcnow())
+                              '\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)', color=get_color(), timestamp=datetime.datetime.utcnow())
         if show_req_user:
             embed.add_field(name='Requested by',
                             value='<@{}>'.format(ctx.author.id))

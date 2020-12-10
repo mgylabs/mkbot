@@ -57,7 +57,7 @@ def setup(bot: commands.Bot):
 
         await ctx.message.delete()
         embed = bot.replyformat.get(
-            ctx, string, '[MK Bot](https://gitlab.com/mgylabs/mulgyeol-mkbot) said on behalf of <@{}>'.format(ctx.author.id))
+            ctx, string, '[MK Bot](https://github.com/mgylabs/mulgyeol-mkbot) said on behalf of <@{}>'.format(ctx.author.id))
         embed.set_author(name=ctx.message.author.name,
                          icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=embed)

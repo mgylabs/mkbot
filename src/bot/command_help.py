@@ -46,7 +46,7 @@ class CommandHelp(commands.DefaultHelpCommand):
     async def send_pages(self):
         """A helper utility to send the page output from :attr:`paginator` to the destination."""
 
-        description = "> MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://gitlab.com/mgylabs/mulgyeol-mkbot"
+        description = "> MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://github.com/mgylabs/mulgyeol-mkbot"
         version_desc = f'Version {VERSION}' if VERSION != None else "Test Mode"
         for page in self.paginator.pages:
             await self.context.send(f'Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2020')

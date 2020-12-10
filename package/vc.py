@@ -1,9 +1,9 @@
 import json
 import sys
 import os
-from typing import ChainMap
 import requests
 import yaml
+import datetime
 
 
 def isfile(filename):
@@ -106,7 +106,7 @@ def create_temp_changelog():
 
     for dirpath, _, filenames in os.walk('changelogs/unreleased'):
         for name in filenames:
-            with open(os.path.join(dirpath, name), 'rt') as f:
+            with open(os.path.join(dirpath, name), 'rt', encoding='utf-8') as f:
                 t: dict = yaml.safe_load(f)
                 if t != None:
                     t = {k: v for k, v in t.items() if v != None}
@@ -114,7 +114,7 @@ def create_temp_changelog():
 
     for ch in changelogs:
         if ch.get('pull_request', None) != None:
-            string = f"* {ch.get('title', '')}. #{ch.get('pull_request')}"
+            string = f"* {ch.get('title', '')} (#{ch.get('pull_request')})"
         else:
             string = f"* {ch.get('title', '')}."
         if ch['type'] in index_box:
@@ -127,8 +127,45 @@ def create_temp_changelog():
         templog += v
         templog.append('\n')
 
-    with open('temp_changelog.md', 'wt') as f:
+    with open('temp_changelog.md', 'wt', encoding='utf-8') as f:
         f.write('\n'.join(templog))
+
+
+def update_changelog(version):
+    changelogs = []
+    index_box = {}
+    templog = [f'\n## {version} ({str(datetime.date.today())})']
+
+    for dirpath, _, filenames in os.walk('changelogs/unreleased'):
+        for name in filenames:
+            with open(os.path.join(dirpath, name), 'rt', encoding='utf-8') as f:
+                t: dict = yaml.safe_load(f)
+                if t != None:
+                    t = {k: v for k, v in t.items() if v != None}
+                    changelogs.append(t)
+
+    for ch in changelogs:
+        if ch.get('pull_request', None) != None:
+            string = f"* {ch.get('title', '')} (#{ch.get('pull_request')})"
+        else:
+            string = f"* {ch.get('title', '')}."
+        if ch['type'] in index_box:
+            index_box[ch.get('type', 'others')].append(string)
+        else:
+            index_box[ch.get('type', 'others')] = [string]
+
+    for k, v in index_box.items():
+        templog.append(f'### {k.capitalize()}')
+        templog += v
+        templog.append('\n')
+
+    with open('CHANGELOG.md', 'rt', encoding='utf-8') as f:
+        old = f.readlines()
+
+    old.insert(1, '\n'.join(templog))
+
+    with open('CHANGELOG.md', 'wt', encoding='utf-8') as f:
+        f.writelines(old)
 
 
 def github_release():
@@ -143,6 +180,7 @@ def github_release():
         json.dump(package_version_data, f)
 
     create_temp_changelog()
+    update_changelog(package_version_data['version'])
 
 
 if '-b' in sys.argv:

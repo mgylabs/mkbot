@@ -16,7 +16,7 @@ API provided by: https://discordapp.com/developers/applications
 
 ## Installing
 
-See [here](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/releases) for downloading stable release
+See [here](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
 
 ## Development Guide
 
