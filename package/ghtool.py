@@ -171,9 +171,10 @@ def create_pull_request():
     res = requests_API('POST', '/repos/mgylabs/mulgyeol-mkbot/pulls',
                        {'title': f'Update CHANGELOG.md for {TAG_NAME}', 'head': f'update-changelog-for-{TAG_NAME}', 'base': 'master', 'body': f'## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.'})
     print(res.text)
-    res = requests_API(
-        'PATCH', f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}", {'labels': ['CHANGELOG']})
-    print(res.text)
+    if 'number' in res.json():
+        res = requests_API(
+            'PATCH', f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}", {'labels': ['CHANGELOG']})
+        print(res.text)
 
 
 def check_last_commit():

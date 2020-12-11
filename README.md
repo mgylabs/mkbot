@@ -1,14 +1,15 @@
-# MK Bot
+# Mulgyeol MK Bot
 
-Discord Bot developed by Mulgyeol Labs  
-API provided by: https://discordapp.com/developers/applications
-
-> This project is managed by @myftbot
+Mulgyeol MK Bot is an open source local-hosted discord Bot.  
+Self-host discord bot on your own local Windows PC.
 
 ## Features
 
 - [x] TTS voices
 - [x] Message Deleter
+- [x] Simple Poll
+- [x] Roulette
+- [x] Translation with Conversation Mode
 - [x] Local Hosting
 - [x] User Access Control
 
@@ -16,7 +17,13 @@ API provided by: https://discordapp.com/developers/applications
 
 ## Installing
 
-See [here](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
+### Mulgyeol MK Bot Stable
+* See [Release Note for Stable](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
+
+### Mulgyeol MK Bot Canary
+> Be warned: Canary can be unstable.
+* See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading nightly build
+
 
 ## Development Guide
 
@@ -55,14 +62,3 @@ See [here](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downlo
 > :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
 
 For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home).
-
-## How to Push into master
-
-> You should create a personal fork or create another branches there when you push changes, and then create Merge Requests to master branch.
-
-1.  Create a new branch.
-2.  Push into the branch.
-3.  Create a new Merge Request.
-4.  When you add a ~AutoMerge label to the Merge Request, @myftbot will automatically merge it when requirements are met.
-
-[Learn more](https://gitlab.com/mgylabs/developer/taehyeokkang/MGYLBot/-/wikis/Auto-Merge)
