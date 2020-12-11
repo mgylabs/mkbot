@@ -8,20 +8,20 @@
     "properties": {
         "discordToken": {
             "type": "string",
-            "title": "DISCORD BOT TOKEN"
+            "title": "Sets your discord bot token."
         },
         "kakaoToken": {
             "type": "string",
-            "title": "KAKAO API TOKEN"
+            "title": "Sets your kakao api token."
         },
         "commandPrefix": {
             "type": "string",
-            "title": "명령어 접두사를 설정합니다.",
+            "title": "Sets the prefix of commands.",
             "default": "."
         },
         "messageColor": {
             "type": "string",
-            "title": "Bot 응답 메시지 색상을 설정합니다.",
+            "title": "Sets the color of the bot message.",
             "default": "#FAA61A",
             "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
             "examples": [
@@ -30,7 +30,7 @@
         },
         "disabledPrivateChannel": {
             "type": "boolean",
-            "title": "DM 사용 안 함 여부를 설정합니다.",
+            "title": "Disables private channel.",
             "default": false,
             "examples": [
                 true
@@ -38,7 +38,15 @@
         },
         "connectOnStart": {
             "type": "boolean",
-            "title": "자동 연결 여부를 설정합니다.",
+            "title": "When set to true, this enables the auto connect at startup.",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "canaryUpdate": {
+            "type": "boolean",
+            "title": "When set to true, this enables canary update.",
             "default": false,
             "examples": [
                 true
