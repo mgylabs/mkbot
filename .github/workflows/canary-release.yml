@@ -3,6 +3,9 @@ name: Nightly Build
 on:
   schedule:
     - cron:  '0 15 * * *'
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
     inputs:
       name:
