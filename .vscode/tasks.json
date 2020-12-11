@@ -12,10 +12,13 @@
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [],
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
-            "label": "build and test",
+            "label": "Test in Packaged Application",
             "type": "shell",
             "command": ".venv\\Scripts\\activate && scripts\\build.bat",
             "args": [
@@ -45,7 +48,7 @@
             },
             "problemMatcher": [],
             "group": {
-                "kind": "test",
+                "kind": "build",
                 "isDefault": true
             }
         }

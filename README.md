@@ -22,8 +22,28 @@ Self-host discord bot on your own local Windows PC.
 
 ### Mulgyeol MK Bot Canary
 > Be warned: Canary can be unstable.
-* See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading nightly build
+* See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary) for downloading nightly build
 
+### Build from Source
+#### Install dependencies
+* Visual Studio Code
+* python 3.7
+* NSIS 3.x
+* msbuild 16.x
+
+#### Build and Package
+1. Enter the following a command in terminal.
+```bat
+.\scripts\venv.bat
+```
+
+2. Go into `vscode`, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> and select `build` to start the build task.
+
+3. When `build` task is complete, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> again and select `package`.
+
+4. Run `Package\MKBotSetup.exe` to install `MK Bot`.
+
+> **Note:** If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
 ## Development Guide
 
