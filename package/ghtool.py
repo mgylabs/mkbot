@@ -78,20 +78,35 @@ def comment_on_pr():
 def comment_on_pr_for_canary():
     cur_commit = os.getenv('GITHUB_SHA')
     pr_list = set()
-    tags = requests_API('GET', '/repos/mgylabs/mulgyeol-mkbot/tags').json()
-    if len(tags) < 2:
-        return
+    canary_tag = requests_API(
+        'GET', '/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary').json()
 
-    last_tag = None
-    for i, t in enumerate(tags):
-        if t['name'].startswith('v'):
-            last_tag = t['name']
+    last_canary_commit = None
+    if len(canary_tag['assets']) > 0:
+        asset = find_asset(canary_tag['assets'])
+        if asset != None:
+            _, _, ver, _ = asset['name'].split('-')
+            last_canary_commit = ver.split('.')[-1]
 
-    if last_tag == None:
-        return
+    if last_canary_commit == None:
+        tags = requests_API('GET', '/repos/mgylabs/mulgyeol-mkbot/tags').json()
+        if len(tags) < 2:
+            return
+
+        last_tag = None
+        for i, t in enumerate(tags):
+            if t['name'].startswith('v'):
+                last_tag = t['name']
+
+        if last_tag == None:
+            return
+
+        source = last_tag
+    else:
+        source = last_canary_commit
 
     commits_dict = requests_API(
-        'GET', f'/repos/mgylabs/mulgyeol-mkbot/compare/{last_tag}...{cur_commit}').json()['commits']
+        'GET', f'/repos/mgylabs/mulgyeol-mkbot/compare/{source}...{cur_commit}').json()['commits']
     commits = {x['sha'] for x in commits_dict}
 
     for commit in commits:
