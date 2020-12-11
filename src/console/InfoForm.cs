@@ -19,6 +19,7 @@ namespace MKBot
                 JObject json = JObject.Parse(jsonString);
 
                 string[] version_array = json["version"].ToString().Split('-');
+                string commit = json["commit"].ToString();
                 string version_str = version_array[0];
                 if (version_array.Length > 1 && version_array[1] == "dev")
                 {
@@ -28,7 +29,7 @@ namespace MKBot
                 {
                     version_str += " Stable";
                 }
-                label1.Text = "Mulgyeol MK Bot\nVersion " + version_str + "\nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
+                label1.Text = "Version " + version_str + "\nCommit " + commit + "\n\nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
             }
             catch
             {

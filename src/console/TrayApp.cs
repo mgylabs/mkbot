@@ -27,6 +27,7 @@ namespace MKBot
         private Form Infowin;
 
         private string DirectoryPath;
+        private string UserDataPath;
 
         public TrayApp()
         {
@@ -37,8 +38,9 @@ namespace MKBot
             DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
             Environment.CurrentDirectory = DirectoryPath;
 #endif
+            UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
             Infowin = new InfoForm();
-            var jsonString = File.ReadAllText("data\\config.json");
+            var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
             
             psi1.FileName = "app\\app.exe";
@@ -120,17 +122,17 @@ namespace MKBot
 
         private void Click_Setting(object source, EventArgs e)
         {
-            Process.Start("data\\config.json");
+            Process.Start(UserDataPath + "\\config.json");
         }
 
         private void Click_MGCert(object source, EventArgs e)
         {
-            Process.Start("data\\mgcert.json");
+            Process.Start(UserDataPath + "\\mgcert.json");
         }
 
         private void Click_Extensions(object sender, EventArgs e)
         {
-            Process.Start("data\\extensions.json");
+            Process.Start(UserDataPath + "\\extensions.json");
         }
 
         private void Click_Update(object sender, EventArgs e)
@@ -285,7 +287,7 @@ namespace MKBot
                     Install_update();
                     break;
                 case "openConfig":
-                    Process.Start("data\\config.json");
+                    Process.Start(UserDataPath + "\\config.json");
                     break;
                 default:
                     Console.WriteLine("default");

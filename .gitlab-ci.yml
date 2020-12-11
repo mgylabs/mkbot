@@ -126,6 +126,8 @@ test-build-bot:
     - .build-bot
   script:
     - mv package\data build
+    - mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot"
+    - cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" -Recurse
     - mkdir $Env:USERPROFILE\.mkbot
     - mv extensions $Env:USERPROFILE\.mkbot
     - cd .\build\app

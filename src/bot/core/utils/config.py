@@ -1,6 +1,21 @@
 import os
 import json
+import sys
 
+LOCALAPPDATA = os.getenv('LOCALAPPDATA')
+
+def is_development_mode():
+    return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
+
+
+if is_development_mode():
+    CONFIG_PATH = '../data/config.json'
+    MGCERT_PATH = '../data/mgcert.json'
+    USER_DATA_PATH = '../data'
+else:
+    CONFIG_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
+    MGCERT_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\mgcert.json"
+    USER_DATA_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data"
 
 class Settings:
     def __init__(self, data):
@@ -38,13 +53,13 @@ class Version:
 
 
 def invoke():
-    with open('../data/config.json', 'rt', encoding='utf-8') as f:
+    with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
         TOKEN = json.load(f)
 
     sch_url = 'https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema'
 
     if TOKEN.get('$schema', None) != sch_url:
-        with open('../data/config.json', 'wt', encoding='utf-8') as f:
+        with open(CONFIG_PATH, 'wt', encoding='utf-8') as f:
             if '$schema' in TOKEN:
                 TOKEN['$schema'] = sch_url
                 json.dump(TOKEN,
@@ -57,12 +72,12 @@ def invoke():
 
 
 def add_data(key, value):
-    with open('../data/config.json', 'rt', encoding='utf-8') as f:
+    with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
         TOKEN = json.load(f)
 
     TOKEN[key] = value
 
-    with open('../data/config.json', 'wt', encoding='utf-8') as f:
+    with open(CONFIG_PATH, 'wt', encoding='utf-8') as f:
         json.dump(TOKEN, f, indent=4, ensure_ascii=False)
 
 

@@ -15,6 +15,8 @@ RequestExecutionLevel user
 
 BrandingText "Mulgyeol Labs"
 
+AllowSkipFiles off
+
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "mkbot_install.ico"
@@ -60,7 +62,10 @@ Section "Apps" SEC01
   nsExec::Exec 'taskkill /f /im "MKBot.exe"'
   SetOutPath "$INSTDIR"
   File "msu.exe"
-  IfSilent +1 +2
+  IfSilent +1 +4
+  SetSilent Normal
+  HideWindow
+  SetAutoClose true
   Exec "$INSTDIR\msu.exe /start MKBotSetup.exe"
   File /nonfatal /a "..\build\*"
   File "MKBot.VisualElementsManifest.xml"
@@ -70,7 +75,7 @@ Section "Apps" SEC01
   File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\resources"
   File /nonfatal /a /r "..\resources\*"
-  SetOutPath "$INSTDIR\data"
+  SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
   SetOverwrite on

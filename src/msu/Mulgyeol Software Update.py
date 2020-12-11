@@ -8,10 +8,19 @@ import hashlib
 import traceback
 import msvcrt  # pylint: disable=import-error
 
+def is_development_mode():
+    return not getattr(sys, 'frozen', False)
+
+
+if is_development_mode():
+    CONFIG_PATH = '..\\data\\config.json'
+else:
+    CONFIG_PATH = f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
+
 
 def load_canary_config():
     try:
-        with open('../data/config.json', 'rt', encoding='utf-8') as f:
+        with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
             TOKEN = json.load(f)
         return TOKEN['canaryUpdate']
     except:

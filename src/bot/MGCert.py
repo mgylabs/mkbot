@@ -5,7 +5,7 @@ from functools import wraps
 import logging
 import json
 from MsgFormat import MsgFormatter
-from core.utils.config import CONFIG
+from core.utils.config import CONFIG, USER_DATA_PATH
 
 logger = logging.getLogger('Logger')
 logger.setLevel(logging.DEBUG)
@@ -14,7 +14,8 @@ formatter = logging.Formatter(
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
-file_handler = logging.FileHandler('MK Bot.log', mode='a', encoding='utf-8')
+file_handler = logging.FileHandler(
+    USER_DATA_PATH + '/MK Bot.log', mode='a', encoding='utf-8')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 

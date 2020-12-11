@@ -1,7 +1,7 @@
 import asyncio
 import discord
 from discord.ext import commands
-from core.utils.config import CONFIG, VERSION
+from core.utils.config import CONFIG, VERSION, MGCERT_PATH
 from MGCert import MGCertificate
 from MsgFormat import MsgFormatter
 from core_ext import core_extensions
@@ -21,12 +21,12 @@ errorlevel = 0
 replyformat = MsgFormatter()
 bot = commands.Bot(command_prefix=CONFIG.commandPrefix,
                    help_command=CommandHelp(replyformat))
-cert = MGCertificate('../data/mgcert.json')
+cert = MGCertificate(MGCERT_PATH)
 bot.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
 
 
 def is_development_mode():
-    return not getattr(sys, 'frozen', False)
+    return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
 
 
 def instance_already_running():
@@ -49,7 +49,8 @@ async def on_ready():
     print('Logged in within', time.time() - stime)
     replyformat.set_avatar_url(bot.user.avatar_url)
     if is_development_mode():
-        name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ else "IN DEV"
+        name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ or (
+            '--debug') in sys.argv else "IN DEV"
         activity_type = discord.ActivityType.playing
     elif VERSION == None:
         name = "MK Bot Test Mode"

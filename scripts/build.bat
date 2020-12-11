@@ -47,7 +47,7 @@ rmdir /q /s Update
     cd %CI_PROJECT_DIR%
     xcopy /q /I /Y src\data build\data
     cd build\app
-    start cmd /k "app.exe & pause & exit"
+    start cmd /k "app.exe --debug & pause & exit"
     echo.
     echo Start MK Bot in Test Mode
 )

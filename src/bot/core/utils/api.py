@@ -3,16 +3,27 @@ import sys
 import os
 import pickle
 
-if getattr(sys, 'frozen', False):
-    loc = os.getenv('USERPROFILE') + '\\.mkbot\\'
-else:
+LOCALAPPDATA = os.getenv('LOCALAPPDATA')
+
+
+def is_development_mode():
+    return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
+
+
+if is_development_mode():
     loc = '..\\..\\'
+    EXT_CONFIG_PATH = '..\\data\\extensions.json'
+    EXT_BIN_PATH = '..\\data\\ext.bin'
+else:
+    loc = os.getenv('USERPROFILE') + '\\.mkbot\\'
+    EXT_CONFIG_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\extensions.json"
+    EXT_BIN_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\ext.bin"
 
 extensions_path = loc + 'extensions'
 
 with open(loc + 'extensions\\extensions.json', 'rt') as f:
     default_exts = json.load(f)['extensions']
-with open('..\\data\\extensions.json', 'rt') as f:
+with open(EXT_CONFIG_PATH, 'rt') as f:
     exts = json.load(f)['extensions']
 
 
@@ -27,7 +38,7 @@ def find_available_extension(name: str):
 
 
 def set_enabled(ext_id: str):
-    with open('..\\data\\extensions.json', 'rt') as f:
+    with open(EXT_CONFIG_PATH, 'rt') as f:
         exts_list = json.load(f)
     find = False
     for i in exts_list['extensions']:
@@ -39,26 +50,26 @@ def set_enabled(ext_id: str):
     if not find:
         exts_list['extensions'].append({'id': ext_id, 'enabled': True})
 
-    with open('..\\data\\extensions.json', 'wt') as f:
+    with open(EXT_CONFIG_PATH, 'wt') as f:
         json.dump(exts_list, f, indent=4, ensure_ascii=False)
 
 
 def save_commit(name, sha):
-    if not os.path.isfile('..\\data\\ext.bin'):
+    if not os.path.isfile(EXT_BIN_PATH):
         data = {}
     else:
-        with open('..\\data\\ext.bin', 'rb') as f:
+        with open(EXT_BIN_PATH, 'rb') as f:
             data = pickle.load(f)
     data[name] = sha
-    with open('..\\data\\ext.bin', 'wb') as f:
+    with open(EXT_CONFIG_PATH, 'wb') as f:
         pickle.dump(data, f)
 
 
 def load_commit(name):
-    if not os.path.isfile('..\\data\\ext.bin'):
+    if not os.path.isfile(EXT_CONFIG_PATH):
         return None
     else:
-        with open('..\\data\\ext.bin', 'rb') as f:
+        with open(EXT_CONFIG_PATH, 'rb') as f:
             data = pickle.load(f)
         return data.get('name', None)
 

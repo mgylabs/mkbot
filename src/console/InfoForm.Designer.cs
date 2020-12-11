@@ -95,11 +95,12 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 126);
+            this.label1.Location = new System.Drawing.Point(12, 118);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 45);
+            this.label1.Size = new System.Drawing.Size(284, 60);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Mulgyeol MK Bot\r\nVersion 1.0.4\r\nCopyright © 2020 Mulgyeol Labs. All rights reserved.";
+            this.label1.Text = "Version 1.0.4\r\nCommit 1234567\r\n\r\nCopyright © 2020 Mulgyeol Labs. All rights reser" +
+    "ved.";
             // 
             // button1
             // 
