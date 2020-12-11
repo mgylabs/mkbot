@@ -8,20 +8,20 @@
     "properties": {
         "discordToken": {
             "type": "string",
-            "title": "Sets your discord bot token."
+            "description":"Sets your discord bot token."
         },
         "kakaoToken": {
             "type": "string",
-            "title": "Sets your kakao api token."
+            "description": "Sets your kakao api token."
         },
         "commandPrefix": {
             "type": "string",
-            "title": "Sets the prefix of commands.",
+            "description": "Sets the prefix of commands.",
             "default": "."
         },
         "messageColor": {
             "type": "string",
-            "title": "Sets the color of the bot message.",
+            "description": "Sets the color of the bot message.",
             "default": "#FAA61A",
             "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
             "examples": [
@@ -30,7 +30,7 @@
         },
         "disabledPrivateChannel": {
             "type": "boolean",
-            "title": "Disables private channel.",
+            "description": "Disables private channel.",
             "default": false,
             "examples": [
                 true
@@ -38,7 +38,7 @@
         },
         "connectOnStart": {
             "type": "boolean",
-            "title": "When set to true, this enables the auto connect at startup.",
+            "description": "When set to true, this enables the auto connect at startup.",
             "default": false,
             "examples": [
                 true
@@ -46,7 +46,7 @@
         },
         "canaryUpdate": {
             "type": "boolean",
-            "title": "When set to true, this enables canary update.",
+            "description": "When set to true, this enables canary update.",
             "default": false,
             "examples": [
                 true
