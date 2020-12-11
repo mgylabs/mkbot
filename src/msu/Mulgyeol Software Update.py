@@ -34,8 +34,14 @@ def instance_already_running():
 class VersionInfo:
     def __init__(self, name, url):
         _, self.rtype, self.version, self.sha = name.split('-')
-        self.version = version.parse(self.version)
-        self.url = url
+        self.commit = None
+        if self.rtype == 'canary':
+            self.commit = self.version.split('.')[-1]
+            self.version.replace(f'.{self.commit}', '')
+            self.version = version.parse(self.version)
+        else:
+            self.version = version.parse(self.version)
+            self.url = url
 
 
 class Updater:
@@ -43,7 +49,12 @@ class Updater:
         with open('../info/version.json', 'rt') as f:
             current_data = json.load(f)
 
-        self.current_version = version.parse(current_data['version'])
+        self.enabled_canary = enabled_canary
+        if self.enabled_canary:
+            self.current_version = version.parse(
+                current_data['version'].replace('-dev', ''))
+        else:
+            self.current_version = version.parse(current_data['version'])
 
         if current_data.get('commit', None) == None:
             sys.exit(1)
@@ -54,33 +65,43 @@ class Updater:
         res.raise_for_status()
         data = res.json()
 
-        asset = None
-        for d in data['assets']:
-            if d['name'].startswith('mkbotsetup-'):
-                asset = d
-                break
+        asset = self.find_asset(data['assets'])
 
         if asset == None:
             sys.exit(1)
 
         self.setupPath = os.getenv('TEMP') + '\\mkbot-update\\MKBotSetup.exe'
-        self.enabled_canary = enabled_canary
 
         self.last_stable = VersionInfo(
             asset['name'], asset['browser_download_url'])
-
-        # TODO: canary update
-        # if self.enabled_canary:
-        #     self.last_canary = VersionInfo()
-        # else:
-        #     self.last_canary = None
+        self.last_canary = None
+        if self.enabled_canary:
+            res = requests.get(
+                'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary')
+            try:
+                res.raise_for_status()
+                asset = self.find_asset(res.json()['assets'])
+                if asset != None:
+                    self.last_canary = VersionInfo(
+                        asset['name'], asset['browser_download_url'])
+            except:
+                pass
 
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        # elif self.enabled_canary and self.last_canary and self.last_canary.version > self.current_version:
-        #     self.target = self.last_canary
+        elif self.enabled_canary and self.last_canary and self.last_canary.commit != current_data['commit']:
+            self.target = self.last_canary
         else:
             sys.exit(1)
+
+    def find_asset(self, assets):
+        asset = None
+        for d in assets:
+            if d['name'].startswith('mkbotsetup-'):
+                asset = d
+                break
+
+        return asset
 
     def download(self):
         r = requests.get(self.target.url)

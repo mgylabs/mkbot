@@ -18,9 +18,16 @@ def isnewupdate(base, last):
     return base[:-1] != last[:-1]
 
 
+def save_version_txt(version):
+    with open('version.txt', 'wt') as f:
+        f.write(version)
+
+
 def build():
     with open('package/info/version.json', 'rt') as f:
         cur = json.load(f)
+
+    cur['version'] = cur['version'].replace('-dev', '.0')
 
     if isfile('output/last_version.txt'):
         with open('output/last_version.txt', 'rt') as f:
@@ -77,7 +84,7 @@ def release():
         with open('output/last_version.txt', 'rt') as f:
             info = f.readline()
 
-        package_version_data['version'] = info
+        package_version_data['version'] = '.'.join(info.split('.')[:3])
 
         with open('package/info/version.json', 'wt') as f:
             json.dump(package_version_data, f)
@@ -98,11 +105,17 @@ def github_build():
     with open('package/info/version.json', 'wt') as f:
         json.dump(package_version_data, f)
 
+    save_version_txt(package_version_data['version'])
 
-def create_temp_changelog():
+
+def create_temp_changelog(stable, commit=None):
     changelogs = []
     index_box = {}
-    templog = []
+    if stable:
+        templog = []
+    else:
+        templog = [
+            f'## Nightly build for developers\n### Be warned: Canary can be unstable.\n* commit: {commit}\n']
 
     for dirpath, _, filenames in os.walk('changelogs/unreleased'):
         for name in filenames:
@@ -168,18 +181,23 @@ def update_changelog(version):
         f.writelines(old)
 
 
-def github_release():
+def github_release(stable):
     with open('package/info/version.json', 'rt') as f:
         package_version_data = json.load(f)
 
-    package_version_data['version'] = package_version_data['version'].replace(
-        '-dev', '')
+    if stable:
+        package_version_data['version'] = package_version_data['version'].replace(
+            '-dev', '')
     package_version_data['commit'] = os.getenv('GITHUB_SHA')
 
     with open('package/info/version.json', 'wt') as f:
         json.dump(package_version_data, f)
-
-    create_temp_changelog()
+    if stable:
+        save_version_txt(package_version_data['version'])
+    else:
+        save_version_txt(package_version_data['version'].replace(
+            '-dev', package_version_data['commit'][:7]))
+    create_temp_changelog(stable, package_version_data['commit'])
     update_changelog(package_version_data['version'])
 
 
@@ -190,4 +208,6 @@ elif '-r' in sys.argv:
 elif '-gb' in sys.argv:
     github_build()
 elif '-gr' in sys.argv:
-    github_release()
+    github_release(True)
+elif '-gn' in sys.argv:
+    github_release(False)

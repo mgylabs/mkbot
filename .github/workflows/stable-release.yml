@@ -30,13 +30,15 @@ jobs:
     - name: Version
       run: |
         python package/vc.py -gr
+        echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
+      shell: pwsh
     - name: Build MK Bot
       run: |
         call scripts\build.bat
     - name: Packaging
       run: |
         $Env:Path += ";C:\Program Files (x86)\NSIS\"
-        makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=$ver package\MKBot.nsi
+        makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=${Env:mkbot_version} package\MKBot.nsi
         mv package\MKBotSetup.exe .\
         Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
       shell: pwsh

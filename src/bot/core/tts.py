@@ -13,7 +13,7 @@ def setup(bot: commands.Bot):
         {commandPrefix}tts [option] "Content" : Says the content in "content". You do not have to use Quotation marks even if there are spaces included in content.
 
         *Example*
-        {commandPrefix}tts "Conetne"
+        {commandPrefix}tts "Content"
         {commandPrefix}tts -m "Content"
         {commandPrefix}tts -w "Content": -m speaks in male voice and -w speaks in female voice. Default voice is male.
         """

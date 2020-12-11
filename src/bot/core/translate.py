@@ -38,7 +38,7 @@ def setup(bot: commands.Bot):
         async def on_message(self, message: discord.Message):
             if (not self.conversation):
                 return
-            print(message.content)
+
             ctx = await bot.get_context(message)
             _, result = await self._trans(ctx, message.content, self.target)
             if len(result) > 1:
@@ -72,13 +72,13 @@ def setup(bot: commands.Bot):
                             Thai	       th
                             Turkish	       tr
 
-            {commandPrefix}translate "What does it mean in English?" english
-            {commandPrefix}translate "What does it mean in English?" en
+            {commandPrefix}translate "What does it mean in English?" korean
+            {commandPrefix}translate "What does it mean in English?" kr
 
             * Conversation Mode (beta)
             --conversation <true_or_false>
               You can also use <t_or_f>, <y_or_n> and <on_or_off>.
-            -- target <languages>
+            --target <languages>
               You can either give multiple languages separated by comma (,).
 
             Activate
@@ -114,7 +114,7 @@ def setup(bot: commands.Bot):
             for t, r in result.items():
                 await ctx.send(embed=bot.replyformat.get(ctx, 'Translation Successful ' + srcLang + ' => ' + t, msg + '\n\n' + r))
 
-        async def _convert_langs(self, ctx, langs:  set):
+        async def _convert_langs(self, ctx, langs: set):
             short_langs = {t for t in langs if t.lower()
                            in self.languages}
             langs = (
@@ -147,7 +147,7 @@ def setup(bot: commands.Bot):
                 await channel.send(embed=bot.replyformat.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
                 raise commands.CommandError(
                     "srcLanguage detected is not supported")
-            
+
             result = {}
             headers = {
                 'Authorization': 'KakaoAK ' + CONFIG.kakaoToken

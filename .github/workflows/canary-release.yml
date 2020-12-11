@@ -1,15 +1,39 @@
-name: Build and Test
+name: Nightly Build
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-# on: [push, pull_request]
+  schedule:
+    - cron:  '0 15 * * *'
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Manual Build'
+        required: true
+        default: 'true'
 
 jobs:
-  build:
-    name: Build and Test
+  check:
+    runs-on: ubuntu-latest
+    name: Check Latest Commit
+    outputs:
+      is_new: ${{ steps.checkcommit.outputs.is_new }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+    - name: Check Commit
+      id: checkcommit
+      run: |
+        python package/ghtool.py -check
+  canary-release:
+    name: Nightly Build
+    needs: check
+    if: needs.check.outputs.is_new == 'true'
     runs-on: windows-latest
     defaults:
       run:
@@ -29,27 +53,23 @@ jobs:
         pip install -r requirements.txt
         if (Test-Path Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
       shell: pwsh
-    - name: Lint with pylint
-      run: |
-        pylint src -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
     - name: Version
       run: |
-        python package/vc.py -gb
+        python package/vc.py -gn
         echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
       shell: pwsh
     - name: Build MK Bot
       run: |
         call scripts\build.bat
-    - name: Test with dry run
-      run: |
-        mkdir $Env:USERPROFILE\.mkbot
-        cp -Path extensions -Destination $Env:USERPROFILE\.mkbot -Recurse
-        cd .\build\app
-        .\app.exe --dry-run
-      shell: pwsh
     - name: Packaging
       run: |
         $Env:Path += ";C:\Program Files (x86)\NSIS\"
         makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=${Env:mkbot_version} package\MKBot.nsi
         mv package\MKBotSetup.exe .\
+        Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
       shell: pwsh
+    - name: Upload Release Asset
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python package/ghtool.py -uca
