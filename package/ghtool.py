@@ -49,9 +49,10 @@ def comment_on_pr():
     before_tag = None
     for i, t in enumerate(tags):
         if t['name'] == cur_tag:
-            for j in range(len(tags)):
+            for j in range(len(tags) - (i + 1)):
                 if tags[i + j + 1]['name'].startswith('v'):
                     before_tag = tags[i + j + 1]['name']
+                break
             break
 
     if before_tag == None:
@@ -85,7 +86,7 @@ def comment_on_pr_for_canary():
     if len(canary_tag['assets']) > 0:
         asset = find_asset(canary_tag['assets'])
         if asset != None:
-            _, _, ver, _ = asset['name'].split('-')
+            _, _, ver, _ = asset['label'].split('-')
             last_canary_commit = ver.split('.')[-1]
 
     if last_canary_commit == None:
@@ -129,7 +130,7 @@ def upload_asset():
     with open('MKBotSetup.zip', 'rb') as f:
         fdata = f.read()
     r = requests.post(os.getenv('UPLOAD_URL').replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'mkbotsetup-stable-{version}-{file_hash()}', 'label': f'MKBotSetup-{version}.zip'})
+        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotSetup-{version}.zip', 'label': f'mkbotsetup-stable-{version}-{file_hash()}'})
     print(r.text)
 
     comment_on_pr()
@@ -159,7 +160,7 @@ def upload_canary_asset():
     with open('MKBotSetup.zip', 'rb') as f:
         fdata = f.read()
     r = requests.post(UPLOAD_URL.replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'mkbotsetup-canary-{version}.{sha}-{file_hash()}', 'label': f'MKBotCanarySetup-{version}.{sha[:7]}.zip'})
+        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotCanarySetup-{version}.{sha[:7]}.zip', 'label': f'mkbotsetup-canary-{version}.{sha}-{file_hash()}'})
     print(r.text)
 
     comment_on_pr_for_canary()
@@ -171,7 +172,7 @@ def create_pull_request():
                        {'title': f'Update CHANGELOG.md for {TAG_NAME}', 'head': f'update-changelog-for-{TAG_NAME}', 'base': 'master', 'body': f'## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.'})
     print(res.text)
     res = requests_API(
-        'PATCH', f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}", {'labels': 'CHANGELOG'})
+        'PATCH', f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}", {'labels': ['CHANGELOG']})
     print(res.text)
 
 
@@ -183,7 +184,7 @@ def check_last_commit():
     asset = find_asset(res.json()['assets'])
     last_build_commit = None
     if asset != None:
-        _, _, version, _ = asset['name'].split('-')
+        _, _, version, _ = asset['label'].split('-')
         last_build_commit = version.split('.')[-1]
     is_new = last_build_commit != cur_commit
     if is_new:
@@ -194,7 +195,7 @@ def check_last_commit():
 def find_asset(assets):
     asset = None
     for d in assets:
-        if d['name'].startswith('mkbotsetup-'):
+        if d['label'].startswith('mkbotsetup-'):
             asset = d
             break
 

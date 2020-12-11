@@ -41,8 +41,8 @@ def instance_already_running():
 
 
 class VersionInfo:
-    def __init__(self, name, url):
-        _, self.rtype, self.version, self.sha = name.split('-')
+    def __init__(self, label, url):
+        _, self.rtype, self.version, self.sha = label.split('-')
         self.commit = None
         if self.rtype == 'canary':
             self.commit = self.version.split('.')[-1]
@@ -82,7 +82,7 @@ class Updater:
         self.setupPath = os.getenv('TEMP') + '\\mkbot-update\\MKBotSetup.exe'
 
         self.last_stable = VersionInfo(
-            asset['name'], asset['browser_download_url'])
+            asset['label'], asset['browser_download_url'])
         self.last_canary = None
         if self.enabled_canary:
             res = requests.get(
@@ -92,13 +92,13 @@ class Updater:
                 asset = self.find_asset(res.json()['assets'])
                 if asset != None:
                     self.last_canary = VersionInfo(
-                        asset['name'], asset['browser_download_url'])
+                        asset['label'], asset['browser_download_url'])
             except:
                 pass
 
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        elif self.enabled_canary and self.last_canary and self.last_canary.commit != current_data['commit']:
+        elif self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
             self.target = self.last_canary
         else:
             sys.exit(1)
@@ -106,7 +106,7 @@ class Updater:
     def find_asset(self, assets):
         asset = None
         for d in assets:
-            if d['name'].startswith('mkbotsetup-'):
+            if d['label'].startswith('mkbotsetup-'):
                 asset = d
                 break
 
