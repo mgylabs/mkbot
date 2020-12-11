@@ -49,7 +49,7 @@ def comment_on_pr():
     before_tag = None
     for i, t in enumerate(tags):
         if t['name'] == cur_tag:
-            for j in range(len(tags)):
+            for j in range(len(tags) - (i + 1)):
                 if tags[i + j + 1]['name'].startswith('v'):
                     before_tag = tags[i + j + 1]['name']
             break
