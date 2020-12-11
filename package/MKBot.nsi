@@ -62,7 +62,7 @@ Section "Apps" SEC01
   nsExec::Exec 'taskkill /f /im "MKBot.exe"'
   SetOutPath "$INSTDIR"
   File "msu.exe"
-  IfSilent +1 +4
+  IfSilent +1 +5
   SetSilent Normal
   HideWindow
   SetAutoClose true

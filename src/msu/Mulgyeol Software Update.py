@@ -44,13 +44,13 @@ class VersionInfo:
     def __init__(self, label, url):
         _, self.rtype, self.version, self.sha = label.split('-')
         self.commit = None
+        self.url = url
         if self.rtype == 'canary':
             self.commit = self.version.split('.')[-1]
-            self.version.replace(f'.{self.commit}', '')
+            self.version = self.version.replace(f'.{self.commit}', '')
             self.version = version.parse(self.version)
         else:
             self.version = version.parse(self.version)
-            self.url = url
 
 
 class Updater:
@@ -94,7 +94,7 @@ class Updater:
                     self.last_canary = VersionInfo(
                         asset['label'], asset['browser_download_url'])
             except:
-                pass
+                traceback.print_exc()
 
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable

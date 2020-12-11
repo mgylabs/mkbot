@@ -196,7 +196,7 @@ def github_release(stable):
         save_version_txt(package_version_data['version'])
     else:
         save_version_txt(package_version_data['version'].replace(
-            '-dev', package_version_data['commit'][:7]))
+            '-dev', f".{package_version_data['commit'][:7]}"))
     create_temp_changelog(stable, package_version_data['commit'])
     update_changelog(package_version_data['version'])
 
