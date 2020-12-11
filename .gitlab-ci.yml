@@ -167,6 +167,7 @@ version-beta:
   stage: version
   script:
     - pip install requests
+    - pip install PyYAML
     - mkdir output
     - curl --output output/last_version.txt -L "https://gitlab.com/mgylabs/mulgyeol-mkbot/-/jobs/artifacts/master/raw/output/last_version.txt?job=version-beta"
     - python package/vc.py -b
@@ -183,6 +184,7 @@ version-stable:
   stage: version
   script:
     - pip install requests
+    - pip install PyYAML
     - python package/vc.py -r
     - python package/tool.py -r
   needs:

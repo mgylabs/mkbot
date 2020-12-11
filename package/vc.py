@@ -64,6 +64,9 @@ def release():
     with open('package/info/version.json', 'rt') as f:
         package_version_data = json.load(f)
 
+    package_version_data['version'] = package_version_data['version'].replace(
+        '-dev', '.0')
+
     os.makedirs('.public', exist_ok=True)
     tag_name = os.getenv('CI_COMMIT_TAG')
 
