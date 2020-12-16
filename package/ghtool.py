@@ -76,11 +76,9 @@ def comment_on_pr():
         print(res.text)
 
 
-def comment_on_pr_for_canary():
+def comment_on_pr_for_canary(canary_tag):
     cur_commit = os.getenv('GITHUB_SHA')
     pr_list = set()
-    canary_tag = requests_API(
-        'GET', '/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary').json()
 
     last_canary_commit = None
     if len(canary_tag['assets']) > 0:
@@ -144,6 +142,7 @@ def upload_canary_asset():
 
     tag = requests_API(
         'GET', '/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary').json()
+
     UPLOAD_URL = tag['upload_url']
     REL_ID = tag['id']
     if len(tag['assets']) > 0:
@@ -163,7 +162,7 @@ def upload_canary_asset():
         'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotCanarySetup-{version}.{sha[:7]}.zip', 'label': f'mkbotsetup-canary-{version}.{sha}-{file_hash()}'})
     print(r.text)
 
-    comment_on_pr_for_canary()
+    comment_on_pr_for_canary(tag)
 
 
 def create_pull_request():
@@ -192,6 +191,7 @@ def check_last_commit():
         print('::set-output name=is_new::true')
     else:
         print('::set-output name=is_new::false')
+
 
 def find_asset(assets):
     asset = None

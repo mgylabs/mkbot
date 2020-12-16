@@ -72,8 +72,8 @@ def setup(bot: commands.Bot):
                             Thai	       th
                             Turkish	       tr
 
-            {commandPrefix}translate "What does it mean in English?" korean
-            {commandPrefix}translate "What does it mean in English?" kr
+            {commandPrefix}translate "What does it mean in Korean?" korean
+            {commandPrefix}translate "What does it mean in Korean?" kr
 
             * Conversation Mode (beta)
             --conversation <true_or_false>
@@ -82,11 +82,11 @@ def setup(bot: commands.Bot):
               You can either give multiple languages separated by comma (,).
 
             Activate
-            .translate --conversation true --target en
-            .translate --conversation true --target en,jp,kr
+            {commandPrefix}translate --conversation true --target en
+            {commandPrefix}translate --conversation true --target en,jp,kr
 
             Deactivate
-            .translate --conversation false
+            {commandPrefix}translate --conversation false
             """
             if '--conversation' in args:
                 try:
