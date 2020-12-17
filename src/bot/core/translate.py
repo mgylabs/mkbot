@@ -9,17 +9,6 @@ from distutils.util import strtobool
 from .utils import listener
 
 
-def show_all(obj_dict: dict):
-    while True:
-        for k, v in obj_dict.items():
-            if hasattr(v, '__dict__'):
-                print('=========')
-                print(k)
-                print(v.__dict__)
-                obj_dict = v.__dict__
-        break
-
-
 class Translate(commands.Cog):
 
     def __init__(self, bot):
@@ -101,16 +90,6 @@ class Translate(commands.Cog):
         Deactivate
         {commandPrefix}translate --conversation false
         """
-        print(ctx.__dict__, end='\n\n')
-        obj_dict = ctx.__dict__
-        for k, v in obj_dict.items():
-            if hasattr(v, '__dict__'):
-                print('=========')
-                print(k)
-                print(v.__dict__)
-                show_all(v.__dict__)
-
-
 
         if '--conversation' in args:
             try:
