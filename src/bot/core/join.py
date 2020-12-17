@@ -1,17 +1,21 @@
 from discord.ext import commands
+from .utils.MGCert import MGCertificate, Level
+from .utils.MsgFormat import MsgFormatter
+
+
+@commands.command()
+@MGCertificate.verify(level=Level.TRUSTED_USERS)
+async def join(ctx: commands.Context):
+    """
+    Joins voice channel that the user who typed the command is in
+    """
+    channel = ctx.message.channel
+    voice_channel = ctx.author.voice.channel
+    await voice_channel.connect()
+    await ctx.message.delete()
+    await channel.send(embed=MsgFormatter.get(ctx, 'joined {}'.format(voice_channel.name)))
+
 
 
 def setup(bot: commands.Bot):
-    @commands.command()
-    @bot.MGCert.verify(2)
-    async def join(ctx: commands.Context):
-        """
-        Joins voice channel that the user who typed the command is in
-        """
-        channel = ctx.message.channel
-        voice_channel = ctx.author.voice.channel
-        await voice_channel.connect()
-        await ctx.message.delete()
-        await channel.send(embed=bot.replyformat.get(ctx, 'joined {}'.format(voice_channel.name)))
-
     bot.add_command(join)

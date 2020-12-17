@@ -1,15 +1,18 @@
 from discord.ext import commands
+from .utils.MGCert import MGCertificate, Level
+from .utils.MsgFormat import MsgFormatter
+
+
+@commands.command()
+@MGCertificate.verify(level=Level.ADMIN_USERS)
+async def logout(ctx: commands.Context):
+    """
+    Terminates bot (Requires Admin Permission)
+    """
+    await ctx.send(embed=MsgFormatter.get(ctx, "Logs out of Discord and closes all connections"))
+    print('Logged out')
+    await ctx.bot.logout()
 
 
 def setup(bot: commands.Bot):
-    @commands.command()
-    @bot.MGCert.verify(1)
-    async def logout(ctx: commands.Context):
-        """
-        Terminates bot (Requires Admin Permission)
-        """
-        await ctx.send(embed=bot.replyformat.get(ctx, "Logs out of Discord and closes all connections"))
-        print('Logged out')
-        await bot.logout()
-
     bot.add_command(logout)

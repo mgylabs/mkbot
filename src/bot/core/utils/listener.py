@@ -1,18 +1,15 @@
 from functools import wraps
-
-from discord import message
+from discord.ext import commands
 from .config import CONFIG
 import discord
 
 
-def on_message(bot):
+def on_message():
     def deco(func):
         @wraps(func)
         async def outerfunc(*args, **kwargs):
-            if isinstance(args[0], discord.Message):
-                message = args[0]
-            else:
-                message = args[1]
+            bot: commands.bot = args[0].bot
+            message: discord.Message = args[1]
 
             if message.author == bot.user:
                 return

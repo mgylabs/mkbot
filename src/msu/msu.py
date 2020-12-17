@@ -8,6 +8,7 @@ import hashlib
 import traceback
 import msvcrt  # pylint: disable=import-error
 
+
 def is_development_mode():
     return not getattr(sys, 'frozen', False)
 
@@ -54,16 +55,16 @@ class VersionInfo:
 
 
 class Updater:
-    def __init__(self, enabled_canary=False):
-        with open('../info/version.json', 'rt') as f:
-            current_data = json.load(f)
-
+    def __init__(self, current_data, enabled_canary=False):
         self.enabled_canary = enabled_canary
         if self.enabled_canary:
             self.current_version = version.parse(
                 current_data['version'].replace('-dev', ''))
         else:
             self.current_version = version.parse(current_data['version'])
+
+        self.last_canary = None
+        self.target = None
 
         if current_data.get('commit', None) == None:
             sys.exit(1)
@@ -83,25 +84,24 @@ class Updater:
 
         self.last_stable = VersionInfo(
             asset['label'], asset['browser_download_url'])
-        self.last_canary = None
-        if self.enabled_canary:
-            res = requests.get(
-                'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary')
-            try:
-                res.raise_for_status()
-                asset = self.find_asset(res.json()['assets'])
-                if asset != None:
-                    self.last_canary = VersionInfo(
-                        asset['label'], asset['browser_download_url'])
-            except:
-                traceback.print_exc()
-
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        elif self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
-            self.target = self.last_canary
         else:
-            sys.exit(1)
+            if self.enabled_canary:
+                res = requests.get(
+                    'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary')
+                try:
+                    res.raise_for_status()
+                    asset = self.find_asset(res.json()['assets'])
+                    if asset != None:
+                        self.last_canary = VersionInfo(
+                            asset['label'], asset['browser_download_url'])
+                except:
+                    traceback.print_exc()
+            if self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
+                self.target = self.last_canary
+            else:
+                sys.exit(1)
 
     def find_asset(self, assets):
         asset = None
@@ -156,19 +156,22 @@ def main():
         sys.exit(1)
 
     enabled_canary = load_canary_config()
+    with open('../info/version.json', 'rt') as f:
+        current_data = json.load(f)
 
     if '/s' in sys.argv:
-        ut = Updater(enabled_canary)
+        ut = Updater(current_data, enabled_canary)
         ut.can_install()
     elif '/c' in sys.argv:
-        ut = Updater(enabled_canary)
+        ut = Updater(current_data, enabled_canary)
         ut.run()
     else:
         sys.exit(1)
 
 
-try:
-    main()
-except Exception as e:
-    traceback.print_exc()
-    sys.exit(1)
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+        traceback.print_exc()
+        sys.exit(1)
