@@ -2,8 +2,8 @@
 
 *.log
 *.mp3
-test_*
-!test/**/*
+temp*
+# !tests/**/*
 src/bot/build/
 src/bot/dist/
 
@@ -394,7 +394,6 @@ package/vc.py
 .venv/
 src/msu/build
 src/msu/dist
-src/msu/*.spec
 package/MKBotSetup.exe
 src/info
 src/bot/extensions

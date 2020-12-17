@@ -31,7 +31,10 @@ jobs:
       shell: pwsh
     - name: Lint with pylint
       run: |
-        pylint src -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+        pylint src tests -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+    - name: Unit Test
+      run: |
+        python -m unittest discover -v -s tests -p test_*.py
     - name: Version
       run: |
         python package/vc.py -gb
