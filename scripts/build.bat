@@ -25,6 +25,16 @@ cd src\bot
 pyinstaller app.spec --log-level WARN || goto :error
 move dist\app ..\..\build
 
+@ If /i "%1" == "--test-bot" (
+    cd %CI_PROJECT_DIR%
+    xcopy /q /I /Y src\data build\data
+    cd build\app
+    start cmd /k "app.exe --debug & pause & exit"
+    echo.
+    echo Start MK Bot in Test Mode
+    exit /b 0
+)
+
 cd ..\console
 @ If DEFINED GITHUB_ACTIONS (
     nuget restore console.sln
@@ -35,22 +45,13 @@ cd ..\console
 move bin\Release\* ..\..\build
 
 cd ..\msu
-pyinstaller --icon=..\..\package\mkbot_install.ico --log-level WARN "Mulgyeol Software Update.py" || goto :error
+pyinstaller msu.spec --log-level WARN || goto :error
 move "dist\Mulgyeol Software Update" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build
 xcopy /q /I /Y /E Update\* app
 del *.pdb
 rmdir /q /s Update
-
-@ If /i "%1" == "--test-bot" (
-    cd %CI_PROJECT_DIR%
-    xcopy /q /I /Y src\data build\data
-    cd build\app
-    start cmd /k "app.exe --debug & pause & exit"
-    echo.
-    echo Start MK Bot in Test Mode
-)
 
 exit /b 0
 

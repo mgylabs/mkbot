@@ -1,6 +1,6 @@
 import discord
 import datetime
-from core.utils.config import CONFIG
+from .config import CONFIG
 
 
 Msg_Color = None
@@ -18,17 +18,18 @@ def get_color():
 
 
 class MsgFormatter:
-    def __init__(self, avatar_url=None):
-        self.avatar_url = avatar_url
+    avatar_url: str = None
 
-    def set_avatar_url(self, avatar_url):
-        self.avatar_url = avatar_url
+    @staticmethod
+    def set_avatar_url(avatar_url):
+        MsgFormatter.avatar_url = avatar_url
 
-    def get(self, ctx, title, description='', show_req_user=True):
+    @staticmethod
+    def get(ctx, title, description='', show_req_user=True):
         embed = discord.Embed(title=title, description=description +
                               '\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)', color=get_color(), timestamp=datetime.datetime.utcnow())
         if show_req_user:
             embed.add_field(name='Requested by',
                             value='<@{}>'.format(ctx.author.id))
-        embed.set_footer(text='© 2020 MGYL', icon_url=self.avatar_url)
+        embed.set_footer(text='© 2020 MGYL', icon_url=MsgFormatter.avatar_url)
         return embed
