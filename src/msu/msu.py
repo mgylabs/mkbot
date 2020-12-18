@@ -66,8 +66,7 @@ class Updater:
     def __init__(self, current_data, enabled_canary=False):
         self.enabled_canary = enabled_canary
         if self.enabled_canary:
-            self.current_version = version.parse(
-                current_data['version'].replace('-dev', ''))
+            self.current_version = version.parse(current_data['version'])
         else:
             self.current_version = version.parse(current_data['version'])
 
@@ -106,7 +105,7 @@ class Updater:
                             asset['label'], asset['browser_download_url'])
                 except:
                     traceback.print_exc()
-            if self.enabled_canary and self.last_canary and self.last_canary.version > self.current_version and self.last_canary.commit != current_data['commit']:
+            if self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
                 self.target = self.last_canary
             else:
                 sys.exit(1)

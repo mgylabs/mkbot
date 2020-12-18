@@ -78,7 +78,8 @@ async def on_message(message: discord.Message):
     else:
         if CONFIG.__DEBUG_MODE__ and is_development_mode():
             for i in core_extensions:
-                bot.reload_extension(i)
+                if not (i in ['core.translate']):
+                    bot.reload_extension(i)
         await bot.process_commands(message)
 
 
