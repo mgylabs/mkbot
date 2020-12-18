@@ -3,7 +3,7 @@
 				DisplayName="MK Bot"
 				BackgroundColor="#2D2D30"
 				ShowNameOnSquare150x150Logo="on"
-				Square150x150Logo="resources\mkbot_150x150.png"
-				Square70x70Logo="resources\mkbot_70x70.png"
+				Square150x150Logo="resources\app\mkbot_150x150.png"
+				Square70x70Logo="resources\app\mkbot_70x70.png"
 				ForegroundText="light" />
 </Application>

@@ -199,7 +199,7 @@ def github_release(stable):
         save_version_txt(package_version_data['version'])
     else:
         save_version_txt(package_version_data['version'].replace(
-            '-dev', f".{package_version_data['commit'][:7]}"))
+            '-dev', f".{package_version_data['commit'][:7]} Canary"))
     create_temp_changelog(stable, package_version_data['commit'])
     update_changelog(package_version_data['version'])
 

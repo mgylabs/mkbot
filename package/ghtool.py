@@ -128,7 +128,7 @@ def upload_asset():
     with open('MKBotSetup.zip', 'rb') as f:
         fdata = f.read()
     r = requests.post(os.getenv('UPLOAD_URL').replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotSetup-{version}.zip', 'label': f'mkbotsetup-stable-{version}-{file_hash()}'})
+        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotSetup-{version}.zip', 'label': f'MKBotSetup-stable-{version}-{file_hash()}'})
     print(r.text)
 
     comment_on_pr()
@@ -159,7 +159,7 @@ def upload_canary_asset():
     with open('MKBotSetup.zip', 'rb') as f:
         fdata = f.read()
     r = requests.post(UPLOAD_URL.replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotCanarySetup-{version}.{sha[:7]}.zip', 'label': f'mkbotsetup-canary-{version}.{sha}-{file_hash()}'})
+        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotCanarySetup-{version}.{sha[:7]}.zip', 'label': f'MKBotSetup-canary-{version}.{sha}-{file_hash()}'})
     print(r.text)
 
     comment_on_pr_for_canary(tag)
@@ -196,7 +196,7 @@ def check_last_commit():
 def find_asset(assets):
     asset = None
     for d in assets:
-        if d['label'].startswith('mkbotsetup-'):
+        if d['label'].lower().startswith('mkbotsetup-'):
             asset = d
             break
 
