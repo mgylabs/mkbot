@@ -19,7 +19,7 @@ set CI_PROJECT_DIR=%cd%
 
 xcopy /q /I /Y /E package\data build\data
 xcopy /q /I /Y /E package\info build\info
-xcopy /q /I /Y resources build\resources
+xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
 pyinstaller app.spec --log-level WARN || goto :error
@@ -46,7 +46,7 @@ move bin\Release\* ..\..\build
 
 cd ..\msu
 pyinstaller msu.spec --log-level WARN || goto :error
-move "dist\Mulgyeol Software Update" ..\..\build\Update
+move "dist\msu" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build
 xcopy /q /I /Y /E Update\* app

@@ -6,6 +6,7 @@
 
 ## PR Checklist
 * [ ] Closes #xxx
+* [ ] [Changelog entry](https://github.com/mgylabs/mulgyeol-mkbot/tree/master/changelogs)
 
 ### Testing
 * [ ] [Tested in packaged application](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home#testing-in-packaged-application)

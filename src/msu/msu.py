@@ -7,6 +7,8 @@ import zipfile
 import hashlib
 import traceback
 import msvcrt  # pylint: disable=import-error
+import winreg
+import subprocess
 
 
 def is_development_mode():
@@ -17,6 +19,12 @@ if is_development_mode():
     CONFIG_PATH = '..\\data\\config.json'
 else:
     CONFIG_PATH = f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
+
+
+def check_ready_to_update():
+    with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\MKBot.exe") as subkey:
+        value, _ = winreg.QueryValueEx(subkey, 'ReadyToUpdate')
+    return value == '1'
 
 
 def load_canary_config():
@@ -98,7 +106,7 @@ class Updater:
                             asset['label'], asset['browser_download_url'])
                 except:
                     traceback.print_exc()
-            if self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
+            if self.enabled_canary and self.last_canary and self.last_canary.version > self.current_version and self.last_canary.commit != current_data['commit']:
                 self.target = self.last_canary
             else:
                 sys.exit(1)
@@ -106,26 +114,34 @@ class Updater:
     def find_asset(self, assets):
         asset = None
         for d in assets:
-            if d['label'].startswith('mkbotsetup-'):
+            if d['label'].lower().startswith('mkbotsetup-'):
                 asset = d
                 break
 
         return asset
 
     def download(self):
-        r = requests.get(self.target.url)
-        r.raise_for_status()
+        DOWNLOAD_PATH = f"{os.getenv('TEMP')}\\mkbot-update"
+        if self.check_sha1_hash():
+            subprocess.call(
+                [f"{DOWNLOAD_PATH}\\MKBotSetup.exe", '/S', '/unpack'])
+        else:
+            r = requests.get(self.target.url)
+            r.raise_for_status()
 
-        download_file_name = os.getenv(
-            'TEMP') + '\\mkbot-update\\MKBotSetup.zip'
+            download_file_name = f'{DOWNLOAD_PATH}\\MKBotSetup.zip'
 
-        os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
+            os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
 
-        with open(download_file_name, 'wb') as f:
-            f.write(r.content)
+            with open(download_file_name, 'wb') as f:
+                f.write(r.content)
 
-        _zip = zipfile.ZipFile(download_file_name)
-        _zip.extractall(os.getenv('TEMP') + '\\mkbot-update')
+            _zip = zipfile.ZipFile(download_file_name)
+            _zip.extractall(DOWNLOAD_PATH)
+
+            if self.check_sha1_hash():
+                subprocess.call(
+                    [f"{DOWNLOAD_PATH}\\MKBotSetup.exe", '/S', '/unpack'])
 
     def check_sha1_hash(self):
         if os.path.isfile(self.setupPath):
@@ -136,16 +152,16 @@ class Updater:
             return False
 
     def run(self):
-        if self.check_sha1_hash():
+        if check_ready_to_update():
             sys.exit(0)
         self.download()
-        if self.check_sha1_hash():
+        if check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)
 
     def can_install(self):
-        if self.check_sha1_hash():
+        if check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)

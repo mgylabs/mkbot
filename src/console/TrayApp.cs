@@ -51,7 +51,7 @@ namespace MKBot
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
 
-            psi2.FileName = "app\\Mulgyeol Software Update.exe";
+            psi2.FileName = "app\\msu.exe";
             psi2.WorkingDirectory = "app";
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
@@ -207,7 +207,7 @@ namespace MKBot
                         },
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = DirectoryPath+"\\resources\\MKBot_on.png",
+                            Source = DirectoryPath + "\\resources\\app\\MKBot_on.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
@@ -246,7 +246,7 @@ namespace MKBot
                         },
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = DirectoryPath+"\\resources\\MKBot_install.png",
+                            Source = DirectoryPath + "\\resources\\app\\MKBot_install.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
@@ -336,11 +336,11 @@ namespace MKBot
             string param;
             if (autorun)
             {
-                param = "/S /autorun";
+                param = "/S /update /autorun";
             }
             else
             {
-                param = "/S";
+                param = "/S /update";
             }
             notifyIcon1.Visible = false;
             Process.Start(Environment.GetEnvironmentVariable("TEMP") + "\\mkbot-update\\MKBotSetup.exe", param);
