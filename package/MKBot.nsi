@@ -52,6 +52,7 @@ ShowUnInstDetails show
 
 Var installOption
 Var ReadyToUpdate
+Var MAINDIR
 ; 0 = unpack
 ; 1 = general
 ; 2 = update
@@ -89,8 +90,43 @@ Function RmDirsButOne
  Pop $R0
 FunctionEnd
 
+Function RmFilesButOne
+ Exch $R0 ; exclude file
+ Exch
+ Exch $R1 ; route dir
+ Push $R2
+ Push $R3
+ 
+  FindFirst $R3 $R2 "$R1\*.*"
+  IfErrors Exit
+ 
+  Top:
+   StrCmp $R2 "." Next
+   StrCmp $R2 ".." Next
+   StrCmp $R2 $R0 Next
+   IfFileExists "$R1\$R2\*.*" Next
+    Delete "$R1\$R2"
+ 
+   #Goto Exit ;uncomment this to stop it being recursive (delete only one file)
+ 
+   Next:
+    ClearErrors
+    FindNext $R3 $R2
+    IfErrors Exit
+   Goto Top
+ 
+  Exit:
+  FindClose $R3
+ 
+ Pop $R3
+ Pop $R2
+ Pop $R1
+ Pop $R0
+FunctionEnd
+
 Function .onInit
   ;!insertmacro MUI_LANGDLL_DISPLAY
+  StrCpy $MAINDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
   StrCpy $installOption 1
   StrCpy $INSTDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
   ${GetParameters} $1
@@ -122,8 +158,16 @@ Section "Apps" SEC01
   SetAutoClose true
 
   ${If} $installOption < 2
+    ${If} $installOption == 0
+      IfFileExists "$INSTDIR\*.*" +1 +2
+      RMDir /r "$INSTDIR"
+    ${EndIf}
     SetOutPath "$INSTDIR"
     File "Update.exe"
+    ${If} $installOption == 0
+      Delete "$INSTDIR\..\Update.exe"
+      Rename "$INSTDIR\Update.exe" "$INSTDIR\..\Update.exe"
+    ${EndIf}
     File /nonfatal /a "..\build\*"
     File "MKBot.VisualElementsManifest.xml"
     SetOutPath "$INSTDIR\app"
@@ -141,9 +185,9 @@ Section "Apps" SEC01
   ${ElseIf} $installOption == 2
     ReadRegStr $ReadyToUpdate HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate"
     ${If} $ReadyToUpdate == "1"
-      Delete "$INSTDIR\*"
-      Rename "$INSTDIR\_\Update.exe" "$INSTDIR\Update.exe"
-      Exec "$INSTDIR\Update.exe /start MKBotSetup.exe"
+      Push "$INSTDIR"
+      Push "Update.exe"
+      Call RmFilesButOne
       Push "$INSTDIR" 
       Push "_" 		;dir to exclude
       Call RmDirsButOne
@@ -154,12 +198,12 @@ Section "Apps" SEC01
     ${EndIf}
   ${EndIf}
 
-  ${If} $installOption > 0
-    SetOutPath "$INSTDIR"
+  ${If} $installOption < 2
+    SetOutPath "$MAINDIR"
     CreateDirectory "$SMPROGRAMS\MK Bot"
-    CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+    CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$MAINDIR\MKBot.exe"
     !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\MK Bot\MK Bot.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
-    CreateShortCut "$DESKTOP\MK Bot.lnk" "$INSTDIR\MKBot.exe"
+    CreateShortCut "$DESKTOP\MK Bot.lnk" "$MAINDIR\MKBot.exe"
   ${EndIf}
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
@@ -168,28 +212,32 @@ Section "Apps" SEC01
 SectionEnd
 
 Section -AdditionalIcons
-  ${If} $installOption > 0
+  ${If} $installOption < 2
     WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-    CreateShortCut "$SMPROGRAMS\MK Bot\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-    CreateShortCut "$SMPROGRAMS\MK Bot\Uninstall.lnk" "$INSTDIR\uninst.exe"
+    CreateShortCut "$SMPROGRAMS\MK Bot\Website.lnk" "$MAINDIR\${PRODUCT_NAME}.url"
+    CreateShortCut "$SMPROGRAMS\MK Bot\Uninstall.lnk" "$MAINDIR\uninst.exe"
   ${EndIf}
 SectionEnd
 
 Section -Post
-  ${If} $installOption > 0
+  ${If} $installOption < 2
     WriteUninstaller "$INSTDIR\uninst.exe"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\MKBot.exe"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
+    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\MKBot.exe"
+    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
+    ${If} $installOption == 1
+      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
+    ${Else}
+      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "1"
+    ${EndIf}
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\MKBot.exe"
+    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MAINDIR\uninst.exe"
+    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\MKBot.exe"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Mulgyeol MK Bot" "$INSTDIR\MKBot.exe"
-  ${ElseIf} $installOption == 0
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "1"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Mulgyeol MK Bot" "$MAINDIR\MKBot.exe"
+  ${ElseIf} $installOption == 2
+    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
   ${EndIf}
 SectionEnd
 
@@ -225,7 +273,7 @@ Section Uninstall
   Delete "$SMPROGRAMS\MK Bot\MK Bot.lnk"
 
   RMDir "$SMPROGRAMS\MK Bot"
-  RMDir /r /REBOOTOK $INSTDIR
+  RMDir /r /REBOOTOK $MAINDIR
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKCU "${PRODUCT_DIR_REGKEY}"

@@ -336,14 +336,14 @@ namespace MKBot
             string param;
             if (autorun)
             {
-                param = "/S /update /autorun";
+                param = "/start /autorun";
             }
             else
             {
-                param = "/S /update";
+                param = "/start";
             }
             notifyIcon1.Visible = false;
-            Process.Start(Environment.GetEnvironmentVariable("TEMP") + "\\mkbot-update\\MKBotSetup.exe", param);
+            Process.Start("Update.exe", param);
             Environment.Exit(0);
         }
 

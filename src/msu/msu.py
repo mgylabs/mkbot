@@ -21,12 +21,6 @@ else:
     CONFIG_PATH = f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
 
 
-def check_ready_to_update():
-    with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\MKBot.exe") as subkey:
-        value, _ = winreg.QueryValueEx(subkey, 'ReadyToUpdate')
-    return value == '1'
-
-
 def load_canary_config():
     try:
         with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
@@ -150,17 +144,22 @@ class Updater:
         else:
             return False
 
+    def check_ready_to_update(self):
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\MKBot.exe") as subkey:
+            value, _ = winreg.QueryValueEx(subkey, 'ReadyToUpdate')
+        return value == '1'
+
     def run(self):
-        if check_ready_to_update():
+        if self.check_ready_to_update() and self.check_sha1_hash():
             sys.exit(0)
         self.download()
-        if check_ready_to_update():
+        if self.check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)
 
     def can_install(self):
-        if check_ready_to_update():
+        if self.check_ready_to_update() and self.check_sha1_hash():
             sys.exit(0)
         else:
             sys.exit(1)
