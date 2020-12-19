@@ -6,6 +6,5 @@ core_extensions = (
     'core.tts',
     'core.poll',
     'core.roulette',
-    'core.translate',
-    'core.install'
+    'core.translate'
 )
