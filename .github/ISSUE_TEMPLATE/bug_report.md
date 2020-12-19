@@ -7,21 +7,21 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Describe the bug
+<!-- A clear and concise description of what the bug is. -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
+## Steps to reproduce
+<!-- Steps to reproduce the behavior: -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Expected behavior
+<!-- A clear and concise description of what you expected to happen. -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Screenshots
+<!-- If applicable, add screenshots to help explain your problem. -->
 
-**Desktop (please complete the following information):**
+## Environment
  - OS: [e.g. Windows 10]
- - MK Bot Version [e.g. 3.4.1]
+ - MK Bot Version [e.g. 1.3.1]
 
-**Additional context**
-Add any other context about the problem here.
+## Possible fixes
+<!-- If you can, link to the line of code that might be responsible for the problem -->
