@@ -1,20 +1,26 @@
 import asyncio
-import discord
-from discord.ext import commands
-from core.utils.config import CONFIG, VERSION, MGCERT_PATH
-from core.utils.MGCert import MGCertificate
-from core.utils.MsgFormat import MsgFormatter
-from core.utils import listener
-from core_ext import core_extensions
-from command_help import CommandHelp
-import sys
+import hashlib
+import msvcrt  # pylint: disable=import-error
 import os
 import re
-import core.utils.api
+import sys
 import time
 import traceback
-import msvcrt  # pylint: disable=import-error
-import hashlib
+
+import discord
+from discord.ext import commands
+
+import core.utils.api
+from command_help import CommandHelp
+from core.utils import listener
+from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+from core.utils.MGCert import MGCertificate
+from core.utils.MsgFormat import MsgFormatter
+from core_ext import core_extensions
+
+import logging
+
+log = logging.getLogger(__name__)
 
 stime = time.time()
 errorlevel = 0
@@ -25,10 +31,6 @@ bot = commands.Bot(command_prefix=CONFIG.commandPrefix,
                    help_command=CommandHelp(replyformat))
 cert = MGCertificate(MGCERT_PATH)
 bot.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
-
-
-def is_development_mode():
-    return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
 
 
 def instance_already_running():
@@ -129,5 +131,5 @@ else:
     try:
         bot.run(CONFIG.discordToken)
     except discord.errors.LoginFailure as e:
-        print(e)
+        log.critical(e)
         sys.exit(1)

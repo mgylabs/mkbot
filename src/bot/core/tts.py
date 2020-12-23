@@ -1,10 +1,10 @@
-from discord.ext import commands
 import discord
 import requests
+from discord.ext import commands
 
+from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
-from .utils.config import CONFIG
 
 
 @commands.command()

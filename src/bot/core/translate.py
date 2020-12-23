@@ -1,12 +1,14 @@
-from discord.ext import commands
+from distutils.util import strtobool
+
 import discord
 import requests
+from discord.ext import commands
+from langdetect import detect
+
+from .utils import listener
+from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
-from .utils.config import CONFIG
-from langdetect import detect
-from distutils.util import strtobool
-from .utils import listener
 
 
 class Translate(commands.Cog):

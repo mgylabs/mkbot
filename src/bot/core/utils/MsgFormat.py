@@ -1,7 +1,8 @@
-import discord
 import datetime
-from .config import CONFIG
 
+import discord
+
+from .config import CONFIG
 
 Msg_Color = None
 

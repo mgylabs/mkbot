@@ -1,7 +1,9 @@
 from functools import wraps
-from discord.ext import commands
-from .config import CONFIG
+
 import discord
+from discord.ext import commands
+
+from .config import CONFIG
 
 
 def on_message():

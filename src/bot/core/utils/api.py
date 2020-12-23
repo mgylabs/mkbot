@@ -1,7 +1,7 @@
 import json
-import sys
 import os
 import pickle
+import sys
 
 LOCALAPPDATA = os.getenv('LOCALAPPDATA')
 

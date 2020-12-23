@@ -1,9 +1,12 @@
-from discord.ext import commands
-import discord
 import random
 import time
-from .utils.MGCert import MGCertificate, Level
+
+import discord
+from discord.ext import commands
+
+from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
+
 
 @commands.command(aliases=['rou'])
 @MGCertificate.verify(level=Level.TRUSTED_USERS)

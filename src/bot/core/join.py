@@ -1,5 +1,6 @@
 from discord.ext import commands
-from .utils.MGCert import MGCertificate, Level
+
+from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 

@@ -1,14 +1,16 @@
-from discord.ext import commands
-import discord
-from .utils.config import CONFIG, add_data
-from .utils import api
-from .utils.MGCert import MGCertificate, Level
-from .utils.MsgFormat import MsgFormatter
-from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow  # pylint: disable=import-error
-import requests
 import os
-import zipfile
 import shutil
+import zipfile
+
+import discord
+import requests
+from discord.ext import commands
+from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow  # pylint: disable=import-error
+
+from .utils import api
+from .utils.config import CONFIG, add_data
+from .utils.MGCert import Level, MGCertificate
+from .utils.MsgFormat import MsgFormatter
 
 
 @commands.command()
