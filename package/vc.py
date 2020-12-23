@@ -198,7 +198,7 @@ def github_release(stable):
         canary_version = version(
             package_version_data['version'].replace('-dev', ''))
         canary_version[-1] += 1
-        package_version_data['version'] = list_to_version_str(canary_version)
+        package_version_data['version'] = f"{list_to_version_str(canary_version)}-dev"
     package_version_data['commit'] = os.getenv('GITHUB_SHA')
 
     with open('package/info/version.json', 'wt') as f:
