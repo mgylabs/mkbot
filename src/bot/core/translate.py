@@ -54,7 +54,7 @@ class Translate(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def translate(self, ctx: commands.Context, *args):
         """
-        Command that translates sentence entered to desired language 
+        Command that translates sentence entered to desired language. 
         Language list:
                         Korean	       kr
                         English	       en
