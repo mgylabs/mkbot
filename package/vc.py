@@ -14,6 +14,9 @@ def version(v):
     return list(map(int, (v.split("."))))
 
 
+def list_to_version_str(ls):
+    return '.'.join(map(str, ls))
+
 def isnewupdate(base, last):
     return base[:-1] != last[:-1]
 
@@ -191,6 +194,11 @@ def github_release(stable):
     if stable:
         package_version_data['version'] = package_version_data['version'].replace(
             '-dev', '')
+    else:
+        canary_version = version(
+            package_version_data['version'].replace('-dev', ''))
+        canary_version[-1] += 1
+        package_version_data['version'] = list_to_version_str(canary_version)
     package_version_data['commit'] = os.getenv('GITHUB_SHA')
 
     with open('package/info/version.json', 'wt') as f:

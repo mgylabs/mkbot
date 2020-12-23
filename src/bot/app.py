@@ -18,6 +18,7 @@ import hashlib
 
 stime = time.time()
 errorlevel = 0
+pending = True
 
 replyformat = MsgFormatter()
 bot = commands.Bot(command_prefix=CONFIG.commandPrefix,
@@ -57,7 +58,7 @@ async def on_ready():
         name = "MK Bot Test Mode"
         activity_type = discord.ActivityType.playing
     else:
-        name = f"MK Bot {VERSION}"
+        name = f"{bot.command_prefix}help"
         activity_type = discord.ActivityType.listening
     activity = discord.Activity(name=name, type=activity_type)
     await bot.change_presence(status=discord.Status.online, activity=activity)
@@ -73,9 +74,18 @@ async def on_message(message: discord.Message):
 
     if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
         text = re.sub('<@!?\d+> ', '', message.content)
-        if text == 'ping':
-            await message.channel.send(message.author.mention + ' pong')
+        if text.lower() == 'ping':
+            await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
     else:
+        global pending
+        if pending and message.content.startswith(bot.command_prefix):
+            name = f"MK Bot {VERSION}"
+            activity = discord.Activity(
+                name=name, type=discord.ActivityType.listening)
+            await bot.change_presence(
+                status=discord.Status.online, activity=activity)
+            pending = False
+
         if CONFIG.__DEBUG_MODE__ and is_development_mode():
             for i in core_extensions:
                 if not (i in ['core.translate']):

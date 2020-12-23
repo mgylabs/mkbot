@@ -29,8 +29,11 @@ if "%num%" == "1" (
 )
 
 
-
-set ch_filename="changelogs\unreleased\%ch_pr%-%ch_title: =-%.yml"
+if "%ch_pr%" == "" (
+    set ch_filename="changelogs\unreleased\%ch_title: =-%.yml"
+) else (
+    set ch_filename="changelogs\unreleased\%ch_pr%-%ch_title: =-%.yml"
+)
 
 >"%ch_filename%" (
     echo ---

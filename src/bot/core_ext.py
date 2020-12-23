@@ -3,6 +3,7 @@ core_extensions = (
     'core.join',
     'core.leave',
     'core.logout',
+    'core.ping',
     'core.tts',
     'core.poll',
     'core.roulette',
