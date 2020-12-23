@@ -1,13 +1,15 @@
 import asyncio
+import json
+import logging
+from functools import wraps
+
 import discord
 from discord.ext import commands
-from functools import wraps
-import logging
-import json
-from .MsgFormat import MsgFormatter
-from .config import CONFIG, USER_DATA_PATH
 
-logger = logging.getLogger('Logger')
+from .config import CONFIG, USER_DATA_PATH
+from .MsgFormat import MsgFormatter
+
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
     "%(levelname)s :: %(asctime)s :: %(message)s", "%Y-%m-%d %H:%M:%S")
@@ -43,6 +45,7 @@ class Level:
 class MGCertificate:
     admin_users = []
     trusted_users = []
+
     def __init__(self, name):
         with open(name, 'rt') as f:
             data = json.load(f)
@@ -93,8 +96,7 @@ class MGCertificate:
                 req_user = str(ctx.author)
 
                 if MGCertificate.getUserLevel(req_user) > level:
-                    replyformat = MsgFormatter(ctx.me.avatar_url)
-                    embed = replyformat.get(ctx, "Permission denied", '<@{}> is not in the {}. This incident will be reported.'.format(
+                    embed = MsgFormatter.get(ctx, "Permission denied", '<@{}> is not in the {}. This incident will be reported.'.format(
                         ctx.author.id, Level.get_description(level)), False)
                     embed.add_field(name='User', value=str(ctx.author))
                     embed.add_field(name='Command tried', value='{} ({})'.format(
