@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.AccessControl;
 using System.Windows.Forms;
 using Windows.UI.Notifications;
@@ -28,6 +29,7 @@ namespace MKBot
 
         private string DirectoryPath;
         private string UserDataPath;
+        private string[] args;
 
         public TrayApp()
         {
@@ -38,6 +40,7 @@ namespace MKBot
             DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
             Environment.CurrentDirectory = DirectoryPath;
 #endif
+            args = Environment.GetCommandLineArgs();
             UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
             Infowin = new InfoForm();
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
@@ -47,10 +50,13 @@ namespace MKBot
             psi1.WorkingDirectory = "app";
             psi1.CreateNoWindow = true;
             psi1.UseShellExecute = false;
+            if (args.Contains("--debug"))
+            {
+                psi1.Arguments = "--debug";
+            }
             app_process.StartInfo = psi1;
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
-
             psi2.FileName = "app\\msu.exe";
             psi2.WorkingDirectory = "app";
             psi2.CreateNoWindow = true;

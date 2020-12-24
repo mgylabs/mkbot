@@ -9,11 +9,11 @@
 * [ ] [Changelog entry](https://github.com/mgylabs/mulgyeol-mkbot/tree/master/changelogs)
 
 ### Testing
-* [ ] [Tested in packaged application](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home#testing-in-packaged-application)
+* [ ] [Tested in packaged application](https://github.com/mgylabs/mulgyeol-mkbot/wiki/How-to-Contribute#testing-in-packaged-application)
 
 ### Dependency Changes
 * [ ] Labeled as `dependencies`
-* [ ] [Validated hook files](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home#pyinstaller)
+* [ ] [Validated hook files](https://github.com/mgylabs/mulgyeol-mkbot/wiki/How-to-Contribute#add-hook-files)
 
 <!-- Provide a more detailed description of the PR, other things fixed or any additional comments/features here -->
 ## Detailed Description of the Pull Request / Additional comments

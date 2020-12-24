@@ -41,7 +41,7 @@ Self-host discord bot on your own local Windows PC.
 
 3. When `build` task is complete, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> again and select `package`.
 
-4. Run `Package\MKBotSetup.exe` to install `MK Bot`.
+4. Run `package\MKBotSetup.exe` to install `MK Bot`.
 
 > **Note:** If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
@@ -79,6 +79,4 @@ Self-host discord bot on your own local Windows PC.
 
 ---
 
-> :warning: **WARNING**: `.gitlab-ci.yml`, `Procfile`, `runtime.txt`, `requirements.txt` are required when running the program on the server, so errors may occur when changing.
-
-For more infomation, See [Project Wiki](https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home).
+For more infomation, See [Project Wiki](https://github.com/mgylabs/mulgyeol-mkbot/wiki/How-to-Contribute).

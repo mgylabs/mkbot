@@ -44,7 +44,7 @@ namespace MKBot
 
         private void InfoForm_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Process.Start("https://gitlab.com/mgylabs/mulgyeol-mkbot/-/wikis/home");
+            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/wiki");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
