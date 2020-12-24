@@ -7,3 +7,4 @@ pylint==2.4.4
 PyNaCl==1.4.0
 PyYAML==5.3.1
 requests==2.25.1
+bs4 == 4.9.3
