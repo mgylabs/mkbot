@@ -192,7 +192,9 @@ Section "Apps" SEC01
       Push "$INSTDIR" 
       Push "_" 		;dir to exclude
       Call RmDirsButOne
-      CopyFiles /SILENT "$INSTDIR\_\*" "$INSTDIR"
+      SetOutPath "$INSTDIR"
+      nsExec::Exec 'xcopy /q /I /Y /E "$INSTDIR\_\*" "$INSTDIR"'
+      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
       RMDir /r "$INSTDIR\_"
     ${Else}
       Abort
@@ -237,8 +239,6 @@ Section -Post
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Mulgyeol MK Bot" "$MAINDIR\MKBot.exe"
-  ${ElseIf} $installOption == 2
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
   ${EndIf}
 SectionEnd
 
