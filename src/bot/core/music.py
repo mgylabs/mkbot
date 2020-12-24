@@ -11,7 +11,7 @@ class Music(commands.Cog):
         self._last_member = None
         self.song_list = dict()
 
-    @commands.Cog.listener
+    @commands.command(aliases=['m'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def play(self, ctx: commands.Context, command, song):
         """
@@ -30,4 +30,4 @@ class Music(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Music)
+    bot.add_cog(Music(bot))
