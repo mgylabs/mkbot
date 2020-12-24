@@ -8,10 +8,10 @@ class DiscordFilter(logging.Filter):
 
 
 log = logging.getLogger()
-log.addFilter(DiscordFilter())
 formatter = logging.Formatter(
     "[%(asctime)s] %(name)s (line %(lineno)d): %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
 stream_handler = logging.StreamHandler()
+stream_handler.addFilter(DiscordFilter())
 if is_development_mode():
     stream_handler.setLevel(logging.DEBUG)
 else:

@@ -38,7 +38,8 @@ class Version:
         self.base_version = version_str[0]
         self.tuple_version = tuple(self.base_version.split('.'))
         self.canary = True if (
-            len(version_str) > 1 and version_str[1] == 'dev') else False
+            len(version_str) > 1 and version_str[1] == 'dev' and self.commit != None) else False
+        self.tag = f'v{self.base_version}'
 
     def is_canary(self) -> bool:
         return self.canary

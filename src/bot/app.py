@@ -1,5 +1,6 @@
 import asyncio
 import hashlib
+import logging
 import msvcrt  # pylint: disable=import-error
 import os
 import re
@@ -17,12 +18,11 @@ from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
 from core_ext import core_extensions
-
-import logging
-
-log = logging.getLogger(__name__)
+from release import ReleaseNotify
 
 stime = time.time()
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+log = logging.getLogger(__name__)
 errorlevel = 0
 pending = True
 
@@ -64,6 +64,8 @@ async def on_ready():
         activity_type = discord.ActivityType.listening
     activity = discord.Activity(name=name, type=activity_type)
     await bot.change_presence(status=discord.Status.online, activity=activity)
+    if not is_development_mode():
+        await ReleaseNotify.run(bot)
 
 
 @bot.event

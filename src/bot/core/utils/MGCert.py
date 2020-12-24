@@ -97,7 +97,7 @@ class MGCertificate:
 
                 if MGCertificate.getUserLevel(req_user) > level:
                     embed = MsgFormatter.get(ctx, "Permission denied", '<@{}> is not in the {}. This incident will be reported.'.format(
-                        ctx.author.id, Level.get_description(level)), False)
+                        ctx.author.id, Level.get_description(level)), show_req_user=False)
                     embed.add_field(name='User', value=str(ctx.author))
                     embed.add_field(name='Command tried', value='{} ({})'.format(
                         ctx.command.name, Level.get_description(level)))
