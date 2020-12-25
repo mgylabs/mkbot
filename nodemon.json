@@ -1,0 +1,6 @@
+{
+  "verbose": false,
+  "watch": ["src/bot/"],
+  "exec": "cd src/bot && python app.py",
+  "ext": "py"
+}

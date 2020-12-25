@@ -18,6 +18,20 @@
             }
         },
         {
+            "label": "nodemon",
+            "type": "shell",
+            "command": ".venv\\Scripts\\activate && nodemon",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "Test in Packaged Application",
             "type": "shell",
             "command": ".venv\\Scripts\\activate && scripts\\build.bat",

@@ -22,7 +22,7 @@ xcopy /q /I /Y /E package\info build\info
 xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
-pyinstaller app.spec --log-level WARN || goto :error
+pyinstaller app.spec -y --log-level WARN || goto :error
 move dist\app ..\..\build
 
 @ If /i "%1" == "--test-bot" (
@@ -45,7 +45,7 @@ cd ..\console
 move bin\Release\* ..\..\build
 
 cd ..\msu
-pyinstaller msu.spec --log-level WARN || goto :error
+pyinstaller msu.spec -y --log-level WARN || goto :error
 move "dist\msu" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build
