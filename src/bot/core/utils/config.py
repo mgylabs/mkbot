@@ -27,7 +27,6 @@ class Settings:
         self.connectOnStart = False
         self.gitlabToken = ''
         self.canaryUpdate = False
-        self.__DEBUG_MODE__ = False
         self.__dict__.update(data)
 
 

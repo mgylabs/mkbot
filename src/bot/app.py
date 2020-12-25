@@ -53,8 +53,7 @@ async def on_ready():
     print('Logged in within', time.time() - stime)
     replyformat.set_avatar_url(bot.user.avatar_url)
     if is_development_mode():
-        name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ or (
-            '--debug') in sys.argv else "IN DEV"
+        name = "IN DEBUG" if '--debug' in sys.argv else "IN DEV"
         activity_type = discord.ActivityType.playing
     elif VERSION == None:
         name = "MK Bot Test Mode"
@@ -89,11 +88,6 @@ async def on_message(message: discord.Message):
             await bot.change_presence(
                 status=discord.Status.online, activity=activity)
             pending = False
-
-        if CONFIG.__DEBUG_MODE__ and is_development_mode():
-            for i in core_extensions:
-                if not (i in ['core.translate']):
-                    bot.reload_extension(i)
         await bot.process_commands(message)
 
 
@@ -107,14 +101,13 @@ for i in core_extensions:
 
 try:
     exts = core.utils.api.get_enabled_extensions()
-    if len(exts) > 0:
-        for i in exts:
-            if is_development_mode():
-                sys.path.append(f'..\\..\\extensions\\{i[0]}')
-            else:
-                sys.path.append(os.getenv('USERPROFILE') +
-                                f'\\.mkbot\\extensions\\{i[0]}')
-            bot.load_extension(i[1])
+    for i in exts:
+        if is_development_mode():
+            sys.path.append(f'..\\..\\extensions\\{i[0]}')
+        else:
+            sys.path.append(os.getenv('USERPROFILE') +
+                            f'\\.mkbot\\extensions\\{i[0]}')
+        bot.load_extension(i[1])
 except Exception as e:
     traceback.print_exc()
 

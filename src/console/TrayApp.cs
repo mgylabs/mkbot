@@ -41,7 +41,14 @@ namespace MKBot
             Environment.CurrentDirectory = DirectoryPath;
 #endif
             args = Environment.GetCommandLineArgs();
-            UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
+            if (args.Contains("--debug"))
+            {
+                UserDataPath = "..\\data";
+            }
+            else
+            {
+                UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
+            }
             Infowin = new InfoForm();
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
