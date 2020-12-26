@@ -80,15 +80,17 @@ async def on_message(message: discord.Message):
         if text.lower() == 'ping':
             await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
     else:
+        await bot.process_commands(message)
         global pending
         if pending and message.content.startswith(bot.command_prefix):
+            pending = False
             name = f"MK Bot {VERSION}"
             activity = discord.Activity(
                 name=name, type=discord.ActivityType.listening)
             await bot.change_presence(
                 status=discord.Status.online, activity=activity)
-            pending = False
-        await bot.process_commands(message)
+            if not is_development_mode():
+                await ReleaseNotify.run(message.channel)
 
 
 for i in core_extensions:

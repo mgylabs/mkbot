@@ -3,9 +3,6 @@ name: Nightly Build
 on:
   schedule:
     - cron:  '0 15 * * *'
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       name:
@@ -17,6 +14,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     name: Check Latest Commit
+    if: github.repository == 'mgylabs/mulgyeol-mkbot'
     outputs:
       is_new: ${{ steps.checkcommit.outputs.is_new }}
     steps:

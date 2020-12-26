@@ -400,3 +400,4 @@ src/bot/extensions
 extensions/twitch_highlights
 package/MKBotSetup.zip
 temp_changelog.md
+src/bot/msu.flag

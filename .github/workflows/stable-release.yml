@@ -8,6 +8,7 @@ on:
 jobs:
   stable-release:
     name: Stable Release
+    if: github.repository == 'mgylabs/mulgyeol-mkbot'
     runs-on: windows-latest
     defaults:
       run:
