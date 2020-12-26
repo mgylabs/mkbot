@@ -1,9 +1,11 @@
-!define PRODUCT_NAME "Mulgyeol MK Bot"
+;!define PRODUCT_NAME "Mulgyeol MK Bot"
+;!define PRODUCT_EXE "MKBot.exe"
 ; !define PRODUCT_VERSION "1.0.0"
 !searchreplace PRODUCT_VERSION_NUMBER "${PRODUCT_VERSION}" " Canary" ""
+!searchreplace PRODUCT_SHORT_NAME "${PRODUCT_NAME}" "Mulgyeol " ""
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
 !define PRODUCT_WEB_SITE "https://github.com/mgylabs/mulgyeol-mkbot"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\MKBot.exe"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE}"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
 
@@ -46,7 +48,7 @@ AllowSkipFiles off
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "MKBotSetup.exe"
-InstallDir "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
+InstallDir "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
 InstallDirRegKey HKCU "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -127,30 +129,30 @@ FunctionEnd
 
 Function .onInit
   ;!insertmacro MUI_LANGDLL_DISPLAY
-  StrCpy $MAINDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
+  StrCpy $MAINDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
   StrCpy $installOption 1
-  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
+  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
   ${GetParameters} $1
   ClearErrors
   ${GetOptions} $1 '/unpack' $R0
   IfErrors +3 0
-  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot\_"
+  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}\_"
   StrCpy $installOption 0
   ClearErrors
   ${GetOptions} $1 '/update' $R0
   IfErrors +3 0
-  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\Mulgyeol MK Bot"
+  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
   StrCpy $installOption 2
 FunctionEnd
 
 Function RunMDF
   SetOutPath "$INSTDIR"
-  Exec "$INSTDIR\MKBot.exe"
+  Exec "$INSTDIR\${PRODUCT_EXE}"
 FunctionEnd
 
 Section "Apps" SEC01
   ${If} $installOption > 0
-    nsExec::Exec 'taskkill /f /im "MKBot.exe"'
+    nsExec::Exec 'taskkill /f /im "${PRODUCT_EXE}"'
   ${EndIf}
 
   IfSilent +1 +4
@@ -177,7 +179,7 @@ Section "Apps" SEC01
     File /nonfatal /a /r "info\*"
     SetOutPath "$INSTDIR\resources\app"
     File /nonfatal /a /r "..\resources\app\*"
-    SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
+    SetOutPath "$LOCALAPPDATA\Mulgyeol\${PRODUCT_NAME}\data"
     SetOverwrite off
     File /nonfatal /a /r "data\*"
     SetOverwrite on
@@ -203,10 +205,10 @@ Section "Apps" SEC01
 
   ${If} $installOption < 2
     SetOutPath "$MAINDIR"
-    CreateDirectory "$SMPROGRAMS\MK Bot"
-    CreateShortCut "$SMPROGRAMS\MK Bot\MK Bot.lnk" "$MAINDIR\MKBot.exe"
-    !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\MK Bot\MK Bot.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
-    CreateShortCut "$DESKTOP\MK Bot.lnk" "$MAINDIR\MKBot.exe"
+    CreateDirectory "$SMPROGRAMS\${PRODUCT_SHORT_NAME}"
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
+    !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
+    CreateShortCut "$DESKTOP\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
   ${EndIf}
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
@@ -217,15 +219,15 @@ SectionEnd
 Section -AdditionalIcons
   ${If} $installOption < 2
     WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-    CreateShortCut "$SMPROGRAMS\MK Bot\Website.lnk" "$MAINDIR\${PRODUCT_NAME}.url"
-    CreateShortCut "$SMPROGRAMS\MK Bot\Uninstall.lnk" "$MAINDIR\uninst.exe"
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Website.lnk" "$MAINDIR\${PRODUCT_NAME}.url"
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Uninstall.lnk" "$MAINDIR\uninst.exe"
   ${EndIf}
 SectionEnd
 
 Section -Post
   ${If} $installOption < 2
     WriteUninstaller "$INSTDIR\uninst.exe"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\MKBot.exe"
+    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
     WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
     ${If} $installOption == 1
       WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
@@ -234,11 +236,11 @@ Section -Post
     ${EndIf}
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MAINDIR\uninst.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\MKBot.exe"
+    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\${PRODUCT_EXE}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION_NUMBER}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Mulgyeol MK Bot" "$MAINDIR\MKBot.exe"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" "$MAINDIR\${PRODUCT_EXE}"
   ${EndIf}
 SectionEnd
 
@@ -249,7 +251,7 @@ Function .onInstSuccess
     ${GetOptions} $1 '/autorun' $R0
     IfErrors +4 0
     SetOutPath "$INSTDIR"
-    Exec "$INSTDIR\MKBot.exe"
+    Exec "$INSTDIR\${PRODUCT_EXE}"
   ${EndIf}
 FunctionEnd
 
@@ -267,17 +269,17 @@ Section Uninstall
   ;Exec 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe stop'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe remove'
-  nsExec::Exec 'taskkill /f /im "MKBot.exe"'
-  Delete "$SMPROGRAMS\MK Bot\Uninstall.lnk"
-  Delete "$SMPROGRAMS\MK Bot\Website.lnk"
-  Delete "$DESKTOP\MK Bot.lnk"
-  Delete "$SMPROGRAMS\MK Bot\MK Bot.lnk"
+  nsExec::Exec 'taskkill /f /im "${PRODUCT_EXE}"'
+  Delete "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Website.lnk"
+  Delete "$DESKTOP\${PRODUCT_SHORT_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk"
 
-  RMDir "$SMPROGRAMS\MK Bot"
-  RMDir /r /REBOOTOK $MAINDIR
+  RMDir "$SMPROGRAMS\${PRODUCT_SHORT_NAME}"
+  RMDir /r /REBOOTOK $INSTDIR
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKCU "${PRODUCT_DIR_REGKEY}"
-  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Mulgyeol MK Bot"
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}"
   SetAutoClose true
 SectionEnd

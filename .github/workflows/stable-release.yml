@@ -39,7 +39,7 @@ jobs:
     - name: Packaging
       run: |
         $Env:Path += ";C:\Program Files (x86)\NSIS\"
-        makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=${Env:mkbot_version} package\MKBot.nsi
+        makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" package\MKBot.nsi
         mv package\MKBotSetup.exe .\
         Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
       shell: pwsh

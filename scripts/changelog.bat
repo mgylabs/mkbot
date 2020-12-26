@@ -1,4 +1,5 @@
 @echo off
+setlocal
 cd "%~dp0.."
 
 set /p ch_title="Title> "
@@ -44,3 +45,4 @@ if "%ch_pr%" == "" (
 
 echo.
 echo A changelog was created at %ch_filename%
+endlocal
