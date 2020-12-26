@@ -1,5 +1,5 @@
+import aiohttp
 import discord
-import requests
 from discord.ext import commands
 
 from .utils.config import CONFIG
@@ -49,11 +49,12 @@ async def tts(ctx: commands.Context, *args):
 
     data = '<speak><voice name="{}">{}</voice></speak>'.format(
         vs, string).encode('utf-8')
-    response = requests.post(
-        'https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', headers=headers, data=data)
 
-    with open('temp.mp3', 'wb') as f:
-        f.write(response.content)
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', data=data) as r:
+            if r.status == 200:
+                with open('temp.mp3', 'wb') as f:
+                    f.write(await r.read())
 
     ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
 

@@ -1,7 +1,7 @@
 from distutils.util import strtobool
 
+import aiohttp
 import discord
-import requests
 from discord.ext import commands
 from langdetect import detect
 
@@ -165,9 +165,11 @@ class Translate(commands.Cog):
                     'src_lang': srcLang,
                     'target_lang': t
                 }
-                response = requests.get(
-                    'https://kapi.kakao.com/v1/translation/translate', headers=headers, params=params)
-                result[t] = response.json()['translated_text'][0][0]
+                async with aiohttp.ClientSession(headers=headers) as session:
+                    async with session.get('https://kapi.kakao.com/v1/translation/translate', params=params) as r:
+                        if r.status == 200:
+                            js = await r.json()
+                            result[t] = js['translated_text'][0][0]
 
         return srcLang, result
 
