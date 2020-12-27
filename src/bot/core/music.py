@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
+song_list = list()
+
 
 class Song():
     def addSong(self, title, url):
@@ -14,12 +16,12 @@ class Song():
     def searchSong(self, content, number):
         self.url = 'https://www.youtube.com/watch?v=' + \
             content[number]['videoRenderer']['videoId']
-        self.description = content[0]['videoRenderer']['descriptionSnippet']['runs']
+        self.description = content[number]['videoRenderer']['descriptionSnippet']['runs']
         self.title = ''
         for i in self.description:
             self.title += i['text']
         self.channel = content[number]['videoRenderer']['longBylineText']['runs'][0]['text']
-        self.published_time = content[0]['videoRenderer']['publishedTimeText']['simpleText']
+        self.published_time = content[number]['videoRenderer']['publishedTimeText']['simpleText']
         self.viewCount = content[number]['videoRenderer']['viewCountText']['simpleText']
         self.length = content[number]['videoRenderer']['lengthText']['simpleText']
 
@@ -32,7 +34,6 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.song_list = list()
 
     @commands.command(aliases=['m'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -40,6 +41,7 @@ class Music(commands.Cog):
         """
         Music command
         """
+
         if "youtube.com" in song:
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
@@ -65,13 +67,14 @@ class Music(commands.Cog):
                     'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
                 if not 'badges' in content[a]['videoRenderer'].keys():
                     song_ = Song()
-                    self.song_list.append(song_.searchSong(content, a))
+                    song_.searchSong(content, a)
+                    song_list.append(song_)
                     b += 1
                 if b == 4:
                     break
                 a += 1
             await ctx.message.delete()
-            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', self.song_list[0].title))
+            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
 
 
 def setup(bot: commands.Bot):
