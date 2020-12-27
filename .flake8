@@ -1,7 +1,7 @@
 [flake8]
 ignore = E711, E501, W504
 exclude =
-    .venv,
+    .venv*,
     # No need to traverse our git directory
     .git,
     # There's no value in checking cache directories
