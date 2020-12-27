@@ -48,10 +48,12 @@ class Music(commands.Cog):
             }]
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            musicFile = (ydl.extract_info("{}".format(song.url))['title'] +
-                         '-' +
-                         ydl.extract_info("{}".format(song.url))['id']) + '.mp3'
-        ctx.voice_client.play(discord.FFmpegPCMAudio(musicFile))
+            info = ydl.extract_info(song.url, download=False)
+            musicFile = info['formats'][0]['url']
+        FFMPEG_OPTIONS = {
+            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+        ctx.voice_client.play(discord.FFmpegPCMAudio(
+            musicFile, **FFMPEG_OPTIONS))
 
     @commands.command(aliases=['s'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -101,7 +103,7 @@ class Music(commands.Cog):
             await ctx.message.delete()
             # to be worked on
             await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
-        self.playMusic(song_list[0])
+        self.playMusic(ctx, song_list[0])
 
 
 def setup(bot: commands.Bot):
