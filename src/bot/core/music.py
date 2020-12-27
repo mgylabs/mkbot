@@ -45,7 +45,7 @@ class Music(commands.Cog):
             soup = BeautifulSoup(r.text, 'lxml')
             title = str(soup.find('title'))[7:-8]
             song_list.append(Song.addSong(title, song))
-            await ctx.delete()
+            await ctx.message.delete()
             await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
 
         else:
@@ -63,14 +63,15 @@ class Music(commands.Cog):
             while True:
                 content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
                     'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
-                if 'badges' in content[a]['videoRenderer'].keys():
-                    self.song_list.append(Song.searchSong(content, a))
+                if not 'badges' in content[a]['videoRenderer'].keys():
+                    song_ = Song()
+                    self.song_list.append(song_.searchSong(content, a))
                     b += 1
                 if b == 4:
                     break
                 a += 1
-            await ctx.delete()
-            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
+            await ctx.message.delete()
+            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', self.song_list[0].title))
 
 
 def setup(bot: commands.Bot):
