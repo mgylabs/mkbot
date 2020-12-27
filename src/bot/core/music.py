@@ -17,8 +17,7 @@ class Song():
         self.url = 'https://www.youtube.com/watch?v=' + \
             content[number]['videoRenderer']['videoId']
         self.description = content[number]['videoRenderer']['descriptionSnippet']['runs']
-        self.title = ''
-        for i in self.description:
+        for i in content[number]['videoRenderer']['title']['runs']:
             self.title += i['text']
         self.channel = content[number]['videoRenderer']['longBylineText']['runs'][0]['text']
         self.published_time = content[number]['videoRenderer']['publishedTimeText']['simpleText']
@@ -28,6 +27,7 @@ class Song():
     def printSong(self):
         # markdown?
         print()
+        return
 
 
 class Music(commands.Cog):
@@ -35,13 +35,12 @@ class Music(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.command(aliases=['m'])
+    @commands.command(aliases=['s'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def search(self, ctx: commands.Context, song):
         """
         Music command
         """
-
         if "youtube.com" in song:
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
@@ -65,7 +64,7 @@ class Music(commands.Cog):
             while True:
                 content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
                     'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
-                if not 'badges' in content[a]['videoRenderer'].keys():
+                if ('videoRenderer' in content[a]) and (not 'badges' in content[a]['videoRenderer']):
                     song_ = Song()
                     song_.searchSong(content, a)
                     song_list.append(song_)
