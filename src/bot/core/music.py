@@ -1,9 +1,11 @@
 from discord.ext import commands
 from .utils.MGCert import MGCertificate, Level
+import discord
 from .utils.MsgFormat import MsgFormatter
 import requests
 from bs4 import BeautifulSoup
 import json
+import youtube_dl
 
 song_list = list()
 
@@ -17,6 +19,7 @@ class Song():
         self.url = 'https://www.youtube.com/watch?v=' + \
             content[number]['videoRenderer']['videoId']
         self.description = content[number]['videoRenderer']['descriptionSnippet']['runs']
+        self.title = ''
         for i in content[number]['videoRenderer']['title']['runs']:
             self.title += i['text']
         self.channel = content[number]['videoRenderer']['longBylineText']['runs'][0]['text']
@@ -35,12 +38,35 @@ class Music(commands.Cog):
         self.bot = bot
         self._last_member = None
 
+    def playMusic(self, ctx, song):
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }]
+        }
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            musicFile = (ydl.extract_info("{}".format(song.url))['title'] +
+                         '-' +
+                         ydl.extract_info("{}".format(song.url))['id']) + '.mp3'
+        ctx.voice_client.play(discord.FFmpegPCMAudio(musicFile))
+
     @commands.command(aliases=['s'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def search(self, ctx: commands.Context, song):
         """
         Music command
         """
+        if ctx.voice_client == None:
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+            else:
+                await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", "You are not in any voice channel. Please join a voice channel to use Music bot."))
+                raise commands.CommandError(
+                    "Author not connected to a voice channel.")
+
         if "youtube.com" in song:
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
@@ -73,7 +99,9 @@ class Music(commands.Cog):
                     break
                 a += 1
             await ctx.message.delete()
+            # to be worked on
             await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
+        self.playMusic(song_list[0])
 
 
 def setup(bot: commands.Bot):
