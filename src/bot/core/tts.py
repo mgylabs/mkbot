@@ -11,6 +11,7 @@ from .utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
 
+
 @commands.command()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def tts(ctx: commands.Context, *args):

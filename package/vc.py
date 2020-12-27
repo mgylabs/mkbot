@@ -42,7 +42,7 @@ def build():
     cur_ver = version(cur['version'])
     try:
         last_ver = version(last)
-    except:
+    except Exception:
         last_ver = cur_ver
 
     if isnewupdate(cur_ver, last_ver):
@@ -80,7 +80,7 @@ def release():
         res.raise_for_status()
 
         last_version_data = res.json()
-    except:
+    except Exception:
         last_version_data = {'name': 'MK Bot', 'last-version': '0.0.0.0',
                              'tags': None, 'canary': {}}
 

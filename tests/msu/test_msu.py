@@ -1,5 +1,4 @@
-from sys import path
-from unittest import TestCase, mock
+from unittest import TestCase
 from unittest.mock import mock_open, patch
 
 from src.msu import msu
@@ -70,9 +69,9 @@ class MSUTest(TestCase):
                         {
                             "name": f"MKBotSetup-{stable_version}.zip",
                             "label": f"MKBotSetup-stable-{stable_version}-16bb694a133c33fe80c4b67be2a3e000facd883c",
-                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v{stable_version}/MKBotSetup-{stable_version}.zip"
-                        }
-                    ]
+                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v{stable_version}/MKBotSetup-{stable_version}.zip",
+                        },
+                    ],
                 }
                 return MockResponse(test_json, 200)
             elif args[0] == 'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary':
@@ -81,9 +80,9 @@ class MSUTest(TestCase):
                         {
                             "name": f"MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip",
                             "label": f"MKBotSetup-canary-{canary_version}.{canary_commit}-8214d361d2826779517f7fb0502405aafdf0ec54",
-                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip"
-                        }
-                    ]
+                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip",
+                        },
+                    ],
                 }
                 return MockResponse(test_json, 200)
         return mock_requests_get
@@ -101,14 +100,14 @@ class MSUTest(TestCase):
         mock_get.side_effect = self.generate_mock_requests_get(
             '1.3.3', '1.4.0', '82980060b4606ef9bc428932736647d45e400fd9')
 
-        ### --- When commit is set to null
+        # --- When commit is set to null
         current_version = self.get_version_json('1.3.2', None)
         with self.assertRaises(SystemExit) as se:
             updater = msu.Updater(current_version, True)
 
         self.assertEqual(se.exception.code, 1)
 
-        ### --- When there are no updates available
+        # --- When there are no updates available
         current_version = self.get_version_json(
             '1.5.4', '04a87e226add7197f3538b3349e562cc4135451d')
         with self.assertRaises(SystemExit) as se:
@@ -116,8 +115,8 @@ class MSUTest(TestCase):
 
         self.assertEqual(se.exception.code, 1)
 
-        ### --- When a stable update is available
-        #### --- If current version is stable
+        # --- When a stable update is available
+        # --- If current version is stable
         current_version = self.get_version_json(
             '1.3.2', '5be84dc9dfaa24003dfe4c7c88db1f6d212c226f')
         updater = msu.Updater(current_version, False)
@@ -130,7 +129,7 @@ class MSUTest(TestCase):
 
         mock_get.side_effect = self.generate_mock_requests_get(
             '1.4.0', '1.4.0', '82980060b4606ef9bc428932736647d45e400fd9')
-        #### --- If current version is canary
+        # --- If current version is canary
         current_version = self.get_version_json(
             '1.4.0-dev', '82980060b4606ef9bc428932736647d45e400fd9')
         updater = msu.Updater(current_version, False)
@@ -143,8 +142,8 @@ class MSUTest(TestCase):
 
         mock_get.side_effect = self.generate_mock_requests_get(
             '1.3.3', '1.4.0', '82980060b4606ef9bc428932736647d45e400fd9')
-        ### --- When a canary update is available
-        #### --- If CanaryuUpdate is set to true
+        # --- When a canary update is available
+        # --- If CanaryuUpdate is set to true
         current_version = self.get_version_json(
             '1.3.3', '04a87e226add7197f3538b3349e562cc4135451d')
         updater = msu.Updater(current_version, True)
@@ -158,7 +157,7 @@ class MSUTest(TestCase):
         self.assertEqual(updater.last_canary.__dict__, canary_expected)
         self.assertEqual(updater.target, updater.last_canary)
 
-        #### --- If CanaryUpdate is set to false
+        # --- If CanaryUpdate is set to false
         current_version = self.get_version_json(
             '1.3.3', '04a87e226add7197f3538b3349e562cc4135451d')
         with self.assertRaises(SystemExit) as se:
@@ -178,21 +177,20 @@ class MSUTest(TestCase):
             {
                 "name": "MKBotSetup-1.3.3.zip",
                 "label": "MKBotSetup-stable-1.3.3-16bb694a133c33fe80c4b67be2a3e000facd883c",
-                "browser_download_url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.zip"
-            }
+                "browser_download_url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.zip",
+            },
         ]
         self.assertEqual(msu.Updater(
             current_version).find_asset(assets), assets[0])
 
     @patch("builtins.open", new_callable=mock_open, read_data='{"name": "MK Bot", "version": "1.3.2", "commit": "5be84dc9dfaa24003dfe4c7c88db1f6d212c226f"}')
-    @patch('src.msu.msu.sys.argv')
-    def test_main(self, mock_argv, mock_file):
+    @patch('src.msu.msu.sys.argv', ['msu.py'])
+    def test_main(self, mock_file):
         with patch('src.msu.msu.instance_already_running', return_value=True), self.assertRaises(SystemExit) as se:
             msu.main()
             self.assertEqual(se.exception.code, 1)
 
         with patch('src.msu.msu.instance_already_running', return_value=False), self.assertRaises(SystemExit) as se:
-            mock_argv = []
             msu.main()
             mock_file.assert_called_with('../info/version.json', 'rt')
             self.assertEqual(se.exception.code, 1)

@@ -1,4 +1,3 @@
-import asyncio
 import hashlib
 import logging
 import msvcrt  # pylint: disable=import-error
@@ -10,7 +9,6 @@ import traceback
 
 import discord
 from discord.ext import commands
-from discord.ext.commands.core import command
 
 from command_help import CommandHelp
 from core.utils import api
@@ -106,7 +104,7 @@ async def on_command_error(ctx, error: commands.CommandError):
 for i in core_extensions:
     try:
         bot.load_extension(i)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         if i != "core.install":
             errorlevel += 1
@@ -120,7 +118,7 @@ try:
             sys.path.append(os.getenv('USERPROFILE') +
                             f'\\.mkbot\\extensions\\{i[0]}')
         bot.load_extension(i[1])
-except Exception as e:
+except Exception:
     traceback.print_exc()
 
 print('Mulgyeol MK Bot')

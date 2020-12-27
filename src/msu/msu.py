@@ -27,7 +27,7 @@ def load_canary_config():
         with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
             TOKEN = json.load(f)
         return TOKEN['canaryUpdate']
-    except:
+    except Exception:
         return False
 
 
@@ -98,7 +98,7 @@ class Updater:
                     if asset != None:
                         self.last_canary = VersionInfo(
                             asset['label'], asset['browser_download_url'])
-                except:
+                except Exception:
                     traceback.print_exc()
             if self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
                 self.target = self.last_canary
@@ -169,7 +169,7 @@ class Updater:
 def main():
     if instance_already_running():
         sys.exit(1)
-
+    print(sys.argv)
     enabled_canary = load_canary_config()
     with open('../info/version.json', 'rt') as f:
         current_data = json.load(f)
@@ -187,6 +187,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)

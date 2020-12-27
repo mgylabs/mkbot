@@ -4,6 +4,7 @@ import sys
 
 LOCALAPPDATA = os.getenv('LOCALAPPDATA')
 
+
 def is_development_mode():
     return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
 
@@ -16,6 +17,7 @@ else:
     CONFIG_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
     MGCERT_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\mgcert.json"
     USER_DATA_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data"
+
 
 class Settings:
     def __init__(self, data):
@@ -45,7 +47,7 @@ class Version:
 
     def __str__(self) -> str:
         if is_development_mode():
-            return f"Dev"
+            return "Dev"
         if self.commit == None:
             return f"{self.base_version} Test Mode"
         if self.is_canary():
@@ -88,7 +90,7 @@ def get_mkbot_version():
         with open('../info/version.json', 'rt') as f:
             d = json.load(f)
         return Version(d['version'], d['commit'])
-    except:
+    except Exception:
         return None
 
 

@@ -66,27 +66,27 @@ Function RmDirsButOne
  Exch $R1 ; route dir
  Push $R2
  Push $R3
- 
+
   ClearErrors
   FindFirst $R3 $R2 "$R1\*.*"
   IfErrors Exit
- 
+
   Top:
     StrCmp $R2 "." Next
     StrCmp $R2 ".." Next
     StrCmp $R2 $R0 Next
     IfFileExists "$R1\$R2\*.*" 0 Next
     RmDir /r "$R1\$R2"
- 
+
   Next:
     ClearErrors
     FindNext $R3 $R2
     IfErrors Exit
     Goto Top
- 
+
   Exit:
   FindClose $R3
- 
+
  Pop $R3
  Pop $R2
  Pop $R1
@@ -99,28 +99,28 @@ Function RmFilesButOne
  Exch $R1 ; route dir
  Push $R2
  Push $R3
- 
+
   FindFirst $R3 $R2 "$R1\*.*"
   IfErrors Exit
- 
+
   Top:
    StrCmp $R2 "." Next
    StrCmp $R2 ".." Next
    StrCmp $R2 $R0 Next
    IfFileExists "$R1\$R2\*.*" Next
     Delete "$R1\$R2"
- 
+
    #Goto Exit ;uncomment this to stop it being recursive (delete only one file)
- 
+
    Next:
     ClearErrors
     FindNext $R3 $R2
     IfErrors Exit
    Goto Top
- 
+
   Exit:
   FindClose $R3
- 
+
  Pop $R3
  Pop $R2
  Pop $R1
@@ -191,7 +191,7 @@ Section "Apps" SEC01
       Push "$INSTDIR"
       Push "Update.exe"
       Call RmFilesButOne
-      Push "$INSTDIR" 
+      Push "$INSTDIR"
       Push "_" 		;dir to exclude
       Call RmDirsButOne
       SetOutPath "$INSTDIR"

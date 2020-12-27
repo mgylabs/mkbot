@@ -1,9 +1,7 @@
-import asyncio
 import json
 import logging
 from functools import wraps
 
-import discord
 from discord.ext import commands
 
 from .config import CONFIG, USER_DATA_PATH

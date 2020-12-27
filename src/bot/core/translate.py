@@ -13,6 +13,7 @@ from .utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
 
+
 class Translate(commands.Cog):
 
     def __init__(self, bot):
@@ -56,7 +57,7 @@ class Translate(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def translate(self, ctx: commands.Context, *args):
         """
-        Command that translates sentence entered to desired language 
+        Command that translates sentence entered to desired language
         Language list:
                         Korean	       kr
                         English	       en
@@ -146,19 +147,20 @@ class Translate(commands.Cog):
         langDetectDict = {
             "ko": "kr",
             "ja": "jp",
-            "zh": "cn", }
+            "zh": "cn",
+        }
 
         if srcLang in langDetectDict:
             srcLang = langDetectDict[srcLang]
 
-        if not srcLang in self.languages.values():
+        if srcLang not in self.languages.values():
             await channel.send(embed=MsgFormatter.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
             log.warning("srcLanguage detected is not supported")
             return
 
         result = {}
         headers = {
-            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken
+            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken,
         }
 
         for t in targetLangs:
@@ -166,7 +168,7 @@ class Translate(commands.Cog):
                 params = {
                     'query': msg,
                     'src_lang': srcLang,
-                    'target_lang': t
+                    'target_lang': t,
                 }
                 async with aiohttp.ClientSession(headers=headers) as session:
                     async with session.get('https://kapi.kakao.com/v1/translation/translate', params=params) as r:
