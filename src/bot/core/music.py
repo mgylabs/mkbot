@@ -6,15 +6,37 @@ from bs4 import BeautifulSoup
 import json
 
 
+class Song():
+    def addSong(self, title, url):
+        self.url = url
+        self.title = title
+
+    def searchSong(self, content, number):
+        self.url = 'https://www.youtube.com/watch?v=' + \
+            content[number]['videoRenderer']['videoId']
+        self.description = content[0]['videoRenderer']['descriptionSnippet']['runs']
+        self.title = ''
+        for i in self.description:
+            self.title += i['text']
+        self.channel = content[number]['videoRenderer']['longBylineText']['runs'][0]['text']
+        self.published_time = content[0]['videoRenderer']['publishedTimeText']['simpleText']
+        self.viewCount = content[number]['videoRenderer']['viewCountText']['simpleText']
+        self.length = content[number]['videoRenderer']['lengthText']['simpleText']
+
+    def printSong(self):
+        # markdown?
+        print()
+
+
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.song_list = dict()
+        self.song_list = list()
 
     @commands.command(aliases=['m'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
-    async def play(self, ctx: commands.Context, song):
+    async def search(self, ctx: commands.Context, song):
         """
         Music command
         """
@@ -22,7 +44,9 @@ class Music(commands.Cog):
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
             title = str(soup.find('title'))[7:-8]
-            self.song_list[title] = song
+            song_list.append(Song.addSong(title, song))
+            await ctx.delete()
+            await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
 
         else:
             r = requests.get(
@@ -33,24 +57,20 @@ class Music(commands.Cog):
 
             s = json.loads(J)
 
-            content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
-                'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0:4]
-            # 5개 노래 전부 하게 변경
-            url = 'https://www.youtube.com/watch?v=' + \
-                content[0]['videoRenderer']['videoId']
-            description = content[0]['videoRenderer']['descriptionSnippet']['runs']
-            title = ''
-            for i in description:
-                title += i['text']
-            channel = content[0]['videoRenderer']['longBylineText']['runs'][0]['text']
-            published_time = content[0]['videoRenderer']['publishedTimeText']['simpleText']
-            viewCount = content[0]['videoRenderer']['viewCountText']['simpleText']
-            length = content[0]['videoRenderer']['lengthText']['simpleText']
+            a = 0
+            b = 0
 
-        await ctx.delete()
-        await ctx.send(embed=MsgFormatter.get(ctx, title, " in Queue"))
-
-    # async def list(self, ctx: commands.Context):
+            while True:
+                content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
+                    'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
+                if 'badges' in content[a]['videoRenderer'].keys():
+                    self.song_list.append(Song.searchSong(content, a))
+                    b += 1
+                if b == 4:
+                    break
+                a += 1
+            await ctx.delete()
+            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
 
 
 def setup(bot: commands.Bot):
