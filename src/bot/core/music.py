@@ -55,12 +55,28 @@ class Music(commands.Cog):
         ctx.voice_client.play(discord.FFmpegPCMAudio(
             musicFile, **FFMPEG_OPTIONS))
 
+    @commands.command(aliases=['p'])
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def play(self, ctx: commands.Context, song=''):
+        pass
+
+    @commands.command(aliases=['pp'])
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def pause(self, ctx: commands.Context):
+        pass
+
+    @commands.command(aliases=['q'])
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def queue(self, ctx: commands.Context):
+        pass
+
     @commands.command(aliases=['s'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def search(self, ctx: commands.Context, song):
         """
         Music command
         """
+        # to be moved to another method that manages music play
         if ctx.voice_client == None:
             if ctx.author.voice:
                 await ctx.author.voice.channel.connect()
@@ -102,8 +118,9 @@ class Music(commands.Cog):
                 a += 1
             await ctx.message.delete()
             # to be worked on
-            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title))
-        self.playMusic(ctx, song_list[0])
+            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title + '\n Length: ' + song_list[0].length))
+        if discord.VoiceClient.is_playing():
+            self.playMusic(ctx, song_list[songQueue])
 
 
 def setup(bot: commands.Bot):
