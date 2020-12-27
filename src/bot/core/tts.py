@@ -1,3 +1,6 @@
+import logging
+
+import aiofiles
 import aiohttp
 import discord
 from discord.ext import commands
@@ -6,6 +9,7 @@ from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
+log = logging.getLogger(__name__)
 
 @commands.command()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -25,8 +29,8 @@ async def tts(ctx: commands.Context, *args):
             await ctx.author.voice.channel.connect()
         else:
             await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", "You are not in any voice channel. Please join a voice channel to use TTS."))
-            raise commands.CommandError(
-                "Author not connected to a voice channel.")
+            log.warning("Author not connected to a voice channel.")
+            return
 
     headers = {
         'Content-Type': 'application/xml',
@@ -42,7 +46,7 @@ async def tts(ctx: commands.Context, *args):
             vs = 'WOMAN_DIALOG_BRIGHT'
         else:
             await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", f"Invalid parameter. For more information, type `{CONFIG.commandPrefix}help tts`."))
-            raise commands.CommandError("Error")
+            return
     else:
         string = ' '.join(args)
         vs = 'MAN_DIALOG_BRIGHT'
@@ -53,10 +57,10 @@ async def tts(ctx: commands.Context, *args):
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', data=data) as r:
             if r.status == 200:
-                with open('temp.mp3', 'wb') as f:
-                    f.write(await r.read())
+                async with aiofiles.open('temp_tts.mp3', 'wb') as f:
+                    await f.write(await r.read())
 
-    ctx.voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
+    ctx.voice_client.play(discord.FFmpegPCMAudio('temp_tts.mp3'))
 
     await ctx.message.delete()
     embed = MsgFormatter.get(

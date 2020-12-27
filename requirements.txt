@@ -1,5 +1,7 @@
+aiofiles==0.6.0
 autopep8==1.5.3
 discord.py==1.5.1
+isort==4.3.21
 langdetect==1.0.8
 packaging==20.3
 PyInstaller==4.0

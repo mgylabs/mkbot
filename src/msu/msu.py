@@ -1,14 +1,15 @@
-from packaging import version
-import requests
-import json
-import os
-import sys
-import zipfile
 import hashlib
-import traceback
+import json
 import msvcrt  # pylint: disable=import-error
-import winreg
+import os
 import subprocess
+import sys
+import traceback
+import winreg
+import zipfile
+
+import requests
+from packaging import version
 
 
 def is_development_mode():

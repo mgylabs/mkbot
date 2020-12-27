@@ -29,9 +29,12 @@ jobs:
         pip install -r requirements.txt
         if (Test-Path Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
       shell: pwsh
-    - name: Lint with pylint
+    - name: pylint
       run: |
-        pylint src tests -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+        pylint src tests -d R,C,W,F0010 --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+    - name: isort
+      run: |
+        isort src tests --recursive --check-only
     - name: Unit Test
       run: |
         python -m unittest discover -v -s tests -p test_*.py
@@ -55,6 +58,6 @@ jobs:
     - name: Packaging
       run: |
         $Env:Path += ";C:\Program Files (x86)\NSIS\"
-        makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" package\MKBot.nsi
+        makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DEXT_DIR=.mkbot" package\MKBot.nsi
         mv package\MKBotSetup.exe .\
       shell: pwsh

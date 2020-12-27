@@ -10,10 +10,10 @@ import traceback
 
 import discord
 from discord.ext import commands
+from discord.ext.commands.core import command
 
-import core.utils.api
 from command_help import CommandHelp
-from core.utils import listener
+from core.utils import api
 from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
@@ -76,7 +76,7 @@ async def on_message(message: discord.Message):
         return
 
     if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
-        text = re.sub('<@!?\d+> ', '', message.content)
+        text = re.sub('<@!?\\d+> ', '', message.content)
         if text.lower() == 'ping':
             await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
     else:
@@ -93,6 +93,16 @@ async def on_message(message: discord.Message):
                 await ReleaseNotify.run(message.channel)
 
 
+@bot.event
+async def on_command_error(ctx, error: commands.CommandError):
+    if isinstance(error, commands.CommandNotFound):
+        return
+    if isinstance(error, commands.CommandInvokeError):
+        await ctx.send(str(error))
+        raise error
+    await ctx.send(embed=MsgFormatter.get(ctx, error.__class__.__name__, str(error)))
+
+
 for i in core_extensions:
     try:
         bot.load_extension(i)
@@ -102,7 +112,7 @@ for i in core_extensions:
             errorlevel += 1
 
 try:
-    exts = core.utils.api.get_enabled_extensions()
+    exts = api.get_enabled_extensions()
     for i in exts:
         if is_development_mode():
             sys.path.append(f'..\\..\\extensions\\{i[0]}')

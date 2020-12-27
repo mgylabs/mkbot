@@ -1,7 +1,7 @@
 from sys import path
-from unittest import TestCase
-from unittest import mock
-from unittest.mock import patch, mock_open
+from unittest import TestCase, mock
+from unittest.mock import mock_open, patch
+
 from src.msu import msu
 
 

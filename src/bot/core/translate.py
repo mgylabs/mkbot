@@ -1,3 +1,4 @@
+import logging
 from distutils.util import strtobool
 
 import aiohttp
@@ -10,6 +11,7 @@ from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
+log = logging.getLogger(__name__)
 
 class Translate(commands.Cog):
 
@@ -130,7 +132,8 @@ class Translate(commands.Cog):
 
         if len(langs) == 0:
             await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Fail: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
-            raise commands.CommandError("targetlang not identified")
+            log.warning("targetlang not identified")
+            return
         elif len(invalid_langs) > 0:
             await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Warning: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
 
@@ -150,8 +153,8 @@ class Translate(commands.Cog):
 
         if not srcLang in self.languages.values():
             await channel.send(embed=MsgFormatter.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
-            raise commands.CommandError(
-                "srcLanguage detected is not supported")
+            log.warning("srcLanguage detected is not supported")
+            return
 
         result = {}
         headers = {

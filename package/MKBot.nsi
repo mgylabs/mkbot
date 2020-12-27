@@ -183,7 +183,7 @@ Section "Apps" SEC01
     SetOverwrite off
     File /nonfatal /a /r "data\*"
     SetOverwrite on
-    SetOutPath "$PROFILE\.mkbot\extensions"
+    SetOutPath "$PROFILE\${EXT_DIR}\extensions"
     File /nonfatal /a /r "..\extensions\*"
   ${ElseIf} $installOption == 2
     ReadRegStr $ReadyToUpdate HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate"

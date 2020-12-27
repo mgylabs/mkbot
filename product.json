@@ -1,0 +1,9 @@
+{
+    "nameShort": "MK Bot - OSS",
+	"nameLong": "Mulgyeol MK Bot - OSS",
+	"applicationName": "MKBot-OSS",
+	"dataFolderName": ".mkbot-oss",
+	"win32MutexName": "mkbotoss",
+	"licenseName": "MIT",
+	"licenseUrl": "https://github.com/mgylabs/mulgyeol-mkbot/blob/master/LICENSE.txt"
+}
