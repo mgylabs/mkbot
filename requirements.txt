@@ -1,5 +1,5 @@
 aiofiles==0.6.0
-autopep8==1.5.3
+autopep8==1.5.4
 debugpy==1.2.1
 discord.py==1.5.1
 flake8==3.8.4
