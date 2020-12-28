@@ -1,6 +1,7 @@
 ;!define PRODUCT_NAME "Mulgyeol MK Bot"
 ;!define PRODUCT_EXE "MKBot.exe"
 ; !define PRODUCT_VERSION "1.0.0"
+; !define EXT_DIR ".mkbot"
 !searchreplace PRODUCT_VERSION_NUMBER "${PRODUCT_VERSION}" " Canary" ""
 !searchreplace PRODUCT_SHORT_NAME "${PRODUCT_NAME}" "Mulgyeol " ""
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
@@ -179,7 +180,7 @@ Section "Apps" SEC01
     File /nonfatal /a /r "info\*"
     SetOutPath "$INSTDIR\resources\app"
     File /nonfatal /a /r "..\resources\app\*"
-    SetOutPath "$LOCALAPPDATA\Mulgyeol\${PRODUCT_NAME}\data"
+    SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
     SetOverwrite off
     File /nonfatal /a /r "data\*"
     SetOverwrite on

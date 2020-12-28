@@ -26,9 +26,14 @@ class MsgFormatter:
         MsgFormatter.avatar_url = avatar_url
 
     @staticmethod
-    def get(ctx, title, description='', fields: list = [], show_req_user=True):
+    def get(ctx, title, description='', fields: list = [], show_req_user=True, *, color: str = None):
+        if color is None:
+            color = get_color()
+        else:
+            color = int(color.replace('#', ''), 16)
+
         embed = discord.Embed(title=title, description=description +
-                              '\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)', color=get_color(), timestamp=datetime.datetime.utcnow())
+                              '\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)', color=color, timestamp=datetime.datetime.utcnow())
 
         for fd in fields:
             embed.add_field(**fd)

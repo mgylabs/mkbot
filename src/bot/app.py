@@ -6,6 +6,7 @@ import re
 import sys
 import time
 import traceback
+import urllib.parse
 
 import discord
 from discord.ext import commands
@@ -92,13 +93,20 @@ async def on_message(message: discord.Message):
 
 
 @bot.event
-async def on_command_error(ctx, error: commands.CommandError):
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
         return
     if isinstance(error, commands.CommandInvokeError):
-        await ctx.send(str(error))
+        tb = ''.join(traceback.format_exception(
+            None, error, error.__traceback__))
+        query_str = urllib.parse.urlencode(
+            {'template': 'bug_report.md', 'title': str(error)})
+        issue_link = f'https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}'
+        desc = f'Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem.'
+        await ctx.send(embed=MsgFormatter.get(ctx, 'An unknown error has occurred :face_with_monocle:', f'{desc}\n\n```{tb}```', color='#FF0000'))
         raise error
-    await ctx.send(embed=MsgFormatter.get(ctx, error.__class__.__name__, str(error)))
+
+    await ctx.send(embed=MsgFormatter.get(ctx, f"Command Error: {ctx.command.name}", str(error)))
 
 
 for i in core_extensions:
