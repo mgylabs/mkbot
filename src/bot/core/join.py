@@ -17,6 +17,5 @@ async def join(ctx: commands.Context):
     await channel.send(embed=MsgFormatter.get(ctx, 'joined {}'.format(voice_channel.name)))
 
 
-
 def setup(bot: commands.Bot):
     bot.add_command(join)

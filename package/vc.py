@@ -17,6 +17,7 @@ def version(v):
 def list_to_version_str(ls):
     return '.'.join(map(str, ls))
 
+
 def isnewupdate(base, last):
     return base[:-1] != last[:-1]
 
@@ -41,7 +42,7 @@ def build():
     cur_ver = version(cur['version'])
     try:
         last_ver = version(last)
-    except:
+    except Exception:
         last_ver = cur_ver
 
     if isnewupdate(cur_ver, last_ver):
@@ -79,7 +80,7 @@ def release():
         res.raise_for_status()
 
         last_version_data = res.json()
-    except:
+    except Exception:
         last_version_data = {'name': 'MK Bot', 'last-version': '0.0.0.0',
                              'tags': None, 'canary': {}}
 
@@ -100,18 +101,6 @@ def release():
 
     with open('.public/version.json', 'wt') as f:
         json.dump(last_version_data, f)
-
-
-def github_build():
-    with open('package/info/version.json', 'rt') as f:
-        package_version_data = json.load(f)
-
-    package_version_data['commit'] = os.getenv('GITHUB_SHA')
-
-    with open('package/info/version.json', 'wt') as f:
-        json.dump(package_version_data, f)
-
-    save_version_txt(package_version_data['version'])
 
 
 def create_temp_changelog(stable, commit=None):
@@ -187,6 +176,27 @@ def update_changelog(version):
         f.writelines(old)
 
 
+def update_AssemblyInfo(version):
+    with open('src/console/Properties/AssemblyInfo.cs', 'rt', encoding='utf-8') as f:
+        asi = f.read()
+    asi = asi.replace('MK Bot - OSS', 'MK Bot').replace('0.0.1.0', version)
+    with open('src/console/Properties/AssemblyInfo.cs', 'wt', encoding='utf-8') as f:
+        f.write(asi)
+
+
+def github_build():
+    with open('package/info/version.json', 'rt') as f:
+        package_version_data = json.load(f)
+
+    package_version_data['commit'] = os.getenv('GITHUB_SHA')
+
+    with open('package/info/version.json', 'wt') as f:
+        json.dump(package_version_data, f)
+
+    save_version_txt(package_version_data['version'])
+    update_AssemblyInfo(package_version_data['version'].replace('-dev', ''))
+
+
 def github_release(stable):
     with open('package/info/version.json', 'rt') as f:
         package_version_data = json.load(f)
@@ -208,6 +218,7 @@ def github_release(stable):
     else:
         save_version_txt(package_version_data['version'].replace(
             '-dev', f".{package_version_data['commit'][:7]} Canary"))
+    update_AssemblyInfo(package_version_data['version'].replace('-dev', ''))
     create_temp_changelog(stable, package_version_data['commit'])
     update_changelog(package_version_data['version'])
 

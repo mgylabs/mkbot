@@ -30,6 +30,5 @@ async def delete(ctx: commands.Context, amount):
         await channel.send(embed=MsgFormatter.get(ctx, '{} Messages deleted'.format(amount)))
 
 
-
 def setup(bot: commands.Bot):
     bot.add_command(delete)

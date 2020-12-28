@@ -391,7 +391,7 @@ src/data/
 package/vc.py
 
 .env/
-.venv/
+.venv*/
 src/msu/build
 src/msu/dist
 package/MKBotSetup.exe
@@ -400,3 +400,4 @@ src/bot/extensions
 extensions/twitch_highlights
 package/MKBotSetup.zip
 temp_changelog.md
+src/bot/msu.flag

@@ -1,7 +1,8 @@
+import logging
 from distutils.util import strtobool
 
+import aiohttp
 import discord
-import requests
 from discord.ext import commands
 from langdetect import detect
 
@@ -9,6 +10,8 @@ from .utils import listener
 from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
+
+log = logging.getLogger(__name__)
 
 
 class Translate(commands.Cog):
@@ -54,7 +57,7 @@ class Translate(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def translate(self, ctx: commands.Context, *args):
         """
-        Command that translates sentence entered to desired language. 
+        Command that translates sentence entered to desired language
         Language list:
                         Korean	       kr
                         English	       en
@@ -130,7 +133,8 @@ class Translate(commands.Cog):
 
         if len(langs) == 0:
             await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Fail: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
-            raise commands.CommandError("targetlang not identified")
+            log.warning("targetlang not identified")
+            return
         elif len(invalid_langs) > 0:
             await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Warning: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
 
@@ -143,19 +147,20 @@ class Translate(commands.Cog):
         langDetectDict = {
             "ko": "kr",
             "ja": "jp",
-            "zh": "cn", }
+            "zh": "cn",
+        }
 
         if srcLang in langDetectDict:
             srcLang = langDetectDict[srcLang]
 
-        if not srcLang in self.languages.values():
+        if srcLang not in self.languages.values():
             await channel.send(embed=MsgFormatter.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
-            raise commands.CommandError(
-                "srcLanguage detected is not supported")
+            log.warning("srcLanguage detected is not supported")
+            return
 
         result = {}
         headers = {
-            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken
+            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken,
         }
 
         for t in targetLangs:
@@ -163,11 +168,13 @@ class Translate(commands.Cog):
                 params = {
                     'query': msg,
                     'src_lang': srcLang,
-                    'target_lang': t
+                    'target_lang': t,
                 }
-                response = requests.get(
-                    'https://kapi.kakao.com/v1/translation/translate', headers=headers, params=params)
-                result[t] = response.json()['translated_text'][0][0]
+                async with aiohttp.ClientSession(headers=headers) as session:
+                    async with session.get('https://kapi.kakao.com/v1/translation/translate', params=params) as r:
+                        if r.status == 200:
+                            js = await r.json()
+                            result[t] = js['translated_text'][0][0]
 
         return srcLang, result
 

@@ -21,8 +21,12 @@ else:
 
 extensions_path = loc + 'extensions'
 
-with open(loc + 'extensions\\extensions.json', 'rt') as f:
-    default_exts = json.load(f)['extensions']
+if os.path.isfile(loc + 'extensions\\extensions.json'):
+    with open(loc + 'extensions\\extensions.json', 'rt') as f:
+        default_exts = json.load(f)['extensions']
+else:
+    default_exts = {}
+
 with open(EXT_CONFIG_PATH, 'rt') as f:
     exts = json.load(f)['extensions']
 

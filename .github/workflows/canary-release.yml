@@ -3,9 +3,6 @@ name: Nightly Build
 on:
   schedule:
     - cron:  '0 15 * * *'
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       name:
@@ -17,6 +14,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     name: Check Latest Commit
+    if: github.repository == 'mgylabs/mulgyeol-mkbot'
     outputs:
       is_new: ${{ steps.checkcommit.outputs.is_new }}
     steps:
@@ -67,7 +65,7 @@ jobs:
     - name: Packaging
       run: |
         $Env:Path += ";C:\Program Files (x86)\NSIS\"
-        makensis.exe /INPUTCHARSET UTF8 /DPRODUCT_VERSION=${Env:mkbot_version} package\MKBot.nsi
+        makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DEXT_DIR=.mkbot" package\MKBot.nsi
         mv package\MKBotSetup.exe .\
         Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
       shell: pwsh
