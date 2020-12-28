@@ -3,8 +3,6 @@ import os
 
 import discord
 import requests
-from discord.channel import TextChannel
-from discord.ext import commands
 
 from core.utils.config import VERSION
 from core.utils.MsgFormat import MsgFormatter

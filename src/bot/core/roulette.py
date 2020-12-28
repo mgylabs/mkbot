@@ -30,5 +30,6 @@ async def roulette(ctx: commands.Context, title, *items):
     await msg.edit(embed=MsgFormatter.get(
         ctx, f"Roulette for {title}", f"chose... {random.choice(items)}!"))
 
+
 def setup(bot: commands.Bot):
     bot.add_command(roulette)

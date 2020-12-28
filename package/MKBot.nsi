@@ -1,6 +1,7 @@
 ;!define PRODUCT_NAME "Mulgyeol MK Bot"
 ;!define PRODUCT_EXE "MKBot.exe"
 ; !define PRODUCT_VERSION "1.0.0"
+; !define EXT_DIR ".mkbot"
 !searchreplace PRODUCT_VERSION_NUMBER "${PRODUCT_VERSION}" " Canary" ""
 !searchreplace PRODUCT_SHORT_NAME "${PRODUCT_NAME}" "Mulgyeol " ""
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
@@ -66,27 +67,27 @@ Function RmDirsButOne
  Exch $R1 ; route dir
  Push $R2
  Push $R3
- 
+
   ClearErrors
   FindFirst $R3 $R2 "$R1\*.*"
   IfErrors Exit
- 
+
   Top:
     StrCmp $R2 "." Next
     StrCmp $R2 ".." Next
     StrCmp $R2 $R0 Next
     IfFileExists "$R1\$R2\*.*" 0 Next
     RmDir /r "$R1\$R2"
- 
+
   Next:
     ClearErrors
     FindNext $R3 $R2
     IfErrors Exit
     Goto Top
- 
+
   Exit:
   FindClose $R3
- 
+
  Pop $R3
  Pop $R2
  Pop $R1
@@ -99,28 +100,28 @@ Function RmFilesButOne
  Exch $R1 ; route dir
  Push $R2
  Push $R3
- 
+
   FindFirst $R3 $R2 "$R1\*.*"
   IfErrors Exit
- 
+
   Top:
    StrCmp $R2 "." Next
    StrCmp $R2 ".." Next
    StrCmp $R2 $R0 Next
    IfFileExists "$R1\$R2\*.*" Next
     Delete "$R1\$R2"
- 
+
    #Goto Exit ;uncomment this to stop it being recursive (delete only one file)
- 
+
    Next:
     ClearErrors
     FindNext $R3 $R2
     IfErrors Exit
    Goto Top
- 
+
   Exit:
   FindClose $R3
- 
+
  Pop $R3
  Pop $R2
  Pop $R1
@@ -179,11 +180,11 @@ Section "Apps" SEC01
     File /nonfatal /a /r "info\*"
     SetOutPath "$INSTDIR\resources\app"
     File /nonfatal /a /r "..\resources\app\*"
-    SetOutPath "$LOCALAPPDATA\Mulgyeol\${PRODUCT_NAME}\data"
+    SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
     SetOverwrite off
     File /nonfatal /a /r "data\*"
     SetOverwrite on
-    SetOutPath "$PROFILE\.mkbot\extensions"
+    SetOutPath "$PROFILE\${EXT_DIR}\extensions"
     File /nonfatal /a /r "..\extensions\*"
   ${ElseIf} $installOption == 2
     ReadRegStr $ReadyToUpdate HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate"
@@ -191,7 +192,7 @@ Section "Apps" SEC01
       Push "$INSTDIR"
       Push "Update.exe"
       Call RmFilesButOne
-      Push "$INSTDIR" 
+      Push "$INSTDIR"
       Push "_" 		;dir to exclude
       Call RmDirsButOne
       SetOutPath "$INSTDIR"

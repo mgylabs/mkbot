@@ -21,4 +21,3 @@
 
 ### Others
 * Migrate from GitLab (#7)
-

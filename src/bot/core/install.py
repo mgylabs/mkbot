@@ -2,10 +2,10 @@ import os
 import shutil
 import zipfile
 
-import discord
 import requests
 from discord.ext import commands
-from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow  # pylint: disable=import-error
+from mulgyeol_oauth.InstalledAppFlow import \
+    InstalledAppFlow  # pylint: disable=import-error
 
 from .utils import api
 from .utils.config import CONFIG, add_data
@@ -80,7 +80,6 @@ async def install(ctx: commands.Context, ext_id: str, option=None):
         await ctx.send(embed=MsgFormatter.get(ctx, "사용 가능한 업데이트가 없습니다.", f"**{ext_id}**\n{last_commit[:8]}"))
     else:
         await ctx.send(embed=MsgFormatter.get(ctx, "이미 설치된 확장입니다.", f"`{ctx.message.content} -U` 을(를) 시도해 보세요."))
-
 
 
 def setup(bot: commands.Bot):

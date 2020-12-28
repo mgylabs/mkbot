@@ -1,4 +1,3 @@
-import asyncio
 import hashlib
 import logging
 import msvcrt  # pylint: disable=import-error
@@ -7,13 +6,13 @@ import re
 import sys
 import time
 import traceback
+import urllib.parse
 
 import discord
 from discord.ext import commands
 
-import core.utils.api
 from command_help import CommandHelp
-from core.utils import listener
+from core.utils import api
 from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
@@ -76,7 +75,7 @@ async def on_message(message: discord.Message):
         return
 
     if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
-        text = re.sub('<@!?\d+> ', '', message.content)
+        text = re.sub('<@!?\\d+> ', '', message.content)
         if text.lower() == 'ping':
             await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
     else:
@@ -93,16 +92,33 @@ async def on_message(message: discord.Message):
                 await ReleaseNotify.run(message.channel)
 
 
+@bot.event
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
+    if isinstance(error, commands.CommandNotFound):
+        return
+    if isinstance(error, commands.CommandInvokeError):
+        tb = ''.join(traceback.format_exception(
+            None, error, error.__traceback__))
+        query_str = urllib.parse.urlencode(
+            {'template': 'bug_report.md', 'title': str(error)})
+        issue_link = f'https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}'
+        desc = f'Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem.'
+        await ctx.send(embed=MsgFormatter.get(ctx, 'An unknown error has occurred :face_with_monocle:', f'{desc}\n\n```{tb}```', color='#FF0000'))
+        raise error
+
+    await ctx.send(embed=MsgFormatter.get(ctx, f"Command Error: {ctx.command.name}", str(error)))
+
+
 for i in core_extensions:
     try:
         bot.load_extension(i)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         if i != "core.install":
             errorlevel += 1
 
 try:
-    exts = core.utils.api.get_enabled_extensions()
+    exts = api.get_enabled_extensions()
     for i in exts:
         if is_development_mode():
             sys.path.append(f'..\\..\\extensions\\{i[0]}')
@@ -110,7 +126,7 @@ try:
             sys.path.append(os.getenv('USERPROFILE') +
                             f'\\.mkbot\\extensions\\{i[0]}')
         bot.load_extension(i[1])
-except Exception as e:
+except Exception:
     traceback.print_exc()
 
 print('Mulgyeol MK Bot')

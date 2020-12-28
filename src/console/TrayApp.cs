@@ -52,7 +52,7 @@ namespace MKBot
             Infowin = new InfoForm();
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
-            
+
             psi1.FileName = "app\\app.exe";
             psi1.WorkingDirectory = "app";
             psi1.CreateNoWindow = true;

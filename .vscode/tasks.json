@@ -57,6 +57,7 @@
                 "/DPRODUCT_VERSION=Pre-release",
                 "/DPRODUCT_NAME=Mulgyeol MK Bot - OSS",
                 "/DPRODUCT_EXE=MKBot-OSS.exe",
+                "/DEXT_DIR=.mkbot",
                 "package\\MKBot.nsi"
             ],
             "options": {
