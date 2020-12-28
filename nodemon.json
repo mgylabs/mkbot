@@ -1,6 +1,6 @@
 {
   "verbose": false,
   "watch": ["src/bot/"],
-  "exec": "cd src/bot && python app.py",
+  "exec": "cd src/bot && python -m debugpy --listen 5678 app.py",
   "ext": "py"
 }
