@@ -169,7 +169,7 @@ class Updater:
 def main():
     if instance_already_running():
         sys.exit(1)
-    print(sys.argv)
+
     enabled_canary = load_canary_config()
     with open('../info/version.json', 'rt') as f:
         current_data = json.load(f)
