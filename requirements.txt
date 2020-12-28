@@ -8,7 +8,7 @@ isort==4.3.21
 langdetect==1.0.8
 packaging==20.3
 pre-commit==2.9.3
-PyInstaller==4.0
+pyinstaller==4.0
 pylint==2.4.4
 PyNaCl==1.4.0
 PyYAML==5.3.1
