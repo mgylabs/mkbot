@@ -274,7 +274,7 @@ Section Uninstall
   Delete "$SMPROGRAMS\MK Bot\MK Bot.lnk"
 
   RMDir "$SMPROGRAMS\MK Bot"
-  RMDir /r /REBOOTOK $MAINDIR
+  RMDir /r /REBOOTOK $INSTDIR
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKCU "${PRODUCT_DIR_REGKEY}"
