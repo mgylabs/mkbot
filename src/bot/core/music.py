@@ -55,9 +55,8 @@ class Music(commands.Cog):
         def next():
             if len(song_list) > self.songQueue:
                 self.songQueue += 1
-                client = discord.Client()
                 fut = asyncio.run_coroutine_threadsafe(
-                    self.playMusic(ctx), client.loop)
+                    self.playMusic(ctx), self.bot.loop)
                 try:
                     fut.result()
                 except:
