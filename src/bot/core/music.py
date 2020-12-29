@@ -88,6 +88,17 @@ class Music(commands.Cog):
     @commands.command(aliases=['p'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def play(self, ctx: commands.Context, song=''):
+        """
+        Plays the keyword searched or plays the song in queue
+
+        //play "keyword"
+        //play
+        //p "keyword"
+        //p
+
+        Searches the keyword in Youtube and puts it in queue
+        If there is no keyword inputted and the player isn't playing anything, it starts the player
+        """
         if song == '':
             if ctx.voice_client.is_playing:
                 await ctx.send(embed=MsgFormatter.get(ctx, 'Already Playing', 'The player is already playing ' + song_list[self.songQueue].title))
@@ -136,6 +147,14 @@ class Music(commands.Cog):
     @commands.command(aliases=['pp'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def pause(self, ctx: commands.Context):
+        """
+        Pauses the song that is playing
+
+        //pause
+        //pp
+
+        Cannot pause the player if the player is already paused
+        """
         if ctx.voice_client.is_playing():
             ctx.voice_client.pause()
             await ctx.send(embed=MsgFormatter.get(ctx, 'Player Paused', 'Paused at: ' + song_list[self.songQueue].title))
@@ -145,18 +164,35 @@ class Music(commands.Cog):
     @commands.command(aliases=['ss'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def skip(self, ctx: commands.Context):
+        """
+        Skips the song that is playing and plays the next song in queue
+
+        //skip
+        //ss
+        """
         ctx.voice_client.stop()
         await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[self.songQueue - 1].title))
         await self.playMusic(ctx)
 
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def stop(self, ctx: commands.Context):
+        """
+        Stops Player
+
+        //stop
+        """
         ctx.voice_client.stop()
         await ctx.send(embed=MsgFormatter.get(ctx, 'Player Stopped'))
 
     @commands.command(aliases=['q'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def queue(self, ctx: commands.Context):
+        """
+        Shows songs in queue
+
+        //queue
+        //q
+        """
         message = ''
         for i in range(len(song_list) - self.songQueue):
             message += str(i + 1) + '. ' + \
@@ -168,7 +204,11 @@ class Music(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def search(self, ctx: commands.Context, *song):
         """
-        Music command
+        Searches music in youtube
+        //search "keyword"
+        //s "keyword"
+
+        Shows 5 candidates that you can choose using emotes
         """
         song = " ".join(song)
 
