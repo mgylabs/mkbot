@@ -98,7 +98,8 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
         return
     if isinstance(error, commands.CommandInvokeError):
         tb = ''.join(traceback.format_exception(
-            None, error, error.__traceback__))
+            None, error, error.__traceback__))[:1700]
+
         query_str = urllib.parse.urlencode(
             {'template': 'bug_report.md', 'title': str(error)})
         issue_link = f'https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}'

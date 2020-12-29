@@ -1,15 +1,61 @@
+import io
 import logging
+import shlex
+import subprocess
 
-import aiofiles
 import aiohttp
 import discord
 from discord.ext import commands
+from discord.opus import Encoder
 
 from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
+
+
+class FFmpegPCMAudio(discord.AudioSource):
+    def __init__(self, source, *, executable='ffmpeg', pipe=False, stderr=None, before_options=None, options=None):
+        stdin = None if not pipe else source
+        args = [executable]
+        if isinstance(before_options, str):
+            args.extend(shlex.split(before_options))
+        args.append('-i')
+        args.append('-' if pipe else source)
+        args.extend(('-f', 's16le', '-ar', '48000',
+                     '-ac', '2', '-loglevel', 'warning'))
+        if isinstance(options, str):
+            args.extend(shlex.split(options))
+        args.append('pipe:1')
+        self._process = None
+        try:
+            self._process = subprocess.Popen(
+                args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr)
+            self._stdout = io.BytesIO(
+                self._process.communicate(input=stdin)[0])
+        except FileNotFoundError:
+            raise discord.ClientException(
+                executable + ' was not found.') from None
+        except subprocess.SubprocessError as exc:
+            raise discord.ClientException(
+                'Popen failed: {0.__class__.__name__}: {0}'.format(exc)) from exc
+
+    def read(self):
+        ret = self._stdout.read(Encoder.FRAME_SIZE)
+        if len(ret) != Encoder.FRAME_SIZE:
+            return b''
+        return ret
+
+    def cleanup(self):
+        proc = self._process
+        if proc is None:
+            return
+        proc.kill()
+        if proc.poll() is None:
+            proc.communicate()
+
+        self._process = None
 
 
 @commands.command()
@@ -57,11 +103,11 @@ async def tts(ctx: commands.Context, *args):
 
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', data=data) as r:
-            if r.status == 200:
-                async with aiofiles.open('temp_tts.mp3', 'wb') as f:
-                    await f.write(await r.read())
+            if r.status != 200:
+                raise commands.CommandError('Undefined')
+            mp3 = io.BytesIO(await r.read())
 
-    ctx.voice_client.play(discord.FFmpegPCMAudio('temp_tts.mp3'))
+    ctx.voice_client.play(FFmpegPCMAudio(mp3.read(), pipe=True))
 
     await ctx.message.delete()
     embed = MsgFormatter.get(
