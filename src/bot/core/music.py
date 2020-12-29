@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import youtube_dl
+import time
 
 song_list = list()
 
@@ -37,6 +38,25 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
+        self.songQueue = 0
+
+    async def player(self, ctx: commands.Context):
+        if ctx.voice_client == None:
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+                self.playMusic(ctx, song_list[self.songQueue])
+            else:
+                await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", "You are not in any voice channel. Please join a voice channel to use Music bot."))
+                raise commands.CommandError(
+                    "Author not connected to a voice channel.")
+
+        while True:
+            if not ctx.voice_client.is_playing:
+                try:
+                    self.songQueue += 1
+                    self.playMusic(ctx, song_list[self.songQueue])
+                except IndexError:
+                    print("end of song Queue")
 
     def playMusic(self, ctx, song):
         ydl_opts = {
@@ -58,17 +78,27 @@ class Music(commands.Cog):
     @commands.command(aliases=['p'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def play(self, ctx: commands.Context, song=''):
-        pass
+        if song == '':
+            ctx.voice_client.resume()
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Resumed', 'Now playing: ' + song_list[self.songQueue].title))
+        # else: #adapt search
 
     @commands.command(aliases=['pp'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def pause(self, ctx: commands.Context):
-        pass
+        if ctx.voice_client.is_playing():
+            ctx.voice_client.pause()
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Paused', 'Paused at: ' + song_list[self.songQueue].title))
+        else:
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Already Paused', 'Paused at: ' + song_list[self.songQueue].title))
 
     @commands.command(aliases=['q'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def queue(self, ctx: commands.Context):
-        pass
+        message = ''
+        for i in song_list:
+            message = i.title + ' ' + i.length + '\n'
+        await ctx.send(embed=MsgFormatter.get(ctx, 'Song Queue', message))
 
     @commands.command(aliases=['s'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -76,15 +106,6 @@ class Music(commands.Cog):
         """
         Music command
         """
-        # to be moved to another method that manages music play
-        if ctx.voice_client == None:
-            if ctx.author.voice:
-                await ctx.author.voice.channel.connect()
-            else:
-                await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", "You are not in any voice channel. Please join a voice channel to use Music bot."))
-                raise commands.CommandError(
-                    "Author not connected to a voice channel.")
-
         if "youtube.com" in song:
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
@@ -102,9 +123,7 @@ class Music(commands.Cog):
 
             s = json.loads(J)
 
-            a = 0
-            b = 0
-
+            a, b = 0, 0
             while True:
                 content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
                     'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
@@ -118,9 +137,9 @@ class Music(commands.Cog):
                 a += 1
             await ctx.message.delete()
             # to be worked on
-            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[0].title + '\n Length: ' + song_list[0].length))
-        if discord.VoiceClient.is_playing():
-            self.playMusic(ctx, song_list[songQueue])
+            await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[-1].title + '\n Length: ' + song_list[-1].length))
+
+        await self.player(ctx)
 
 
 def setup(bot: commands.Bot):
