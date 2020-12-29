@@ -391,7 +391,7 @@ src/data/
 package/vc.py
 
 .env/
-.venv/
+.venv*/
 src/msu/build
 src/msu/dist
 package/MKBotSetup.exe
