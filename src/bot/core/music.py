@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import json
 import youtube_dl
 import time
+import asyncio
 
 song_list = list()
 
@@ -54,7 +55,13 @@ class Music(commands.Cog):
         def next():
             if len(song_list) > self.songQueue:
                 self.songQueue += 1
-                self.playMusic(ctx)
+                client = discord.Client()
+                fut = asyncio.run_coroutine_threadsafe(
+                    self.playMusic(ctx), client.loop)
+                try:
+                    fut.result()
+                except:
+                    pass
 
         await ctx.send(embed=MsgFormatter.get(ctx, "Now Playing",
                                               song_list[self.songQueue].title + "  " + song_list[self.songQueue].length))
@@ -92,7 +99,40 @@ class Music(commands.Cog):
                 await ctx.send(embed=MsgFormatter.get(ctx, 'No Song in Queue', 'The player doesn\'t have any song to play. Use //search to add songs in queue'))
             else:
                 await self.playMusic(ctx)
-        # else: #adapt search
+        else:
+            song = " ".join(song)
+
+            if "youtube.com" in song:
+                r = requests.get(song)
+                soup = BeautifulSoup(r.text, 'lxml')
+                title = str(soup.find('title'))[7:-8]
+                song_list.append(Song.addSong(title, song))
+                await ctx.message.delete()
+                await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
+                await self.player(ctx)
+
+            else:
+                r = requests.get(
+                    "https://www.youtube.com/results?search_query=" + song)
+                soup = BeautifulSoup(r.text, 'lxml')
+                J = str(soup.find_all('script')[27])
+                J = J.split('var ytInitialData = ')[1].split(';<')[0]
+
+                s = json.loads(J)
+
+                a, b = 0, 0
+                while True:
+                    content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
+                        'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
+                    if ('videoRenderer' in content[a]) and (not 'badges' in content[a]['videoRenderer']):
+                        song_ = Song()
+                        song_.searchSong(content, a)
+                        song_list.append(song_)
+                        break
+                    a += 1
+                await ctx.message.delete()
+                await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[-1].title + '\n Length: ' + song_list[-1].length))
+                await self.player(ctx)
 
     @commands.command(aliases=['pp'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -133,13 +173,17 @@ class Music(commands.Cog):
         """
         song = " ".join(song)
 
-        if "youtube.com" in song:
+        if song == '':
+            await ctx.send(embed=MsgFormatter.get(ctx, 'No Search Word Error', "Please Enter a word."))
+
+        elif "youtube.com" in song:
             r = requests.get(song)
             soup = BeautifulSoup(r.text, 'lxml')
             title = str(soup.find('title'))[7:-8]
             song_list.append(Song.addSong(title, song))
             await ctx.message.delete()
             await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
+            await self.player(ctx)
 
         else:
             r = requests.get(
@@ -167,8 +211,7 @@ class Music(commands.Cog):
             await ctx.message.delete()
             # to be worked on
             await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', song_list[-1].title + '\n Length: ' + song_list[-1].length))
-
-        await self.player(ctx)
+            await self.player(ctx)
 
 
 def setup(bot: commands.Bot):
