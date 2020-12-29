@@ -1,9 +1,7 @@
-import asyncio
 import json
 import logging
 from functools import wraps
 
-import discord
 from discord.ext import commands
 
 from .config import CONFIG, USER_DATA_PATH
@@ -104,7 +102,7 @@ class MGCertificate:
                     await ctx.send(embed=embed)
                     logger.critical('"{}" tried to command "{}" that needs "{}" permission.'.format(
                         req_user, ctx.command.name, Level.get_description(level)))
-                    raise Exception('Untrusted user')
+                    return
 
                 return await func(*args, **kwargs)
             return outerfunc

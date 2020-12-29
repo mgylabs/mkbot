@@ -1,3 +1,4 @@
+setlocal
 cd "%~dp0.."
 
 python -m pip install --upgrade pip
@@ -22,7 +23,7 @@ xcopy /q /I /Y /E package\info build\info
 xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
-pyinstaller app.spec --log-level WARN || goto :error
+pyinstaller app.spec -y --log-level WARN || goto :error
 move dist\app ..\..\build
 
 @ If /i "%1" == "--test-bot" (
@@ -38,14 +39,14 @@ move dist\app ..\..\build
 cd ..\console
 @ If DEFINED GITHUB_ACTIONS (
     nuget restore console.sln
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None || goto :error
+    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None /p:Oss=false  || goto :error
 ) Else (
     "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None || goto :error
 )
 move bin\Release\* ..\..\build
 
 cd ..\msu
-pyinstaller msu.spec --log-level WARN || goto :error
+pyinstaller msu.spec -y --log-level WARN || goto :error
 move "dist\msu" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build
@@ -59,3 +60,5 @@ exit /b 0
     @echo.
     @echo Build Failed
     @exit /b %errorlevel%
+
+endlocal

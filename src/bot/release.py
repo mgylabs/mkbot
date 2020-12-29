@@ -1,11 +1,11 @@
-import discord
-from discord.channel import TextChannel
-from discord.ext import commands
-from core.utils.MsgFormat import MsgFormatter
-from core.utils.config import VERSION
-import os
 import logging
+import os
+
+import discord
 import requests
+
+from core.utils.config import VERSION
+from core.utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ class ReleaseNotify:
             f.write('flag')
 
     @classmethod
-    async def send_release_note(cls, bot: commands.Bot):
+    async def send_release_note(cls, channel: discord.TextChannel):
         note_api_url = f'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/{VERSION.tag}'
         note_url = f'https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}'
         res = requests.get(note_api_url)
@@ -75,8 +75,4 @@ class ReleaseNotify:
             note.description = f'Welcome to the {VERSION.tag} release of MK Bot.'
         embed = MsgFormatter.push(
             f"Mulgyeol MK Bot {VERSION.tag} Release 🎉", note.description + f'\nPlease see the [Release Note]({note_url}) for more information.', note.fields)
-        guild: discord.Guild
-        for guild in bot.guilds:
-            if len(guild.text_channels) > 0:
-                channel: discord.TextChannel = guild.text_channels[0]
-                await channel.send(embed=embed)
+        await channel.send(embed=embed)

@@ -4,6 +4,7 @@ import sys
 
 LOCALAPPDATA = os.getenv('LOCALAPPDATA')
 
+
 def is_development_mode():
     return (not getattr(sys, 'frozen', False) or ('--debug') in sys.argv)
 
@@ -17,6 +18,7 @@ else:
     MGCERT_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\mgcert.json"
     USER_DATA_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data"
 
+
 class Settings:
     def __init__(self, data):
         self.discordToken = "Your Token"
@@ -27,7 +29,6 @@ class Settings:
         self.connectOnStart = False
         self.gitlabToken = ''
         self.canaryUpdate = False
-        self.__DEBUG_MODE__ = False
         self.__dict__.update(data)
 
 
@@ -45,6 +46,8 @@ class Version:
         return self.canary
 
     def __str__(self) -> str:
+        if is_development_mode():
+            return "Dev"
         if self.commit == None:
             return f"{self.base_version} Test Mode"
         if self.is_canary():
@@ -87,7 +90,7 @@ def get_mkbot_version():
         with open('../info/version.json', 'rt') as f:
             d = json.load(f)
         return Version(d['version'], d['commit'])
-    except:
+    except Exception:
         return None
 
 

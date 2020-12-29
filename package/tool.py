@@ -58,7 +58,7 @@ try:
         stable_release()
     elif '-e' in sys.argv:
         sys.exit(int(sys.argv[2]))
-except Exception as e:
+except Exception:
     import traceback
     traceback.print_exc()
     pass

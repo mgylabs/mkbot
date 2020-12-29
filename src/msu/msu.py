@@ -1,14 +1,15 @@
-from packaging import version
-import requests
-import json
-import os
-import sys
-import zipfile
 import hashlib
-import traceback
+import json
 import msvcrt  # pylint: disable=import-error
-import winreg
+import os
 import subprocess
+import sys
+import traceback
+import winreg
+import zipfile
+
+import requests
+from packaging import version
 
 
 def is_development_mode():
@@ -26,7 +27,7 @@ def load_canary_config():
         with open(CONFIG_PATH, 'rt', encoding='utf-8') as f:
             TOKEN = json.load(f)
         return TOKEN['canaryUpdate']
-    except:
+    except Exception:
         return False
 
 
@@ -97,7 +98,7 @@ class Updater:
                     if asset != None:
                         self.last_canary = VersionInfo(
                             asset['label'], asset['browser_download_url'])
-                except:
+                except Exception:
                     traceback.print_exc()
             if self.enabled_canary and self.last_canary and self.last_canary.version >= self.current_version and self.last_canary.commit != current_data['commit']:
                 self.target = self.last_canary
@@ -186,6 +187,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)

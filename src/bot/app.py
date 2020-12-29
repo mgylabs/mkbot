@@ -1,4 +1,3 @@
-import asyncio
 import hashlib
 import logging
 import msvcrt  # pylint: disable=import-error
@@ -7,13 +6,13 @@ import re
 import sys
 import time
 import traceback
+import urllib.parse
 
 import discord
 from discord.ext import commands
 
-import core.utils.api
 from command_help import CommandHelp
-from core.utils import listener
+from core.utils import api
 from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
@@ -53,8 +52,7 @@ async def on_ready():
     print('Logged in within', time.time() - stime)
     replyformat.set_avatar_url(bot.user.avatar_url)
     if is_development_mode():
-        name = "IN DEBUG" if CONFIG.__DEBUG_MODE__ or (
-            '--debug') in sys.argv else "IN DEV"
+        name = "IN DEBUG" if '--debug' in sys.argv else "IN DEV"
         activity_type = discord.ActivityType.playing
     elif VERSION == None:
         name = "MK Bot Test Mode"
@@ -77,45 +75,58 @@ async def on_message(message: discord.Message):
         return
 
     if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
-        text = re.sub('<@!?\d+> ', '', message.content)
+        text = re.sub('<@!?\\d+> ', '', message.content)
         if text.lower() == 'ping':
             await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
     else:
+        await bot.process_commands(message)
         global pending
         if pending and message.content.startswith(bot.command_prefix):
+            pending = False
             name = f"MK Bot {VERSION}"
             activity = discord.Activity(
                 name=name, type=discord.ActivityType.listening)
             await bot.change_presence(
                 status=discord.Status.online, activity=activity)
-            pending = False
+            if not is_development_mode():
+                await ReleaseNotify.run(message.channel)
 
-        if CONFIG.__DEBUG_MODE__ and is_development_mode():
-            for i in core_extensions:
-                if not (i in ['core.translate']):
-                    bot.reload_extension(i)
-        await bot.process_commands(message)
+
+@bot.event
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
+    if isinstance(error, commands.CommandNotFound):
+        return
+    if isinstance(error, commands.CommandInvokeError):
+        tb = ''.join(traceback.format_exception(
+            None, error, error.__traceback__))
+        query_str = urllib.parse.urlencode(
+            {'template': 'bug_report.md', 'title': str(error)})
+        issue_link = f'https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}'
+        desc = f'Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem.'
+        await ctx.send(embed=MsgFormatter.get(ctx, 'An unknown error has occurred :face_with_monocle:', f'{desc}\n\n```{tb}```', color='#FF0000'))
+        raise error
+
+    await ctx.send(embed=MsgFormatter.get(ctx, f"Command Error: {ctx.command.name}", str(error)))
 
 
 for i in core_extensions:
     try:
         bot.load_extension(i)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         if i != "core.install":
             errorlevel += 1
 
 try:
-    exts = core.utils.api.get_enabled_extensions()
-    if len(exts) > 0:
-        for i in exts:
-            if is_development_mode():
-                sys.path.append(f'..\\..\\extensions\\{i[0]}')
-            else:
-                sys.path.append(os.getenv('USERPROFILE') +
-                                f'\\.mkbot\\extensions\\{i[0]}')
-            bot.load_extension(i[1])
-except Exception as e:
+    exts = api.get_enabled_extensions()
+    for i in exts:
+        if is_development_mode():
+            sys.path.append(f'..\\..\\extensions\\{i[0]}')
+        else:
+            sys.path.append(os.getenv('USERPROFILE') +
+                            f'\\.mkbot\\extensions\\{i[0]}')
+        bot.load_extension(i[1])
+except Exception:
     traceback.print_exc()
 
 print('Mulgyeol MK Bot')
