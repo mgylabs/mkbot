@@ -246,7 +246,7 @@ Section -Post
 SectionEnd
 
 Function .onInstSuccess
-  ${If} $installOption == 2
+  ${If} $installOption != 0
     ${GetParameters} $1
     ClearErrors
     ${GetOptions} $1 '/autorun' $R0
