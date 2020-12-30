@@ -19,15 +19,19 @@ async def delete(ctx: commands.Context, amount):
 
     if amount.isdigit():
         await channel.purge(limit=int(amount))
-        await channel.send(embed=MsgFormatter.get(ctx, '{} Messages deleted'.format(amount)))
+        await channel.send(
+            embed=MsgFormatter.get(ctx, "{} Messages deleted".format(amount))
+        )
 
-    elif amount == 'all':
+    elif amount == "all":
         async for message in channel.history(limit=200):
             messages.append(message)
 
         amount = len(messages)
         await channel.purge(limit=amount)
-        await channel.send(embed=MsgFormatter.get(ctx, '{} Messages deleted'.format(amount)))
+        await channel.send(
+            embed=MsgFormatter.get(ctx, "{} Messages deleted".format(amount))
+        )
 
 
 def setup(bot: commands.Bot):

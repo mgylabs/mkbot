@@ -24,5 +24,7 @@ def on_message():
                 return
 
             return await func(*args, **kwargs)
+
         return outerfunc
+
     return deco

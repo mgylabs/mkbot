@@ -16,69 +16,70 @@ log = logging.getLogger(__name__)
 
 
 class Translate(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
         self.conversation = False
-        self.target = {'en'}
-        self.languages = {"korean": "kr",
-                          "english": "en",
-                          "japanese": "jp",
-                          "chinese": "cn",
-                          "vietnamese": "vi",
-                          "indonesian": "id",
-                          "arabic": "ar",
-                          "bengali": "bn",
-                          "german": "de",
-                          "spanish": "es",
-                          "french": "fr",
-                          "hindi": "hi",
-                          "italian": "it",
-                          "malay": "ms",
-                          "dutch": "nl",
-                          "portuguese": "pt",
-                          "russian": "ru",
-                          "thai": "th",
-                          "turkish": "tr"}
+        self.target = {"en"}
+        self.languages = {
+            "korean": "kr",
+            "english": "en",
+            "japanese": "jp",
+            "chinese": "cn",
+            "vietnamese": "vi",
+            "indonesian": "id",
+            "arabic": "ar",
+            "bengali": "bn",
+            "german": "de",
+            "spanish": "es",
+            "french": "fr",
+            "hindi": "hi",
+            "italian": "it",
+            "malay": "ms",
+            "dutch": "nl",
+            "portuguese": "pt",
+            "russian": "ru",
+            "thai": "th",
+            "turkish": "tr",
+        }
 
     @commands.Cog.listener()
     @listener.on_message()
     async def on_message(self, message: discord.Message):
-        if (not self.conversation):
+        if not self.conversation:
             return
 
         ctx = await self.bot.get_context(message)
         _, result = await self._trans(ctx, message.content, self.target)
         if len(result) > 1:
-            await ctx.send('\n'.join([f"{k.upper()}: {v}" for k, v in result.items()]))
+            await ctx.send("\n".join([f"{k.upper()}: {v}" for k, v in result.items()]))
         else:
-            await ctx.send('\n'.join([f"{v}" for _, v in result.items()]))
+            await ctx.send("\n".join([f"{v}" for _, v in result.items()]))
 
-    @commands.command(aliases=['trans'])
+    @commands.command(aliases=["trans"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def translate(self, ctx: commands.Context, *args):
         """
         Command that translates sentence entered to desired language
         Language list:
-                        Korean	       kr
-                        English	       en
-                        Japanese	   jp
-                        Chinese	       cn
-                        Vietnamese	   vi
-                        Inodonesian	   id
-                        Arabic	       ar
-                        Bengali	       bn
-                        German	       de
-                        Spanish	       es
-                        French	       fr
-                        Hindi	       hi
-                        Italian	       it
-                        Malay	       ms
-                        Dutch	       nl
-                        Portuguese	   pt
-                        Russian	       ru
-                        Thai	       th
-                        Turkish	       tr
+            Korean          kr
+            English          en
+            Japanese        jp
+            Chinese         cn
+            Vietnamese     vi
+            Inodonesian    id
+            Arabic           ar
+            Bengali         bn
+            German        de
+            Spanish         es
+            French           fr
+            Hindi            hi
+            Italian            it
+            Malay          ms
+            Dutch           nl
+            Portuguese    pt
+            Russian         ru
+            Thai             th
+            Turkish          tr
 
         {commandPrefix}translate "What does it mean in Korean?" korean
         {commandPrefix}translate "What does it mean in Korean?" kr
@@ -97,47 +98,65 @@ class Translate(commands.Cog):
         {commandPrefix}translate --conversation false
         """
 
-        if '--conversation' in args:
+        if "--conversation" in args:
             try:
-                self.conversation = strtobool(
-                    args[args.index('--conversation') + 1])
+                self.conversation = strtobool(args[args.index("--conversation") + 1])
             except ValueError as e:
-                await ctx.send(embed=MsgFormatter.get(
-                    ctx, 'Usage Error', str(e)))
-            if '--target' in args:
-                targetLangs = set(
-                    args[args.index('--target') + 1].split(','))
+                await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", str(e)))
+            if "--target" in args:
+                targetLangs = set(args[args.index("--target") + 1].split(","))
                 self.target = await self._convert_langs(ctx, targetLangs)
             if self.conversation:
-                await ctx.send(embed=MsgFormatter.get(
-                    ctx, 'Start Conversation Mode', f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.target)])}.'))
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Start Conversation Mode",
+                        f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.target)])}.',
+                    )
+                )
             else:
-                await ctx.send(embed=MsgFormatter.get(
-                    ctx, 'Exit Conversation Mode'))
+                await ctx.send(embed=MsgFormatter.get(ctx, "Exit Conversation Mode"))
             return
         else:
             msg = args[0]
             targetLangs = {args[1]} if len(args) > 1 else self.target
 
-        srcLang, result = await self._trans(ctx, msg, await self._convert_langs(ctx, targetLangs))
+        srcLang, result = await self._trans(
+            ctx, msg, await self._convert_langs(ctx, targetLangs)
+        )
         for t, r in result.items():
-            await ctx.send(embed=MsgFormatter.get(ctx, 'Translation Successful ' + srcLang + ' => ' + t, msg + '\n\n' + r))
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Translation Successful " + srcLang + " => " + t,
+                    msg + "\n\n" + r,
+                )
+            )
 
     async def _convert_langs(self, ctx, langs: set):
-        short_langs = {t for t in langs if t.lower()
-                       in self.languages}
-        langs = (
-            langs - short_langs) | {self.languages[t] for t in short_langs}
-        invalid_langs = {t for t in langs if not (
-            t in self.languages.values())}
+        short_langs = {t for t in langs if t.lower() in self.languages}
+        langs = (langs - short_langs) | {self.languages[t] for t in short_langs}
+        invalid_langs = {t for t in langs if not (t in self.languages.values())}
         langs -= invalid_langs
 
         if len(langs) == 0:
-            await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Fail: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    f'Translation Fail: {", ".join(invalid_langs)}',
+                    "Cannot find target language(s) inputted",
+                )
+            )
             log.warning("targetlang not identified")
             return
         elif len(invalid_langs) > 0:
-            await ctx.send(embed=MsgFormatter.get(ctx, f'Translation Warning: {", ".join(invalid_langs)}', 'Cannot find target language(s) inputted'))
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    f'Translation Warning: {", ".join(invalid_langs)}',
+                    "Cannot find target language(s) inputted",
+                )
+            )
 
         return langs
 
@@ -155,27 +174,42 @@ class Translate(commands.Cog):
             srcLang = langDetectDict[srcLang]
 
         if srcLang not in self.languages.values():
-            await channel.send(embed=MsgFormatter.get(ctx, 'Translation Fail: Input Language Detection Failed', 'Language detected is not supported. \n ** Detected language: ' + srcLang + ' **\nuse //help translate to find supported languages'))
+            await channel.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Translation Fail: Input Language Detection Failed",
+                    "Language detected is not supported. \n ** Detected language: "
+                    + srcLang
+                    + " **\nuse //help translate to find supported languages",
+                )
+            )
             log.warning("srcLanguage detected is not supported")
             return
 
         result = {}
         headers = {
-            'Authorization': 'KakaoAK ' + CONFIG.kakaoToken,
+            "Authorization": "KakaoAK " + CONFIG.kakaoToken,
         }
 
-        tasks = [self._request_api(headers, {
-                                   'query': msg, 'src_lang': srcLang, 'target_lang': t}) for t in targetLangs if t != srcLang]
+        tasks = [
+            self._request_api(
+                headers, {"query": msg, "src_lang": srcLang, "target_lang": t}
+            )
+            for t in targetLangs
+            if t != srcLang
+        ]
         result = dict(await asyncio.gather(*tasks))
 
         return srcLang, result
 
     async def _request_api(self, headers, params):
         async with aiohttp.ClientSession(headers=headers) as session:
-            async with session.get('https://kapi.kakao.com/v1/translation/translate', params=params) as r:
+            async with session.get(
+                "https://kapi.kakao.com/v1/translation/translate", params=params
+            ) as r:
                 if r.status == 200:
                     js = await r.json()
-                    return params['target_lang'], js['translated_text'][0][0]
+                    return params["target_lang"], js["translated_text"][0][0]
 
 
 def setup(bot: commands.Bot):

@@ -2,6 +2,10 @@
 setlocal
 cd "%~dp0.."
 
+set ch_title=
+set ch_type=
+set ch_pr=
+
 :title
 set /p ch_title="Title> "
 

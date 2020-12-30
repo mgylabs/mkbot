@@ -8,7 +8,7 @@ from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 
-@commands.command(aliases=['rou'])
+@commands.command(aliases=["rou"])
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def roulette(ctx: commands.Context, title, *items):
     """
@@ -21,14 +21,23 @@ async def roulette(ctx: commands.Context, title, *items):
     Note:
     This bot cannot be added to items.
     """
-    msg: discord.Message = await ctx.send(embed=MsgFormatter.get(ctx, "Roulette is running. Please wait.", "..."))
+    msg: discord.Message = await ctx.send(
+        embed=MsgFormatter.get(ctx, "Roulette is running. Please wait.", "...")
+    )
 
     for i in range(5, 0, -1):
-        await msg.edit(embed=MsgFormatter.get(ctx, "Roulette is running. Please wait.", f"{i} sec left"))
+        await msg.edit(
+            embed=MsgFormatter.get(
+                ctx, "Roulette is running. Please wait.", f"{i} sec left"
+            )
+        )
         time.sleep(1)
 
-    await msg.edit(embed=MsgFormatter.get(
-        ctx, f"Roulette for {title}", f"chose... {random.choice(items)}!"))
+    await msg.edit(
+        embed=MsgFormatter.get(
+            ctx, f"Roulette for {title}", f"chose... {random.choice(items)}!"
+        )
+    )
 
 
 def setup(bot: commands.Bot):

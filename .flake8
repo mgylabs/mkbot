@@ -1,5 +1,10 @@
 [flake8]
-ignore = E711, E501, W504
+ignore =
+        E203,
+        E501,
+        E711,
+        W504,
+        W503,
 exclude =
     .venv*,
     # No need to traverse our git directory
@@ -15,3 +20,4 @@ exclude =
     # This contains builds of flake8 that we don't want to check
     dist,
     extensions
+max-line-length = 88

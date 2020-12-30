@@ -17,13 +17,13 @@ class Field:
         self.inline = inline
 
     def to_dict(self):
-        return {'name': self.name, 'value': self.value, 'inline': self.inline}
+        return {"name": self.name, "value": self.value, "inline": self.inline}
 
 
 class ReleaseNote:
     def __init__(self, rel_body) -> None:
         self.body = rel_body.splitlines()
-        self.body = [x for x in self.body if x != '']
+        self.body = [x for x in self.body if x != ""]
         self.render()
 
     def render(self):
@@ -31,17 +31,16 @@ class ReleaseNote:
         value = {}
         name = None
         for t in self.body:
-            if t.startswith('## '):
-                name = t.replace('## ', '')
+            if t.startswith("## "):
+                name = t.replace("## ", "")
                 value[name] = []
                 continue
-            elif name != None and t.startswith('* '):
+            elif name != None and t.startswith("* "):
                 value[name].append(t)
             elif name == None:
                 header.append(t)
-        self.description = '\n'.join(header)
-        self.fields = [Field(k, '\n'.join(v)).to_dict()
-                       for k, v in value.items()]
+        self.description = "\n".join(header)
+        self.fields = [Field(k, "\n".join(v)).to_dict() for k, v in value.items()]
 
 
 class ReleaseNotify:
@@ -53,26 +52,32 @@ class ReleaseNotify:
 
     @classmethod
     def exist_flag(cls):
-        return os.path.isfile('msu.flag')
+        return os.path.isfile("msu.flag")
 
     @classmethod
     def write_flag(cls):
-        with open('msu.flag', 'wt') as f:
-            f.write('flag')
+        with open("msu.flag", "wt") as f:
+            f.write("flag")
 
     @classmethod
     async def send_release_note(cls, channel: discord.TextChannel):
-        note_api_url = f'https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/{VERSION.tag}'
-        note_url = f'https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}'
+        note_api_url = f"https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/{VERSION.tag}"
+        note_url = (
+            f"https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}"
+        )
         res = requests.get(note_api_url)
         try:
             res.raise_for_status()
         except Exception as e:
             log.debug(e)
             log.debug(res.text)
-        note = ReleaseNote(res.json()['body'])
-        if note.description == '':
-            note.description = f'Welcome to the {VERSION.tag} release of MK Bot.'
+        note = ReleaseNote(res.json()["body"])
+        if note.description == "":
+            note.description = f"Welcome to the {VERSION.tag} release of MK Bot."
         embed = MsgFormatter.push(
-            f"Mulgyeol MK Bot {VERSION.tag} Release 🎉", note.description + f'\nPlease see the [Release Note]({note_url}) for more information.', note.fields)
+            f"Mulgyeol MK Bot {VERSION.tag} Release 🎉",
+            note.description
+            + f"\nPlease see the [Release Note]({note_url}) for more information.",
+            note.fields,
+        )
         await channel.send(embed=embed)

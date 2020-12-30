@@ -204,11 +204,7 @@ def github_release(stable):
     if stable:
         package_version_data['version'] = package_version_data['version'].replace(
             '-dev', '')
-    else:
-        canary_version = version(
-            package_version_data['version'].replace('-dev', ''))
-        canary_version[-1] += 1
-        package_version_data['version'] = f"{list_to_version_str(canary_version)}-dev"
+
     package_version_data['commit'] = os.getenv('GITHUB_SHA')
 
     with open('package/info/version.json', 'wt') as f:
@@ -223,6 +219,36 @@ def github_release(stable):
     update_changelog(package_version_data['version'])
 
 
+def github_bump_version():
+    with open('package/info/version.json', 'rt') as f:
+        package_version_data = json.load(f)
+
+    next_version = version(
+        package_version_data['version'].replace('-dev', ''))
+
+    if next_version[2] == 0:
+        next_version[1] += 1
+        package_version_data['version'] = f"{list_to_version_str(next_version)}-dev"
+
+        with open('package/info/version.json', 'wt') as f:
+            json.dump(package_version_data, f)
+
+
+def github_revert_version():
+    with open('package/info/version.json', 'rt') as f:
+        package_version_data = json.load(f)
+
+    next_version = version(
+        package_version_data['version'].replace('-dev', ''))
+
+    if next_version[2] == 0:
+        next_version[1] -= 1
+        package_version_data['version'] = f"{list_to_version_str(next_version)}-dev"
+
+        with open('package/info/version.json', 'wt') as f:
+            json.dump(package_version_data, f)
+
+
 if '-b' in sys.argv:
     build()
 elif '-r' in sys.argv:
@@ -233,3 +259,7 @@ elif '-gr' in sys.argv:
     github_release(True)
 elif '-gn' in sys.argv:
     github_release(False)
+elif '-gu' in sys.argv:
+    github_bump_version()
+elif '-gur' in sys.argv:
+    github_revert_version()
