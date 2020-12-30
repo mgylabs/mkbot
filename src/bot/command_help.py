@@ -7,7 +7,9 @@ class CommandHelp(commands.DefaultHelpCommand):
     formatter = None
 
     def __init__(self, formatter):
-        super().__init__(no_category="General", paginator=commands.Paginator(None, None))
+        super().__init__(
+            no_category="General", paginator=commands.Paginator(None, None)
+        )
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
 
@@ -39,8 +41,7 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         for command in commands:
             name = command.name
-            entry = '{0}`{1}` - {2}'.format(
-                self.indent * ' ', name, command.short_doc)
+            entry = "{0}`{1}` - {2}".format(self.indent * " ", name, command.short_doc)
             self.paginator.add_line(self.shorten_text(entry))
 
     async def send_pages(self):
@@ -48,9 +49,14 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         description = "> MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://github.com/mgylabs/mulgyeol-mkbot"
         if VERSION != None:
-            version_desc = f'Version {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**Be warned: Canary can be unstable.**' if VERSION.is_canary(
-            ) else f'Version {VERSION}'
+            version_desc = (
+                f"Version {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**Be warned: Canary can be unstable.**"
+                if VERSION.is_canary()
+                else f"Version {VERSION}"
+            )
         else:
             version_desc = "Test Mode"
         for page in self.paginator.pages:
-            await self.context.send(f'Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2020')
+            await self.context.send(
+                f"Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2020"
+            )

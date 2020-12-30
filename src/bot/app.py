@@ -26,17 +26,17 @@ errorlevel = 0
 pending = True
 
 replyformat = MsgFormatter()
-bot = commands.Bot(command_prefix=CONFIG.commandPrefix,
-                   help_command=CommandHelp(replyformat))
+bot = commands.Bot(
+    command_prefix=CONFIG.commandPrefix, help_command=CommandHelp(replyformat)
+)
 cert = MGCertificate(MGCERT_PATH)
-bot.__dict__.update({'MGCert': cert, 'replyformat': replyformat})
+bot.__dict__.update({"MGCert": cert, "replyformat": replyformat})
 
 
 def instance_already_running():
     key = hashlib.sha1(CONFIG.discordToken.encode()).hexdigest()[:8]
 
-    fd = os.open(f"{os.getenv('TEMP')}\\mkbot_{key}.lock",
-                 os.O_WRONLY | os.O_CREAT)
+    fd = os.open(f"{os.getenv('TEMP')}\\mkbot_{key}.lock", os.O_WRONLY | os.O_CREAT)
 
     try:
         msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
@@ -49,10 +49,10 @@ def instance_already_running():
 
 @bot.event
 async def on_ready():
-    print('Logged in within', time.time() - stime)
+    print("Logged in within", time.time() - stime)
     replyformat.set_avatar_url(bot.user.avatar_url)
     if is_development_mode():
-        name = "IN DEBUG" if '--debug' in sys.argv else "IN DEV"
+        name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
         activity_type = discord.ActivityType.playing
     elif VERSION == None:
         name = "MK Bot Test Mode"
@@ -75,19 +75,19 @@ async def on_message(message: discord.Message):
         return
 
     if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
-        text = re.sub('<@!?\\d+> ', '', message.content)
-        if text.lower() == 'ping':
-            await message.channel.send(f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms")
+        text = re.sub("<@!?\\d+> ", "", message.content)
+        if text.lower() == "ping":
+            await message.channel.send(
+                f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms"
+            )
     else:
         await bot.process_commands(message)
         global pending
         if pending and message.content.startswith(bot.command_prefix):
             pending = False
             name = f"MK Bot {VERSION}"
-            activity = discord.Activity(
-                name=name, type=discord.ActivityType.listening)
-            await bot.change_presence(
-                status=discord.Status.online, activity=activity)
+            activity = discord.Activity(name=name, type=discord.ActivityType.listening)
+            await bot.change_presence(status=discord.Status.online, activity=activity)
             if not is_development_mode():
                 await ReleaseNotify.run(message.channel)
 
@@ -97,16 +97,28 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
         return
     if isinstance(error, commands.CommandInvokeError):
-        tb = ''.join(traceback.format_exception(
-            None, error, error.__traceback__))
+        tb = "".join(traceback.format_exception(None, error, error.__traceback__))[
+            :1700
+        ]
+
         query_str = urllib.parse.urlencode(
-            {'template': 'bug_report.md', 'title': str(error)})
-        issue_link = f'https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}'
-        desc = f'Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem.'
-        await ctx.send(embed=MsgFormatter.get(ctx, 'An unknown error has occurred :face_with_monocle:', f'{desc}\n\n```{tb}```', color='#FF0000'))
+            {"template": "bug_report.md", "title": str(error)}
+        )
+        issue_link = f"https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}"
+        desc = f"Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem."
+        await ctx.send(
+            embed=MsgFormatter.get(
+                ctx,
+                "An unknown error has occurred :face_with_monocle:",
+                f"{desc}\n\n```{tb}```",
+                color="#FF0000",
+            )
+        )
         raise error
 
-    await ctx.send(embed=MsgFormatter.get(ctx, f"Command Error: {ctx.command.name}", str(error)))
+    await ctx.send(
+        embed=MsgFormatter.get(ctx, f"Command Error: {ctx.command.name}", str(error))
+    )
 
 
 for i in core_extensions:
@@ -121,23 +133,22 @@ try:
     exts = api.get_enabled_extensions()
     for i in exts:
         if is_development_mode():
-            sys.path.append(f'..\\..\\extensions\\{i[0]}')
+            sys.path.append(f"..\\..\\extensions\\{i[0]}")
         else:
-            sys.path.append(os.getenv('USERPROFILE') +
-                            f'\\.mkbot\\extensions\\{i[0]}')
+            sys.path.append(os.getenv("USERPROFILE") + f"\\.mkbot\\extensions\\{i[0]}")
         bot.load_extension(i[1])
 except Exception:
     traceback.print_exc()
 
-print('Mulgyeol MK Bot')
-print(f'Version {VERSION}' if VERSION != None else 'Test Mode')
-print('Copyright (c) 2020 Mulgyeol Labs. All rights reserved.\n')
+print("Mulgyeol MK Bot")
+print(f"Version {VERSION}" if VERSION != None else "Test Mode")
+print("Copyright (c) 2020 Mulgyeol Labs. All rights reserved.\n")
 
 if instance_already_running():
-    print('The discord token provided is already in use by MK Bot.')
+    print("The discord token provided is already in use by MK Bot.")
     sys.exit(0)
 
-if '--dry-run' in sys.argv:
+if "--dry-run" in sys.argv:
     print("Test succeeded")
     sys.exit(errorlevel)
 else:

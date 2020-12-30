@@ -1,6 +1,6 @@
 # Test MK Bot Extension
 async def hello(ctx):
-    await ctx.send('Hello {0.display_name}.'.format(ctx.author))
+    await ctx.send("Hello {0.display_name}.".format(ctx.author))
 
 
 def setup(bot):
@@ -8,4 +8,4 @@ def setup(bot):
 
 
 def teardown(bot):
-    print('I am being unloaded!')
+    print("I am being unloaded!")

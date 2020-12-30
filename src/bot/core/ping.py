@@ -10,7 +10,9 @@ async def ping(ctx: commands.Context):
     """
     Shows the bot's latency
     """
-    await ctx.send(embed=MsgFormatter.get(ctx, f"Pong in {round(ctx.bot.latency*1000)}ms"))
+    await ctx.send(
+        embed=MsgFormatter.get(ctx, f"Pong in {round(ctx.bot.latency*1000)}ms")
+    )
 
 
 def setup(bot: commands.Bot):

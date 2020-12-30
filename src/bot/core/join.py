@@ -14,7 +14,9 @@ async def join(ctx: commands.Context):
     voice_channel = ctx.author.voice.channel
     await voice_channel.connect()
     await ctx.message.delete()
-    await channel.send(embed=MsgFormatter.get(ctx, 'joined {}'.format(voice_channel.name)))
+    await channel.send(
+        embed=MsgFormatter.get(ctx, "joined {}".format(voice_channel.name))
+    )
 
 
 def setup(bot: commands.Bot):

@@ -5,12 +5,14 @@ from .utils.config import is_development_mode
 
 class DiscordFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
-        return not record.name.startswith('discord')
+        return not record.name.startswith("discord")
 
 
 log = logging.getLogger()
 formatter = logging.Formatter(
-    "[%(asctime)s] %(name)s (line %(lineno)d): %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
+    "[%(asctime)s] %(name)s (line %(lineno)d): %(levelname)s - %(message)s",
+    "%Y-%m-%d %H:%M:%S",
+)
 stream_handler = logging.StreamHandler()
 stream_handler.addFilter(DiscordFilter())
 if is_development_mode():
