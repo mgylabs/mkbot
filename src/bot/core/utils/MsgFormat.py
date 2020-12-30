@@ -1,8 +1,9 @@
 import datetime
+import platform
 
 import discord
 
-from .config import CONFIG
+from .config import CONFIG, VERSION
 
 Msg_Color = None
 
@@ -16,6 +17,10 @@ def get_color():
         return Msg_Color
     else:
         return Msg_Color
+
+
+def color_to_int(code):
+    return int(code.replace("#", ""), 16)
 
 
 class MsgFormatter:
@@ -33,12 +38,12 @@ class MsgFormatter:
         fields: list = [],
         show_req_user=True,
         *,
-        color: str = None
+        color: str = None,
     ):
         if color is None:
             color = get_color()
         else:
-            color = int(color.replace("#", ""), 16)
+            color = color_to_int(color)
 
         embed = discord.Embed(
             title=title,
@@ -68,5 +73,22 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
+        embed.set_footer(text="© 2020 MGYL", icon_url=MsgFormatter.avatar_url)
+        return embed
+
+    @staticmethod
+    def abrt(ctx, issue_link, tb, show_req_user=True):
+        description = f"Please [create an issue]({issue_link}) at GitHub with logs below to help fix this problem."
+        env = f"Version: {VERSION}\nCommit: {VERSION.commit}\nOS: {platform.platform().replace('-', ' ')}"
+
+        embed = discord.Embed(
+            title="ABRT: An unknown error has occurred :face_with_monocle:",
+            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
+            color=color_to_int("#FF0000"),
+            timestamp=datetime.datetime.utcnow(),
+        )
+
+        if show_req_user:
+            embed.add_field(name="Requested by", value="<@{}>".format(ctx.author.id))
         embed.set_footer(text="© 2020 MGYL", icon_url=MsgFormatter.avatar_url)
         return embed
