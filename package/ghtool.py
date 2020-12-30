@@ -167,8 +167,9 @@ def upload_canary_asset():
 
 def create_pull_request():
     TAG_NAME = os.getenv('TAG_NAME').replace('refs/tags/', '')
+    BASE_REF = os.getenv('BASE_REF').replace('refs/heads/', '')
     res = requests_API('POST', '/repos/mgylabs/mulgyeol-mkbot/pulls',
-                       {'title': f'Update CHANGELOG.md for {TAG_NAME}', 'head': f'update-changelog-for-{TAG_NAME}', 'base': 'master', 'body': f'## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.'})
+                       {'title': f'Update CHANGELOG.md for {TAG_NAME}', 'head': f'update-changelog-for-{TAG_NAME}', 'base': BASE_REF, 'body': f'## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.'})
     print(res.text)
     if 'number' in res.json():
         res = requests_API(
@@ -193,6 +194,18 @@ def check_last_commit():
         print('::set-output name=is_new::false')
 
 
+def create_new_branch():
+    TAG_NAME = os.getenv('TAG_NAME')
+    SHA = requests_API(
+        'GET', '/repos/mgylabs/mulgyeol-mkbot/git/ref/heads/master').json()['object']['sha']
+    print(SHA)
+    res = requests_API('POST', '/repos/mgylabs/mulgyeol-mkbot/git/refs',
+                       {'ref': f'refs/heads/update-changelog-for-{TAG_NAME[10:]}', 'sha': SHA})
+    print(res.text)
+    with open('head_sha.txt', 'wt') as f:
+        f.write(SHA)
+
+
 def find_asset(assets):
     asset = None
     for d in assets:
@@ -211,3 +224,5 @@ elif '-cp' in sys.argv:
     create_pull_request()
 elif '-check' in sys.argv:
     check_last_commit()
+elif '--create-new-branch' in sys.argv:
+    create_new_branch()

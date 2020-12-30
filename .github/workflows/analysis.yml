@@ -18,6 +18,11 @@ jobs:
       run:
         shell: cmd
     steps:
+    - name: Cancel Previous Runs
+      if: github.ref != 'refs/heads/master'
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
@@ -49,6 +54,11 @@ jobs:
     name: pre-commit
     runs-on: ubuntu-latest
     steps:
+    - name: Cancel Previous Runs
+      if: github.ref != 'refs/heads/master'
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
