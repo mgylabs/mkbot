@@ -1,14 +1,16 @@
-from discord.ext import commands
-from .utils.MGCert import MGCertificate, Level
-import discord
-from .utils.MsgFormat import MsgFormatter
-from .utils import listener
-import requests
-from bs4 import BeautifulSoup
-import json
-import youtube_dl
-import time
 import asyncio
+import json
+import time
+
+import discord
+import requests
+import youtube_dl
+from bs4 import BeautifulSoup
+from discord.ext import commands
+
+from .utils import listener
+from .utils.MGCert import Level, MGCertificate
+from .utils.MsgFormat import MsgFormatter
 
 song_list = list()
 
@@ -171,10 +173,14 @@ class Music(commands.Cog):
         //skip
         //ss
         """
-        ctx.voice_client.stop()
-        await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[self.songQueue - 1].title))
-        await self.playMusic(ctx)
-
+        if (not ctx.voice_client.is_playing()) and self.songQueue == len(song_list):
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Not Playing Error', 'The player isn\'t playing anything. Add a song to skip.'))
+        else:
+            ctx.voice_client.stop()
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[self.songQueue - 1].title))
+            await self.playMusic(ctx)
+            
+    @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def stop(self, ctx: commands.Context):
         """
@@ -248,62 +254,39 @@ class Music(commands.Cog):
                 if b == 5:
                     break
                 a += 1
-            botmsg = ''
+
+            async def check_reaction(botmsg, timeout):
+                time.sleep(timeout)
+                added = False
+                cached_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id)
+                for reaction in cached_msg.reactions:
+                    if reaction.count >= 2:
+                        song_list.append(search_song_list[reactions.index(str(reaction.emoji))])
+                        added = True
+                        await ctx.send(embed=MsgFormatter.get(ctx, 'Chose ' + song_list[-1].title, song_list[-1].title + ' - ' + song_list[-1].length + '\n added in queue'))
+                        await self.player(ctx)
+                        break
+                if not added:
+                    await ctx.send(embed=MsgFormatter.get(ctx, 'Timeout Error', 'No reaction was added. Please add a reaction to choose a song'))
+            
+            timeout = 3
+
+            msg = ''
             for i in range(len(search_song_list)):
-                botmsg += str(i + 1) + '. ' + \
+                msg += str(i + 1) + '. ' + \
                     search_song_list[i].title + ' - ' + \
                     search_song_list[i].length + '\n'
-            botmsg = await ctx.send(embed=MsgFormatter.get(ctx, song + ' searched', botmsg))
+            botmsg = await ctx.send(embed=MsgFormatter.get(ctx, f"{song} searched, {timeout} seconds to choose", msg))
+
             for reaction in reactions:
                 await botmsg.add_reaction(reaction)
 
-            async def check_reaction():
-                cached_msg = discord.utils.get(
-                    self.bot.cached_messages, id=botmsg.id)
-                return cached_msg
-
-            timeout = 15.0
-            start = time.time()
-            timelimit = True
-            while timelimit:
+            while timeout > 0:
                 time.sleep(1)
-                cached_msg = await check_reaction()
-                for reaction in cached_msg.reactions:
-                    if reaction.count == 2:
-                        song_list.append(
-                            search_song_list[reactions.index(str(reaction.emoji))])
-                        await ctx.send(embed=MsgFormatter.get(ctx, 'Chose ' + song_list[-1].title, song_list[-1].title + ' - ' + song_list[-1].length + '\n added in queue'))
-                        await self.player(ctx)
-                        timelimit = False
-                        break
-                timelimit = (time.time() - start) < timeout
-                print(cached_msg.reactions)
-            if not timelimit:
-                await ctx.send(embed=MsgFormatter.get(ctx, 'Timeout Error', 'No reaction was added. Please add a reaction to choose a song'))
+                timeout -=1
+                await botmsg.edit(embed=MsgFormatter.get(ctx, f"{song} searched, {timeout} seconds to choose", msg))
 
-            await check_reaction()
-
+            await check_reaction(botmsg, timeout)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Music(bot))
-
-
-'''
-            async def check_reaction(timeout=15.0):
-                start = time.time()
-                timelimit = True
-                while timelimit:
-                    cached_msg = discord.utils.get(
-                        self.bot.cached_messages, id=botmsg.id)
-                    for reaction in cached_msg.reactions:
-                        if reaction.count == 2:
-                            song_list.append(
-                                search_song_list[reactions.index(str(reaction.emoji))])
-                            await ctx.send(embed=MsgFormatter.get(ctx, 'Chose ' + song_list[-1].title, song_list[-1].title + ' - ' + song_list[-1].length + '\n added in queue'))
-                            await self.player(ctx)
-                            timelimit = False
-                            break
-                    timelimit = (time.time() - start) < timeout
-                    print(cached_msg.reactions)
-                if not timelimit:
-                    await ctx.send(embed=MsgFormatter.get(ctx, 'Timeout Error', 'No reaction added. Please add a reaction to choose a song'))'''

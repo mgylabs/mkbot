@@ -8,4 +8,5 @@ core_extensions = (
     "core.poll",
     "core.roulette",
     "core.translate",
+    "core.music"
 )
