@@ -10,12 +10,14 @@ from .MsgFormat import MsgFormatter
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
-    "%(levelname)s :: %(asctime)s :: %(message)s", "%Y-%m-%d %H:%M:%S")
+    "%(levelname)s :: %(asctime)s :: %(message)s", "%Y-%m-%d %H:%M:%S"
+)
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 file_handler = logging.FileHandler(
-    USER_DATA_PATH + '/MK Bot.log', mode='a', encoding='utf-8')
+    USER_DATA_PATH + "/MK Bot.log", mode="a", encoding="utf-8"
+)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
@@ -35,9 +37,9 @@ class Level:
             return Level.Description.ADMIN_USERS
 
     class Description:
-        ALL_USERS = 'all users'  # 3
-        TRUSTED_USERS = 'trusted users'  # 2
-        ADMIN_USERS = 'admin users'  # 1
+        ALL_USERS = "all users"  # 3
+        TRUSTED_USERS = "trusted users"  # 2
+        ADMIN_USERS = "admin users"  # 1
 
 
 class MGCertificate:
@@ -45,10 +47,10 @@ class MGCertificate:
     trusted_users = []
 
     def __init__(self, name):
-        with open(name, 'rt') as f:
+        with open(name, "rt") as f:
             data = json.load(f)
-        MGCertificate.admin_users: list = data.get('adminUsers', [])
-        MGCertificate.trusted_users: list = data.get('trustedUsers', [])
+        MGCertificate.admin_users: list = data.get("adminUsers", [])
+        MGCertificate.trusted_users: list = data.get("trustedUsers", [])
 
     @staticmethod
     def isTrustedUser(username):
@@ -81,8 +83,7 @@ class MGCertificate:
     def verify(level=Level.TRUSTED_USERS):
         def deco(func):
             if func.__doc__ != None:
-                func.__doc__ = func.__doc__.format(
-                    commandPrefix=CONFIG.commandPrefix)
+                func.__doc__ = func.__doc__.format(commandPrefix=CONFIG.commandPrefix)
 
             @wraps(func)
             async def outerfunc(*args, **kwargs):
@@ -94,16 +95,31 @@ class MGCertificate:
                 req_user = str(ctx.author)
 
                 if MGCertificate.getUserLevel(req_user) > level:
-                    embed = MsgFormatter.get(ctx, "Permission denied", '<@{}> is not in the {}. This incident will be reported.'.format(
-                        ctx.author.id, Level.get_description(level)), show_req_user=False)
-                    embed.add_field(name='User', value=str(ctx.author))
-                    embed.add_field(name='Command tried', value='{} ({})'.format(
-                        ctx.command.name, Level.get_description(level)))
+                    embed = MsgFormatter.get(
+                        ctx,
+                        "Permission denied",
+                        "<@{}> is not in the {}. This incident will be reported.".format(
+                            ctx.author.id, Level.get_description(level)
+                        ),
+                        show_req_user=False,
+                    )
+                    embed.add_field(name="User", value=str(ctx.author))
+                    embed.add_field(
+                        name="Command tried",
+                        value="{} ({})".format(
+                            ctx.command.name, Level.get_description(level)
+                        ),
+                    )
                     await ctx.send(embed=embed)
-                    logger.critical('"{}" tried to command "{}" that needs "{}" permission.'.format(
-                        req_user, ctx.command.name, Level.get_description(level)))
+                    logger.critical(
+                        '"{}" tried to command "{}" that needs "{}" permission.'.format(
+                            req_user, ctx.command.name, Level.get_description(level)
+                        )
+                    )
                     return
 
                 return await func(*args, **kwargs)
+
             return outerfunc
+
         return deco

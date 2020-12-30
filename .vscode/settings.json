@@ -11,7 +11,12 @@
         "--ignore",
         "E402"
     ],
+    "python.formatting.provider": "black",
     "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true,
+        "source.fixAll": true
+    },
     "python.analysis.extraPaths": [
         "src\\bot",
         "src\\msu"
@@ -30,5 +35,7 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSaveMode": "file"
 }

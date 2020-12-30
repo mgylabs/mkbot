@@ -4,9 +4,9 @@ import os
 import sys
 import hashlib
 
-base_url = 'https://api.github.com'
-if os.getenv('GITHUB_TOKEN') != None:
-    req_headers = {'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}"}
+base_url = "https://api.github.com"
+if os.getenv("GITHUB_TOKEN") != None:
+    req_headers = {"Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}"}
 else:
     req_headers = {}
 
@@ -14,16 +14,14 @@ else:
 def requests_API(method, link, datadict=None):
     method = method.upper()
     if method == "POST":
-        x = requests.post(base_url + link,
-                          json=datadict, headers=req_headers)
+        x = requests.post(base_url + link, json=datadict, headers=req_headers)
     elif method == "PUT":
-        x = requests.put(base_url + link,
-                         json=datadict, headers=req_headers)
-    elif method == 'GET':
+        x = requests.put(base_url + link, json=datadict, headers=req_headers)
+    elif method == "GET":
         x = requests.get(base_url + link, headers=req_headers)
-    elif method == 'PATCH':
+    elif method == "PATCH":
         x = requests.patch(base_url + link, json=datadict, headers=req_headers)
-    elif method == 'DELETE':
+    elif method == "DELETE":
         x = requests.delete(base_url + link, headers=req_headers)
     else:
         return
@@ -31,7 +29,7 @@ def requests_API(method, link, datadict=None):
 
 
 def file_hash():
-    with open('MKBotSetup.exe', 'rb') as f:
+    with open("MKBotSetup.exe", "rb") as f:
         setup = f.read()
 
     sha1Hash = hashlib.sha1(setup)
@@ -40,18 +38,18 @@ def file_hash():
 
 
 def comment_on_pr():
-    cur_tag = os.getenv('TAG_NAME').replace('refs/tags/', '')
+    cur_tag = os.getenv("TAG_NAME").replace("refs/tags/", "")
     pr_list = set()
-    tags = requests_API('GET', '/repos/mgylabs/mulgyeol-mkbot/tags').json()
+    tags = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/tags").json()
     if len(tags) < 2:
         return
 
     before_tag = None
     for i, t in enumerate(tags):
-        if t['name'] == cur_tag:
+        if t["name"] == cur_tag:
             for j in range(len(tags) - (i + 1)):
-                if tags[i + j + 1]['name'].startswith('v'):
-                    before_tag = tags[i + j + 1]['name']
+                if tags[i + j + 1]["name"].startswith("v"):
+                    before_tag = tags[i + j + 1]["name"]
                 break
             break
 
@@ -59,43 +57,53 @@ def comment_on_pr():
         return
 
     commits_dict = requests_API(
-        'GET', f'/repos/mgylabs/mulgyeol-mkbot/compare/{before_tag}...{cur_tag}').json()['commits']
-    commits = {x['sha'] for x in commits_dict}
+        "GET", f"/repos/mgylabs/mulgyeol-mkbot/compare/{before_tag}...{cur_tag}"
+    ).json()["commits"]
+    commits = {x["sha"] for x in commits_dict}
 
     for commit in commits:
-        items = requests_API(
-            'GET', f'/search/issues?q=repo:mgylabs/mulgyeol-mkbot+is:pr+is:merged+sha:{commit}').json().get('items', None)
+        items = (
+            requests_API(
+                "GET",
+                f"/search/issues?q=repo:mgylabs/mulgyeol-mkbot+is:pr+is:merged+sha:{commit}",
+            )
+            .json()
+            .get("items", None)
+        )
         if items != None:
-            pr_list |= {x['number'] for x in items}
+            pr_list |= {x["number"] for x in items}
 
-    body = f'`Mulgyeol MK Bot {cur_tag}` has been released which incorporates this pull request. :tada:\n* [Release Note](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{cur_tag})'
+    body = f"`Mulgyeol MK Bot {cur_tag}` has been released which incorporates this pull request. :tada:\n* [Release Note](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{cur_tag})"
 
     for i in pr_list:
         res = requests_API(
-            'POST', f'/repos/mgylabs/mulgyeol-mkbot/issues/{i}/comments', datadict={'body': body})
+            "POST",
+            f"/repos/mgylabs/mulgyeol-mkbot/issues/{i}/comments",
+            datadict={"body": body},
+        )
         print(res.text)
 
 
 def comment_on_pr_for_canary(canary_tag):
-    cur_commit = os.getenv('GITHUB_SHA')
+    cur_commit = os.getenv("GITHUB_SHA")
     pr_list = set()
 
     last_canary_commit = None
-    if len(canary_tag['assets']) > 0:
-        asset = find_asset(canary_tag['assets'])
+    if len(canary_tag["assets"]) > 0:
+        asset = find_asset(canary_tag["assets"])
         if asset != None:
-            _, _, ver, _ = asset['label'].split('-')
-            last_canary_commit = ver.split('.')[-1]
+            _, _, ver, _ = asset["label"].split("-")
+            last_canary_commit = ver.split(".")[-1]
 
     if last_canary_commit == None:
-        tags = requests_API('GET', '/repos/mgylabs/mulgyeol-mkbot/tags').json()
+        tags = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/tags").json()
         if len(tags) < 2:
             return
 
         last_tag = None
         for i, t in enumerate(tags):
-            if t['name'].startswith('v'):
-                last_tag = t['name']
+            if t["name"].startswith("v"):
+                last_tag = t["name"]
 
         if last_tag == None:
             return
@@ -105,124 +113,171 @@ def comment_on_pr_for_canary(canary_tag):
         source = last_canary_commit
 
     commits_dict = requests_API(
-        'GET', f'/repos/mgylabs/mulgyeol-mkbot/compare/{source}...{cur_commit}').json()['commits']
-    commits = {x['sha'] for x in commits_dict}
+        "GET", f"/repos/mgylabs/mulgyeol-mkbot/compare/{source}...{cur_commit}"
+    ).json()["commits"]
+    commits = {x["sha"] for x in commits_dict}
 
     for commit in commits:
-        items = requests_API(
-            'GET', f'/search/issues?q=repo:mgylabs/mulgyeol-mkbot+is:pr+is:merged+sha:{commit}').json().get('items', None)
+        items = (
+            requests_API(
+                "GET",
+                f"/search/issues?q=repo:mgylabs/mulgyeol-mkbot+is:pr+is:merged+sha:{commit}",
+            )
+            .json()
+            .get("items", None)
+        )
         if items != None:
-            pr_list |= {x['number'] for x in items}
+            pr_list |= {x["number"] for x in items}
 
-    body = f'`Mulgyeol MK Bot Canary` has been released which incorporates this pull request. :tada:\n* commit: {cur_commit}\n* [Release Note](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary)'
+    body = f"`Mulgyeol MK Bot Canary` has been released which incorporates this pull request. :tada:\n* commit: {cur_commit}\n* [Release Note](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary)"
 
     for i in pr_list:
         res = requests_API(
-            'POST', f'/repos/mgylabs/mulgyeol-mkbot/issues/{i}/comments', datadict={'body': body})
+            "POST",
+            f"/repos/mgylabs/mulgyeol-mkbot/issues/{i}/comments",
+            datadict={"body": body},
+        )
         print(res.text)
 
 
 def upload_asset():
-    with open('package/info/version.json', 'rt') as f:
-        version = json.load(f)['version']
-    with open('MKBotSetup.zip', 'rb') as f:
+    with open("package/info/version.json", "rt") as f:
+        version = json.load(f)["version"]
+    with open("MKBotSetup.zip", "rb") as f:
         fdata = f.read()
-    r = requests.post(os.getenv('UPLOAD_URL').replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotSetup-{version}.zip', 'label': f'MKBotSetup-stable-{version}-{file_hash()}'})
+    r = requests.post(
+        os.getenv("UPLOAD_URL").replace("{?name,label}", ""),
+        headers={
+            "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
+            "Content-Type": "application/zip",
+        },
+        data=fdata,
+        params={
+            "name": f"MKBotSetup-{version}.zip",
+            "label": f"MKBotSetup-stable-{version}-{file_hash()}",
+        },
+    )
     print(r.text)
 
     comment_on_pr()
 
 
 def upload_canary_asset():
-    with open('package/info/version.json', 'rt') as f:
+    with open("package/info/version.json", "rt") as f:
         data = json.load(f)
-    version = data['version'].replace('-dev', '')
-    sha = data['commit']
+    version = data["version"].replace("-dev", "")
+    sha = data["commit"]
 
     tag = requests_API(
-        'GET', '/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary').json()
+        "GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+    ).json()
 
-    UPLOAD_URL = tag['upload_url']
-    REL_ID = tag['id']
-    if len(tag['assets']) > 0:
-        asset = find_asset(tag['assets'])
+    UPLOAD_URL = tag["upload_url"]
+    REL_ID = tag["id"]
+    if len(tag["assets"]) > 0:
+        asset = find_asset(tag["assets"])
         if asset != None:
             r = requests_API(
-                'DELETE', f'/repos/mgylabs/mulgyeol-mkbot/releases/assets/{asset["id"]}')
+                "DELETE", f'/repos/mgylabs/mulgyeol-mkbot/releases/assets/{asset["id"]}'
+            )
             print(r.text)
-    with open('temp_changelog.md', 'rt', encoding='utf-8') as f:
+    with open("temp_changelog.md", "rt", encoding="utf-8") as f:
         chlog = f.read()
     r = requests_API(
-        'PATCH', f'/repos/mgylabs/mulgyeol-mkbot/releases/{REL_ID}', {'body': chlog})
-    print(r.text, end='\n\n')
-    with open('MKBotSetup.zip', 'rb') as f:
+        "PATCH", f"/repos/mgylabs/mulgyeol-mkbot/releases/{REL_ID}", {"body": chlog}
+    )
+    print(r.text, end="\n\n")
+    with open("MKBotSetup.zip", "rb") as f:
         fdata = f.read()
-    r = requests.post(UPLOAD_URL.replace('{?name,label}', ''), headers={
-        'Authorization': f"Bearer {os.getenv('GITHUB_TOKEN')}", 'Content-Type': 'application/zip'}, data=fdata, params={'name': f'MKBotCanarySetup-{version}.{sha[:7]}.zip', 'label': f'MKBotSetup-canary-{version}.{sha}-{file_hash()}'})
+    r = requests.post(
+        UPLOAD_URL.replace("{?name,label}", ""),
+        headers={
+            "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
+            "Content-Type": "application/zip",
+        },
+        data=fdata,
+        params={
+            "name": f"MKBotCanarySetup-{version}.{sha[:7]}.zip",
+            "label": f"MKBotSetup-canary-{version}.{sha}-{file_hash()}",
+        },
+    )
     print(r.text)
 
     comment_on_pr_for_canary(tag)
 
 
 def create_pull_request():
-    TAG_NAME = os.getenv('TAG_NAME').replace('refs/tags/', '')
-    BASE_REF = os.getenv('BASE_REF').replace('refs/heads/', '')
-    res = requests_API('POST', '/repos/mgylabs/mulgyeol-mkbot/pulls',
-                       {'title': f'Update CHANGELOG.md for {TAG_NAME}', 'head': f'update-changelog-for-{TAG_NAME}', 'base': BASE_REF, 'body': f'## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.'})
+    TAG_NAME = os.getenv("TAG_NAME").replace("refs/tags/", "")
+    BASE_REF = os.getenv("BASE_REF").replace("refs/heads/", "")
+    res = requests_API(
+        "POST",
+        "/repos/mgylabs/mulgyeol-mkbot/pulls",
+        {
+            "title": f"Update CHANGELOG.md for {TAG_NAME}",
+            "head": f"update-changelog-for-{TAG_NAME}",
+            "base": BASE_REF,
+            "body": f"## Summary of the Pull Request\n* This PR updates CHANGELOG.md for {TAG_NAME}.",
+        },
+    )
     print(res.text)
-    if 'number' in res.json():
+    if "number" in res.json():
         res = requests_API(
-            'PATCH', f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}", {'labels': ['CHANGELOG']})
+            "PATCH",
+            f"/repos/mgylabs/mulgyeol-mkbot/issues/{res.json()['number']}",
+            {"labels": ["CHANGELOG"]},
+        )
         print(res.text)
 
 
 def check_last_commit():
-    cur_commit = os.getenv('GITHUB_SHA')
-    res = requests_API(
-        'GET', '/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary')
+    cur_commit = os.getenv("GITHUB_SHA")
+    res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary")
 
-    asset = find_asset(res.json()['assets'])
+    asset = find_asset(res.json()["assets"])
     last_build_commit = None
     if asset != None:
-        _, _, version, _ = asset['label'].split('-')
-        last_build_commit = version.split('.')[-1]
+        _, _, version, _ = asset["label"].split("-")
+        last_build_commit = version.split(".")[-1]
     is_new = last_build_commit != cur_commit
     if is_new:
-        print('::set-output name=is_new::true')
+        print("::set-output name=is_new::true")
     else:
-        print('::set-output name=is_new::false')
+        print("::set-output name=is_new::false")
 
 
 def create_new_branch():
-    TAG_NAME = os.getenv('TAG_NAME')
+    TAG_NAME = os.getenv("TAG_NAME")
     SHA = requests_API(
-        'GET', '/repos/mgylabs/mulgyeol-mkbot/git/ref/heads/master').json()['object']['sha']
+        "GET", "/repos/mgylabs/mulgyeol-mkbot/git/ref/heads/master"
+    ).json()["object"]["sha"]
     print(SHA)
-    res = requests_API('POST', '/repos/mgylabs/mulgyeol-mkbot/git/refs',
-                       {'ref': f'refs/heads/update-changelog-for-{TAG_NAME[10:]}', 'sha': SHA})
+    res = requests_API(
+        "POST",
+        "/repos/mgylabs/mulgyeol-mkbot/git/refs",
+        {"ref": f"refs/heads/update-changelog-for-{TAG_NAME[10:]}", "sha": SHA},
+    )
     print(res.text)
-    with open('head_sha.txt', 'wt') as f:
+    with open("head_sha.txt", "wt") as f:
         f.write(SHA)
 
 
 def find_asset(assets):
     asset = None
     for d in assets:
-        if d['label'].lower().startswith('mkbotsetup-'):
+        if d["label"].lower().startswith("mkbotsetup-"):
             asset = d
             break
 
     return asset
 
 
-if '-ua' in sys.argv:
+if "-ua" in sys.argv:
     upload_asset()
-elif '-uca' in sys.argv:
+elif "-uca" in sys.argv:
     upload_canary_asset()
-elif '-cp' in sys.argv:
+elif "-cp" in sys.argv:
     create_pull_request()
-elif '-check' in sys.argv:
+elif "-check" in sys.argv:
     check_last_commit()
-elif '--create-new-branch' in sys.argv:
+elif "--create-new-branch" in sys.argv:
     create_new_branch()

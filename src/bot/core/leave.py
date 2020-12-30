@@ -14,9 +14,11 @@ async def leave(ctx: commands.Context):
     voice_channel = ctx.author.voice.channel
     await ctx.message.delete()
     for x in ctx.bot.voice_clients:
-        if(x.guild == ctx.message.guild):
+        if x.guild == ctx.message.guild:
             await x.disconnect()
-            await channel.send(embed=MsgFormatter.get(ctx, 'leaved {}'.format(voice_channel.name)))
+            await channel.send(
+                embed=MsgFormatter.get(ctx, "leaved {}".format(voice_channel.name))
+            )
 
 
 def setup(bot: commands.Bot):
