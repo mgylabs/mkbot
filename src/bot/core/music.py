@@ -55,6 +55,11 @@ class Music(commands.Cog):
 
         return songQueue, song_list
 
+    def updatePlayer(self, ctx, song_list, songQueue):
+        guild_id = ctx.message.guild.id
+        song_list_dict[guild_id][0] = songQueue
+        song_list_dict[guild_id][1] = song_list
+
     async def player(self, ctx: commands.Context):
         if ctx.voice_client == None:
             if ctx.author.voice:
@@ -82,6 +87,7 @@ class Music(commands.Cog):
                 )
                 try:
                     fut.result()
+                    self.updatePlayer(song_list, songQueue)
                 except:
                     pass
 
@@ -184,6 +190,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue")
                 )
+                self.updatePlayer(song_list, songQueue)
                 await self.player(ctx)
 
             else:
@@ -223,6 +230,7 @@ class Music(commands.Cog):
                         song_list[-1].title + "\n Length: " + song_list[-1].length,
                     )
                 )
+                self.updatePlayer(song_list, songQueue)
                 await self.player(ctx)
 
     @commands.command(aliases=["pp"])
@@ -353,6 +361,7 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue")
             )
+            self.updatePlayer(song_list, songQueue)
             await self.player(ctx)
 
         else:
@@ -408,6 +417,7 @@ class Music(commands.Cog):
                                 + "\n added in queue",
                             )
                         )
+                        self.updatePlayer(song_list, songQueue)
                         await self.player(ctx)
                         break
                 if not added:
