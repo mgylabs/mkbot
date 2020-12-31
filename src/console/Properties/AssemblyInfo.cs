@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mulgyeol Labs")]
 [assembly: AssemblyProduct("MK Bot - OSS")]
-[assembly: AssemblyCopyright("Copyright © 2020 Mulgyeol Labs.")]
+[assembly: AssemblyCopyright("Copyright © 2021 Mulgyeol Labs.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

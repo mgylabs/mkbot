@@ -47,7 +47,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=title,
-            description=description
+            description=description.format(commandPrefix=CONFIG.commandPrefix)
             + "\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
             color=color,
             timestamp=datetime.datetime.utcnow(),
@@ -58,7 +58,7 @@ class MsgFormatter:
 
         if show_req_user:
             embed.add_field(name="Requested by", value="<@{}>".format(ctx.author.id))
-        embed.set_footer(text="© 2020 MGYL", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2021", icon_url=MsgFormatter.avatar_url)
         return embed
 
     @staticmethod
@@ -73,7 +73,7 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
-        embed.set_footer(text="© 2020 MGYL", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2021", icon_url=MsgFormatter.avatar_url)
         return embed
 
     @staticmethod
@@ -90,5 +90,5 @@ class MsgFormatter:
 
         if show_req_user:
             embed.add_field(name="Requested by", value="<@{}>".format(ctx.author.id))
-        embed.set_footer(text="© 2020 MGYL", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2021", icon_url=MsgFormatter.avatar_url)
         return embed
