@@ -2,8 +2,8 @@ import asyncio
 import json
 import time
 
+import aiohttp
 import discord
-import requests
 import youtube_dl
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -12,7 +12,7 @@ from .utils import listener
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
-song_list = list()
+song_list_dict = dict()
 
 
 class Song():
@@ -31,17 +31,23 @@ class Song():
         self.viewCount = content[number]['videoRenderer']['viewCountText']['simpleText']
         self.length = content[number]['videoRenderer']['lengthText']['simpleText']
 
-    def printSong(self):
-        # markdown?
-        print()
-        return
-
 
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.songQueue = 0
+
+    def setPlayer(self, ctx):
+        guild_id = ctx.message.guild.id
+        try:
+            songQueue = song_list_dict[guild_id][0]
+            song_list = song_list_dict[guild_id][1]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
+            songQueue = song_list_dict[guild_id][0]
+            song_list = song_list_dict[guild_id][1]
+
+        return songQueue, song_list
 
     async def player(self, ctx: commands.Context):
         if ctx.voice_client == None:
@@ -54,9 +60,11 @@ class Music(commands.Cog):
                     "Author not connected to a voice channel.")
 
     async def playMusic(self, ctx):
+        songQueue, song_list = self.setPlayer(ctx)
+
         def next():
-            if len(song_list) > self.songQueue:
-                self.songQueue += 1
+            if len(song_list) > songQueue:
+                songQueue += 1
                 fut = asyncio.run_coroutine_threadsafe(
                     self.playMusic(ctx), self.bot.loop)
                 try:
@@ -65,7 +73,7 @@ class Music(commands.Cog):
                     pass
 
         await ctx.send(embed=MsgFormatter.get(ctx, "Now Playing",
-                                              song_list[self.songQueue].title + "  " + song_list[self.songQueue].length))
+                                              song_list[songQueue].title + "  " + song_list[songQueue].length))
 
         ydl_opts = {
             'format': 'bestaudio/best',
@@ -76,8 +84,8 @@ class Music(commands.Cog):
             }]
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(
-                song_list[self.songQueue].url, download=False)
+            loop = asyncio.get_event_loop()
+            info = await loop.run_in_executor(None, lambda: ydl.extract_info(song_list[songQueue].url, download=False))
             musicFile = info['formats'][0]['url']
         FFMPEG_OPTIONS = {
             'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
@@ -93,22 +101,24 @@ class Music(commands.Cog):
         """
         Plays the keyword searched or plays the song in queue
 
-        //play "keyword"
-        //play
-        //p "keyword"
-        //p
+        {commandPrefix}play "keyword"
+        {commandPrefix}play
+        {commandPrefix}p "keyword"
+        {commandPrefix}p
 
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
         """
+        songQueue, song_list = self.setPlayer(ctx)
+            
         if song == '':
             if ctx.voice_client.is_playing:
-                await ctx.send(embed=MsgFormatter.get(ctx, 'Already Playing', 'The player is already playing ' + song_list[self.songQueue].title))
+                await ctx.send(embed=MsgFormatter.get(ctx, 'Already Playing', 'The player is already playing ' + song_list[songQueue].title))
             elif ctx.voice_client.is_paused():
                 ctx.voice_client.resume()
-                await ctx.send(embed=MsgFormatter.get(ctx, 'Player Resumed', 'Now playing: ' + song_list[self.songQueue].title))
-            elif len(song_list) == self.songQueue:
-                await ctx.send(embed=MsgFormatter.get(ctx, 'No Song in Queue', 'The player doesn\'t have any song to play. Use //search to add songs in queue'))
+                await ctx.send(embed=MsgFormatter.get(ctx, 'Player Resumed', 'Now playing: ' + song_list[songQueue].title))
+            elif len(song_list) == songQueue:
+                await ctx.send(embed=MsgFormatter.get(ctx, 'No Song in Queue', 'The player doesn\'t have any song to play. Use {commandPrefix}search to add songs in queue'))
             else:
                 await self.playMusic(ctx)
         else:
@@ -116,18 +126,25 @@ class Music(commands.Cog):
                 song = " ".join(song)
 
             if "youtube.com" in song:
-                r = requests.get(song)
-                soup = BeautifulSoup(r.text, 'lxml')
+                client_session = aiohttp.ClientSession(raise_for_status=True)
+                async with client_session.get("https://www.youtube.com/results?search_query=" + song) as r:
+                    if r.status != 200:
+                        raise commands.CommandError("Undefined")
+                    text = await r.text()
+                soup = BeautifulSoup(text, 'lxml')
                 title = str(soup.find('title'))[7:-8]
-                song_list.append(Song.addSong(title, song))
+                song_list.append(Song().addSong(title, song))
                 await ctx.message.delete()
                 await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
                 await self.player(ctx)
 
             else:
-                r = requests.get(
-                    "https://www.youtube.com/results?search_query=" + song)
-                soup = BeautifulSoup(r.text, 'lxml')
+                client_session = aiohttp.ClientSession(raise_for_status=True)
+                async with client_session.get("https://www.youtube.com/results?search_query=" + song) as r:
+                    if r.status != 200:
+                        raise commands.CommandError("Undefined")
+                    text = await r.text()
+                soup = BeautifulSoup(text, 'lxml')
                 J = str(soup.find_all('script')[27])
                 J = J.split('var ytInitialData = ')[1].split(';<')[0]
 
@@ -137,7 +154,7 @@ class Music(commands.Cog):
                 while True:
                     content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
                         'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
-                    if ('videoRenderer' in content[a]) and (not 'badges' in content[a]['videoRenderer']):
+                    if ('videoRenderer' in content[a]) and ('badges' not in content[a]['videoRenderer']):
                         song_ = Song()
                         song_.searchSong(content, a)
                         song_list.append(song_)
@@ -153,16 +170,18 @@ class Music(commands.Cog):
         """
         Pauses the song that is playing
 
-        //pause
-        //pp
+        {commandPrefix}pause
+        {commandPrefix}pp
 
         Cannot pause the player if the player is already paused
         """
+        songQueue, song_list = self.setPlayer(ctx)
+
         if ctx.voice_client.is_playing():
             ctx.voice_client.pause()
-            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Paused', 'Paused at: ' + song_list[self.songQueue].title))
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Paused', 'Paused at: ' + song_list[songQueue].title))
         else:
-            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Already Paused', 'Paused at: ' + song_list[self.songQueue].title))
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Player Already Paused', 'Paused at: ' + song_list[songQueue].title))
 
     @commands.command(aliases=['ss'])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -170,14 +189,16 @@ class Music(commands.Cog):
         """
         Skips the song that is playing and plays the next song in queue
 
-        //skip
-        //ss
+        {commandPrefix}skip
+        {commandPrefix}ss
         """
-        if (not ctx.voice_client.is_playing()) and self.songQueue == len(song_list):
+        songQueue, song_list = self.setPlayer(ctx)
+
+        if (not ctx.voice_client.is_playing()) and songQueue == len(song_list):
             await ctx.send(embed=MsgFormatter.get(ctx, 'Not Playing Error', 'The player isn\'t playing anything. Add a song to skip.'))
         else:
             ctx.voice_client.stop()
-            await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[self.songQueue - 1].title))
+            await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[songQueue - 1].title))
             await self.playMusic(ctx)
             
     @commands.command()
@@ -186,7 +207,7 @@ class Music(commands.Cog):
         """
         Stops Player
 
-        //stop
+        {commandPrefix}stop
         """
         ctx.voice_client.stop()
         await ctx.send(embed=MsgFormatter.get(ctx, 'Player Stopped'))
@@ -197,14 +218,16 @@ class Music(commands.Cog):
         """
         Shows songs in queue
 
-        //queue
-        //q
+        {commandPrefix}queue
+        {commandPrefix}q
         """
+        songQueue, song_list = self.setPlayer(ctx)
+
         message = ''
-        for i in range(len(song_list) - self.songQueue):
+        for i in range(len(song_list) - songQueue):
             message += str(i + 1) + '. ' + \
-                song_list[i + self.songQueue].title + ' - ' + \
-                song_list[i + self.songQueue].length + '\n'
+                song_list[i + songQueue].title + ' - ' + \
+                song_list[i + songQueue].length + '\n'
         await ctx.send(embed=MsgFormatter.get(ctx, 'Song Queue', message))
 
     @commands.command(aliases=['s'])
@@ -212,11 +235,13 @@ class Music(commands.Cog):
     async def search(self, ctx: commands.Context, *song):
         """
         Searches music in youtube
-        //search "keyword"
-        //s "keyword"
+        {commandPrefix}search "keyword"
+        {commandPrefix}s "keyword"
 
         Shows 5 candidates that you can choose using emotes
         """
+        songQueue, song_list = self.setPlayer(ctx)
+
         song = " ".join(song)
         reactions = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣']
 
@@ -224,18 +249,25 @@ class Music(commands.Cog):
             await ctx.send(embed=MsgFormatter.get(ctx, 'No Search Word Error', "Please Enter a word."))
 
         elif "youtube.com" in song:
-            r = requests.get(song)
-            soup = BeautifulSoup(r.text, 'lxml')
+            client_session = aiohttp.ClientSession(raise_for_status=True)
+            async with client_session.get("https://www.youtube.com/results?search_query=" + song) as r:
+                if r.status != 200:
+                    raise commands.CommandError("Undefined")
+                text = await r.text()
+            soup = BeautifulSoup(text, 'lxml')
             title = str(soup.find('title'))[7:-8]
-            song_list.append(Song.addSong(title, song))
+            song_list.append(Song().addSong(title, song))
             await ctx.message.delete()
             await ctx.send(embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue"))
             await self.player(ctx)
 
         else:
-            r = requests.get(
-                "https://www.youtube.com/results?search_query=" + song)
-            soup = BeautifulSoup(r.text, 'lxml')
+            client_session = aiohttp.ClientSession(raise_for_status=True)
+            async with client_session.get("https://www.youtube.com/results?search_query=" + song) as r:
+                if r.status != 200:
+                    raise commands.CommandError("Undefined")
+                text = await r.text()
+            soup = BeautifulSoup(text, 'lxml')
             J = str(soup.find_all('script')[27])
             J = J.split('var ytInitialData = ')[1].split(';<')[0]
 
@@ -246,7 +278,7 @@ class Music(commands.Cog):
             while True:
                 content = s['contents']['twoColumnSearchResultsRenderer']['primaryContents'][
                     'sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
-                if ('videoRenderer' in content[a]) and (not 'badges' in content[a]['videoRenderer']):
+                if ('videoRenderer' in content[a]) and ('badges' not in content[a]['videoRenderer']):
                     song_ = Song()
                     song_.searchSong(content, a)
                     search_song_list.append(song_)
@@ -282,11 +314,11 @@ class Music(commands.Cog):
                 await botmsg.add_reaction(reaction)
 
             while timeout > 0:
-                time.sleep(1)
+                await asyncio.sleep(timeout)
                 timeout -=1
                 await botmsg.edit(embed=MsgFormatter.get(ctx, f"{song} searched, {timeout} seconds to choose", msg))
 
-            await check_reaction(botmsg, timeout)
+            await check_reaction(botmsg, timeout=3)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Music(bot))
