@@ -139,7 +139,7 @@ except Exception:
 
 print("Mulgyeol MK Bot")
 print(f"Version {VERSION}" if VERSION != None else "Test Mode")
-print("Copyright (c) 2020 Mulgyeol Labs. All rights reserved.\n")
+print("Copyright (c) 2021 Mulgyeol Labs. All rights reserved.\n")
 
 if instance_already_running():
     print("The discord token provided is already in use by MK Bot.")
