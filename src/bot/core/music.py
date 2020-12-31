@@ -200,7 +200,7 @@ class Music(commands.Cog):
             ctx.voice_client.stop()
             await ctx.send(embed=MsgFormatter.get(ctx, 'Song Skipped', 'Skipped ' + song_list[songQueue - 1].title))
             await self.playMusic(ctx)
-            
+
     @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def stop(self, ctx: commands.Context):
@@ -300,7 +300,7 @@ class Music(commands.Cog):
                         break
                 if not added:
                     await ctx.send(embed=MsgFormatter.get(ctx, 'Timeout Error', 'No reaction was added. Please add a reaction to choose a song'))
-            
+
             timeout = 3
 
             msg = ''

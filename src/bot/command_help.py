@@ -36,6 +36,9 @@ class CommandHelp(commands.DefaultHelpCommand):
         if not commands:
             return
 
+        if len(self.paginator) != 0:
+            self.paginator.add_line()
+
         self.paginator.add_line(heading)
         max_size = max_size or self.get_max_size(commands)
 
@@ -56,7 +59,9 @@ class CommandHelp(commands.DefaultHelpCommand):
             )
         else:
             version_desc = "Test Mode"
+
         for page in self.paginator.pages:
+            page = page.rstrip()
             await self.context.send(
                 f"Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2020"
             )

@@ -101,19 +101,16 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
             :1700
         ]
 
+        tb = tb.split(
+            "The above exception was the direct cause of the following exception:"
+        )[0].strip()
+
         query_str = urllib.parse.urlencode(
             {"template": "bug_report.md", "title": str(error)}
         )
+
         issue_link = f"https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}"
-        desc = f"Please create an issue at [GitHub]({issue_link}) with logs below to help fix this problem."
-        await ctx.send(
-            embed=MsgFormatter.get(
-                ctx,
-                "An unknown error has occurred :face_with_monocle:",
-                f"{desc}\n\n```{tb}```",
-                color="#FF0000",
-            )
-        )
+        await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb))
         raise error
 
     await ctx.send(
