@@ -1,6 +1,5 @@
 import asyncio
 import json
-import time
 
 import aiohttp
 import discord
@@ -54,7 +53,7 @@ class Music(commands.Cog):
                 )
                 raise commands.CommandError("Author not connected to a voice channel.")
 
-    async def playMusic(self, ctx):
+    async def playMusic(self, ctx, skip=False):
         guild_id = ctx.message.guild.id
         try:
             song_list_dict[guild_id][0]
@@ -69,24 +68,27 @@ class Music(commands.Cog):
                 )
                 fut.result()
 
-        try:
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "Now Playing",
-                    song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title
-                    + "  "
-                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].length,
+        if not skip:
+            try:
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Now Playing",
+                        song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title
+                        + "  "
+                        + song_list_dict[guild_id][1][
+                            song_list_dict[guild_id][0]
+                        ].length,
+                    )
                 )
-            )
-        except IndexError:
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "End of Song Queue",
-                    "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
+            except IndexError:
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "End of Song Queue",
+                        "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
+                    )
                 )
-            )
 
         ydl_opts = {
             "format": "bestaudio/best",
@@ -107,7 +109,10 @@ class Music(commands.Cog):
                     download=False,
                 ),
             )
-            musicFile = info["formats"][0]["url"]
+            try:
+                musicFile = info["formats"][0]["url"]
+            except IndexError:
+                pass
         FFMPEG_OPTIONS = {
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
             "options": "-vn",
@@ -122,7 +127,7 @@ class Music(commands.Cog):
 
     @commands.command(aliases=["p"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
-    async def play(self, ctx: commands.Context, song=""):
+    async def play(self, ctx: commands.Context, *song):
         """
         Plays the keyword searched or plays the song in queue
         {commandPrefix}play "keyword"
@@ -306,7 +311,7 @@ class Music(commands.Cog):
                     + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title,
                 )
             )
-            await self.playMusic(ctx)
+            await self.playMusic(ctx, skip=True)
 
     @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
