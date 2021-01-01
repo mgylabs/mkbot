@@ -1,8 +1,9 @@
 import logging
 import os
 
+import aiofiles
+import aiohttp
 import discord
-import requests
 
 from core.utils.config import VERSION
 from core.utils.MsgFormat import MsgFormatter
@@ -47,7 +48,7 @@ class ReleaseNotify:
     @classmethod
     async def run(cls, bot):
         if (not VERSION.is_canary()) and (not cls.exist_flag()):
-            cls.write_flag()
+            await cls.write_flag()
             await cls.send_release_note(bot)
 
     @classmethod
@@ -55,9 +56,9 @@ class ReleaseNotify:
         return os.path.isfile("msu.flag")
 
     @classmethod
-    def write_flag(cls):
-        with open("msu.flag", "wt") as f:
-            f.write("flag")
+    async def write_flag(cls):
+        async with aiofiles.open("msu.flag", "wt") as f:
+            await f.write("flag")
 
     @classmethod
     async def send_release_note(cls, channel: discord.TextChannel):
@@ -65,13 +66,10 @@ class ReleaseNotify:
         note_url = (
             f"https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}"
         )
-        res = requests.get(note_api_url)
-        try:
-            res.raise_for_status()
-        except Exception as e:
-            log.debug(e)
-            log.debug(res.text)
-        note = ReleaseNote(res.json()["body"])
+        async with aiohttp.ClientSession(raise_for_status=True) as session:
+            async with session.get(note_api_url) as res:
+                js = await res.json()
+                note = ReleaseNote(js["body"])
         if note.description == "":
             note.description = f"Welcome to the {VERSION.tag} release of MK Bot."
         embed = MsgFormatter.push(
