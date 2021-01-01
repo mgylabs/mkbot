@@ -43,23 +43,6 @@ class Music(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    def setPlayer(self, ctx):
-        guild_id = ctx.message.guild.id
-        try:
-            songQueue = song_list_dict[guild_id][0]
-            song_list = song_list_dict[guild_id][1]
-        except KeyError:
-            song_list_dict[guild_id] = [0, list()]
-            songQueue = song_list_dict[guild_id][0]
-            song_list = song_list_dict[guild_id][1]
-
-        return songQueue, song_list
-
-    def updatePlayer(self, ctx, song_list, songQueue):
-        guild_id = ctx.message.guild.id
-        song_list_dict[guild_id][0] = songQueue
-        song_list_dict[guild_id][1] = song_list
-
     async def player(self, ctx: commands.Context):
         if ctx.voice_client == None:
             if ctx.author.voice:
@@ -76,28 +59,41 @@ class Music(commands.Cog):
                 raise commands.CommandError("Author not connected to a voice channel.")
 
     async def playMusic(self, ctx):
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
         def next():
-            songQueue, song_list = self.setPlayer(ctx)
-            if len(song_list) > songQueue:
-                songQueue += 1
+            if len(song_list_dict[guild_id][1]) > song_list_dict[guild_id][0]:
+                song_list_dict[guild_id][0] += 1
                 fut = asyncio.run_coroutine_threadsafe(
                     self.playMusic(ctx), self.bot.loop
                 )
                 try:
                     fut.result()
-                    self.updatePlayer(song_list, songQueue)
                 except:
                     pass
 
-        await ctx.send(
-            embed=MsgFormatter.get(
-                ctx,
-                "Now Playing",
-                song_list[songQueue].title + "  " + song_list[songQueue].length,
+        try:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Now Playing",
+                    song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title
+                    + "  "
+                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].length,
+                )
             )
-        )
+        except IndexError:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Skip failed",
+                    "You cannot skip because the song Queue is empty.",
+                )
+            )
 
         ydl_opts = {
             "format": "bestaudio/best",
@@ -112,7 +108,11 @@ class Music(commands.Cog):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             loop = asyncio.get_event_loop()
             info = await loop.run_in_executor(
-                None, lambda: ydl.extract_info(song_list[songQueue].url, download=False)
+                None,
+                lambda: ydl.extract_info(
+                    song_list_dict[guild_id][1][song_list_dict[guild_id][0]].url,
+                    download=False,
+                ),
             )
             musicFile = info["formats"][0]["url"]
         FFMPEG_OPTIONS = {
@@ -132,16 +132,18 @@ class Music(commands.Cog):
     async def play(self, ctx: commands.Context, song=""):
         """
         Plays the keyword searched or plays the song in queue
-
         {commandPrefix}play "keyword"
         {commandPrefix}play
         {commandPrefix}p "keyword"
         {commandPrefix}p
-
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
         """
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
         if song == "":
             if ctx.voice_client.is_playing:
@@ -149,7 +151,10 @@ class Music(commands.Cog):
                     embed=MsgFormatter.get(
                         ctx,
                         "Already Playing",
-                        "The player is already playing " + song_list[songQueue].title,
+                        "The player is already playing "
+                        + song_list_dict[guild_id][1][
+                            song_list_dict[guild_id][0]
+                        ].title,
                     )
                 )
             elif ctx.voice_client.is_paused():
@@ -158,10 +163,13 @@ class Music(commands.Cog):
                     embed=MsgFormatter.get(
                         ctx,
                         "Player Resumed",
-                        "Now playing: " + song_list[songQueue].title,
+                        "Now playing: "
+                        + song_list_dict[guild_id][1][
+                            song_list_dict[guild_id][0]
+                        ].title,
                     )
                 )
-            elif len(song_list) == songQueue:
+            elif len(song_list_dict[guild_id][1]) == song_list_dict[guild_id][0]:
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
@@ -172,7 +180,7 @@ class Music(commands.Cog):
             else:
                 await self.playMusic(ctx)
         else:
-            if isinstance(song, list):
+            if isinstance(song, tuple):
                 song = " ".join(song)
 
             if "youtube.com" in song:
@@ -185,12 +193,13 @@ class Music(commands.Cog):
                     text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 title = str(soup.find("title"))[7:-8]
-                song_list.append(Song().addSong(title, song))
+                song_list_dict[guild_id][1].append(Song().addSong(title, song))
                 await ctx.message.delete()
                 await ctx.send(
-                    embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue")
+                    embed=MsgFormatter.get(
+                        ctx, song_list_dict[guild_id][1][-1].title, " in Queue"
+                    )
                 )
-                self.updatePlayer(song_list, songQueue)
                 await self.player(ctx)
 
             else:
@@ -219,7 +228,7 @@ class Music(commands.Cog):
                     ):
                         song_ = Song()
                         song_.searchSong(content, a)
-                        song_list.append(song_)
+                        song_list_dict[guild_id][1].append(song_)
                         break
                     a += 1
                 await ctx.message.delete()
@@ -227,10 +236,11 @@ class Music(commands.Cog):
                     embed=MsgFormatter.get(
                         ctx,
                         song + " searched",
-                        song_list[-1].title + "\n Length: " + song_list[-1].length,
+                        song_list_dict[guild_id][1][-1].title
+                        + "\n Length: "
+                        + song_list_dict[guild_id][1][-1].length,
                     )
                 )
-                self.updatePlayer(song_list, songQueue)
                 await self.player(ctx)
 
     @commands.command(aliases=["pp"])
@@ -238,19 +248,24 @@ class Music(commands.Cog):
     async def pause(self, ctx: commands.Context):
         """
         Pauses the song that is playing
-
         {commandPrefix}pause
         {commandPrefix}pp
-
         Cannot pause the player if the player is already paused
         """
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
         if ctx.voice_client.is_playing():
             ctx.voice_client.pause()
             await ctx.send(
                 embed=MsgFormatter.get(
-                    ctx, "Player Paused", "Paused at: " + song_list[songQueue].title
+                    ctx,
+                    "Player Paused",
+                    "Paused at: "
+                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title,
                 )
             )
         else:
@@ -258,7 +273,8 @@ class Music(commands.Cog):
                 embed=MsgFormatter.get(
                     ctx,
                     "Player Already Paused",
-                    "Paused at: " + song_list[songQueue].title,
+                    "Paused at: "
+                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title,
                 )
             )
 
@@ -267,13 +283,18 @@ class Music(commands.Cog):
     async def skip(self, ctx: commands.Context):
         """
         Skips the song that is playing and plays the next song in queue
-
         {commandPrefix}skip
         {commandPrefix}ss
         """
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
-        if (not ctx.voice_client.is_playing()) and songQueue == len(song_list):
+        if (not ctx.voice_client.is_playing()) and song_list_dict[guild_id][0] == len(
+            song_list_dict[guild_id][1]
+        ):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
@@ -285,7 +306,10 @@ class Music(commands.Cog):
             ctx.voice_client.stop()
             await ctx.send(
                 embed=MsgFormatter.get(
-                    ctx, "Song Skipped", "Skipped " + song_list[songQueue - 1].title
+                    ctx,
+                    "Song Skipped",
+                    "Skipped "
+                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title,
                 )
             )
             await self.playMusic(ctx)
@@ -295,7 +319,6 @@ class Music(commands.Cog):
     async def stop(self, ctx: commands.Context):
         """
         Stops Player
-
         {commandPrefix}stop
         """
         ctx.voice_client.stop()
@@ -306,20 +329,23 @@ class Music(commands.Cog):
     async def queue(self, ctx: commands.Context):
         """
         Shows songs in queue
-
         {commandPrefix}queue
         {commandPrefix}q
         """
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
         message = ""
-        for i in range(len(song_list) - songQueue):
+        for i in range(len(song_list_dict[guild_id][1]) - song_list_dict[guild_id][0]):
             message += (
                 str(i + 1)
                 + ". "
-                + song_list[i + songQueue].title
+                + song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]].title
                 + " - "
-                + song_list[i + songQueue].length
+                + song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]].length
                 + "\n"
             )
         await ctx.send(embed=MsgFormatter.get(ctx, "Song Queue", message))
@@ -331,10 +357,13 @@ class Music(commands.Cog):
         Searches music in youtube
         {commandPrefix}search "keyword"
         {commandPrefix}s "keyword"
-
         Shows 5 candidates that you can choose using emotes
         """
-        songQueue, song_list = self.setPlayer(ctx)
+        guild_id = ctx.message.guild.id
+        try:
+            song_list_dict[guild_id][0]
+        except KeyError:
+            song_list_dict[guild_id] = [0, list()]
 
         song = " ".join(song)
         reactions = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣"]
@@ -359,9 +388,10 @@ class Music(commands.Cog):
             song_list.append(Song().addSong(title, song))
             await ctx.message.delete()
             await ctx.send(
-                embed=MsgFormatter.get(ctx, song_list[-1].title, " in Queue")
+                embed=MsgFormatter.get(
+                    ctx, song_list_dict[guild_id][1][-1].title, " in Queue"
+                )
             )
-            self.updatePlayer(song_list, songQueue)
             await self.player(ctx)
 
         else:
@@ -403,21 +433,20 @@ class Music(commands.Cog):
                 cached_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id)
                 for reaction in cached_msg.reactions:
                     if reaction.count >= 2:
-                        song_list.append(
+                        song_list_dict[guild_id][1].append(
                             search_song_list[reactions.index(str(reaction.emoji))]
                         )
                         added = True
                         await ctx.send(
                             embed=MsgFormatter.get(
                                 ctx,
-                                "Chose " + song_list[-1].title,
-                                song_list[-1].title
+                                "Chose " + song_list_dict[guild_id][1][-1].title,
+                                song_list_dict[guild_id][1][-1].title
                                 + " - "
-                                + song_list[-1].length
+                                + song_list_dict[guild_id][1][-1].length
                                 + "\n added in queue",
                             )
                         )
-                        self.updatePlayer(song_list, songQueue)
                         await self.player(ctx)
                         break
                 if not added:
