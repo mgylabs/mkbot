@@ -184,7 +184,7 @@ class Music(commands.Cog):
                 song = " ".join(song)
 
             if "youtube.com" in song:
-                async with aiohttp.ClientSession(raise_for_status=True) as session:
+                client_session = aiohttp.ClientSession(raise_for_status=True)
                 async with client_session.get(
                     "https://www.youtube.com/results?search_query=" + song
                 ) as r:
@@ -203,7 +203,7 @@ class Music(commands.Cog):
                 await self.player(ctx)
 
             else:
-                async with aiohttp.ClientSession(raise_for_status=True) as session:
+                client_session = aiohttp.ClientSession(raise_for_status=True)
                 async with client_session.get(
                     "https://www.youtube.com/results?search_query=" + song
                 ) as r:
@@ -385,7 +385,7 @@ class Music(commands.Cog):
                 text = await r.text()
             soup = BeautifulSoup(text, "lxml")
             title = str(soup.find("title"))[7:-8]
-            song_list.append(Song().addSong(title, song))
+            song_list_dict[guild_id][1].append(Song().addSong(title, song))
             await ctx.message.delete()
             await ctx.send(
                 embed=MsgFormatter.get(
