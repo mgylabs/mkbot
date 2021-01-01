@@ -203,7 +203,7 @@ class Music(commands.Cog):
                 await self.player(ctx)
 
             else:
-                client_session = aiohttp.ClientSession(raise_for_status=True)
+                async with aiohttp.ClientSession(raise_for_status=True) as session:
                 async with client_session.get(
                     "https://www.youtube.com/results?search_query=" + song
                 ) as r:
