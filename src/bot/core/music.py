@@ -8,7 +8,6 @@ import youtube_dl
 from bs4 import BeautifulSoup
 from discord.ext import commands
 
-from .utils import listener
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
@@ -30,9 +29,6 @@ class Song:
             self.title += i["text"]
         self.channel = content[number]["videoRenderer"]["longBylineText"]["runs"][0][
             "text"
-        ]
-        self.published_time = content[number]["videoRenderer"]["publishedTimeText"][
-            "simpleText"
         ]
         self.viewCount = content[number]["videoRenderer"]["viewCountText"]["simpleText"]
         self.length = content[number]["videoRenderer"]["lengthText"]["simpleText"]
@@ -71,10 +67,7 @@ class Music(commands.Cog):
                 fut = asyncio.run_coroutine_threadsafe(
                     self.playMusic(ctx), self.bot.loop
                 )
-                try:
-                    fut.result()
-                except:
-                    pass
+                fut.result()
 
         try:
             await ctx.send(
@@ -90,8 +83,8 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
-                    "Skip failed",
-                    "You cannot skip because the song Queue is empty.",
+                    "End of Song Queue",
+                    "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
                 )
             )
 
@@ -147,6 +140,7 @@ class Music(commands.Cog):
 
         if song == "":
             if ctx.voice_client.is_playing:
+                await self.playMusic(ctx)
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
@@ -184,13 +178,13 @@ class Music(commands.Cog):
                 song = " ".join(song)
 
             if "youtube.com" in song:
-                client_session = aiohttp.ClientSession(raise_for_status=True)
-                async with client_session.get(
-                    "https://www.youtube.com/results?search_query=" + song
-                ) as r:
-                    if r.status != 200:
-                        raise commands.CommandError("Undefined")
-                    text = await r.text()
+                async with aiohttp.ClientSession(raise_for_status=True) as session:
+                    async with session.get(
+                        "https://www.youtube.com/results?search_query=" + song
+                    ) as r:
+                        if r.status != 200:
+                            raise commands.CommandError("Undefined")
+                        text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 title = str(soup.find("title"))[7:-8]
                 song_list_dict[guild_id][1].append(Song().addSong(title, song))
@@ -203,20 +197,20 @@ class Music(commands.Cog):
                 await self.player(ctx)
 
             else:
-                client_session = aiohttp.ClientSession(raise_for_status=True)
-                async with client_session.get(
-                    "https://www.youtube.com/results?search_query=" + song
-                ) as r:
-                    if r.status != 200:
-                        raise commands.CommandError("Undefined")
-                    text = await r.text()
+                async with aiohttp.ClientSession(raise_for_status=True) as session:
+                    async with session.get(
+                        "https://www.youtube.com/results?search_query=" + song
+                    ) as r:
+                        if r.status != 200:
+                            raise commands.CommandError("Undefined")
+                        text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 J = str(soup.find_all("script")[27])
                 J = J.split("var ytInitialData = ")[1].split(";<")[0]
 
                 s = json.loads(J)
 
-                a, b = 0, 0
+                a = 0
                 while True:
                     content = s["contents"]["twoColumnSearchResultsRenderer"][
                         "primaryContents"
@@ -428,7 +422,7 @@ class Music(commands.Cog):
                 a += 1
 
             async def check_reaction(botmsg, timeout):
-                time.sleep(timeout)
+                await asyncio.sleep(timeout)
                 added = False
                 cached_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id)
                 for reaction in cached_msg.reactions:
