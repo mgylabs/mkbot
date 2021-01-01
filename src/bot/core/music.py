@@ -53,7 +53,7 @@ class Music(commands.Cog):
                 )
                 raise commands.CommandError("Author not connected to a voice channel.")
 
-    async def playMusic(self, ctx, skip=False):
+    async def playMusic(self, ctx):
         guild_id = ctx.message.guild.id
         try:
             song_list_dict[guild_id][0]
@@ -68,27 +68,24 @@ class Music(commands.Cog):
                 )
                 fut.result()
 
-        if not skip:
-            try:
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        "Now Playing",
-                        song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title
-                        + "  "
-                        + song_list_dict[guild_id][1][
-                            song_list_dict[guild_id][0]
-                        ].length,
-                    )
+        try:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Now Playing",
+                    song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title
+                    + "  "
+                    + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].length,
                 )
-            except IndexError:
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        "End of Song Queue",
-                        "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
-                    )
+            )
+        except IndexError:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "End of Song Queue",
+                    "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
                 )
+            )
 
         ydl_opts = {
             "format": "bestaudio/best",
@@ -311,7 +308,6 @@ class Music(commands.Cog):
                     + song_list_dict[guild_id][1][song_list_dict[guild_id][0]].title,
                 )
             )
-            await self.playMusic(ctx, skip=True)
 
     @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
