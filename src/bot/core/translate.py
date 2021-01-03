@@ -203,13 +203,14 @@ class Translate(commands.Cog):
         return srcLang, result
 
     async def _request_api(self, headers, params):
-        async with aiohttp.ClientSession(headers=headers) as session:
+        async with aiohttp.ClientSession(
+            headers=headers, raise_for_status=True
+        ) as session:
             async with session.get(
                 "https://kapi.kakao.com/v1/translation/translate", params=params
             ) as r:
-                if r.status == 200:
-                    js = await r.json()
-                    return params["target_lang"], js["translated_text"][0][0]
+                js = await r.json()
+                return params["target_lang"], js["translated_text"][0][0]
 
 
 def setup(bot: commands.Bot):

@@ -122,12 +122,10 @@ async def tts(ctx: commands.Context, *args):
         "utf-8"
     )
 
-    async with aiohttp.ClientSession(headers=headers) as session:
+    async with aiohttp.ClientSession(headers=headers, raise_for_status=True) as session:
         async with session.post(
             "https://kakaoi-newtone-openapi.kakao.com/v1/synthesize", data=data
         ) as r:
-            if r.status != 200:
-                raise commands.CommandError("Undefined")
             mp3 = io.BytesIO(await r.read())
 
     ctx.voice_client.play(FFmpegPCMAudio(mp3.read(), pipe=True))

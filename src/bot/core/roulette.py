@@ -1,5 +1,5 @@
+import asyncio
 import random
-import time
 
 import discord
 from discord.ext import commands
@@ -31,7 +31,7 @@ async def roulette(ctx: commands.Context, title, *items):
                 ctx, "Roulette is running. Please wait.", f"{i} sec left"
             )
         )
-        time.sleep(1)
+        asyncio.sleep(1)
 
     await msg.edit(
         embed=MsgFormatter.get(

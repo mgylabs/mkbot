@@ -187,8 +187,6 @@ class Music(commands.Cog):
                     async with session.get(
                         "https://www.youtube.com/results?search_query=" + song
                     ) as r:
-                        if r.status != 200:
-                            raise commands.CommandError("Undefined")
                         text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 title = str(soup.find("title"))[7:-8]
@@ -206,8 +204,6 @@ class Music(commands.Cog):
                     async with session.get(
                         "https://www.youtube.com/results?search_query=" + song
                     ) as r:
-                        if r.status != 200:
-                            raise commands.CommandError("Undefined")
                         text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 J = str(soup.find_all("script")[27])
@@ -375,13 +371,11 @@ class Music(commands.Cog):
             )
 
         elif "youtube.com" in song:
-            client_session = aiohttp.ClientSession(raise_for_status=True)
-            async with client_session.get(
-                "https://www.youtube.com/results?search_query=" + song
-            ) as r:
-                if r.status != 200:
-                    raise commands.CommandError("Undefined")
-                text = await r.text()
+            async with aiohttp.ClientSession(raise_for_status=True) as session:
+                async with session.get(
+                    "https://www.youtube.com/results?search_query=" + song
+                ) as r:
+                    text = await r.text()
             soup = BeautifulSoup(text, "lxml")
             title = str(soup.find("title"))[7:-8]
             song_list_dict[guild_id][1].append(Song().addSong(title, song))
@@ -394,13 +388,11 @@ class Music(commands.Cog):
             await self.player(ctx)
 
         else:
-            client_session = aiohttp.ClientSession(raise_for_status=True)
-            async with client_session.get(
-                "https://www.youtube.com/results?search_query=" + song
-            ) as r:
-                if r.status != 200:
-                    raise commands.CommandError("Undefined")
-                text = await r.text()
+            async with aiohttp.ClientSession(raise_for_status=True) as session:
+                async with session.get(
+                    "https://www.youtube.com/results?search_query=" + song
+                ) as r:
+                    text = await r.text()
             soup = BeautifulSoup(text, "lxml")
             J = str(soup.find_all("script")[27])
             J = J.split("var ytInitialData = ")[1].split(";<")[0]
