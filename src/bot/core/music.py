@@ -17,6 +17,7 @@ class Song:
     def addSong(self, title, url):
         self.url = url
         self.title = title
+        self.length = ""
 
     def searchSong(self, content, number):
         self.url = (
@@ -102,14 +103,14 @@ class Music(commands.Cog):
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             loop = asyncio.get_event_loop()
-            info = await loop.run_in_executor(
-                None,
-                lambda: ydl.extract_info(
-                    song_list_dict[guild_id][1][song_list_dict[guild_id][0]].url,
-                    download=False,
-                ),
-            )
             try:
+                info = await loop.run_in_executor(
+                    None,
+                    lambda: ydl.extract_info(
+                        song_list_dict[guild_id][1][song_list_dict[guild_id][0]].url,
+                        download=False,
+                    ),
+                )
                 musicFile = info["formats"][0]["url"]
             except IndexError:
                 pass
@@ -122,7 +123,7 @@ class Music(commands.Cog):
                 discord.FFmpegPCMAudio(musicFile, **FFMPEG_OPTIONS),
                 after=lambda e: next(),
             )
-        except discord.errors.ClientException:
+        except (discord.errors.ClientException, UnboundLocalError) as e:
             pass
 
     @commands.command(aliases=["p"])
@@ -143,7 +144,7 @@ class Music(commands.Cog):
         except KeyError:
             song_list_dict[guild_id] = [0, list()]
 
-        if song == "":
+        if song == tuple():
             if ctx.voice_client.is_playing:
                 await self.playMusic(ctx)
                 await ctx.send(
@@ -179,18 +180,22 @@ class Music(commands.Cog):
             else:
                 await self.playMusic(ctx)
         else:
-            if isinstance(song, tuple):
+            if len(song) > 1:
                 song = " ".join(song)
+            else:
+                song = song[0]
 
             if "youtube.com" in song:
+                if song[:11] != "https://www.":
+                    song = "https://www." + song[song.index("y") :]
                 async with aiohttp.ClientSession(raise_for_status=True) as session:
-                    async with session.get(
-                        "https://www.youtube.com/results?search_query=" + song
-                    ) as r:
+                    async with session.get(song) as r:
                         text = await r.text()
                 soup = BeautifulSoup(text, "lxml")
                 title = str(soup.find("title"))[7:-8]
-                song_list_dict[guild_id][1].append(Song().addSong(title, song))
+                song_ = Song()
+                song_.addSong(title, song)
+                song_list_dict[guild_id][1].append(song_)
                 await ctx.message.delete()
                 await ctx.send(
                     embed=MsgFormatter.get(
@@ -230,7 +235,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        song + " searched",
+                        song + " in Queue",
                         song_list_dict[guild_id][1][-1].title
                         + "\n Length: "
                         + song_list_dict[guild_id][1][-1].length,
