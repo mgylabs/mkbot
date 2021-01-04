@@ -123,7 +123,7 @@ class Music(commands.Cog):
                 discord.FFmpegPCMAudio(musicFile, **FFMPEG_OPTIONS),
                 after=lambda e: next(),
             )
-        except (discord.errors.ClientException, UnboundLocalError) as e:
+        except (discord.errors.ClientException, UnboundLocalError):
             pass
 
     @commands.command(aliases=["p"])
