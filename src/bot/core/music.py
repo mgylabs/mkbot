@@ -112,7 +112,7 @@ class Music(commands.Cog):
                     ),
                 )
                 musicFile = info["formats"][0]["url"]
-            except IndexError:
+            except IndexError:  # end of queue, after=next error
                 pass
         FFMPEG_OPTIONS = {
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
@@ -144,7 +144,7 @@ class Music(commands.Cog):
         except KeyError:
             song_list_dict[guild_id] = [0, list()]
 
-        if song == tuple():
+        if len(song) == 0:
             if ctx.voice_client.is_playing:
                 await self.playMusic(ctx)
                 await ctx.send(
