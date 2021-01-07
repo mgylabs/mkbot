@@ -6,7 +6,7 @@ discord.py==1.5.1
 flake8==3.8.4
 langdetect==1.0.8
 lxml==4.6.2
-packaging==20.3
+packaging==20.8
 pre-commit==2.9.3
 pyinstaller==4.1
 pylint==2.4.4
