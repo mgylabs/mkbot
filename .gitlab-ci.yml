@@ -11,6 +11,6 @@ pages:
       - public
   only:
     refs:
-      - master
+      - main
     changes:
       - public/**/*

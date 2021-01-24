@@ -5,5 +5,5 @@
 	"dataFolderName": ".mkbot-oss",
 	"win32MutexName": "mkbotoss",
 	"licenseName": "MIT",
-	"licenseUrl": "https://github.com/mgylabs/mulgyeol-mkbot/blob/master/LICENSE.txt"
+	"licenseUrl": "https://github.com/mgylabs/mulgyeol-mkbot/blob/main/LICENSE.txt"
 }

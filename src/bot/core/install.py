@@ -50,7 +50,7 @@ async def install(ctx: commands.Context, ext_id: str, option=None):
     last_commit = requests.get(
         f"{base_url}/projects/{ext_data['project_id']}/repository/commits/HEAD",
         headers=req_headers,
-        params={"ref_name": "master"},
+        params={"ref_name": "main"},
     ).json()["id"]
 
     if (cur_commit == None) or ((option == "-U") and (cur_commit != last_commit)):
@@ -60,7 +60,7 @@ async def install(ctx: commands.Context, ext_id: str, option=None):
         os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
 
         res = requests.get(
-            f"{base_url}/projects/{ext_data['project_id']}/jobs/artifacts/master/download?job=release",
+            f"{base_url}/projects/{ext_data['project_id']}/jobs/artifacts/main/download?job=release",
             headers=req_headers,
         )
 
@@ -73,7 +73,7 @@ async def install(ctx: commands.Context, ext_id: str, option=None):
         if os.path.isdir(f"{api.extensions_path}\\{name}"):
             shutil.rmtree(f"{api.extensions_path}\\{name}")
         shutil.move(
-            f"{api.extensions_path}\\{name.replace('_', '-')}-master-{last_commit}",
+            f"{api.extensions_path}\\{name.replace('_', '-')}-main-{last_commit}",
             f"{api.extensions_path}\\{name}",
         )
 

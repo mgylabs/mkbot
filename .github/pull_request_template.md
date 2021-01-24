@@ -9,7 +9,7 @@
 ## PR Checklist
 
 - [ ] Closes #xxx
-- [ ] [Changelog entry](https://github.com/mgylabs/mulgyeol-mkbot/tree/master/changelogs)
+- [ ] [Changelog entry](https://github.com/mgylabs/mulgyeol-mkbot/tree/main/changelogs)
 
 ### Testing
 

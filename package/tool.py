@@ -1,6 +1,7 @@
-import requests
 import os
 import sys
+
+import requests
 
 base_url = "https://gitlab.com/api/v4"
 req_headers = {"PRIVATE-TOKEN": os.getenv("TOOL_API_KEY")}
@@ -21,7 +22,7 @@ def requests_API(method, link, datadict=None):
 def pre_release():
     mr_data = requests_API(
         "GET",
-        "/projects/{}/merge_requests?state=merged&not[labels][]=workflow::verification&not[labels][]=workflow::production&target_branch=master".format(
+        "/projects/{}/merge_requests?state=merged&not[labels][]=workflow::verification&not[labels][]=workflow::production&target_branch=main".format(
             project_id
         ),
     ).json()
@@ -38,7 +39,7 @@ def stable_release():
 
     mr_data = requests_API(
         "GET",
-        "/projects/{}/merge_requests?state=merged&labels=workflow::verification&target_branch=master&sort=asc".format(
+        "/projects/{}/merge_requests?state=merged&labels=workflow::verification&target_branch=main&sort=asc".format(
             project_id
         ),
     ).json()

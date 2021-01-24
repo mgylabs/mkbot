@@ -3,11 +3,11 @@ name: Build and Test
 on:
   push:
     branches:
-      - master
+      - main
       - release-*
   pull_request:
     branches:
-      - master
+      - main
       - release-*
 # on: [push, pull_request]
 
@@ -20,7 +20,7 @@ jobs:
         shell: cmd
     steps:
       - name: Cancel Previous Runs
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ github.token }}

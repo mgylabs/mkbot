@@ -248,7 +248,7 @@ def check_last_commit():
 def create_new_branch():
     TAG_NAME = os.getenv("TAG_NAME")
     SHA = requests_API(
-        "GET", "/repos/mgylabs/mulgyeol-mkbot/git/ref/heads/master"
+        "GET", "/repos/mgylabs/mulgyeol-mkbot/git/ref/heads/main"
     ).json()["object"]["sha"]
     print(SHA)
     res = requests_API(
