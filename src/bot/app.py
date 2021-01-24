@@ -14,6 +14,7 @@ from discord.ext import commands
 from command_help import CommandHelp
 from core.utils import api
 from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+from core.utils.exceptions import NonFatalError, UsageError
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
 from core_ext import core_extensions
@@ -96,6 +97,17 @@ async def on_message(message: discord.Message):
 async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
         return
+
+    if isinstance(error, NonFatalError):
+        log.debug(str(error))
+        return
+
+    if isinstance(error, UsageError):
+        await ctx.send(
+            embed=MsgFormatter.get(ctx, f"Usage Error: {ctx.command.name}", str(error))
+        )
+        return
+
     if isinstance(error, commands.CommandInvokeError):
         tb = "".join(traceback.format_exception(None, error, error.__traceback__))[
             :1700

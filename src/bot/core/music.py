@@ -7,8 +7,10 @@ import youtube_dl
 from bs4 import BeautifulSoup
 from discord.ext import commands
 
+from .utils.exceptions import NonFatalError, UsageError
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
+from .utils.voice import validate_voice_client
 
 song_list_dict = dict()
 
@@ -40,19 +42,12 @@ class Music(commands.Cog):
         self._last_member = None
 
     async def player(self, ctx: commands.Context):
-        if ctx.voice_client == None:
-            if ctx.author.voice:
-                await ctx.author.voice.channel.connect()
-                await self.playMusic(ctx)
-            else:
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        "Usage Error",
-                        "You are not in any voice channel. Please join a voice channel to use Music bot.",
-                    )
-                )
-                raise commands.CommandError("Author not connected to a voice channel.")
+        if await validate_voice_client(ctx):
+            await self.playMusic(ctx)
+        else:
+            raise UsageError(
+                "You are not in any voice channel. Please join a voice channel to use Music bot."
+            )
 
     async def playMusic(self, ctx, skip=False):
         guild_id = ctx.message.guild.id
@@ -113,7 +108,8 @@ class Music(commands.Cog):
                 )
                 musicFile = info["formats"][0]["url"]
             except IndexError:  # end of queue, after=next error
-                pass
+                raise NonFatalError("End of queue")
+
         FFMPEG_OPTIONS = {
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
             "options": "-vn",
@@ -143,6 +139,11 @@ class Music(commands.Cog):
             song_list_dict[guild_id][0]
         except KeyError:
             song_list_dict[guild_id] = [0, list()]
+
+        if not await validate_voice_client(ctx):
+            raise UsageError(
+                "You are not in any voice channel. Please join a voice channel to use Music bot."
+            )
 
         if len(song) == 0:
             if ctx.voice_client.is_playing:

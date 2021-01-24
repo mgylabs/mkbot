@@ -8,6 +8,9 @@ import discord
 from discord.ext import commands
 from discord.opus import Encoder
 
+from core.utils.exceptions import UsageError
+from core.utils.voice import validate_voice_client
+
 from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -79,19 +82,10 @@ async def tts(ctx: commands.Context, *args):
     {commandPrefix}tts -w "Content": -m speaks in male voice and -w speaks in female voice. Default voice is male.
     """
 
-    if ctx.voice_client == None:
-        if ctx.author.voice:
-            await ctx.author.voice.channel.connect()
-        else:
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "Usage Error",
-                    "You are not in any voice channel. Please join a voice channel to use TTS.",
-                )
-            )
-            log.warning("Author not connected to a voice channel.")
-            return
+    if not await validate_voice_client(ctx):
+        raise UsageError(
+            "You are not in any voice channel. Please join a voice channel to use TTS."
+        )
 
     headers = {
         "Content-Type": "application/xml",
@@ -106,14 +100,9 @@ async def tts(ctx: commands.Context, *args):
         elif voice.upper() == "-W":
             vs = "WOMAN_DIALOG_BRIGHT"
         else:
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "Usage Error",
-                    f"Invalid parameter. For more information, type `{CONFIG.commandPrefix}help tts`.",
-                )
+            raise UsageError(
+                f"Invalid parameter. For more information, type `{CONFIG.commandPrefix}help tts`."
             )
-            return
     else:
         string = " ".join(args)
         vs = "MAN_DIALOG_BRIGHT"
