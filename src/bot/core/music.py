@@ -123,8 +123,8 @@ class Music(commands.Cog):
                 discord.FFmpegPCMAudio(musicFile, **FFMPEG_OPTIONS),
                 after=lambda e: next(),
             )
-        except (discord.errors.ClientException, UnboundLocalError):
-            pass
+        except (discord.errors.ClientException, UnboundLocalError) as e:
+            raise commands.CommandError(str(e))
 
     @commands.command(aliases=["p"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
