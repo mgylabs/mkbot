@@ -156,7 +156,10 @@ if instance_already_running():
     sys.exit(0)
 
 if "--dry-run" in sys.argv:
-    print("Test succeeded")
+    if errorlevel == 0:
+        print("Test Passed")
+    else:
+        print("Test Failed")
     sys.exit(errorlevel)
 else:
     try:
