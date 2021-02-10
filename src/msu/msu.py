@@ -106,6 +106,7 @@ class Updater:
             if (
                 self.enabled_canary
                 and self.last_canary
+                and self.last_canary.version > self.last_stable.version
                 and self.last_canary.version >= self.current_version
                 and self.last_canary.commit != current_data["commit"]
             ):

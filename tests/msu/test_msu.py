@@ -142,6 +142,7 @@ class MSUTest(TestCase):
         self.assertEqual(se.exception.code, 1)
 
         # --- When there are no updates available
+        # --- Case 1
         current_version = self.get_version_json(
             "1.5.4", "04a87e226add7197f3538b3349e562cc4135451d"
         )
@@ -150,8 +151,25 @@ class MSUTest(TestCase):
 
         self.assertEqual(se.exception.code, 1)
 
+        # --- Case 2
+        mock_get.side_effect = self.generate_mock_requests_get(
+            "1.4.0", "1.4.0", "82980060b4606ef9bc428932736647d45e400fd9"
+        )
+
+        current_version = self.get_version_json(
+            "1.4.0", "04a87e226add7197f3538b3349e562cc4135451d"
+        )
+        with self.assertRaises(SystemExit) as se:
+            updater = msu.Updater(current_version, True)
+
+        self.assertEqual(se.exception.code, 1)
+
         # --- When a stable update is available
         # --- If current version is stable
+        mock_get.side_effect = self.generate_mock_requests_get(
+            "1.3.3", "1.4.0", "82980060b4606ef9bc428932736647d45e400fd9"
+        )
+
         current_version = self.get_version_json(
             "1.3.2", "5be84dc9dfaa24003dfe4c7c88db1f6d212c226f"
         )
