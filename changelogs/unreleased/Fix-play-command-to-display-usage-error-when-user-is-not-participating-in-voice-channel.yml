@@ -1,4 +1,0 @@
----
-title: Fix play command to display usage error when user is not participating in voice channel
-pull_request:
-type: bug fixes
