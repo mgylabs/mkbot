@@ -63,8 +63,6 @@ async def on_ready():
         activity_type = discord.ActivityType.listening
     activity = discord.Activity(name=name, type=activity_type)
     await bot.change_presence(status=discord.Status.online, activity=activity)
-    if not is_development_mode():
-        await ReleaseNotify.run(bot)
 
 
 @bot.event

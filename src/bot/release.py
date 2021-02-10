@@ -46,10 +46,10 @@ class ReleaseNote:
 
 class ReleaseNotify:
     @classmethod
-    async def run(cls, bot):
+    async def run(cls, channel):
         if (not VERSION.is_canary()) and (not cls.exist_flag()):
             await cls.write_flag()
-            await cls.send_release_note(bot)
+            await cls.send_release_note(channel)
 
     @classmethod
     def exist_flag(cls):
