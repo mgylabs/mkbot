@@ -55,7 +55,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>mkbot_on.ico</ApplicationIcon>
+    <ApplicationIcon>../../resources/console/mkbot_on.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -109,15 +109,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\mkbot_off.ico" />
+    <None Include="..\..\resources\console\mkbot_off.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\mkbot_on.ico" />
+    <None Include="..\..\resources\console\mkbot_on.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="mkbot_on.ico" />
-    <None Include="Resources\MKBot_logo.png" />
-    <None Include="Resources\mkbot_icon.png" />
+    <None Include="..\..\resources\console\MKBot_logo.png" />
+    <None Include="..\..\resources\console\mkbot_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
