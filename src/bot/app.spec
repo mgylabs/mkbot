@@ -29,7 +29,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           icon=os.getenv('CI_PROJECT_DIR') +
-          '\\resources\\console\\mkbot_on.ico',
+          '\\resources\\package\\mkbot.ico',
           upx=True,
           console=True)
 coll = COLLECT(exe,

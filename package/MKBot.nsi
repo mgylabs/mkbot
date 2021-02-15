@@ -24,8 +24,8 @@ AllowSkipFiles off
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\resources\package\mkbot_install.ico"
-!define MUI_UNICON "..\resources\package\mkbot_install.ico"
+!define MUI_ICON "..\resources\package\mkbot.ico"
+!define MUI_UNICON "..\resources\package\mkbot.ico"
 
 ; Welcome page
 !define MUI_WELCOMEFINISHPAGE_BITMAP "..\resources\package\welcome.bmp"

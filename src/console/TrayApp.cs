@@ -34,7 +34,7 @@ namespace MKBot
         public TrayApp()
         {
 #if DEBUG
-            DirectoryPath = Path.GetFullPath(Environment.CurrentDirectory+"\\..");
+            DirectoryPath = Path.GetFullPath(Environment.CurrentDirectory + "\\..");
             Environment.CurrentDirectory = DirectoryPath + "\\build";
 #else
             DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
@@ -195,7 +195,7 @@ namespace MKBot
             Environment.Exit(0);
         }
 
-        private void ShowToast(string title, string text, string type="action=None")
+        private void ShowToast(string title, string text, string type = "action=None")
         {
             ToastContent toastContent = new ToastContent()
             {
@@ -220,7 +220,7 @@ namespace MKBot
                         },
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = DirectoryPath + "\\resources\\app\\MKBot_on.png",
+                            Source = DirectoryPath + "\\resources\\app\\mkbot.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
@@ -259,7 +259,7 @@ namespace MKBot
                         },
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = DirectoryPath + "\\resources\\app\\MKBot_install.png",
+                            Source = DirectoryPath + "\\resources\\app\\mkbot.png",
                             HintCrop = ToastGenericAppLogoCrop.None
                         }
                     }
