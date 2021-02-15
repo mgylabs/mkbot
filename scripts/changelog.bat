@@ -39,11 +39,13 @@ if "%num%" == "1" (
     goto :select
 )
 
+set low_ch_title=%ch_title: =-%
+FOR /F %%s IN ('powershell -command "(get-item env:'low_ch_title').Value.ToLower()"') DO set low_ch_title=%%s
 
 if "%ch_pr%" == "" (
-    set ch_filename="changelogs\unreleased\%ch_title: =-%.yml"
+    set ch_filename="changelogs\unreleased\%low_ch_title%.yml"
 ) else (
-    set ch_filename="changelogs\unreleased\%ch_pr%-%ch_title: =-%.yml"
+    set ch_filename="changelogs\unreleased\%ch_pr%-%low_ch_title%.yml"
     set "ch_pr= %ch_pr%"
 )
 

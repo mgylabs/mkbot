@@ -43,7 +43,7 @@ namespace MKBot
             args = Environment.GetCommandLineArgs();
             if (args.Contains("--debug"))
             {
-                UserDataPath = "..\\data";
+                UserDataPath = "data";
             }
             else
             {
@@ -75,7 +75,7 @@ namespace MKBot
 
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
-            notifyIcon1.Text = "MK Bot";
+            notifyIcon1.Text = "Mulgyeol MK Bot";
 
             UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
 
