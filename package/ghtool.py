@@ -1,8 +1,9 @@
+import hashlib
 import json
-import requests
 import os
 import sys
-import hashlib
+
+import requests
 
 base_url = "https://api.github.com"
 if os.getenv("GITHUB_TOKEN") != None:
