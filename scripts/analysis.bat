@@ -3,7 +3,7 @@ setlocal
 cd "%~dp0.."
 
 echo pylint ---------------------
-pylint src tests -d R,C,W,F0010 --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+pylint src tests -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
 echo.
 echo black ----------------------
 black .
