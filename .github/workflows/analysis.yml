@@ -11,7 +11,7 @@ on:
       - release-*
 
 jobs:
-  pylint:
+  lint:
     name: lint
     runs-on: windows-latest
     defaults:
@@ -40,7 +40,7 @@ jobs:
       - name: pylint
         if: ${{ always() }}
         run: |
-          pylint src tests -d R,C,W,F0010 --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+          pylint src tests -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
       - name: black
         if: ${{ always() }}
         run: |
