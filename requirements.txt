@@ -11,6 +11,6 @@ pre-commit==2.9.3
 pyinstaller==4.1
 pylint==2.4.4
 PyNaCl==1.4.0
-PyYAML==5.3.1
+PyYAML==5.4.1
 requests==2.25.1
 youtube_dl==2021.2.4.1
