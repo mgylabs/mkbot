@@ -4,10 +4,11 @@ import zipfile
 
 import requests
 from discord.ext import commands
-from mulgyeol_oauth.InstalledAppFlow import (
-    InstalledAppFlow,
-)  # pylint: disable=import-error
 
+# pylint: disable=import-error
+from mulgyeol_oauth.InstalledAppFlow import InstalledAppFlow
+
+# pylint: disable=import-error
 from .utils import api
 from .utils.config import CONFIG, add_data
 from .utils.MGCert import Level, MGCertificate
