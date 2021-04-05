@@ -9,14 +9,14 @@ Self-host discord bot on your own local Windows PC.
 
 ## Features
 
--   [x] TTS voices
--   [x] Message Deleter
--   [x] Simple Poll
--   [x] Roulette
--   [x] Translation with Conversation Mode
--   [x] Music
--   [x] Local Hosting
--   [x] User Access Control
+- [x] TTS voices
+- [x] Message Deleter
+- [x] Simple Poll
+- [x] Roulette
+- [x] Translation with Conversation Mode
+- [x] Music
+- [x] Local Hosting
+- [x] User Access Control
 
 ![docs/preview.png](https://user-images.githubusercontent.com/58393346/107910752-58c8c280-6f9e-11eb-969f-0b3c96f45221.png)
 
@@ -24,22 +24,22 @@ Self-host discord bot on your own local Windows PC.
 
 ### Mulgyeol MK Bot Stable
 
--   See [Release Note for Stable](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
+- See [Release Note for Stable](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
 
 ### Mulgyeol MK Bot Canary
 
 > Be warned: Canary can be unstable.
 
--   See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary) for downloading nightly build
+- See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary) for downloading nightly build
 
 ### Build from Source
 
 #### Install dependencies
 
--   Visual Studio Code
--   python 3.7
--   NSIS 3.06
--   msbuild 16.5
+- Visual Studio Code
+- Python 3.8
+- NSIS 3.06
+- msbuild 16.5
 
 #### Build and Package
 
@@ -53,7 +53,7 @@ Self-host discord bot on your own local Windows PC.
 
 3. When `build` task is complete, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> again and select `package`.
 
-4. Run `package\MKBotSetup.exe` to install `MK Bot`.
+4. Run `MKBotSetup.exe` to install `MK Bot`.
 
 > **Note:** If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
@@ -68,21 +68,21 @@ Self-host discord bot on your own local Windows PC.
 
 2. Edit `config.json`, `mgcert.json` at `src\data` directory.
 
--   config.json
+- config.json
 
 ```json
 {
-    "discordToken": "Your Bot TOKEN",
-    "kakaoToken": "Your KakaoTalk REST API Token"
+  "discordToken": "Your Bot TOKEN",
+  "kakaoToken": "Your KakaoTalk REST API Token"
 }
 ```
 
--   mgcert.json
+- mgcert.json
 
 ```json
 {
-    "adminUsers": ["admin_username#0000"],
-    "trustedUsers": ["trusted_username#0000"]
+  "adminUsers": ["admin_username#0000"],
+  "trustedUsers": ["trusted_username#0000"]
 }
 ```
 
