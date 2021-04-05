@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import sys
@@ -56,7 +57,7 @@ class Version:
         if self.commit == None:
             return f"{self.base_version} Test Mode"
         if self.is_canary():
-            return f"{self.base_version} Canary"
+            return f"{self.base_version}.{self.commit[:7]} Canary"
         else:
             return f"{self.base_version} Stable"
 
@@ -92,12 +93,17 @@ def add_data(key, value):
 
 def get_mkbot_version():
     try:
-        with open("../info/version.json", "rt") as f:
+        with open("../info/version.json", "rt", encoding="utf-8") as f:
             d = json.load(f)
         return Version(d["version"], d["commit"])
     except Exception:
         return None
 
 
+def get_discriminator(key):
+    return hashlib.sha1(key.encode()).hexdigest()
+
+
 CONFIG = Settings(invoke())
 VERSION = get_mkbot_version()
+DISCRIMINATOR = get_discriminator(CONFIG.discordToken)

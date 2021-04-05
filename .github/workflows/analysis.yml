@@ -28,7 +28,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: Install dependencies
+      - uses: webfactory/ssh-agent@v0.5.1
+        name: Install SSH key
+        id: install-ssh
+        continue-on-error: true
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Install dependencies 1
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
@@ -36,6 +42,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           if ($Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
+        shell: pwsh
+      - name: Install dependencies 2
+        if: steps.install-ssh.outcome == 'success'
+        run: |
+          pip install git+ssh://git@github.com/MycroftKang/application-insights-python.git
         shell: pwsh
       - name: pylint
         if: ${{ always() }}

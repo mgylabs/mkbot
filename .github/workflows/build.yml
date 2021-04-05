@@ -29,7 +29,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: Install dependencies
+      - uses: webfactory/ssh-agent@v0.5.1
+        name: Install SSH key
+        id: install-ssh
+        continue-on-error: true
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Install dependencies 1
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
@@ -38,13 +44,21 @@ jobs:
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           if ($Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
         shell: pwsh
+      - name: Install dependencies 2
+        if: steps.install-ssh.outcome == 'success'
+        run: |
+          pip install git+ssh://git@github.com/MycroftKang/application-insights-python.git
+        shell: pwsh
       - name: Unit Test
         run: |
           python -m unittest discover -v -s tests -p test_*.py
       - name: Version
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
-          python package/vc.py -gb
+          python package/vc.py -gb ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
+          if ($Env:API_KEY) { echo $Env:API_KEY > src\bot\core\utils\APIKey.py }
         shell: pwsh
       - name: Build MK Bot
         run: |
@@ -62,5 +76,4 @@ jobs:
         run: |
           $Env:Path += ";C:\Program Files (x86)\NSIS\"
           makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DEXT_DIR=.mkbot" package\MKBot.nsi
-          mv package\MKBotSetup.exe .\
         shell: pwsh
