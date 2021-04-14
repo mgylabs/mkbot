@@ -11,6 +11,10 @@ import zipfile
 import requests
 from packaging import version
 
+sys.path.append("..\\lib")
+
+from mgylabs.services.telemetry_service import TelemetryReporter
+
 
 def is_development_mode():
     return not getattr(sys, "frozen", False)
@@ -129,6 +133,12 @@ class Updater:
             subprocess.call([f"{DOWNLOAD_PATH}\\MKBotSetup.exe", "/S", "/unpack"])
         else:
             r = requests.get(self.target.url)
+
+            TelemetryReporter.send_telemetry_event(
+                "UpdateDownloaded",
+                {"status": r.status_code, "version": self.target.version},
+            )
+
             r.raise_for_status()
 
             download_file_name = f"{DOWNLOAD_PATH}\\MKBotSetup.zip"
@@ -196,7 +206,9 @@ def main():
 
 if __name__ == "__main__":
     try:
+        TelemetryReporter.start()
         main()
-    except Exception:
+    except Exception as error:
+        TelemetryReporter.send_telemetry_exception(error)
         traceback.print_exc()
         sys.exit(1)

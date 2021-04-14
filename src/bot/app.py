@@ -11,10 +11,13 @@ import urllib.parse
 import discord
 from discord.ext import commands
 
+sys.path.append("..\\lib")
+
+from mgylabs.services.telemetry_service import TelemetryReporter
+from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+
 from command_help import CommandHelp
-from core.service.telemetry_service import TelemetryService
 from core.utils import api
-from core.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from core.utils.exceptions import NonFatalError, UsageError
 from core.utils.MGCert import MGCertificate
 from core.utils.MsgFormat import MsgFormatter
@@ -51,7 +54,7 @@ def instance_already_running():
 
 @bot.event
 async def on_ready():
-    TelemetryService.start()
+    TelemetryReporter.start("Login")
     print("Logged in within", time.time() - stime)
 
     replyformat.set_avatar_url(bot.user.avatar_url)

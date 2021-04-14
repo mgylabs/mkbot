@@ -402,4 +402,4 @@ package/MKBotSetup.zip
 temp_changelog.md
 src/bot/msu.flag
 MKBotSetup.exe
-src/bot/core/utils/APIKey.py
+src/lib/mgylabs/constants/APIKey.py

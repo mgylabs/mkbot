@@ -1,6 +1,5 @@
 from discord.ext import commands
-
-from core.utils.config import VERSION
+from mgylabs.utils.config import VERSION
 
 
 class CommandHelp(commands.DefaultHelpCommand):

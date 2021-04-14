@@ -48,6 +48,9 @@ class Version:
         )
         self.tag = f"v{self.base_version}"
 
+    def is_release_build(self):
+        return (not is_development_mode()) and (self.commit is not None)
+
     def is_canary(self) -> bool:
         return self.canary
 
@@ -63,8 +66,11 @@ class Version:
 
 
 def invoke():
-    with open(CONFIG_PATH, "rt", encoding="utf-8") as f:
-        TOKEN = json.load(f)
+    if os.path.isfile(CONFIG_PATH):
+        with open(CONFIG_PATH, "rt", encoding="utf-8") as f:
+            TOKEN = json.load(f)
+    else:
+        return {}
 
     sch_url = "https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema"
 

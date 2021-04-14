@@ -6,9 +6,9 @@ import aiohttp
 import discord
 from discord.ext import commands
 from langdetect import detect
+from mgylabs.utils.config import CONFIG
 
 from .utils import listener
-from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 

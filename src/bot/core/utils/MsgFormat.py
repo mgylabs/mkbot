@@ -2,8 +2,7 @@ import datetime
 import platform
 
 import discord
-
-from .config import CONFIG, VERSION
+from mgylabs.utils.config import CONFIG, VERSION
 
 Msg_Color = None
 

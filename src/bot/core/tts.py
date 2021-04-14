@@ -7,11 +7,11 @@ import aiohttp
 import discord
 from discord.ext import commands
 from discord.opus import Encoder
+from mgylabs.utils.config import CONFIG
 
 from core.utils.exceptions import UsageError
 from core.utils.voice import validate_voice_client
 
-from .utils.config import CONFIG
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 

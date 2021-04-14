@@ -1,13 +1,13 @@
 import traceback
 
-from ..utils.config import DISCRIMINATOR, VERSION, is_development_mode
+from ..utils.config import DISCRIMINATOR, VERSION
 
 try:
     # pylint: disable=import-error,no-name-in-module
 
     from mulgyeol_telemetry.telemetry import TelemetryClient
 
-    from ..utils.APIKey import INSIGHTS_APPLICATION_KEY
+    from ..constants.APIKey import INSIGHTS_APPLICATION_KEY
 
     # pylint: disable=import-error,no-name-in-module
 except ModuleNotFoundError:
@@ -19,7 +19,7 @@ else:
     telemetry_enabled = True
 
 
-class TelemetryService:
+class TelemetryReporter:
     reporter = None
 
     @classmethod
@@ -28,10 +28,18 @@ class TelemetryService:
             return cls.reporter.send_telemetry_event(event_name, properties)
 
     @classmethod
-    def start(cls):
-        if telemetry_enabled and not is_development_mode() and cls.reporter is None:
+    def send_telemetry_exception(cls, error, properties={}):
+        assert isinstance(error, Exception)
+
+        if cls.reporter is not None:
+            return cls.reporter.send_telemetry_exception(error, properties)
+
+    @classmethod
+    def start(cls, callback_event_name=None):
+        if telemetry_enabled and VERSION.is_release_build() and cls.reporter is None:
             cls.reporter = TelemetryClient(
                 INSIGHTS_APPLICATION_KEY, str(VERSION), DISCRIMINATOR
             )
 
-        cls.send_telemetry_event("login")
+        if callback_event_name is not None:
+            cls.send_telemetry_event(str(callback_event_name))

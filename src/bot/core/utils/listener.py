@@ -2,8 +2,7 @@ from functools import wraps
 
 import discord
 from discord.ext import commands
-
-from .config import CONFIG
+from mgylabs.utils.config import CONFIG
 
 
 def on_message():
