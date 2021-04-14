@@ -1,6 +1,6 @@
 import logging
 
-from .utils.config import is_development_mode
+from mgylabs.utils.config import is_development_mode
 
 
 class DiscordFilter(logging.Filter):

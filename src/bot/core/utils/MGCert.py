@@ -3,8 +3,8 @@ import logging
 from functools import wraps
 
 from discord.ext import commands
+from mgylabs.utils.config import CONFIG, USER_DATA_PATH
 
-from .config import CONFIG, USER_DATA_PATH
 from .MsgFormat import MsgFormatter
 
 logger = logging.getLogger(__name__)

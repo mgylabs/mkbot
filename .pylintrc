@@ -1,0 +1,13 @@
+[MASTER]
+
+init-hook="import sys, os; sys.path.extend(['./src/lib', './src/bot', './src/msu'])"
+
+[REPORTS]
+
+score=no
+
+output-format=colorized
+
+[MESSAGES CONTROL]
+
+disable=R,C,W

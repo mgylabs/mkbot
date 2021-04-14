@@ -71,7 +71,7 @@ jobs:
         run: |
           python package/vc.py -gn ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
-          if ($Env:API_KEY) { echo $Env:API_KEY > src\bot\core\utils\APIKey.py }
+          if ($Env:API_KEY) { echo $Env:API_KEY > src\lib\mgylabs\constants\APIKey.py }
         shell: pwsh
       - name: Build MK Bot
         run: |

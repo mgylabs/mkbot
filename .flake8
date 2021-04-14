@@ -1,10 +1,13 @@
 [flake8]
 ignore =
-        E203,
-        E501,
-        E711,
-        W504,
-        W503,
+    E203,
+    E501,
+    E711,
+    W504,
+    W503,
+per-file-ignores =
+    src/bot/app.py: E402,
+    src/msu/msu.py: E402,
 exclude =
     .venv*,
     # No need to traverse our git directory

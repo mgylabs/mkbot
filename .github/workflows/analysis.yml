@@ -51,7 +51,7 @@ jobs:
       - name: pylint
         if: ${{ always() }}
         run: |
-          pylint src tests -d R,C,W --init-hook="import sys, os; sys.path.extend(['./src/bot', './src/msu'])" -s n -f colorized
+          pylint src tests
       - name: black
         if: ${{ always() }}
         run: |

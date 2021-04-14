@@ -58,15 +58,15 @@ jobs:
         run: |
           python package/vc.py -gb ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
-          if ($Env:API_KEY) { echo $Env:API_KEY > src\bot\core\utils\APIKey.py }
+          if ($Env:API_KEY) { echo $Env:API_KEY > src\lib\mgylabs\constants\APIKey.py }
         shell: pwsh
       - name: Build MK Bot
         run: |
           call scripts\build.bat
       - name: Test with dry run
         run: |
-          mkdir $Env:USERPROFILE\.mkbot
-          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot"
+          mkdir $Env:USERPROFILE\.mkbot > $null
+          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" > $null
           cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" -Recurse
           cp -Path extensions -Destination $Env:USERPROFILE\.mkbot -Recurse
           cd .\build\app

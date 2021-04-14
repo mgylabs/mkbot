@@ -4,8 +4,8 @@ import os
 import aiofiles
 import aiohttp
 import discord
+from mgylabs.utils.config import VERSION
 
-from core.utils.config import VERSION
 from core.utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
@@ -47,7 +47,11 @@ class ReleaseNote:
 class ReleaseNotify:
     @classmethod
     async def run(cls, channel):
-        if (not VERSION.is_canary()) and (not cls.exist_flag()):
+        if (
+            (VERSION.is_release_build())
+            and (not VERSION.is_canary())
+            and (not cls.exist_flag())
+        ):
             await cls.write_flag()
             await cls.send_release_note(channel)
 
