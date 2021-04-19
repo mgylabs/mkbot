@@ -16,8 +16,10 @@ formatter = logging.Formatter(
 stream_handler = logging.StreamHandler()
 stream_handler.addFilter(DiscordFilter())
 if is_development_mode():
-    stream_handler.setLevel(logging.DEBUG)
+    LOG_LEVEL = logging.DEBUG
 else:
-    stream_handler.setLevel(logging.WARNING)
+    LOG_LEVEL = logging.WARNING
+stream_handler.setLevel(LOG_LEVEL)
 stream_handler.setFormatter(formatter)
 log.addHandler(stream_handler)
+log.setLevel(LOG_LEVEL)

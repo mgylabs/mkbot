@@ -136,7 +136,7 @@ class Updater:
 
             TelemetryReporter.send_telemetry_event(
                 "UpdateDownloaded",
-                {"status": r.status_code, "url": r.url},
+                {"status": r.status_code, "url": self.target.url},
             )
 
             r.raise_for_status()
