@@ -12,7 +12,6 @@ try:
     # pylint: disable=import-error,no-name-in-module
 except ModuleNotFoundError:
     telemetry_enabled = False
-    traceback.print_exc()
 except Exception:
     telemetry_enabled = False
     traceback.print_exc()
