@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 import traceback
-import winreg
 import zipfile
 
 import requests
@@ -162,16 +161,12 @@ class Updater:
         else:
             return False
 
-    def check_ready_to_update(self):
-        with winreg.OpenKey(
-            winreg.HKEY_CURRENT_USER,
-            "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\MKBot.exe",
-        ) as subkey:
-            value, _ = winreg.QueryValueEx(subkey, "ReadyToUpdate")
-        return value == "1"
+    @staticmethod
+    def check_ready_to_update():
+        return os.path.isfile("../Update.flag") and os.path.isdir("../_")
 
     def run(self):
-        if self.check_ready_to_update() and self.check_sha1_hash():
+        if self.check_ready_to_update():
             sys.exit(0)
         self.download()
         if self.check_ready_to_update():
@@ -179,8 +174,9 @@ class Updater:
         else:
             sys.exit(1)
 
-    def can_install(self):
-        if self.check_ready_to_update() and self.check_sha1_hash():
+    @staticmethod
+    def can_install():
+        if Updater.check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)
@@ -195,8 +191,7 @@ def main():
         current_data = json.load(f)
 
     if "/s" in sys.argv:
-        ut = Updater(current_data, enabled_canary)
-        ut.can_install()
+        Updater.can_install()
     elif "/c" in sys.argv:
         ut = Updater(current_data, enabled_canary)
         ut.run()

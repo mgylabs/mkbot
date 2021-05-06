@@ -55,78 +55,9 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Var installOption
-Var ReadyToUpdate
 Var MAINDIR
 ; 0 = unpack
 ; 1 = general
-; 2 = update
-
-Function RmDirsButOne
- Exch $R0 ; exclude dir
- Exch
- Exch $R1 ; route dir
- Push $R2
- Push $R3
-
-  ClearErrors
-  FindFirst $R3 $R2 "$R1\*.*"
-  IfErrors Exit
-
-  Top:
-    StrCmp $R2 "." Next
-    StrCmp $R2 ".." Next
-    StrCmp $R2 $R0 Next
-    IfFileExists "$R1\$R2\*.*" 0 Next
-    RmDir /r "$R1\$R2"
-
-  Next:
-    ClearErrors
-    FindNext $R3 $R2
-    IfErrors Exit
-    Goto Top
-
-  Exit:
-  FindClose $R3
-
- Pop $R3
- Pop $R2
- Pop $R1
- Pop $R0
-FunctionEnd
-
-Function RmFilesButOne
- Exch $R0 ; exclude file
- Exch
- Exch $R1 ; route dir
- Push $R2
- Push $R3
-
-  FindFirst $R3 $R2 "$R1\*.*"
-  IfErrors Exit
-
-  Top:
-   StrCmp $R2 "." Next
-   StrCmp $R2 ".." Next
-   StrCmp $R2 $R0 Next
-   IfFileExists "$R1\$R2\*.*" Next
-    Delete "$R1\$R2"
-
-   #Goto Exit ;uncomment this to stop it being recursive (delete only one file)
-
-   Next:
-    ClearErrors
-    FindNext $R3 $R2
-    IfErrors Exit
-   Goto Top
-
-  Exit:
-  FindClose $R3
-
- Pop $R3
- Pop $R2
- Pop $R1
- Pop $R0
-FunctionEnd
 
 Function .onInit
   ;!insertmacro MUI_LANGDLL_DISPLAY
@@ -139,11 +70,26 @@ Function .onInit
   IfErrors +3 0
   StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}\_"
   StrCpy $installOption 0
-  ClearErrors
-  ${GetOptions} $1 '/update' $R0
-  IfErrors +3 0
-  StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
-  StrCpy $installOption 2
+FunctionEnd
+
+Function WriteToFile
+  Exch $0 ;file to write to
+  Exch
+  Exch $1 ;text to write
+
+    FileOpen $0 $0 a #open file
+    FileSeek $0 0 END #go to end
+    FileWrite $0 $1 #write to file
+    FileClose $0
+
+  Pop $1
+  Pop $0
+FunctionEnd
+
+Function WriteFlag
+  Push `flag` ;text to write to file
+  Push `$MAINDIR\Update.flag` ;file to write to
+  Call WriteToFile
 FunctionEnd
 
 Function RunMDF
@@ -152,6 +98,8 @@ Function RunMDF
 FunctionEnd
 
 Section "Apps" SEC01
+  Delete `$MAINDIR\Update.flag`
+
   ${If} $installOption > 0
     nsExec::Exec 'taskkill /f /im "${PRODUCT_EXE}"'
   ${EndIf}
@@ -161,56 +109,36 @@ Section "Apps" SEC01
   HideWindow
   SetAutoClose true
 
-  ${If} $installOption < 2
-    ${If} $installOption == 0
-      IfFileExists "$INSTDIR\*.*" +1 +2
-      RMDir /r "$INSTDIR"
-    ${EndIf}
-    SetOutPath "$INSTDIR"
-    File "Update.exe"
-    ${If} $installOption == 0
-      Delete "$INSTDIR\..\Update.exe"
-      Rename "$INSTDIR\Update.exe" "$INSTDIR\..\Update.exe"
-    ${EndIf}
-    File /nonfatal /a "..\build\*"
-    File "MKBot.VisualElementsManifest.xml"
-    SetOutPath "$INSTDIR\app"
-    File /nonfatal /a /r "..\build\app\*"
-    SetOutPath "$INSTDIR\info"
-    File /nonfatal /a /r "info\*"
-    SetOutPath "$INSTDIR\resources\app"
-    File /nonfatal /a /r "..\resources\app\*"
-    SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
-    SetOverwrite off
-    File /nonfatal /a /r "data\*"
-    SetOverwrite on
-    SetOutPath "$PROFILE\${EXT_DIR}\extensions"
-    File /nonfatal /a /r "..\extensions\*"
-  ${ElseIf} $installOption == 2
-    ReadRegStr $ReadyToUpdate HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate"
-    ${If} $ReadyToUpdate == "1"
-      Push "$INSTDIR"
-      Push "Update.exe"
-      Call RmFilesButOne
-      Push "$INSTDIR"
-      Push "_" 		;dir to exclude
-      Call RmDirsButOne
-      SetOutPath "$INSTDIR"
-      nsExec::Exec 'xcopy /q /I /Y /E "$INSTDIR\_\*" "$INSTDIR"'
-      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
-      RMDir /r "$INSTDIR\_"
-    ${Else}
-      Abort
-    ${EndIf}
+  ${If} $installOption == 0
+    IfFileExists "$INSTDIR\*.*" +1 +2
+    RMDir /r "$INSTDIR"
   ${EndIf}
+  SetOutPath "$INSTDIR"
+  File "Update.exe"
+  ${If} $installOption == 0
+    Delete "$INSTDIR\..\Update.exe"
+    Rename "$INSTDIR\Update.exe" "$INSTDIR\..\Update.exe"
+  ${EndIf}
+  File /nonfatal /a "..\build\*"
+  File "MKBot.VisualElementsManifest.xml"
+  SetOutPath "$INSTDIR\app"
+  File /nonfatal /a /r "..\build\app\*"
+  SetOutPath "$INSTDIR\info"
+  File /nonfatal /a /r "info\*"
+  SetOutPath "$INSTDIR\resources\app"
+  File /nonfatal /a /r "..\resources\app\*"
+  SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
+  SetOverwrite off
+  File /nonfatal /a /r "data\*"
+  SetOverwrite on
+  SetOutPath "$PROFILE\${EXT_DIR}\extensions"
+  File /nonfatal /a /r "..\extensions\*"
 
-  ${If} $installOption < 2
-    SetOutPath "$MAINDIR"
-    CreateDirectory "$SMPROGRAMS\${PRODUCT_SHORT_NAME}"
-    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
-    !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
-    CreateShortCut "$DESKTOP\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
-  ${EndIf}
+  SetOutPath "$MAINDIR"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_SHORT_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
+  !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
+  CreateShortCut "$DESKTOP\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'
   ;ExecWait '$INSTDIR\Update\MulgyeolUpdateService.exe install'
@@ -218,31 +146,25 @@ Section "Apps" SEC01
 SectionEnd
 
 Section -AdditionalIcons
-  ${If} $installOption < 2
-    WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Website.lnk" "$MAINDIR\${PRODUCT_NAME}.url"
-    CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Uninstall.lnk" "$MAINDIR\uninst.exe"
-  ${EndIf}
+  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Website.lnk" "$MAINDIR\${PRODUCT_NAME}.url"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\Uninstall.lnk" "$MAINDIR\uninst.exe"
 SectionEnd
 
 Section -Post
-  ${If} $installOption < 2
-    WriteUninstaller "$INSTDIR\uninst.exe"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
-    ${If} $installOption == 1
-      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "0"
-    ${Else}
-      WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "1"
-    ${EndIf}
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MAINDIR\uninst.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\${PRODUCT_EXE}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION_NUMBER}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" "$MAINDIR\${PRODUCT_EXE}"
+  WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
+  WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
+  ${If} $installOption == 0
+    Call WriteFlag
   ${EndIf}
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MAINDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\${PRODUCT_EXE}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION_NUMBER}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" "$MAINDIR\${PRODUCT_EXE}"
 SectionEnd
 
 Function .onInstSuccess
@@ -253,6 +175,9 @@ Function .onInstSuccess
     IfErrors +4 0
     SetOutPath "$INSTDIR"
     Exec "$INSTDIR\${PRODUCT_EXE}"
+  ${Else}
+    ;TODO: will be removed
+    Exec "$MAINDIR\Update.exe /start /autorun"
   ${EndIf}
 FunctionEnd
 
