@@ -367,7 +367,16 @@ namespace MKBot
                 can_update = true;
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Restart to Update";
-                ShowUpdateToast();
+
+                if (!(checking_update || online))
+                {
+                    Run_setup(true);
+                }
+                else
+                {
+                    ShowUpdateToast();
+                }
+
                 checking_update = false;
             }
             else if (msu_process.ExitCode == 1)
