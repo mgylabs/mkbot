@@ -175,9 +175,6 @@ Function .onInstSuccess
     IfErrors +4 0
     SetOutPath "$INSTDIR"
     Exec "$INSTDIR\${PRODUCT_EXE}"
-  ${Else}
-    ;TODO: will be removed
-    Exec "$MAINDIR\Update.exe /start /autorun"
   ${EndIf}
 FunctionEnd
 
