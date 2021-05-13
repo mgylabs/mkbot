@@ -25,7 +25,7 @@ def write_flag():
 
 
 def exist_flag():
-    return os.path.isfile("release.flag")
+    return os.path.isfile("msu.flag")
 
 
 if is_development_mode():
