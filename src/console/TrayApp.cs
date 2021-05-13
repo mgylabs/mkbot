@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using Windows.UI.Notifications;
 
@@ -23,6 +22,8 @@ namespace MKBot
         private Process app_process = new Process();
         private ProcessStartInfo psi2 = new ProcessStartInfo();
         private Process msu_process = new Process();
+
+        private System.Timers.Timer checkForTime = new System.Timers.Timer(30 * 1000);
 
         private ToolStripMenuItem UpdateMenu;
         private Form Infowin;
@@ -80,12 +81,16 @@ namespace MKBot
             UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-            new ToolStripMenuItem("Settings", null, Click_Setting), new ToolStripMenuItem("MGCert", null, Click_MGCert), new ToolStripMenuItem("Extensions", null, Click_Extensions), new ToolStripSeparator(), UpdateMenu, new ToolStripMenuItem("About", null, Click_info), new ToolStripSeparator(), new ToolStripMenuItem("Exit", null, Click_Exit)});
+                new ToolStripMenuItem("Settings", null, Click_Setting),
+                new ToolStripMenuItem("MGCert", null, Click_MGCert),
+                new ToolStripMenuItem("Extensions", null, Click_Extensions),
+                new ToolStripSeparator(), UpdateMenu,
+                new ToolStripMenuItem("About", null, Click_info),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Exit", null, Click_Exit)
+            });
 
-            Run_msu("/s");
-            msu_process.WaitForExit();
-
-            if (msu_process.ExitCode == 0)
+            if (check_ready_to_update())
             {
                 Run_setup(true);
             }
@@ -95,7 +100,6 @@ namespace MKBot
                 msu_process.EnableRaisingEvents = true;
                 notifyIcon1.Visible = true;
                 notifyIcon1.Icon = Properties.Resources.mkbot_off;
-                Run_msu("/c");
             }
 
             bool autoconnect = false;
@@ -108,6 +112,9 @@ namespace MKBot
             {
                 notifyIcon1_MouseClick(new object(), new MouseEventArgs(MouseButtons.Left, 1, 1, 1, 1));
             }
+
+            checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
+            checkForTime.Enabled = true;
         }
 
         //UI
@@ -305,6 +312,43 @@ namespace MKBot
                 default:
                     Console.WriteLine("default");
                     break;
+            }
+        }
+
+        private bool check_ready_to_update()
+        {
+            return File.Exists("./Update.flag");
+        }
+
+        private void checkForTime_Elapsed_At_Startup(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            checkForTime.Enabled = false;
+            checkForTime.Interval = 60 * 60 * 1000;
+
+            CheckForUpdate();
+
+            checkForTime.Elapsed -= new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
+            checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed);
+            checkForTime.Enabled = true;
+        }
+
+        private void checkForTime_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (can_update && !online)
+            {
+                Run_setup(true);
+            }
+            else
+            {
+                CheckForUpdate();
+            }
+        }
+
+        private void CheckForUpdate()
+        {
+            if (!can_update)
+            {
+                Run_msu("/c");
             }
         }
 

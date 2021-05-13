@@ -57,11 +57,11 @@ class ReleaseNotify:
 
     @classmethod
     def exist_flag(cls):
-        return os.path.isfile("msu.flag")
+        return os.path.isfile("release.flag")
 
     @classmethod
     async def write_flag(cls):
-        async with aiofiles.open("msu.flag", "wt") as f:
+        async with aiofiles.open("release.flag", "wt") as f:
             await f.write("flag")
 
     @classmethod

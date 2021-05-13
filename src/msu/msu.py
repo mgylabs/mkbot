@@ -19,6 +19,15 @@ def is_development_mode():
     return not getattr(sys, "frozen", False)
 
 
+def write_flag():
+    with open("msu.flag", "wt") as f:
+        f.write("flag")
+
+
+def exist_flag():
+    return os.path.isfile("release.flag")
+
+
 if is_development_mode():
     CONFIG_PATH = "..\\data\\config.json"
 else:
@@ -81,6 +90,10 @@ class Updater:
 
         res.raise_for_status()
         data = res.json()
+
+        if not exist_flag():
+            TelemetryReporter.send_telemetry_event("CheckedForUpdate")
+            write_flag()
 
         asset = self.find_asset(data["assets"])
 
