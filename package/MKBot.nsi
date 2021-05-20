@@ -156,6 +156,7 @@ Section -Post
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
   ${If} $installOption == 0
+    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "1"
     Call WriteFlag
   ${EndIf}
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"

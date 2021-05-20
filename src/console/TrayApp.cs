@@ -120,7 +120,7 @@ namespace MKBot
         //UI
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            if ((!checking_update) && (e.Button == MouseButtons.Left))
+            if (e.Button == MouseButtons.Left)
             {
                 if (!online)
                 {
