@@ -121,8 +121,8 @@ Section "Apps" SEC01
   ${EndIf}
   File /nonfatal /a "..\build\*"
   File "MKBot.VisualElementsManifest.xml"
-  SetOutPath "$INSTDIR\app"
-  File /nonfatal /a /r "..\build\app\*"
+  SetOutPath "$INSTDIR\bin"
+  File /nonfatal /a /r "..\build\bin\*"
   SetOutPath "$INSTDIR\info"
   File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\resources\app"

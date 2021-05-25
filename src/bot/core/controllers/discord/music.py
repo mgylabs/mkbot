@@ -2,9 +2,10 @@ import asyncio
 import json
 
 import aiohttp
-import discord
 import youtube_dl
 from bs4 import BeautifulSoup
+
+import discord
 from discord.ext import commands
 
 from .utils.exceptions import NonFatalError, UsageError
@@ -49,7 +50,7 @@ class Music(commands.Cog):
                 "You are not in any voice channel. Please join a voice channel to use Music bot."
             )
 
-    async def playMusic(self, ctx, skip=False):
+    async def playMusic(self, ctx: commands.Context, skip=False):
         guild_id = ctx.message.guild.id
         try:
             song_list_dict[guild_id][0]
