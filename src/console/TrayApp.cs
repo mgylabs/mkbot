@@ -15,11 +15,9 @@ namespace MKBot
         private NotifyIcon notifyIcon1;
         private ContextMenuStrip contextMenuStrip1;
 
-        private bool online = false;
         private bool checking_update = false;
         private bool can_update = false;
-        private ProcessStartInfo psi1 = new ProcessStartInfo();
-        private Process app_process = new Process();
+
         private ProcessStartInfo psi2 = new ProcessStartInfo();
         private Process msu_process = new Process();
 
@@ -27,6 +25,9 @@ namespace MKBot
 
         private ToolStripMenuItem UpdateMenu;
         private Form Infowin;
+        private Form Shellwin;
+
+        private MKBotCoreManager MKBotCore;
 
         private string DirectoryPath;
         private string UserDataPath;
@@ -50,23 +51,19 @@ namespace MKBot
             {
                 UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
             }
+
+            MKBotCore = new MKBotCoreManager(args.Contains("--debug"));
+            MKBotCore.MKBotCoreStarted += MKBotCore_Started;
+            MKBotCore.MKBotCoreExit += MKbotCore_Exit;
+
             Infowin = new InfoForm();
+            Shellwin = new ShellForm(MKBotCore);
+
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
 
-            psi1.FileName = "app\\app.exe";
-            psi1.WorkingDirectory = "app";
-            psi1.CreateNoWindow = true;
-            psi1.UseShellExecute = false;
-            if (args.Contains("--debug"))
-            {
-                psi1.Arguments = "--debug";
-            }
-            app_process.StartInfo = psi1;
-            app_process.EnableRaisingEvents = true;
-            app_process.Exited += new EventHandler(ProcessExited_app);
-            psi2.FileName = "app\\msu.exe";
-            psi2.WorkingDirectory = "app";
+            psi2.FileName = "bin\\msu.exe";
+            psi2.WorkingDirectory = "bin";
             psi2.CreateNoWindow = true;
             psi2.UseShellExecute = false;
             msu_process.StartInfo = psi2;
@@ -117,25 +114,38 @@ namespace MKBot
             checkForTime.Enabled = true;
         }
 
+        private void MKbotCore_Exit(object sender, MKBotCoreExitEventArgs e)
+        {
+            notifyIcon1.Icon = Properties.Resources.mkbot_off;
+
+            if (can_update)
+            {
+                Run_setup(true);
+            }
+            if (e.ExitCode == 1)
+            {
+                ShowToast("An invalid token was provided.", "Review your settings for configured token.", "action=openConfig");
+            }
+        }
+
+        private void MKBotCore_Started(object sender, EventArgs e)
+        {
+            notifyIcon1.Icon = Properties.Resources.mkbot_on;
+        }
+
         //UI
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (!online)
+                if (Shellwin.Visible)
                 {
-                    notifyIcon1.Icon = Properties.Resources.mkbot_on;
-                    app_process.Start();
-                    online = true;
-                    var random = new Random();
-                    if ((!can_update) && (random.Next(1, 3) == 1))
-                    {
-                        Run_msu("/c");
-                    }
+                    //Shellwin.Activate();
+                    Shellwin.Hide();
                 }
                 else
                 {
-                    app_process.Kill();
+                    Shellwin.Show();
                 }
             }
         }
@@ -159,9 +169,9 @@ namespace MKBot
         {
             if (can_update)
             {
-                if (online)
+                if (MKBotCore.discord_online)
                 {
-                    app_process.Kill();
+                    MKBotCore.Kill();
                 }
                 else
                 {
@@ -191,9 +201,9 @@ namespace MKBot
         private void Click_Exit(object source, EventArgs e)
         {
             notifyIcon1.Visible = false;
-            if (online)
+            if (MKBotCore.discord_online)
             {
-                app_process.Kill();
+                MKBotCore.Kill();
             }
             if (can_update)
             {
@@ -334,7 +344,7 @@ namespace MKBot
 
         private void checkForTime_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (can_update && !online)
+            if (can_update && !MKBotCore.discord_online)
             {
                 Run_setup(true);
             }
@@ -377,9 +387,9 @@ namespace MKBot
         {
             if (can_update)
             {
-                if (online)
+                if (MKBotCore.discord_online)
                 {
-                    app_process.Kill();
+                    MKBotCore.Kill();
                 }
                 else
                 {
@@ -408,11 +418,12 @@ namespace MKBot
         {
             if (msu_process.ExitCode == 0)
             {
+                Console.WriteLine("> msu exit: 0");
                 can_update = true;
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Restart to Update";
 
-                if (!(checking_update || online))
+                if (!(checking_update || MKBotCore.discord_online))
                 {
                     Run_setup(true);
                 }
@@ -425,6 +436,7 @@ namespace MKBot
             }
             else if (msu_process.ExitCode == 1)
             {
+                Console.WriteLine("> msu exit: 1");
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Check for Updates...";
 
@@ -436,30 +448,9 @@ namespace MKBot
             }
         }
 
-        private void ProcessExited_app(object sender, EventArgs e)
-        {
-            notifyIcon1.Icon = Properties.Resources.mkbot_off;
-            online = false;
-            if (can_update)
-            {
-                Run_setup(true);
-            }
-            if (app_process.ExitCode == 1)
-            {
-                ShowToast("An invalid token was provided.", "Review your settings for configured token.", "action=openConfig");
-            }
-        }
-
         internal void Application_Exit(object sender, EventArgs e)
         {
-            try
-            {
-                if (!app_process.HasExited)
-                {
-                    app_process.Kill();
-                }
-            }
-            catch (Exception) { }
+            MKBotCore.Kill();
         }
     }
 }

@@ -23,14 +23,15 @@ xcopy /q /I /Y /E package\info build\info
 xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
-pyinstaller app.spec -y --log-level WARN || goto :error
-move dist\app ..\..\build
+pyinstaller main.spec -y --log-level WARN || goto :error
+move dist\MKBotCore dist\bin
+move dist\bin ..\..\build
 
 @ If /i "%1" == "--test-bot" (
     cd %CI_PROJECT_DIR%
     xcopy /q /I /Y src\data build\data
-    cd build\app
-    start cmd /k "app.exe --debug & pause & exit"
+    cd build\bin
+    start cmd /k "MKBotCore.exe --debug & pause & exit"
     echo.
     echo Start MK Bot in Test Mode
     exit /b 0
@@ -50,7 +51,7 @@ pyinstaller msu.spec -y --log-level WARN || goto :error
 move "dist\msu" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build
-xcopy /q /I /Y /E Update\* app
+xcopy /q /I /Y /E Update\* bin
 del *.pdb
 rmdir /q /s Update
 

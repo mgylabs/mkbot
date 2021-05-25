@@ -3,16 +3,16 @@ import os
 import sys
 
 sys.path.append(os.curdir)
-from core_ext import core_extensions
+from discord_ext import discord_extensions
 
 block_cipher = None
 
 a = Analysis(
-    ["app.py"],
+    ["main.py"],
     pathex=[os.curdir, "..\\lib"],
     binaries=[],
     datas=[],
-    hiddenimports=[*core_extensions],
+    hiddenimports=[*discord_extensions],
     hookspath=["..\\hooks"],
     runtime_hooks=[],
     excludes=[],
@@ -27,7 +27,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="app",
+    name="MKBotCore",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -43,5 +43,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name="app",
+    name="MKBotCore",
 )

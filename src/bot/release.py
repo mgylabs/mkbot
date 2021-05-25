@@ -6,7 +6,7 @@ import aiohttp
 import discord
 from mgylabs.utils.config import VERSION
 
-from core.utils.MsgFormat import MsgFormatter
+from core.controllers.discord.utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
 

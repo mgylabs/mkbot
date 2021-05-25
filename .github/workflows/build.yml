@@ -69,8 +69,8 @@ jobs:
           mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" > $null
           cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" -Recurse
           cp -Path extensions -Destination $Env:USERPROFILE\.mkbot -Recurse
-          cd .\build\app
-          .\app.exe --dry-run
+          cd .\build\bin
+          .\MKBotCore.exe --dry-run
         shell: pwsh
       - name: Packaging
         run: |
