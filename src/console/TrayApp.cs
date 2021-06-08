@@ -450,7 +450,7 @@ namespace MKBot
 
         internal void Application_Exit(object sender, EventArgs e)
         {
-            MKBotCore.Kill();
+            AsyncClient.TerminateClient();
         }
     }
 }

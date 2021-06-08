@@ -156,7 +156,6 @@ Section -Post
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
   ${If} $installOption == 0
-    WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "ReadyToUpdate" "1"
     Call WriteFlag
   ${EndIf}
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
@@ -176,9 +175,6 @@ Function .onInstSuccess
     IfErrors +4 0
     SetOutPath "$INSTDIR"
     Exec "$INSTDIR\${PRODUCT_EXE}"
-  ${Else}
-    ;TODO: will be removed
-    Exec "$MAINDIR\Update.exe /start /autorun"
   ${EndIf}
 FunctionEnd
 

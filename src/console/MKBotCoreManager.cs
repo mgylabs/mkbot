@@ -106,6 +106,12 @@ namespace MKBot
             }
         }
 
+        public static void TerminateClient()
+        {
+            client.Shutdown(SocketShutdown.Both);
+            client.Close();
+        }
+
         private static void ConnectCallback(IAsyncResult ar)
         {
             try
