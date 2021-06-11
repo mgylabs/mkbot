@@ -337,17 +337,33 @@ namespace MKBot
 
         public void SendShellCommand(string data)
         {
+            EnsureProcessRunning();
+
             data = Uri.EscapeDataString(data);
             AsyncClient.Send("action=shell&request=" + data);
         }
 
         private void ProcessExited_app(object sender, EventArgs e)
         {
-            make_app_process_args();
+            Console.WriteLine("MKBotCore was exited.");
+        }
 
-            app_process.Start();
+        private void EnsureProcessRunning()
+        {
+            try
+            {
+                if (app_process.HasExited)
+                {
+                    make_app_process_args();
+                    app_process.Start();
 
-            AsyncClient.StartClient(recv_callback);
+                    Console.WriteLine("MKBotCore was started.");
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         protected virtual void OnMKBotCoreStarted(EventArgs e)

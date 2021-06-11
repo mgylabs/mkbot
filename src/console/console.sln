@@ -7,10 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console.csproj",
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Build and Debug|Any CPU = Build and Debug|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEC7CEEE-22A9-4BD8-AAB2-F8315DB110C6}.Build and Debug|Any CPU.ActiveCfg = Build and Debug|Any CPU
+		{AEC7CEEE-22A9-4BD8-AAB2-F8315DB110C6}.Build and Debug|Any CPU.Build.0 = Build and Debug|Any CPU
 		{AEC7CEEE-22A9-4BD8-AAB2-F8315DB110C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEC7CEEE-22A9-4BD8-AAB2-F8315DB110C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC7CEEE-22A9-4BD8-AAB2-F8315DB110C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
