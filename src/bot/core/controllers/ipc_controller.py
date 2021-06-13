@@ -11,7 +11,8 @@ from shell_host import shell
 
 log = logging.getLogger(__name__)
 
-pool_sema = threading.BoundedSemaphore()
+shell_sema = threading.BoundedSemaphore()
+discord_sema = threading.BoundedSemaphore()
 
 
 class IPCController:
@@ -23,12 +24,31 @@ class IPCController:
     def on_receive(self, data):
         args = parse_qs(data)
 
-        if "enableDiscordBot" in args.get("action"):
+        if "shell" in args.get("action"):
+            with shell_sema:
+                print("By Shell", args.get("request", ""))
+                try:
+                    shell.bind(
+                        Request(
+                            "shell",
+                            unquote(args.get("request", "")[0]),
+                            send=self.send_response,
+                            wait_for_response=self.wait_for_response,
+                        )
+                    )
+                except CommandNotFoundError as e:
+                    log.debug(e)
+                    self.send_response("Command Not Found!")
+            return
 
-            def callback(exit_code):
-                self.ipc_service.send(f"action=disableDiscordBot&exitcode={exit_code}")
+        with discord_sema:
+            if "enableDiscordBot" in args.get("action"):
 
-            with pool_sema:
+                def callback(exit_code):
+                    self.ipc_service.send(
+                        f"action=disableDiscordBot&exitcode={exit_code}"
+                    )
+
                 if BotStateFlags.online:
                     return
 
@@ -36,30 +56,13 @@ class IPCController:
                 self.discord_manger.start()
                 BotStateFlags.online = True
                 self.ipc_service.send("action=enableDiscordBot")
-
-        elif "disableDiscordBot" in args.get("action"):
-            with pool_sema:
+            elif "disableDiscordBot" in args.get("action"):
                 if not BotStateFlags.online:
                     return
 
                 with BotStateFlags.Terminate():
                     while self.discord_manger.is_alive():
                         pass
-
-        elif "shell" in args.get("action"):
-            print("By Shell", args.get("request", ""))
-            try:
-                shell.bind(
-                    Request(
-                        "shell",
-                        unquote(args.get("request", "")[0]),
-                        send=self.send_response,
-                        wait_for_response=self.wait_for_response,
-                    )
-                )
-            except CommandNotFoundError as e:
-                log.debug(e)
-                self.send_response("Command Not Found!")
 
     def send_response(self, data):
         self.ipc_service.send(f"action=shell&response={quote(data)}")

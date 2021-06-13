@@ -1,6 +1,7 @@
 import queue
 import re
 import subprocess
+import threading
 import traceback
 
 import simpleaudio as sa
@@ -24,8 +25,17 @@ def human_info(title, duration):
     return f"{title} ({human_duration})"
 
 
+class Song:
+    def __init__(self, title, duration, url) -> None:
+        self.title = title
+        self.duration = duration
+        self.url = url
+        self.human_info = human_info(self.title, self.duration)
+
+
 class FFPlayer:
     process = None
+    repeat = False
     stop_flag = False
 
     @classmethod
@@ -44,7 +54,7 @@ class FFPlayer:
             cls.process.kill()
 
     @classmethod
-    def play(cls, music_url, callback):
+    def play(cls, song: Song, callback):
         if cls.is_playing() and not song_queue.empty():
             return
 
@@ -59,7 +69,7 @@ class FFPlayer:
                     "-reconnect_delay_max",
                     "5",
                     "-i",
-                    music_url,
+                    song.url,
                     "-vn",
                     "-autoexit",
                     "-nodisp",
@@ -70,6 +80,9 @@ class FFPlayer:
         except FileNotFoundError:
             print("FFPlay not found")
             raise Exception("FFPlay not found")
+
+        if cls.repeat:
+            song_queue.put_nowait(song)
 
         if not cls.stop_flag:
             callback()
@@ -137,41 +150,53 @@ class Player:
             traceback.print_exc()
 
 
-class Song:
-    def __init__(self, title, duration, url) -> None:
-        self.title = title
-        self.duration = duration
-        self.url = url
-        self.human_info = human_info(self.title, self.duration)
-
-
 def add_to_song_queue(send, song: Song):
     if FFPlayer.is_playing():
         song_queue.put_nowait(song)
         send(song.human_info + " in Queue")
     else:
         song_queue.put_nowait(song)
-        play_music(send)
+        play_music_safe(send)
 
 
 def play_music(send):
-    if not FFPlayer.is_playing():
-        try:
-            song: Song = song_queue.get_nowait()
-        except Exception:
-            send("End of Queue")
-            return
-        send("Now Playing: " + song.human_info)
-        try:
-            FFPlayer.play(song.url, lambda: play_music(send))
-        except Exception as e:
-            send(str(e))
-        song_queue.task_done()
+    try:
+        song: Song = song_queue.get_nowait()
+    except Exception:
+        send("End of Queue")
+        return
+    send("Now Playing: " + song.human_info)
+    try:
+        FFPlayer.play(song, lambda: play_music(send))
+    except Exception as e:
+        send(str(e))
+
+    song_queue.task_done()
+
+
+class PlayerManager(threading.Thread):
+    def __init__(self, send):
+        super().__init__()
+        self.daemon = True
+        self.send = send
+
+    def run(self):
+        play_music(self.send)
+
+
+player_manger: PlayerManager = None
+
+
+def play_music_safe(send):
+    global player_manger
+    if player_manger is None or not player_manger.is_alive():
+        player_manger = PlayerManager(send)
+        player_manger.start()
 
 
 @music_controller.command(f"[{CONFIG.commandPrefix}](play|p)")
 def play(ctx):
-    play_music(ctx.send)
+    play_music_safe(ctx.send)
 
 
 @music_controller.command(f"[{CONFIG.commandPrefix}](play|p) <song>")
@@ -275,3 +300,13 @@ def show_queue(ctx):
         ctx.send("Queue\nEmpty!")
     else:
         ctx.send("Queue\n" + "\n".join(builder))
+
+
+@music_controller.command(f"[{CONFIG.commandPrefix}](repeat|r)")
+def repeat(ctx):
+    if FFPlayer.repeat:
+        FFPlayer.repeat = False
+        ctx.send("Repeat mode was deactivated.")
+    else:
+        FFPlayer.repeat = True
+        ctx.send("Repeat mode was activated.")
