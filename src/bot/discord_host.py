@@ -56,7 +56,9 @@ def create_bot(return_error_level=False):
         TelemetryReporter.start("Login")
         print("Logged in within", time.time() - stime)
 
-        replyformat.set_avatar_url(bot.user.avatar_url)
+        replyformat.set_avatar_url(
+            "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
+        )
         if is_development_mode():
             name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
             activity_type = discord.ActivityType.playing
@@ -105,6 +107,24 @@ def create_bot(return_error_level=False):
 
         if isinstance(error, NonFatalError):
             log.debug(str(error))
+            return
+
+        if isinstance(error, commands.MaxConcurrencyReached):
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    f"Max Concurrency Reached: {ctx.command.name}",
+                    "Too many people using this command. Please retry in a minute.",
+                )
+            )
+            return
+
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx, f"Command On Cooldown: {ctx.command.name}", str(error)
+                )
+            )
             return
 
         if isinstance(error, UsageError):

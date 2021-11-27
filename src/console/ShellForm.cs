@@ -8,7 +8,7 @@ namespace MKBot
     {
         private MKBotCoreManager MKBotCore;
         private delegate void SafeCallDelegate(bool status, bool enabled);
-        private delegate void SafeAppendDelegate(string data);
+        private delegate void SafeAppendDelegate(string data, bool enabled);
 
 
         public ShellForm(MKBotCoreManager MKBotCore)
@@ -34,18 +34,22 @@ namespace MKBot
 
             if (outputBox.InvokeRequired)
             {
-                outputBox.Invoke(new SafeAppendDelegate(Append_to_outputBox), text);
+                outputBox.Invoke(new SafeAppendDelegate(Append_to_outputBox), text, true);
             }
             else
             {
-                Append_to_outputBox(text);
+                Append_to_outputBox(text, true);
             }
         }
 
-        private void Append_to_outputBox(string data)
+        private void Append_to_outputBox(string data, bool buttonEanble = false)
         {
             outputBox.SelectionCharOffset = 8;
             outputBox.AppendText(data + "\n");
+            if (buttonEanble)
+            {
+                this.sendButton.Enabled = true;
+            }
         }
 
         private void MKbotCore_Exit(object sender, MKBotCoreExitEventArgs e)
@@ -122,6 +126,7 @@ namespace MKBot
             if (text.Length > 0)
             {
                 userInputBox.Text = "";
+                this.sendButton.Enabled = false;
                 MKBotCore.SendShellCommand(text);
                 Append_to_outputBox("User: " + text);
             }

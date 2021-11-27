@@ -63,6 +63,7 @@
             //
             // linkLabel2
             //
+            this.linkLabel2.ActiveLinkColor = System.Drawing.Color.LightSkyBlue;
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
@@ -78,6 +79,7 @@
             //
             // linkLabel1
             //
+            this.linkLabel1.ActiveLinkColor = System.Drawing.Color.LightSkyBlue;
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;

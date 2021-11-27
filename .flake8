@@ -5,6 +5,7 @@ ignore =
     E711,
     W504,
     W503,
+    W605,
 per-file-ignores =
     src/bot/main.py: E402,
     src/bot/discord_host.py: E402,
