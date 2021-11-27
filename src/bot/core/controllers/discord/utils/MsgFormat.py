@@ -47,7 +47,7 @@ class MsgFormatter:
         embed = discord.Embed(
             title=title,
             description=description.format(commandPrefix=CONFIG.commandPrefix)
-            + "\n\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
+            + "\n\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
             color=color,
             timestamp=datetime.datetime.utcnow(),
         )
@@ -82,7 +82,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title="ABRT: An unknown error has occurred :face_with_monocle:",
-            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
+            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
             color=color_to_int("#FF0000"),
             timestamp=datetime.datetime.utcnow(),
         )
