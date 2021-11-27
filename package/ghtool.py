@@ -166,7 +166,7 @@ def upload_asset():
 def upload_canary_asset():
     with open("package/info/version.json", "rt") as f:
         data = json.load(f)
-    version = data["version"].replace("-dev", "")
+    version = data["version"].replace("-beta", "")
     sha = data["commit"]
 
     tag = requests_API(
@@ -209,7 +209,7 @@ def upload_canary_asset():
 
 def create_pull_request():
     TAG_NAME = os.getenv("TAG_NAME").replace("refs/tags/", "")
-    BASE_REF = os.getenv("BASE_REF").replace("refs/heads/", "")
+    BASE_REF = os.getenv("BASE_REF", "main").replace("refs/heads/", "")
     res = requests_API(
         "POST",
         "/repos/mgylabs/mulgyeol-mkbot/pulls",

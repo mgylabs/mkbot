@@ -23,6 +23,10 @@ namespace MKBot
                 string version_str = version_array[0];
                 if (version_array.Length > 1 && version_array[1] == "dev")
                 {
+                    version_str += " Dev";
+                }
+                else if (version_array.Length > 1 && version_array[1] == "beta")
+                {
                     version_str += " Canary";
                 }
                 else

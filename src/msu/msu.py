@@ -73,10 +73,8 @@ class VersionInfo:
 class Updater:
     def __init__(self, current_data, enabled_canary=False):
         self.enabled_canary = enabled_canary
-        if self.enabled_canary:
-            self.current_version = version.parse(current_data["version"])
-        else:
-            self.current_version = version.parse(current_data["version"])
+
+        self.current_version = version.parse(current_data["version"])
 
         self.last_canary = None
         self.target = None
@@ -105,23 +103,21 @@ class Updater:
         self.last_stable = VersionInfo(asset["label"], asset["browser_download_url"])
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        else:
-            if self.enabled_canary:
-                res = requests.get(
-                    "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
-                )
-                try:
-                    res.raise_for_status()
-                    asset = self.find_asset(res.json()["assets"])
-                    if asset != None:
-                        self.last_canary = VersionInfo(
-                            asset["label"], asset["browser_download_url"]
-                        )
-                except Exception:
-                    traceback.print_exc()
+        elif self.enabled_canary:
+            res = requests.get(
+                "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+            )
+            try:
+                res.raise_for_status()
+                asset = self.find_asset(res.json()["assets"])
+                if asset != None:
+                    self.last_canary = VersionInfo(
+                        asset["label"], asset["browser_download_url"]
+                    )
+            except Exception:
+                traceback.print_exc()
             if (
-                self.enabled_canary
-                and self.last_canary
+                self.last_canary
                 and self.last_canary.version > self.last_stable.version
                 and self.last_canary.version >= self.current_version
                 and self.last_canary.commit != current_data["commit"]
@@ -129,6 +125,8 @@ class Updater:
                 self.target = self.last_canary
             else:
                 sys.exit(1)
+        else:
+            sys.exit(1)
 
     def find_asset(self, assets):
         asset = None

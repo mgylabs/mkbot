@@ -42,7 +42,9 @@ class Version:
         self.canary = (
             True
             if (
-                len(version_str) > 1 and version_str[1] == "dev" and self.commit != None
+                len(version_str) > 1
+                and version_str[1] == "beta"
+                and self.commit != None
             )
             else False
         )
@@ -60,7 +62,7 @@ class Version:
         if self.commit == None:
             return f"{self.base_version} Test Mode"
         if self.is_canary():
-            return f"{self.base_version}.{self.commit[:7]} Canary"
+            return f"{self.base_version} Canary"
         else:
             return f"{self.base_version} Stable"
 

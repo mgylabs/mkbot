@@ -6,6 +6,29 @@ import sys
 import requests
 import yaml
 
+base_url = "https://api.github.com"
+if os.getenv("GITHUB_TOKEN") != None:
+    req_headers = {"Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}"}
+else:
+    req_headers = {}
+
+
+def requests_API(method, link, datadict=None):
+    method = method.upper()
+    if method == "POST":
+        x = requests.post(base_url + link, json=datadict, headers=req_headers)
+    elif method == "PUT":
+        x = requests.put(base_url + link, json=datadict, headers=req_headers)
+    elif method == "GET":
+        x = requests.get(base_url + link, headers=req_headers)
+    elif method == "PATCH":
+        x = requests.patch(base_url + link, json=datadict, headers=req_headers)
+    elif method == "DELETE":
+        x = requests.delete(base_url + link, headers=req_headers)
+    else:
+        return
+    return x
+
 
 def isfile(filename):
     return os.path.isfile(filename)
@@ -26,6 +49,16 @@ def isnewupdate(base, last):
 def save_version_txt(version):
     with open("version.txt", "wt") as f:
         f.write(version)
+
+
+def find_asset(assets):
+    asset = None
+    for d in assets:
+        if d["label"].lower().startswith("mkbotsetup-"):
+            asset = d
+            break
+
+    return asset
 
 
 def build():
@@ -196,39 +229,72 @@ def github_build():
     with open("package/info/version.json", "rt") as f:
         package_version_data = json.load(f)
 
+    package_version_data["version"] = package_version_data["version"].replace(
+        "-dev", "-beta"
+    )
     package_version_data["commit"] = os.getenv("GITHUB_SHA")
 
     with open("package/info/version.json", "wt") as f:
         json.dump(package_version_data, f)
 
     save_version_txt(package_version_data["version"])
-    update_AssemblyInfo(package_version_data["version"].replace("-dev", ""))
+    update_AssemblyInfo(package_version_data["version"].replace("-beta", ""))
 
 
 def github_release(stable):
     with open("package/info/version.json", "rt") as f:
         package_version_data = json.load(f)
 
-    if stable:
-        package_version_data["version"] = package_version_data["version"].replace(
-            "-dev", ""
+    cur_commit = os.getenv("GITHUB_SHA")
+    base_version = package_version_data["version"].split("-")[0]
+    list_version = version(base_version)
+
+    res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary")
+
+    asset = find_asset(res.json()["assets"])
+
+    last_build_number = 0
+
+    last_build_commit = None
+    if asset != None:
+        _, _, ver, _ = asset["label"].split("-")
+        last_build_list_version = version(".".join(ver.split(".")[:-1]))
+        last_build_number = (
+            last_build_list_version[3] if len(last_build_list_version) > 3 else 1
         )
+        last_build_commit = ver.split(".")[-1]
+
+    if stable:
+        if last_build_commit != cur_commit:
+            list_version[3] = last_build_number + 1
+        else:
+            list_version[3] = last_build_number
+        package_version_data["version"] = list_to_version_str(list_version)
+    else:
+        if last_build_list_version[:3] == list_version[:3]:
+            list_version[3] = last_build_number + 1
+        else:
+            list_version[3] = 1
+        package_version_data["version"] = list_to_version_str(list_version) + "-beta"
 
     package_version_data["commit"] = os.getenv("GITHUB_SHA")
 
     with open("package/info/version.json", "wt") as f:
         json.dump(package_version_data, f)
+
     if stable:
         save_version_txt(package_version_data["version"])
     else:
         save_version_txt(
             package_version_data["version"].replace(
-                "-dev", f".{package_version_data['commit'][:7]} Canary"
+                "-beta", f".{package_version_data['commit'][:7]} Canary"
             )
         )
-    update_AssemblyInfo(package_version_data["version"].replace("-dev", ""))
+    update_AssemblyInfo(
+        package_version_data["version"].replace("-dev", "").replace("-beta", "")
+    )
     create_temp_changelog(stable, package_version_data["commit"])
-    update_changelog(package_version_data["version"])
+    update_changelog(list_to_version_str(list_version[:3]))
 
 
 def github_bump_version():
