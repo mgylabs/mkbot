@@ -82,6 +82,12 @@ class Settings:
                 ensure_ascii=False,
             )
 
+    def get(self, key, default=None):
+        if self.__contains__(key):
+            return self.__getitem__(key)
+        else:
+            return default
+
     def __getitem__(self, key):
         return self.__getattribute__(key)
 
@@ -98,9 +104,10 @@ class Settings:
         if key in self.__default_attr_key__:
             raise KeyError(f"This key is not available: {key}")
 
-        self.load()
-        setattr(Settings, key, SettingItem(value))
-        self.save()
+        with config_sema:
+            self.load()
+            setattr(Settings, key, SettingItem(value))
+            self.save()
 
     def __delattr__(self, key):
         if key in self.__default_attr_key__:

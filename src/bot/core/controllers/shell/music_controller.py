@@ -14,6 +14,8 @@ music_controller = VirtualCommandConsole()
 song_queue = queue.Queue()
 search_pending = []
 
+REPEAT_OPTION_KEY = "shell.music.repeat"
+
 
 def is_youtube_url(data):
     m = re.match(r"(https:\/\/)?(www[.])?youtube.com\/", data, re.IGNORECASE)
@@ -35,7 +37,7 @@ class Song:
 
 class FFPlayer:
     process = None
-    repeat = False
+    repeat = CONFIG.get(REPEAT_OPTION_KEY, False)
     stop_flag = False
 
     @classmethod
@@ -306,7 +308,9 @@ def show_queue(ctx):
 def repeat(ctx):
     if FFPlayer.repeat:
         FFPlayer.repeat = False
+        CONFIG[REPEAT_OPTION_KEY] = FFPlayer.repeat
         ctx.send("Repeat mode was deactivated.")
     else:
         FFPlayer.repeat = True
+        CONFIG[REPEAT_OPTION_KEY] = FFPlayer.repeat
         ctx.send("Repeat mode was activated.")
