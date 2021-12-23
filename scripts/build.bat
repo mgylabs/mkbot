@@ -23,7 +23,12 @@ xcopy /q /I /Y /E package\info build\info
 xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
-pyinstaller main.spec -y --log-level WARN || goto :error
+@ If /i "%1" == "--clean" (
+    pyinstaller main.spec -y --log-level WARN --clean || goto :error
+) Else (
+    pyinstaller main.spec -y --log-level WARN || goto :error
+)
+
 move dist\MKBotCore dist\bin
 move dist\bin ..\..\build
 
@@ -47,7 +52,11 @@ cd ..\console
 move bin\Release\* ..\..\build
 
 cd ..\msu
-pyinstaller msu.spec -y --log-level WARN || goto :error
+@ If /i "%1" == "--clean" (
+    pyinstaller msu.spec -y --log-level WARN --clean || goto :error
+) Else (
+    pyinstaller msu.spec -y --log-level WARN || goto :error
+)
 move "dist\msu" ..\..\build\Update
 
 cd %CI_PROJECT_DIR%\build

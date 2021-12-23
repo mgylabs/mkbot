@@ -10,6 +10,8 @@ per-file-ignores =
     src/bot/main.py: E402,
     src/bot/discord_host.py: E402,
     src/msu/msu.py: E402,
+    migrations/env.py: F401,E402
+    src/lib/mgylabs/db/database.py: F401
 exclude =
     .venv*,
     # No need to traverse our git directory

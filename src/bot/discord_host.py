@@ -13,8 +13,12 @@ from discord.ext import commands, tasks
 
 sys.path.append("..\\lib")
 
+from mgylabs.db.database import run_migrations
+from mgylabs.db.models import DiscordBotLog
+from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+from mgylabs.utils.helper import usage_helper
 
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
@@ -86,7 +90,20 @@ def create_bot(return_error_level=False):
                     f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms"
                 )
         else:
+            ctx: commands.Context = await bot.get_context(message)
+
+            if ctx.command is not None:
+                DiscordBotLog(
+                    message.author.id,
+                    message.id,
+                    MGCertificate.getUserLevel(str(message.author)),
+                    ctx.command.name,
+                    ctx.message.content,
+                    ctx.message.created_at,
+                ).save()
+
             await bot.process_commands(message)
+
             nonlocal pending
             if pending and message.content.startswith(bot.command_prefix):
                 pending = False
@@ -166,6 +183,10 @@ def create_bot(return_error_level=False):
             print(BotStateFlags.terminate)
             await bot.close()
 
+    @tasks.loop(minutes=10)
+    async def usage():
+        usage_helper()
+
     for i in discord_extensions:
         try:
             bot.load_extension(i)
@@ -188,6 +209,7 @@ def create_bot(return_error_level=False):
         traceback.print_exc()
 
     flag_checker.start()
+    usage.start()
 
     print("Mulgyeol MK Bot")
     print(f"Version {VERSION}" if VERSION != None else "Test Mode")
@@ -221,6 +243,7 @@ class DiscordBotManger(threading.Thread):
             get_event_loop()
             bot = create_bot()
             bot.run(CONFIG.discordToken)
+            usage_helper()
         except discord.errors.LoginFailure as e:
             log.critical(e)
             exit_code = 1
@@ -233,5 +256,6 @@ class DiscordBotManger(threading.Thread):
 
 
 if __name__ == "__main__":
+    run_migrations(SCRIPT_DIR, DB_URL)
     bot = create_bot()
     bot.run(CONFIG.discordToken)

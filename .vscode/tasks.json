@@ -1,73 +1,85 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "type": "shell",
-            "command": ".venv\\Scripts\\activate && scripts\\build.bat",
-            "args": [],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "nodemon",
-            "type": "shell",
-            "command": ".venv\\Scripts\\activate && nodemon",
-            "args": [],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Test in Packaged Application",
-            "type": "shell",
-            "command": ".venv\\Scripts\\activate && scripts\\build.bat",
-            "args": [
-                "--test-bot"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "package",
-            "type": "shell",
-            "command": "C:\\Program Files (x86)\\NSIS\\makensis.exe",
-            "args": [
-                "/INPUTCHARSET",
-                "UTF8",
-                "/DPRODUCT_VERSION=Pre-release",
-                "/DPRODUCT_NAME=Mulgyeol MK Bot - OSS",
-                "/DPRODUCT_EXE=MKBot-OSS.exe",
-                "/DEXT_DIR=.mkbot",
-                "package\\MKBot.nsi"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        }
-    ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": ".venv\\Scripts\\activate && scripts\\build.bat",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "build (clean)",
+      "type": "shell",
+      "command": ".venv\\Scripts\\activate && scripts\\build.bat",
+      "args": ["--clean"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "nodemon",
+      "type": "shell",
+      "command": ".venv\\Scripts\\activate && nodemon",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Test in Packaged Application",
+      "type": "shell",
+      "command": ".venv\\Scripts\\activate && scripts\\build.bat",
+      "args": ["--test-bot"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "package",
+      "type": "shell",
+      "command": "C:\\Program Files (x86)\\NSIS\\makensis.exe",
+      "args": [
+        "/INPUTCHARSET",
+        "UTF8",
+        "/DPRODUCT_VERSION=Pre-release",
+        "/DPRODUCT_NAME=Mulgyeol MK Bot - OSS",
+        "/DPRODUCT_EXE=MKBot-OSS.exe",
+        "/DEXT_DIR=.mkbot",
+        "package\\MKBot.nsi"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }

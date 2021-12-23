@@ -87,14 +87,15 @@ class MGCertificate:
 
             @wraps(func)
             async def outerfunc(*args, **kwargs):
-                if isinstance(args[0], commands.context.Context):
-                    ctx = args[0]
+                if isinstance(args[0], commands.Context):
+                    ctx: commands.Context = args[0]
                 else:
-                    ctx = args[1]
+                    ctx: commands.Context = args[1]
 
                 req_user = str(ctx.author)
+                perm = MGCertificate.getUserLevel(req_user)
 
-                if MGCertificate.getUserLevel(req_user) > level:
+                if perm > level:
                     embed = MsgFormatter.get(
                         ctx,
                         "Permission denied",

@@ -1,3 +1,4 @@
+import platform
 import traceback
 
 from ..utils.config import DISCRIMINATOR, VERSION
@@ -24,12 +25,18 @@ class TelemetryReporter:
 
     @classmethod
     def send_telemetry_event(cls, event_name, properties={}):
+        properties["commit"] = VERSION.commit
+        properties["OS"] = platform.platform().replace("-", " ")
+
         if cls.reporter is not None:
             return cls.reporter.send_telemetry_event(event_name, properties)
 
     @classmethod
     def send_telemetry_exception(cls, error, properties={}):
         assert isinstance(error, Exception)
+
+        properties["commit"] = VERSION.commit
+        properties["OS"] = platform.platform().replace("-", " ")
 
         if cls.reporter is not None:
             return cls.reporter.send_telemetry_exception(error, properties)

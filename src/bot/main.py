@@ -6,10 +6,17 @@ from discord_host import create_bot
 sys.path.append("..\\lib")
 import msvcrt
 import os
+import traceback
+
+from mgylabs.db.database import run_migrations
+from mgylabs.db.paths import DB_URL, SCRIPT_DIR
+from mgylabs.services.telemetry_service import TelemetryReporter
 
 from core.controllers.ipc_controller import IPCController
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+log = logging.getLogger(__name__)
 
 
 def instance_already_running():
@@ -24,28 +31,39 @@ def instance_already_running():
     return already_running
 
 
-if instance_already_running():
-    print("MKBotCore is already running.")
-    sys.exit(0)
+def main():
+    if instance_already_running():
+        print("MKBotCore is already running.")
+        sys.exit(0)
 
-if "--dry-run" in sys.argv:
-    errorlevel = create_bot(True)
-    if errorlevel == 0:
-        print("Test Passed")
+    run_migrations(SCRIPT_DIR, DB_URL)
+
+    if "--dry-run" in sys.argv:
+        errorlevel = create_bot(True)
+        if errorlevel == 0:
+            print("Test Passed")
+        else:
+            print("Test Failed")
+        sys.exit(errorlevel)
+
+    if "--port" in sys.argv:
+        try:
+            loc = sys.argv.index("--port")
+            PORT = int(sys.argv[loc + 1])
+        except Exception:
+            PORT = 8979
     else:
-        print("Test Failed")
-    sys.exit(errorlevel)
-
-log = logging.getLogger(__name__)
-
-if "--port" in sys.argv:
-    try:
-        loc = sys.argv.index("--port")
-        PORT = int(sys.argv[loc + 1])
-    except Exception:
         PORT = 8979
-else:
-    PORT = 8979
 
-ipc_controller = IPCController(PORT)
-ipc_controller.run()
+    ipc_controller = IPCController(PORT)
+    ipc_controller.run()
+
+
+if __name__ == "__main__":
+    try:
+        TelemetryReporter.start()
+        main()
+    except Exception as error:
+        TelemetryReporter.send_telemetry_exception(error)
+        traceback.print_exc()
+        sys.exit(1)
