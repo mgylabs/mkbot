@@ -51,6 +51,7 @@ jobs:
         shell: pwsh
       - name: Unit Test
         run: |
+          scripts\prepare.bat
           python -m unittest discover -v -s tests -p test_*.py
       - name: Version
         env:

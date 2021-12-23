@@ -9,6 +9,7 @@ import zipfile
 
 import requests
 from packaging import version
+from requests.sessions import HTTPAdapter
 
 sys.path.append("..\\lib")
 
@@ -62,7 +63,7 @@ class VersionInfo:
         _, self.rtype, self.version, self.sha = label.split("-")
         self.commit = None
         self.url = url
-        if self.rtype == "canary":
+        if self.rtype.lower() == "canary":
             self.commit = self.version.split(".")[-1]
             self.version = self.version.replace(f".{self.commit}", "")
             self.version = version.parse(self.version)
@@ -82,7 +83,10 @@ class Updater:
         if current_data.get("commit", None) == None:
             sys.exit(1)
 
-        res = requests.get(
+        self.session = requests.Session()
+        self.session.mount("https://", HTTPAdapter(max_retries=3))
+
+        res = self.session.get(
             "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
         )
 
@@ -104,7 +108,7 @@ class Updater:
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
         elif self.enabled_canary:
-            res = requests.get(
+            res = self.session.get(
                 "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
             )
             try:
@@ -137,26 +141,29 @@ class Updater:
 
         return asset
 
-    def download(self):
-        DOWNLOAD_PATH = f"{os.getenv('TEMP')}\\mkbot-update"
-        if self.check_sha1_hash():
-            subprocess.call([f"{DOWNLOAD_PATH}\\MKBotSetup.exe", "/S", "/unpack"])
-        else:
-            r = requests.get(self.target.url)
+    def download_file(self, download_file_name):
+        with self.session.get(self.target.url, stream=True) as r:
+            r.raise_for_status()
 
             TelemetryReporter.send_telemetry_event(
                 "UpdateDownloaded",
                 {"status": r.status_code, "url": self.target.url},
             )
 
-            r.raise_for_status()
+            with open(download_file_name, "wb") as f:
+                for chunk in r.iter_content(chunk_size=1024 * 1024):
+                    f.write(chunk)
 
+    def download(self):
+        DOWNLOAD_PATH = f"{os.getenv('TEMP')}\\mkbot-update"
+        if self.check_sha1_hash():
+            subprocess.call([f"{DOWNLOAD_PATH}\\MKBotSetup.exe", "/S", "/unpack"])
+        else:
             download_file_name = f"{DOWNLOAD_PATH}\\MKBotSetup.zip"
 
             os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
 
-            with open(download_file_name, "wb") as f:
-                f.write(r.content)
+            self.download_file(download_file_name)
 
             _zip = zipfile.ZipFile(download_file_name)
             _zip.extractall(DOWNLOAD_PATH)

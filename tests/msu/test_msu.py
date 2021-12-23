@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
+import requests
 from src.msu import msu
 
 
@@ -14,8 +15,9 @@ class MSUTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.patcher_get = patch(
-            "src.msu.msu.requests.get",
+        cls.patcher_get = patch.object(
+            requests.Session,
+            "get",
             side_effect=cls.generate_mock_requests_get(
                 "1.3.3.1", "1.4.0.1", "82980060b4606ef9bc428932736647d45e400fd9"
             ),
@@ -126,7 +128,7 @@ class MSUTest(TestCase):
                 + '"}'
             )
 
-    @patch("src.msu.msu.requests.get")
+    @patch.object(requests.Session, "get")
     def test_Updater_init(self, mock_get):
         from packaging import version
 
