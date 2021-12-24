@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 from alembic import command
 from alembic.config import Config
@@ -11,7 +12,7 @@ from .paths import DB_URL
 
 log = logging.getLogger(__name__)
 
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL, echo=False)
 
 db_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -21,13 +22,18 @@ Base: DeclarativeMeta = declarative_base()
 Base.query = db_session.query_property()
 
 
+def is_development_mode():
+    return not getattr(sys, "frozen", False)
+
+
 def write_flag():
-    with open("migration.flag", "wt") as f:
-        f.write("flag")
+    if not is_development_mode():
+        with open("migration.flag", "wt") as f:
+            f.write("flag")
 
 
 def exist_flag():
-    return os.path.isfile("migration.flag")
+    return False if is_development_mode() else os.path.isfile("migration.flag")
 
 
 def run_migrations(script_location: str, dsn: str) -> None:

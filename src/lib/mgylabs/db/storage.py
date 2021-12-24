@@ -1,3 +1,6 @@
+import pickle
+import traceback
+
 from mgylabs.db.models import HashStore
 
 
@@ -6,16 +9,25 @@ class Storage:
         return HashStore.count()
 
     def __getitem__(self, key):
-        return HashStore.get(key=key).first()
+        val = HashStore.get(key=key).first()
+        if val is None:
+            return None
+        else:
+            try:
+                obj = pickle.loads(val.value)
+            except Exception:
+                traceback.print_exc()
+            else:
+                return obj
 
     def __contains__(self, key):
         return self.__getitem__(key) is not None
 
     def __setitem__(self, key, value):
-        return HashStore.update_or_create(key=key, defaults={"value": value})[0]
+        HashStore.update_or_create(key=key, defaults={"value": pickle.dumps(value)})
 
     def __delitem__(self, key):
-        self.__getitem__(key).delete()
+        HashStore.get(key=key).first().delete()
 
 
-LocalStorage = Storage()
+localStorage = Storage()

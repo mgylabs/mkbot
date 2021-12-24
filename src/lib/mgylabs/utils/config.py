@@ -3,7 +3,6 @@ import json
 import os
 import sys
 import threading
-import traceback
 
 config_sema = threading.BoundedSemaphore()
 
@@ -192,7 +191,6 @@ def get_mkbot_version():
             d = json.load(f)
         return Version(d["version"], d["commit"])
     except Exception:
-        traceback.print_exc()
         return None
 
 
