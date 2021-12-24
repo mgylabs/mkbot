@@ -1,5 +1,4 @@
 import asyncio
-import json
 
 import aiohttp
 import youtube_dl
@@ -22,19 +21,47 @@ class Song:
         self.title = title
         self.length = ""
 
-    def searchSong(self, content, number):
-        self.url = (
-            "https://www.youtube.com/watch?v="
-            + content[number]["videoRenderer"]["videoId"]
+    def searchSong(self, url, title, length):
+        self.url = url
+        self.title = title
+        self.length = length
+
+        return self
+
+
+async def ytsearch(text, count):
+    ls = []
+
+    ydl_opts = {
+        "noplaylist": True,
+        "skip_download": True,
+        "format": "bestaudio/best",
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        loop = asyncio.get_event_loop()
+        infos = await loop.run_in_executor(
+            None,
+            lambda: ydl.extract_info(
+                f"ytsearch{count}:{text}",
+                download=False,
+            )["entries"],
         )
-        self.title = ""
-        for i in content[number]["videoRenderer"]["title"]["runs"]:
-            self.title += i["text"]
-        self.channel = content[number]["videoRenderer"]["longBylineText"]["runs"][0][
-            "text"
-        ]
-        self.viewCount = content[number]["videoRenderer"]["viewCountText"]["simpleText"]
-        self.length = content[number]["videoRenderer"]["lengthText"]["simpleText"]
+
+    for info in infos:
+        music_url = info["formats"][0]["url"]
+        title: str = info["title"]
+        duration: int = info["duration"]
+
+        ls.append(Song().searchSong(music_url, title, str(duration) + "sec"))
+
+    return ls
 
 
 class Music(commands.Cog):
@@ -207,33 +234,10 @@ class Music(commands.Cog):
                 await self.player(ctx)
 
             else:
-                async with aiohttp.ClientSession(raise_for_status=True) as session:
-                    async with session.get(
-                        "https://www.youtube.com/results?search_query=" + song
-                    ) as r:
-                        text = await r.text()
-                soup = BeautifulSoup(text, "lxml")
-                J = str(soup.find_all("script")[27])
-                J = J.split("var ytInitialData = ")[1].split(";<")[0]
+                ls = await ytsearch(song, 1)
 
-                s = json.loads(J)
+                song_list_dict[guild_id][1].append(ls[0])
 
-                a = 0
-                while True:
-                    content = s["contents"]["twoColumnSearchResultsRenderer"][
-                        "primaryContents"
-                    ]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"][
-                        "contents"
-                    ]
-                    if ("videoRenderer" in content[a]) and (
-                        "badges" not in content[a]["videoRenderer"]
-                    ):
-                        song_ = Song()
-                        song_.searchSong(content, a)
-                        song_list_dict[guild_id][1].append(song_)
-                        break
-                    a += 1
-                await ctx.message.delete()
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
@@ -376,54 +380,8 @@ class Music(commands.Cog):
                     ctx, "No Search Word Error", "Please Enter a word."
                 )
             )
-
-        elif "youtube.com" in song:
-            async with aiohttp.ClientSession(raise_for_status=True) as session:
-                async with session.get(
-                    "https://www.youtube.com/results?search_query=" + song
-                ) as r:
-                    text = await r.text()
-            soup = BeautifulSoup(text, "lxml")
-            title = str(soup.find("title"))[7:-8]
-            song_list_dict[guild_id][1].append(Song().addSong(title, song))
-            await ctx.message.delete()
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx, song_list_dict[guild_id][1][-1].title, " in Queue"
-                )
-            )
-            await self.player(ctx)
-
         else:
-            async with aiohttp.ClientSession(raise_for_status=True) as session:
-                async with session.get(
-                    "https://www.youtube.com/results?search_query=" + song
-                ) as r:
-                    text = await r.text()
-            soup = BeautifulSoup(text, "lxml")
-            J = str(soup.find_all("script")[27])
-            J = J.split("var ytInitialData = ")[1].split(";<")[0]
-
-            s = json.loads(J)
-
-            a, b = 0, 0
-            search_song_list = list()
-            while True:
-                content = s["contents"]["twoColumnSearchResultsRenderer"][
-                    "primaryContents"
-                ]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"][
-                    "contents"
-                ]
-                if ("videoRenderer" in content[a]) and (
-                    "badges" not in content[a]["videoRenderer"]
-                ):
-                    song_ = Song()
-                    song_.searchSong(content, a)
-                    search_song_list.append(song_)
-                    b += 1
-                if b == 5:
-                    break
-                a += 1
+            search_song_list = await ytsearch(song, 5)
 
             async def check_reaction(botmsg, timeout):
                 await asyncio.sleep(timeout)
