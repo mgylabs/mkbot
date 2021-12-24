@@ -89,7 +89,3 @@ Self-host discord bot on your own local Windows PC.
 ---
 
 For more infomation, See [Project Wiki](https://github.com/mgylabs/mulgyeol-mkbot/wiki/How-to-Contribute).
-
-alembic init migrations
-alembic revision --autogenerate -m ""
-alembic upgrade head

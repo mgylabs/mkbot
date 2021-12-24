@@ -20,5 +20,6 @@
   "python.testing.pytestEnabled": false,
   "files.insertFinalNewline": true,
   "editor.formatOnPaste": false,
-  "editor.formatOnSaveMode": "file"
+  "editor.formatOnSaveMode": "file",
+  "prettier.tabWidth": 2
 }
