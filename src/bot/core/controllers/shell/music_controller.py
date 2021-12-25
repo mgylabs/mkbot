@@ -196,12 +196,12 @@ def play_music_safe(send):
         player_manger.start()
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}](play|p)")
+@music_controller.command("/(play|p)")
 def play(ctx):
     play_music_safe(ctx.send)
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}](play|p) <song>")
+@music_controller.command("/(play|p) <song>")
 def play_song(ctx, song):
     ydl_opts = {
         "noplaylist": True,
@@ -234,7 +234,7 @@ def play_song(ctx, song):
     add_to_song_queue(ctx.send, Song(title, duration, music_url))
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}](search|s) <text>")
+@music_controller.command("/(search|s) <text>")
 def search(ctx, text):
     global search_pending
     ydl_opts = {
@@ -281,18 +281,18 @@ def search(ctx, text):
     ctx.wait_for_response(callback)
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}]stop")
+@music_controller.command("/stop")
 def stop(ctx):
     FFPlayer.stop()
     ctx.send("Stop")
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}]skip")
+@music_controller.command("/skip")
 def skip(ctx):
     FFPlayer.skip()
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}](queue|q)")
+@music_controller.command("/(queue|q)")
 def show_queue(ctx):
     builder = [
         f"{i+1}. {elem.human_info}" for i, elem in enumerate(list(song_queue.queue))
@@ -304,7 +304,7 @@ def show_queue(ctx):
         ctx.send("Queue\n" + "\n".join(builder))
 
 
-@music_controller.command(f"[{CONFIG.commandPrefix}](repeat|r)")
+@music_controller.command("/(repeat|r)")
 def repeat(ctx):
     if FFPlayer.repeat:
         FFPlayer.repeat = False

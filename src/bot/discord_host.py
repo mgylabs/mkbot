@@ -96,6 +96,8 @@ def create_bot(return_error_level=False):
                 DiscordBotLog(
                     message.author.id,
                     message.id,
+                    message.guild.id,
+                    message.channel.id,
                     MGCertificate.getUserLevel(str(message.author)),
                     ctx.command.name,
                     ctx.message.content,
@@ -240,6 +242,7 @@ class DiscordBotManger(threading.Thread):
     def run(self):
         exit_code = 0
         try:
+            CONFIG.load()
             get_event_loop()
             bot = create_bot()
             bot.run(CONFIG.discordToken)

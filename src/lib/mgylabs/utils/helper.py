@@ -27,7 +27,6 @@ def usage_helper():
         .filter(DiscordBotLog.id > last_log_id)
         .order_by(DiscordBotLog.created_at)
         .options(joinedload(DiscordBotLog.user))
-        .limit(100)
         .all()
     )
 

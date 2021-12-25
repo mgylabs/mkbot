@@ -109,6 +109,8 @@ class DiscordBotLog(CRUD, Base):
         sqlalchemy.Integer, sqlalchemy.ForeignKey(DiscordUser.id)
     )
     msg_id = sqlalchemy.Column(sqlalchemy.Integer, unique=True)
+    guild_id = sqlalchemy.Column(sqlalchemy.Integer)
+    channel_id = sqlalchemy.Column(sqlalchemy.Integer)
     user_perm = sqlalchemy.Column(sqlalchemy.Integer)
     command = sqlalchemy.Column(sqlalchemy.String)
     raw = sqlalchemy.Column(sqlalchemy.String)
@@ -118,10 +120,14 @@ class DiscordBotLog(CRUD, Base):
 
     user: DiscordUser = relationship("DiscordUser", backref="logs")
 
-    def __init__(self, user_id, msg_id, user_perm, command, raw, created_at) -> None:
+    def __init__(
+        self, user_id, msg_id, guild_id, channel_id, user_perm, command, raw, created_at
+    ) -> None:
         super().__init__()
         self.user_id = user_id
         self.msg_id = msg_id
+        self.guild_id = guild_id
+        self.channel_id = channel_id
         self.user_perm = user_perm
         self.command = command
         self.raw = raw

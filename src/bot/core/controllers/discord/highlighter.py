@@ -33,7 +33,7 @@ async def refresh_token(session):
             raise UsageError(
                 js["detail"]
                 if "detail" in js
-                else f"Invalid token: Before using this command, the administrator must create a token by entering `{CONFIG.commandPrefix}generate mgylabs <username> <password>` in the local shell."
+                else "Invalid token: Before using this command, the administrator must create a token by entering `/generate mgylabs <username> <password>` in the local shell."
             )
 
 
@@ -75,7 +75,7 @@ async def highlighter(ctx: commands.Context, url):
     {commandPrefix}hl `https://www.twitch.tv/videos/123456789`
 
     * Note!
-    Before using this command, the administrator must create a token by entering `{commandPrefix}generate mgylabs <username> <password>` in the local shell.
+    Before using this command, the administrator must create a token by entering `/generate mgylabs <username> <password>` in the local shell.
     """
     if m := re.search(
         "(?:https:\/\/)?(?:www[.])?twitch[.]tv\/videos\/(?P<vid>\d+)",

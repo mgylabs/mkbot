@@ -5,9 +5,7 @@ from mgylabs.utils.config import CONFIG
 account_controller = VirtualCommandConsole()
 
 
-@account_controller.command(
-    f"[{CONFIG.commandPrefix}](generate|gen) <provider> <user> <pw>"
-)
+@account_controller.command("/(generate|gen) <provider> <user> <pw>")
 def generate(ctx, provider, user, pw):
     if provider == "mgylabs":
         r = requests.post(
