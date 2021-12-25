@@ -10,9 +10,9 @@ using System.Threading;
 
 namespace MKBot
 {
-    public delegate void ClientReceiveCallback(string response);
+    public delegate void ListenerReceiveCallback(string response);
 
-    public class ReceiveStateObject
+    public class StateObject
     {
         // Size of receive buffer.
         public const int BufferSize = 256;
@@ -21,7 +21,7 @@ namespace MKBot
         // Received data string.
         public StringBuilder sb = new StringBuilder();
 
-        public ClientReceiveCallback callback = null;
+        public ListenerReceiveCallback callback = null;
 
         public ManualResetEvent receiveDone =
             new ManualResetEvent(false);
@@ -33,7 +33,7 @@ namespace MKBot
             new ManualResetEvent(false);
     }
 
-    public class AsyncClient
+    public class AsyncListener
     {
         // The port number for the remote device.
         private static int port = 8979;
@@ -42,8 +42,10 @@ namespace MKBot
         private static ManualResetEvent connectDone =
             new ManualResetEvent(false);
 
-        private static Socket client;
-        private static ClientReceiveCallback last_callback;
+        //private static Socket listener;
+        private static Socket listener;
+        private static Socket handler;
+        private static ListenerReceiveCallback last_callback;
 
         public static int GetAvailablePort(int startingPort)
         {
@@ -75,104 +77,101 @@ namespace MKBot
             return port;
         }
 
-        public static void StartClient(ClientReceiveCallback callback = null)
+        public static void StartListener(ListenerReceiveCallback callback = null)
         {
             // Connect to a remote device.
             try
             {
-                connectDone.Reset();
+                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+
                 // Create a TCP/IP socket.
-                client = new Socket(AddressFamily.InterNetwork,
+                listener = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream, ProtocolType.Tcp);
 
-                // Connect to the remote endpoint.
-                client.BeginConnect("localhost", port, new AsyncCallback(ConnectCallback), null);
+                listener.Bind(localEndPoint);
+                listener.Listen(1);
+
+                BeginAccept(callback);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void BeginAccept(ListenerReceiveCallback callback, bool wait=false)
+        {
+            connectDone.Reset();
+
+            Console.WriteLine("Waiting for a connection...");
+
+            StateObject state = new StateObject();
+            state.callback = callback;
+            last_callback = callback;
+            listener.BeginAccept(new AsyncCallback(AcceptCallback), state);
+
+            if (wait)
+            {
                 connectDone.WaitOne();
-
-                // Receive the response from the remote device.
-                if (callback == null)
-                {
-                    Receive(last_callback);
-                }
-                else
-                {
-                    last_callback = callback;
-                    Receive(callback);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
             }
         }
 
-        public static void TerminateClient()
+        public static void TerminateListener()
         {
-            client.Shutdown(SocketShutdown.Both);
-            client.Close();
+            handler.Shutdown(SocketShutdown.Both);
+            handler.Close();
         }
 
-        private static void ConnectCallback(IAsyncResult ar)
-        {
-            try
-            {
-                client.EndConnect(ar);
-
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
-
-                // Signal that the connection has been made.
-                connectDone.Set();
-
-                // Complete the connection.
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                client.BeginConnect("localhost", port, new AsyncCallback(ConnectCallback), null);
-            }
-        }
-
-        private static ManualResetEvent Receive(ClientReceiveCallback callback)
+        private static ManualResetEvent Receive(ListenerReceiveCallback callback)
         {
             try
             {
                 // Create the state object.
-                ReceiveStateObject state = new ReceiveStateObject();
+                StateObject state = new StateObject();
                 state.callback = callback;
 
                 // Begin receiving the data from the remote device.
-                client.BeginReceive(state.buffer, 0, ReceiveStateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
 
                 return state.receiveDone;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                return new ReceiveStateObject().receiveDone;
+                return new StateObject().receiveDone;
             }
         }
 
-        private static void ReceiveCallback(IAsyncResult ar)
+        private static void AcceptCallback(IAsyncResult ar)
         {
+            connectDone.Set();
+
+            StateObject state = (StateObject)ar.AsyncState;
+            handler = listener.EndAccept(ar);
+
+            Receive(state.callback);
+        }
+
+        private static void ReadCallback(IAsyncResult ar)
+        {
+            // from the asynchronous state object.
+            StateObject state = (StateObject)ar.AsyncState;
+
             try
             {
-                // from the asynchronous state object.
-                ReceiveStateObject state = (ReceiveStateObject)ar.AsyncState;
-
                 // Read data from the remote device.
-                int bytesRead = client.EndReceive(ar);
+                int bytesRead = handler.EndReceive(ar);
                 Console.WriteLine("> Read: {0}", bytesRead);
 
                 // There might be more data, so store the data received so far.
                 state.sb.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
 
-                if (bytesRead > 0 && bytesRead == ReceiveStateObject.BufferSize)
+                if (bytesRead > 0 && bytesRead == StateObject.BufferSize)
                 {
                     // Get the rest of the data.
-                    client.BeginReceive(state.buffer, 0, ReceiveStateObject.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);
+                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        new AsyncCallback(ReadCallback), state);
                 }
                 else
                 {
@@ -190,10 +189,9 @@ namespace MKBot
             catch (Exception e)
             {
                 Console.WriteLine("Recv Callback Error: " + e.ToString());
-                if (!client.Connected)
+                if (!handler.Connected)
                 {
-                    ReceiveStateObject state = (ReceiveStateObject)ar.AsyncState;
-                    StartClient(state.callback);
+                    BeginAccept(state.callback, true);
                 }
             }
         }
@@ -208,17 +206,16 @@ namespace MKBot
                 byte[] byteData = Encoding.ASCII.GetBytes(data);
 
                 // Begin sending the data to the remote device.
-                client.BeginSend(byteData, 0, byteData.Length, 0,
+                handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), state);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
 
-                if (!client.Connected)
+                if (!handler.Connected)
                 {
-                    StartClient();
-                    connectDone.WaitOne();
+                    BeginAccept(last_callback, true);
                     Send(data);
                 }
             }
@@ -233,7 +230,7 @@ namespace MKBot
                 SendStateObject state = (SendStateObject)ar.AsyncState;
 
                 // Complete sending the data to the remote device.
-                int bytesSent = client.EndSend(ar);
+                int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.
@@ -269,16 +266,16 @@ namespace MKBot
             app_process.StartInfo = psi1;
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
+            AsyncListener.StartListener(recv_callback);
 #if !DEBUG
             app_process.Start();
 #endif
-            AsyncClient.StartClient(recv_callback);
         }
 
         private void make_app_process_args()
         {
             var random = new Random();
-            var port = AsyncClient.GetAvailablePort(random.Next(2000, 49151));
+            var port = AsyncListener.GetAvailablePort(random.Next(2000, 49151));
             psi1.Arguments = "--port " + port.ToString();
 
             if (debug)
@@ -323,7 +320,7 @@ namespace MKBot
         {
             if (!discord_online)
             {
-                AsyncClient.Send("action=enableDiscordBot");
+                AsyncListener.Send("action=enableDiscordBot");
             }
         }
 
@@ -331,7 +328,7 @@ namespace MKBot
         {
             if (discord_online)
             {
-                AsyncClient.Send("action=disableDiscordBot");
+                AsyncListener.Send("action=disableDiscordBot");
             }
         }
 
@@ -340,12 +337,16 @@ namespace MKBot
             EnsureProcessRunning();
 
             data = Uri.EscapeDataString(data);
-            AsyncClient.Send("action=shell&request=" + data);
+            AsyncListener.Send("action=shell&request=" + data);
         }
 
         private void ProcessExited_app(object sender, EventArgs e)
         {
             Console.WriteLine("MKBotCore was exited.");
+
+            MKBotCoreExitEventArgs eargs = new MKBotCoreExitEventArgs();
+            eargs.ExitCode = 1234;
+            OnMKBotCoreExit(eargs);
         }
 
         private void EnsureProcessRunning()
