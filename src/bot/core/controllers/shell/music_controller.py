@@ -5,9 +5,10 @@ import threading
 import traceback
 
 import simpleaudio as sa
-import youtube_dl
+import yt_dlp
 from MGBotBuilder import VirtualCommandConsole
 from mgylabs.utils.config import CONFIG
+from yt_dlp import YoutubeDL
 
 music_controller = VirtualCommandConsole()
 
@@ -23,16 +24,32 @@ def is_youtube_url(data):
 
 
 def human_info(title, duration):
-    human_duration = f"{duration // 60}:{duration % 60}"
+    human_duration = f"{int(duration // 60)}:{int(duration % 60)}"
     return f"{title} ({human_duration})"
 
 
 class Song:
-    def __init__(self, title, duration, url) -> None:
+    def __init__(self, title, duration, url=None, web_url=None) -> None:
         self.title = title
         self.duration = duration
         self.url = url
+        self.web_url = web_url
         self.human_info = human_info(self.title, self.duration)
+
+    def set_url(self, url):
+        self.url = url
+
+        return self
+
+    def set_web_url(self, url):
+        self.web_url = url
+
+        return self
+
+    def extract_url(self):
+        self.url = extract_url(self.web_url).url
+
+        return self
 
 
 class FFPlayer:
@@ -186,6 +203,53 @@ class PlayerManager(threading.Thread):
         play_music(self.send)
 
 
+def ytsearch(text, count):
+    ls = []
+
+    ydl_opts = {
+        "noplaylist": True,
+        "skip_download": True,
+        "extract_flat": True,
+        "format": "bestaudio/best",
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+    }
+    with YoutubeDL(ydl_opts) as ydl:
+        infos = ydl.extract_info(f"ytsearch{count}:{text}", download=False)["entries"]
+
+    for info in infos:
+        music_url = info["url"]
+        title: str = info["title"]
+        duration: int = info["duration"]
+
+        ls.append(Song(title, duration, web_url=music_url))
+
+    return ls
+
+
+def extract_url(url):
+    dl_opts = {
+        "skip_download": True,
+        "format": "bestaudio/best",
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+    }
+    with YoutubeDL(dl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+
+    return Song(info["title"], info["duration"], url=info["url"], web_url=url)
+
+
 player_manger: PlayerManager = None
 
 
@@ -203,69 +267,30 @@ def play(ctx):
 
 @music_controller.command("/(play|p) <song>")
 def play_song(ctx, song):
-    ydl_opts = {
-        "noplaylist": True,
-        "skip_download": True,
-        "format": "bestaudio/best",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "192",
-            }
-        ],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        if is_youtube_url(song):
-            try:
-                info = ydl.extract_info(song, download=False)
-            except youtube_dl.utils.DownloadError:
-                ctx.send(f"{song} is not a valid URL.")
-                return
-        else:
-            info = ydl.extract_info(f"ytsearch:{song}", download=False,)[
-                "entries"
-            ][0]
+    if is_youtube_url(song):
+        try:
+            sg = extract_url(song)
+        except yt_dlp.utils.DownloadError:
+            ctx.send(f"{song} is not a valid URL.")
+            return
+    else:
+        sg: Song = ytsearch(song, 1)[0]
+        sg.extract_url()
 
-    music_url = info["formats"][0]["url"]
-    title: str = info["title"]
-    duration: int = info["duration"]
-
-    add_to_song_queue(ctx.send, Song(title, duration, music_url))
+    add_to_song_queue(ctx.send, sg)
 
 
 @music_controller.command("/(search|s) <text>")
 def search(ctx, text):
     global search_pending
-    ydl_opts = {
-        "noplaylist": True,
-        "skip_download": True,
-        "format": "bestaudio/best",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "192",
-            }
-        ],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        infos = ydl.extract_info(
-            f"ytsearch5:{text}",
-            download=False,
-        )["entries"]
+    infos = ytsearch(text, 5)
 
     builder = []
     search_pending = []
 
-    for i, info in enumerate(infos):
-        music_url = info["formats"][0]["url"]
-        title: str = info["title"]
-        duration: int = info["duration"]
-        song = Song(title, duration, music_url)
-
-        search_pending.append(song)
-        builder.append(f"{i+1}. {song.human_info}")
+    for i, sg in enumerate(infos):
+        search_pending.append(sg)
+        builder.append(f"{i+1}. {sg.human_info}")
 
     ctx.send("\n".join(builder))
 
@@ -273,7 +298,7 @@ def search(ctx, text):
         if text.isdigit():
             s = int(text)
             if 1 <= s <= 5:
-                add_to_song_queue(ctx.send, search_pending[s - 1])
+                add_to_song_queue(ctx.send, search_pending[s - 1].extract_url())
                 return
 
         ctx.send("Invalid!")

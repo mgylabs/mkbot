@@ -5,19 +5,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: main.py",
+      "name": "Python: Discord Host",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}\\src\\bot\\main.py",
+      "program": "${workspaceFolder}\\src\\bot\\discord_host.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}\\src\\bot",
       "python": "${command:python.interpreterPath}"
     },
     {
-      "name": "Python: Discord Host",
+      "name": "Python: main.py",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}\\src\\bot\\discord_host.py",
+      "program": "${workspaceFolder}\\src\\bot\\main.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}\\src\\bot",
       "python": "${command:python.interpreterPath}"

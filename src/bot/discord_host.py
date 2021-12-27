@@ -58,7 +58,7 @@ def create_bot(return_error_level=False):
     @bot.event
     async def on_ready():
         TelemetryReporter.start("Login")
-        print("Logged in within", time.time() - stime)
+        print("Logged in within {:0.2f}s".format(time.time() - stime))
 
         replyformat.set_avatar_url(
             "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"

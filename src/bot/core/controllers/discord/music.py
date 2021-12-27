@@ -1,8 +1,8 @@
 import asyncio
 
 import aiohttp
-import youtube_dl
 from bs4 import BeautifulSoup
+from yt_dlp import YoutubeDL
 
 import discord
 from discord.ext import commands
@@ -35,6 +35,7 @@ async def ytsearch(text, count):
     ydl_opts = {
         "noplaylist": True,
         "skip_download": True,
+        "extract_flat": True,
         "format": "bestaudio/best",
         "postprocessors": [
             {
@@ -44,7 +45,7 @@ async def ytsearch(text, count):
             }
         ],
     }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    with YoutubeDL(ydl_opts) as ydl:
         loop = asyncio.get_event_loop()
         infos = await loop.run_in_executor(
             None,
@@ -55,7 +56,7 @@ async def ytsearch(text, count):
         )
 
     for info in infos:
-        music_url = info["formats"][0]["url"]
+        music_url = info["url"]
         title: str = info["title"]
         duration: int = info["duration"]
 
@@ -124,7 +125,7 @@ class Music(commands.Cog):
                 }
             ],
         }
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with YoutubeDL(ydl_opts) as ydl:
             loop = asyncio.get_event_loop()
             try:
                 info = await loop.run_in_executor(
@@ -134,7 +135,7 @@ class Music(commands.Cog):
                         download=False,
                     ),
                 )
-                musicFile = info["formats"][0]["url"]
+                musicFile = info["url"]
             except IndexError:  # end of queue, after=next error
                 raise NonFatalError("End of queue")
 
@@ -143,8 +144,11 @@ class Music(commands.Cog):
             "options": "-vn",
         }
         try:
+            source = await discord.FFmpegOpusAudio.from_probe(
+                musicFile, **FFMPEG_OPTIONS
+            )
             ctx.voice_client.play(
-                discord.FFmpegPCMAudio(musicFile, **FFMPEG_OPTIONS),
+                source,
                 after=lambda e: next(),
             )
         except (discord.errors.ClientException, UnboundLocalError) as e:
