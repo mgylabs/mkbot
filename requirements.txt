@@ -1,6 +1,6 @@
 aiofiles==0.8.0
 alembic==1.7.5
-black==21.12b0
+black==22.1.0
 bs4==0.0.1
 debugpy==1.5.1
 discord.py==1.7.3
