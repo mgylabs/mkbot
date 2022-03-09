@@ -35,7 +35,7 @@ jobs:
     name: Nightly Build
     needs: check
     if: needs.check.outputs.is_new == 'true' || github.event.inputs.manual == 'true'
-    runs-on: windows-latest
+    runs-on: windows-2019
     defaults:
       run:
         shell: cmd
