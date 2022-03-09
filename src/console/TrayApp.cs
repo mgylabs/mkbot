@@ -398,11 +398,11 @@ namespace MKBot
             string param;
             if (autorun)
             {
-                param = "/start /autorun";
+                param = "--start --gui --auto-run";
             }
             else
             {
-                param = "/start";
+                param = "--start --gui";
             }
             notifyIcon1.Visible = false;
             Process.Start("Update.exe", param);

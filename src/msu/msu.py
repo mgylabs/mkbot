@@ -66,7 +66,7 @@ class VersionInfo:
         if self.rtype.lower() == "canary":
             self.commit = self.version.split(".")[-1]
             self.version = self.version.replace(f".{self.commit}", "")
-            self.version = version.parse(self.version)
+            self.version = version.parse(self.version + "-beta")
         else:
             self.version = version.parse(self.version)
 

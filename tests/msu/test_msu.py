@@ -61,7 +61,7 @@ class MSUTest(TestCase):
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
             "url": url,
             "rtype": "canary",
-            "version": version.parse("1.3.3.1"),
+            "version": version.parse("1.3.3.1-beta"),
             "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",
         }
 
@@ -228,7 +228,7 @@ class MSUTest(TestCase):
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
             "rtype": "canary",
-            "version": version.parse("1.4.0.1"),
+            "version": version.parse("1.4.0.1-beta"),
             "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",
         }
 
@@ -247,7 +247,7 @@ class MSUTest(TestCase):
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
             "rtype": "canary",
-            "version": version.parse("1.4.0.1"),
+            "version": version.parse("1.4.0.1-beta"),
             "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",
         }
 
