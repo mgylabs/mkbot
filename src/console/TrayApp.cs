@@ -341,7 +341,7 @@ namespace MKBot
         {
             if (can_update && !MKBotCore.discord_online)
             {
-                Run_setup(true);
+                Run_setup(true, false);
             }
             else
             {
@@ -393,17 +393,22 @@ namespace MKBot
             }
         }
 
-        private void Run_setup(bool autorun)
+        private void Run_setup(bool autorun, bool gui = true)
         {
             string param;
+
+            param = "--start";
+
+            if (gui)
+            {
+                param += " --gui";
+            }
+
             if (autorun)
             {
-                param = "--start --gui --auto-run";
+                param += " --auto-run";
             }
-            else
-            {
-                param = "--start --gui";
-            }
+
             notifyIcon1.Visible = false;
             Process.Start("Update.exe", param);
             Environment.Exit(0);
@@ -420,7 +425,7 @@ namespace MKBot
 
                 if (!(checking_update || MKBotCore.discord_online))
                 {
-                    Run_setup(true);
+                    Run_setup(true, false);
                 }
                 else
                 {
