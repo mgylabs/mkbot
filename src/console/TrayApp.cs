@@ -56,9 +56,6 @@ namespace MKBot
             MKBotCore.MKBotCoreStarted += MKBotCore_Started;
             MKBotCore.MKBotCoreExit += MKbotCore_Exit;
 
-            Infowin = new InfoForm();
-            Shellwin = new ShellForm(MKBotCore);
-
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
 
@@ -99,16 +96,14 @@ namespace MKBot
                 notifyIcon1.Icon = Properties.Resources.mkbot_off;
             }
 
-            bool autoconnect = false;
+            bool auto_connect = false;
             if (configjson["connectOnStart"] != null)
             {
-                autoconnect = (bool)configjson["connectOnStart"];
+                auto_connect = (bool)configjson["connectOnStart"];
             }
 
-            if (autoconnect)
-            {
-                notifyIcon1_MouseClick(new object(), new MouseEventArgs(MouseButtons.Left, 1, 1, 1, 1));
-            }
+            Infowin = new InfoForm();
+            Shellwin = new ShellForm(MKBotCore, auto_connect);
 
             checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
             checkForTime.Enabled = true;

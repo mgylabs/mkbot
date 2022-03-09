@@ -116,6 +116,11 @@ namespace MKBot
             }
         }
 
+        public static void WaitBeginAccept()
+        {
+            connectDone.WaitOne();
+        }
+
         public static void TerminateListener()
         {
             handler.Shutdown(SocketShutdown.Both);
@@ -270,6 +275,8 @@ namespace MKBot
 #if !DEBUG
             app_process.Start();
 #endif
+
+            AsyncListener.WaitBeginAccept();
         }
 
         private void make_app_process_args()

@@ -1,0 +1,4 @@
+---
+title: Fix the connectOnStart option bug
+pull_request:
+type: bug fixes

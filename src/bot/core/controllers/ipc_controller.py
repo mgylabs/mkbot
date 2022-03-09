@@ -58,6 +58,7 @@ class IPCController:
                 self.ipc_service.send("action=enableDiscordBot")
             elif "disableDiscordBot" in args.get("action"):
                 if not BotStateFlags.online:
+                    self.ipc_service.send("action=disableDiscordBot&exitcode=0")
                     return
 
                 with BotStateFlags.Terminate():
