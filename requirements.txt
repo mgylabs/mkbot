@@ -17,4 +17,4 @@ PyYAML==6.0
 requests==2.26.0
 simpleaudio==1.0.4
 SQLAlchemy==1.4.28
-yt-dlp==2021.12.27
+yt-dlp==2022.3.8.2
