@@ -16,5 +16,5 @@ PyNaCl==1.4.0
 PyYAML==6.0
 requests==2.26.0
 simpleaudio==1.0.4
-SQLAlchemy==1.4.28
+SQLAlchemy==1.4.32
 yt-dlp==2022.3.8.2
