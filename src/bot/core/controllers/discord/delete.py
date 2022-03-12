@@ -5,7 +5,7 @@ from .utils.MsgFormat import MsgFormatter
 
 
 @commands.command()
-@MGCertificate.verify(level=Level.TRUSTED_USERS)
+@MGCertificate.verify(level=Level.ADMIN_USERS)
 async def delete(ctx: commands.Context, amount):
     """
     Deletes messages
