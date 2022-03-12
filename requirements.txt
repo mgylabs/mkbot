@@ -7,7 +7,7 @@ discord.py==1.7.3
 flake8==4.0.1
 git+https://github.com/MycroftKang/mulgyeol-bot-framework.git@6b1401dfa4930932b10b9eb16321125c3c9b1707
 langdetect==1.0.9
-lxml==4.7.1
+lxml==4.8.0
 packaging==21.3
 pre-commit==2.17.0
 pyinstaller==4.7
