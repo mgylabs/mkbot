@@ -215,7 +215,7 @@ def create_bot(return_error_level=False):
 
     print("Mulgyeol MK Bot")
     print(f"Version {VERSION}" if VERSION != None else "Test Mode")
-    print("Copyright (c) 2021 Mulgyeol Labs. All rights reserved.\n")
+    print("Copyright (c) 2022 Mulgyeol Labs. All rights reserved.\n")
 
     return bot if not return_error_level else errorlevel
 

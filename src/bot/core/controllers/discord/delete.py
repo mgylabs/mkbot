@@ -8,7 +8,7 @@ from .utils.MsgFormat import MsgFormatter
 @MGCertificate.verify(level=Level.ADMIN_USERS)
 async def delete(ctx: commands.Context, amount):
     """
-    Deletes messages
+    Deletes messages (Requires Admin Permission)
     {commandPrefix}delete amount : deletes 'amount' number of messages
     {commandPrefix}delete all : deletes all(maximum 200) messages
     """

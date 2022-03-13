@@ -33,11 +33,11 @@ namespace MKBot
                 {
                     version_str += " Stable";
                 }
-                label1.Text = "Version " + version_str + "\nCommit " + commit + "\n\nCopyright © 2021 Mulgyeol Labs. All rights reserved.";
+                label1.Text = "Version " + version_str + "\nCommit " + commit + "\n\nCopyright © 2022 Mulgyeol Labs. All rights reserved.";
             }
             catch
             {
-                label1.Text = "Mulgyeol MK Bot\nTest Mode \nCopyright © 2021 Mulgyeol Labs. All rights reserved.";
+                label1.Text = "Mulgyeol MK Bot\nTest Mode \nCopyright © 2022 Mulgyeol Labs. All rights reserved.";
             }
         }
 
