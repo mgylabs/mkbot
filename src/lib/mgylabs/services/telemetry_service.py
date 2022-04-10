@@ -1,4 +1,5 @@
 import platform
+import threading
 import traceback
 
 from ..utils.config import DISCRIMINATOR, VERSION
@@ -24,22 +25,31 @@ class TelemetryReporter:
     reporter = None
 
     @classmethod
-    def send_telemetry_event(cls, event_name, properties={}):
+    def _run_callback_(cls, callback):
+        if callback is not None:
+            threading.Thread(target=callback).start()
+
+    @classmethod
+    def Event(cls, event_name, properties={}, callback=None):
         properties["commit"] = VERSION.commit
         properties["OS"] = platform.platform().replace("-", " ")
 
         if cls.reporter is not None:
-            return cls.reporter.send_telemetry_event(event_name, properties)
+            return cls.reporter.Event(event_name, properties, callback)
+        else:
+            cls._run_callback_(callback)
 
     @classmethod
-    def send_telemetry_exception(cls, error, properties={}):
+    def Exception(cls, error, properties={}, callback=None):
         assert isinstance(error, Exception)
 
         properties["commit"] = VERSION.commit
         properties["OS"] = platform.platform().replace("-", " ")
 
         if cls.reporter is not None:
-            return cls.reporter.send_telemetry_exception(error, properties)
+            return cls.reporter.Exception(error, properties, callback)
+        else:
+            cls._run_callback_(callback)
 
     @classmethod
     def start(cls, callback_event_name=None):
@@ -49,4 +59,4 @@ class TelemetryReporter:
             )
 
         if callback_event_name is not None:
-            cls.send_telemetry_event(str(callback_event_name))
+            cls.Event(str(callback_event_name))

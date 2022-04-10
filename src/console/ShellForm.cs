@@ -15,6 +15,7 @@ namespace MKBot
         {
             InitializeComponent();
 
+            outputBox.Hide();
             this.Size = new Size(510, 100);
 
             update_location();
@@ -92,12 +93,14 @@ namespace MKBot
         {
             if (this.toggleButton.Checked)
             {
+                outputBox.Show();
                 this.Size = new Size(510, 330);
                 this.toggleButton.Text = "Collapse Shell";
             }
             else
             {
                 this.Size = new Size(510, 100);
+                outputBox.Hide();
                 this.toggleButton.Text = "Expand Shell";
             }
 

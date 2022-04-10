@@ -64,6 +64,6 @@ if __name__ == "__main__":
         TelemetryReporter.start()
         main()
     except Exception as error:
-        TelemetryReporter.send_telemetry_exception(error)
+        TelemetryReporter.Exception(error)
         traceback.print_exc()
         sys.exit(1)

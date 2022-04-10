@@ -14,11 +14,11 @@ from discord.ext import commands, tasks
 sys.path.append("..\\lib")
 
 from mgylabs.db.database import run_migrations
-from mgylabs.db.models import DiscordBotLog
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from mgylabs.utils.helper import usage_helper
+from mgylabs.utils.LogEntry import DiscordRequestLogEntry
 
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
@@ -43,13 +43,30 @@ class BotStateFlags:
             BotStateFlags.terminate = False
 
 
+class MKBotContext(commands.Context):
+    pass
+
+
+class MKBot(commands.Bot):
+    async def process_commands(self, request_id, message):
+        if message.author.bot:
+            return
+
+        ctx = await self.get_context(message)
+        ctx.mkbot_request_id = request_id
+        await self.invoke(ctx)
+
+    async def get_context(self, message, *, cls=MKBotContext):
+        return await super().get_context(message, cls=cls)
+
+
 def create_bot(return_error_level=False):
     stime = time.time()
     errorlevel = 0
     pending = True
 
     replyformat = MsgFormatter()
-    bot = commands.Bot(
+    bot = MKBot(
         command_prefix=CONFIG.commandPrefix, help_command=CommandHelp(replyformat)
     )
     cert = MGCertificate(MGCERT_PATH)
@@ -92,19 +109,13 @@ def create_bot(return_error_level=False):
         else:
             ctx: commands.Context = await bot.get_context(message)
 
+            request_id = None
             if ctx.command is not None:
-                DiscordBotLog(
-                    message.author.id,
-                    message.id,
-                    message.guild.id,
-                    message.channel.id,
-                    MGCertificate.getUserLevel(str(message.author)),
-                    ctx.command.name,
-                    ctx.message.content,
-                    ctx.message.created_at,
-                ).save()
+                request_id = DiscordRequestLogEntry.add(
+                    ctx, message, MGCertificate.getUserLevel(str(message.author))
+                )
 
-            await bot.process_commands(message)
+            await bot.process_commands(request_id, message)
 
             nonlocal pending
             if pending and message.content.startswith(bot.command_prefix):

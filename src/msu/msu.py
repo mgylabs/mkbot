@@ -94,7 +94,7 @@ class Updater:
         data = res.json()
 
         if not exist_flag():
-            TelemetryReporter.send_telemetry_event("CheckedForUpdate")
+            TelemetryReporter.Event("CheckedForUpdate")
             write_flag()
 
         asset = self.find_asset(data["assets"])
@@ -145,7 +145,7 @@ class Updater:
         with self.session.get(self.target.url, stream=True) as r:
             r.raise_for_status()
 
-            TelemetryReporter.send_telemetry_event(
+            TelemetryReporter.Event(
                 "UpdateDownloaded",
                 {"status": r.status_code, "url": self.target.url},
             )
@@ -222,6 +222,6 @@ if __name__ == "__main__":
         TelemetryReporter.start()
         main()
     except Exception as error:
-        TelemetryReporter.send_telemetry_exception(error)
+        TelemetryReporter.Exception(error)
         traceback.print_exc()
         sys.exit(1)

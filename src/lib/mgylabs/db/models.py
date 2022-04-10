@@ -101,10 +101,11 @@ class DiscordUser(CRUD, Base):
         return super().save(commit=commit)
 
 
-class DiscordBotLog(CRUD, Base):
-    __tablename__ = "discord_bot_logs"
+class DiscordBotRequestLog(CRUD, Base):
+    __tablename__ = "discord_bot_request_logs"
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    bot_id = sqlalchemy.Column(sqlalchemy.Integer)
     user_id = sqlalchemy.Column(
         sqlalchemy.Integer, sqlalchemy.ForeignKey(DiscordUser.id)
     )
@@ -121,9 +122,19 @@ class DiscordBotLog(CRUD, Base):
     user: DiscordUser = relationship("DiscordUser", backref="logs")
 
     def __init__(
-        self, user_id, msg_id, guild_id, channel_id, user_perm, command, raw, created_at
+        self,
+        bot_id,
+        user_id,
+        msg_id,
+        guild_id,
+        channel_id,
+        user_perm,
+        command,
+        raw,
+        created_at,
     ) -> None:
         super().__init__()
+        self.bot_id = bot_id
         self.user_id = user_id
         self.msg_id = msg_id
         self.guild_id = guild_id
@@ -142,4 +153,25 @@ class DiscordBotLog(CRUD, Base):
         return super().save(commit=commit)
 
     def __repr__(self) -> str:
-        return f"<DiscordBotLog object {self.id}>"
+        return f"<DiscordBotRequestLog object {self.id}>"
+
+
+class DiscordBotCommandEventLog(CRUD, Base):
+    __tablename__ = "discord_bot_command_event_logs"
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    request_id = sqlalchemy.Column(
+        sqlalchemy.Integer, sqlalchemy.ForeignKey(DiscordBotRequestLog.id)
+    )
+    event = sqlalchemy.Column(sqlalchemy.String)
+    properties = sqlalchemy.Column(sqlalchemy.String)
+    created_at = sqlalchemy.Column(
+        sqlalchemy.DateTime, default=datetime.datetime.utcnow()
+    )
+
+    request: DiscordBotRequestLog = relationship(
+        "DiscordBotRequestLog", backref="events"
+    )
+
+    def __repr__(self) -> str:
+        return f"<DiscordBotCommandEventLog object {self.id}>"
