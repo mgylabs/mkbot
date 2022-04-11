@@ -136,8 +136,6 @@ class Translate(commands.Cog):
                 )
 
     async def _convert_langs(self, ctx, langs: set):
-        success = True
-
         short_langs = {t for t in langs if t.lower() in self.languages}
         langs = (langs - short_langs) | {self.languages[t] for t in short_langs}
         invalid_langs = {t for t in langs if not (t in self.languages.values())}
