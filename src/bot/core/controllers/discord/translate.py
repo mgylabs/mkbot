@@ -3,10 +3,11 @@ import logging
 from distutils.util import strtobool
 
 import aiohttp
-import discord
-from discord.ext import commands
 from langdetect import detect
 from mgylabs.utils.config import CONFIG
+
+import discord
+from discord.ext import commands
 
 from .utils import listener
 from .utils.MGCert import Level, MGCertificate
@@ -207,7 +208,7 @@ class Translate(commands.Cog):
             headers=headers, raise_for_status=True
         ) as session:
             async with session.get(
-                "https://kapi.kakao.com/v1/translation/translate", params=params
+                "https://dapi.kakao.com/v2/translation/translate", params=params
             ) as r:
                 js = await r.json()
                 return params["target_lang"], js["translated_text"][0][0]
