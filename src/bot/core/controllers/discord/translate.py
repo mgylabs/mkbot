@@ -3,10 +3,11 @@ import logging
 from distutils.util import strtobool
 
 import aiohttp
-import discord
-from discord.ext import commands
 from langdetect import detect
 from mgylabs.utils.config import CONFIG
+
+import discord
+from discord.ext import commands
 
 from .utils import listener
 from .utils.MGCert import Level, MGCertificate
@@ -121,17 +122,18 @@ class Translate(commands.Cog):
             msg = args[0]
             targetLangs = {args[1]} if len(args) > 1 else self.target
 
-        srcLang, result = await self._trans(
+        srcLang, result, success = await self._trans(
             ctx, msg, await self._convert_langs(ctx, targetLangs)
         )
-        for t, r in result.items():
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "Translation Successful " + srcLang + " => " + t,
-                    msg + "\n\n" + r,
+        if success:
+            for t, r in result.items():
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Translation Successful " + srcLang + " => " + t,
+                        msg + "\n\n" + r,
+                    )
                 )
-            )
 
     async def _convert_langs(self, ctx, langs: set):
         short_langs = {t for t in langs if t.lower() in self.languages}
@@ -148,7 +150,6 @@ class Translate(commands.Cog):
                 )
             )
             log.warning("targetlang not identified")
-            return
         elif len(invalid_langs) > 0:
             await ctx.send(
                 embed=MsgFormatter.get(
@@ -157,10 +158,10 @@ class Translate(commands.Cog):
                     "Cannot find target language(s) inputted",
                 )
             )
-
         return langs
 
     async def _trans(self, ctx, msg, targetLangs: set):
+        success = True
         channel = ctx.message.channel
         srcLang = detect(msg)
 
@@ -168,6 +169,11 @@ class Translate(commands.Cog):
             "ko": "kr",
             "ja": "jp",
             "zh": "cn",
+        }
+
+        result = {}
+        headers = {
+            "Authorization": "KakaoAK " + CONFIG.kakaoToken,
         }
 
         if srcLang in langDetectDict:
@@ -184,12 +190,7 @@ class Translate(commands.Cog):
                 )
             )
             log.warning("srcLanguage detected is not supported")
-            return
-
-        result = {}
-        headers = {
-            "Authorization": "KakaoAK " + CONFIG.kakaoToken,
-        }
+            return srcLang, result, False
 
         tasks = [
             self._request_api(
@@ -200,14 +201,14 @@ class Translate(commands.Cog):
         ]
         result = dict(await asyncio.gather(*tasks))
 
-        return srcLang, result
+        return srcLang, result, success
 
     async def _request_api(self, headers, params):
         async with aiohttp.ClientSession(
             headers=headers, raise_for_status=True
         ) as session:
             async with session.get(
-                "https://kapi.kakao.com/v1/translation/translate", params=params
+                "https://dapi.kakao.com/v2/translation/translate", params=params
             ) as r:
                 js = await r.json()
                 return params["target_lang"], js["translated_text"][0][0]
