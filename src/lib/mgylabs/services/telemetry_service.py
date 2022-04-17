@@ -60,3 +60,8 @@ class TelemetryReporter:
 
         if callback_event_name is not None:
             cls.Event(str(callback_event_name))
+
+    @classmethod
+    def terminate(cls):
+        if cls.reporter is not None:
+            cls.reporter.terminate()

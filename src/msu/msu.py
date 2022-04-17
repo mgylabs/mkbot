@@ -218,10 +218,17 @@ def main():
 
 
 if __name__ == "__main__":
+    error = 0
+
     try:
         TelemetryReporter.start()
         main()
-    except Exception as error:
-        TelemetryReporter.Exception(error)
+    except SystemExit as e:
+        error = e.code
+    except Exception as e:
+        TelemetryReporter.Exception(e)
         traceback.print_exc()
-        sys.exit(1)
+        error = 1
+    finally:
+        TelemetryReporter.terminate()
+        sys.exit(error)
