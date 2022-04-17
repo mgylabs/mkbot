@@ -40,5 +40,5 @@ async def roulette(ctx: commands.Context, title, *items):
     )
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(roulette)

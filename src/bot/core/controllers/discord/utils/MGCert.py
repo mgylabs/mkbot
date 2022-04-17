@@ -2,6 +2,7 @@ import json
 import logging
 from functools import wraps
 
+import discord
 from discord.ext import commands
 from mgylabs.utils.config import CONFIG, USER_DATA_PATH
 
@@ -87,7 +88,9 @@ class MGCertificate:
 
             @wraps(func)
             async def outerfunc(*args, **kwargs):
-                if isinstance(args[0], commands.Context):
+                if isinstance(args[0], commands.Context) or isinstance(
+                    args[0], discord.Interaction
+                ):
                     ctx: commands.Context = args[0]
                 else:
                     ctx: commands.Context = args[1]

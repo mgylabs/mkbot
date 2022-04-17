@@ -1,19 +1,24 @@
+import discord
+from discord import app_commands
 from discord.ext import commands
 
-from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
+from .utils.register import add_command
 
 
-@commands.command()
-@MGCertificate.verify(level=Level.TRUSTED_USERS)
-async def ping(ctx: commands.Context):
+@app_commands.command()
+@app_commands.describe()
+async def ping(interaction: discord.Interaction):
     """
     Shows the bot's latency
     """
-    await ctx.send(
-        embed=MsgFormatter.get(ctx, f"Pong in {round(ctx.bot.latency*1000)}ms")
+
+    await interaction.response.send_message(
+        embed=MsgFormatter.get(
+            interaction, f"Pong in {round(interaction.client.latency*1000)}ms"
+        )
     )
 
 
-def setup(bot: commands.Bot):
-    bot.add_command(ping)
+async def setup(bot: commands.Bot):
+    add_command(bot, ping)

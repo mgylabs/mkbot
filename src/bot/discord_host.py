@@ -60,14 +60,18 @@ class MKBot(commands.Bot):
         return await super().get_context(message, cls=cls)
 
 
-def create_bot(return_error_level=False):
+async def create_bot(return_error_level=False):
     stime = time.time()
     errorlevel = 0
     pending = True
 
+    intent = discord.Intents.all()
     replyformat = MsgFormatter()
     bot = MKBot(
-        command_prefix=CONFIG.commandPrefix, help_command=CommandHelp(replyformat)
+        command_prefix=CONFIG.commandPrefix,
+        intents=intent,
+        help_command=CommandHelp(replyformat),
+        application_id=CONFIG.discordAppID,
     )
     cert = MGCertificate(MGCERT_PATH)
     bot.__dict__.update({"MGCert": cert, "replyformat": replyformat})
@@ -75,6 +79,11 @@ def create_bot(return_error_level=False):
     @bot.event
     async def on_ready():
         TelemetryReporter.start("Login")
+
+        for guild in CONFIG.discordAppCmdGuilds:
+            cmds = await bot.tree.sync(guild=discord.Object(guild))
+            print(guild, cmds)
+
         print("Logged in within {:0.2f}s".format(time.time() - stime))
 
         replyformat.set_avatar_url(
@@ -202,7 +211,7 @@ def create_bot(return_error_level=False):
 
     for i in discord_extensions:
         try:
-            bot.load_extension(i)
+            await bot.load_extension(i)
         except Exception:
             traceback.print_exc()
             if i != "core.install":
@@ -217,7 +226,7 @@ def create_bot(return_error_level=False):
                 sys.path.append(
                     os.getenv("USERPROFILE") + f"\\.mkbot\\extensions\\{i[0]}"
                 )
-            bot.load_extension(i[1])
+            await bot.load_extension(i[1])
     except Exception:
         traceback.print_exc()
 
@@ -244,6 +253,13 @@ def get_event_loop():
     return loop
 
 
+async def start_bot():
+    bot = await create_bot()
+
+    async with bot:
+        await bot.start(CONFIG.discordToken)
+
+
 class DiscordBotManger(threading.Thread):
     def __init__(self, callback):
         super().__init__()
@@ -256,7 +272,7 @@ class DiscordBotManger(threading.Thread):
             CONFIG.load()
             get_event_loop()
             bot = create_bot()
-            bot.run(CONFIG.discordToken)
+            asyncio.run(start_bot())
             usage_helper()
         except discord.errors.LoginFailure as e:
             log.critical(e)
@@ -271,5 +287,4 @@ class DiscordBotManger(threading.Thread):
 
 if __name__ == "__main__":
     run_migrations(SCRIPT_DIR, DB_URL)
-    bot = create_bot()
-    bot.run(CONFIG.discordToken)
+    asyncio.run(start_bot())

@@ -2,13 +2,13 @@
 from discord.ext import commands
 
 
-def setup(bot):
+async def setup(bot):
     @commands.command()
     @bot.MGCert.verify(2)
     async def bye(ctx):
         await ctx.send("Bye {0.display_name}.".format(ctx.author))
 
-    bot.add_command(bye)
+    await bot.add_command(bye)
 
 
 def teardown(bot):

@@ -118,5 +118,5 @@ async def highlighter(ctx: commands.Context, url):
                 raise UsageError("Unknown Error")
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(highlighter)

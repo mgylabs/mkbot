@@ -2,6 +2,7 @@ import datetime
 import platform
 
 import discord
+from discord.ext import commands
 from mgylabs.utils.config import CONFIG, VERSION
 
 Msg_Color = None
@@ -56,7 +57,12 @@ class MsgFormatter:
             embed.add_field(**fd)
 
         if show_req_user:
-            embed.add_field(name="Requested by", value="<@{}>".format(ctx.author.id))
+            if isinstance(ctx, commands.Context):
+                user_id = ctx.author.id
+            elif isinstance(ctx, discord.Interaction):
+                user_id = ctx.user.id
+
+            embed.add_field(name="Requested by", value="<@{}>".format(user_id))
         embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
         return embed
 
