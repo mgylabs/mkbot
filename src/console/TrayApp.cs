@@ -70,7 +70,7 @@ namespace MKBot
 
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
-            notifyIcon1.Text = "Mulgyeol MK Bot";
+            notifyIcon1.Text = Version.product_name;
 
             UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
 

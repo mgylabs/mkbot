@@ -71,7 +71,7 @@
         "/INPUTCHARSET",
         "UTF8",
         "/DPRODUCT_VERSION=Pre-release",
-        "/DPRODUCT_NAME=Mulgyeol MK Bot - OSS",
+        "/DPRODUCT_NAME=Mulgyeol MK Bot OSS",
         "/DPRODUCT_EXE=MKBot-OSS.exe",
         "/DBUILD_TYPE=canary",
         "/DDNAME=mkbot-oss",
