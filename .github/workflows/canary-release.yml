@@ -79,7 +79,7 @@ jobs:
       - name: Packaging
         run: |
           $Env:Path += ";C:\Program Files (x86)\NSIS\"
-          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot Canary" "/DPRODUCT_EXE=MKBot-Canary.exe" "/DBUILD_TYPE=canary" "/DEXT_DIR=.mkbot-canary" package\MKBot.nsi
+          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot Canary" "/DPRODUCT_EXE=MKBot-Canary.exe" "/DDNAME=mkbot-can" "/DBUILD_TYPE=canary" "/DEXT_DIR=.mkbot-canary" package\MKBot.nsi
         shell: pwsh
       - name: Compress Setup
         run: |

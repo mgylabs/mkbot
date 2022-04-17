@@ -1,9 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MKBot
@@ -27,7 +24,7 @@ namespace MKBot
                 MessageBox.Show("Mulgyeol MK Bot is already running.");
                 return;
             }
-            DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>("com.mgylabs.mkbot");
+            DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>(Version.dname);
             DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

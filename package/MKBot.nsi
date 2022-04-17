@@ -138,7 +138,7 @@ Section "Apps" SEC01
   SetOutPath "$MAINDIR"
   CreateDirectory "$SMPROGRAMS\${PRODUCT_SHORT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
-  !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.mkbot"
+  !insertmacro ShortcutSetToastProperties "$SMPROGRAMS\${PRODUCT_SHORT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "{3f7eb835-ef29-45f5-acb5-a078d127dc94}" "com.mgylabs.${DNAME}"
   CreateShortCut "$DESKTOP\${PRODUCT_SHORT_NAME}.lnk" "$MAINDIR\${PRODUCT_EXE}"
   ;ExecWait 'schtasks.exe /Delete /TN "MKBotUpdate" /F'
   ;Exec 'schtasks.exe /Create /TN "MKBotUpdate" /XML "$INSTDIR\Update\MKBotUpdate.xml"'

@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MKBot
 {
@@ -18,6 +13,8 @@ namespace MKBot
         public static string mutex_name;
         public static string product_name;
 
+        public static string dname;
+
         static public void load_version_info()
         {
             var jsonString = File.ReadAllText("info\\version.json");
@@ -26,13 +23,20 @@ namespace MKBot
             string[] version_array = json["version"].ToString().Split('-');
             commit = json["commit"].ToString();
             version_str = version_array[0];
-
-            if (version_array.Length > 1 && version_array[1] == "beta")
+            if (version_array.Length > 1 && version_array[1] == "dev")
+            {
+                version_type = "OSS";
+                mutex_name = "MKBotOSS";
+                product_name = "Mulgyeol MK Bot OSS";
+                dname = "com.mgylabs.mkbot-oss";
+            }
+            else if (version_array.Length > 1 && version_array[1] == "beta")
             {
                 version_type = "Canary";
                 canary = true;
                 mutex_name = "MKBotCanary";
                 product_name = "Mulgyeol MK Bot Canary";
+                dname = "com.mgylabs.mkbot-can";
             }
             else
             {
@@ -40,6 +44,7 @@ namespace MKBot
                 stable = true;
                 mutex_name = "MKBot";
                 product_name = "Mulgyeol MK Bot";
+                dname = "com.mgylabs.mkbot";
             }
         }
     }
