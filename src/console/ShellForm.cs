@@ -15,6 +15,8 @@ namespace MKBot
         {
             InitializeComponent();
 
+            Icon = Properties.Resources.mkbot;
+
             outputBox.Hide();
             this.Size = new Size(510, 100);
 

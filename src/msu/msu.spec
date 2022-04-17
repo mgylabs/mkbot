@@ -30,7 +30,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=True,
-    icon="..\\..\\resources\\package\\mkbot.ico",
+    icon=os.getenv("CI_PROJECT_DIR") + "\\resources\\package\\mkbot.ico",
 )
 coll = COLLECT(
     exe,

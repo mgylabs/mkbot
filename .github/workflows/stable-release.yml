@@ -49,11 +49,11 @@ jobs:
         shell: pwsh
       - name: Build MK Bot
         run: |
-          call scripts\build.bat
+          call scripts\build.bat --stable
       - name: Packaging
         run: |
           $Env:Path += ";C:\Program Files (x86)\NSIS\"
-          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DEXT_DIR=.mkbot" package\MKBot.nsi
+          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DBUILD_TYPE=stable" "/DEXT_DIR=.mkbot" package\MKBot.nsi
         shell: pwsh
       - name: Compress Setup
         run: |

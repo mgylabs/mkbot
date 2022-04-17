@@ -21,7 +21,9 @@
       "label": "build (clean)",
       "type": "shell",
       "command": ".venv\\Scripts\\activate && scripts\\build.bat",
-      "args": ["--clean"],
+      "args": [
+        "--clean"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -49,7 +51,9 @@
       "label": "Test in Packaged Application",
       "type": "shell",
       "command": ".venv\\Scripts\\activate && scripts\\build.bat",
-      "args": ["--test-bot"],
+      "args": [
+        "--test-bot"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -69,6 +73,7 @@
         "/DPRODUCT_VERSION=Pre-release",
         "/DPRODUCT_NAME=Mulgyeol MK Bot - OSS",
         "/DPRODUCT_EXE=MKBot-OSS.exe",
+        "/DBUILD_TYPE=oss",
         "/DEXT_DIR=.mkbot",
         "package\\MKBot.nsi"
       ],

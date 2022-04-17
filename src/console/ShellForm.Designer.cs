@@ -29,7 +29,6 @@ namespace MKBot
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShellForm));
             this.discordCheckBox = new System.Windows.Forms.CheckBox();
             this.outputBox = new System.Windows.Forms.RichTextBox();
             this.userInputBox = new System.Windows.Forms.TextBox();
@@ -120,7 +119,6 @@ namespace MKBot
             this.Controls.Add(this.discordCheckBox);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ShellForm";

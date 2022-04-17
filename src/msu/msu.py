@@ -29,25 +29,13 @@ def exist_flag():
     return os.path.isfile("msu.flag")
 
 
-if is_development_mode():
-    CONFIG_PATH = "..\\data\\config.json"
-else:
-    CONFIG_PATH = (
-        f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\Mulgyeol MK Bot\\data\\config.json"
-    )
+def instance_already_running(canary_build):
+    if canary_build:
+        lock_name = "mkbot_can_msu.lock"
+    else:
+        lock_name = "mkbot_msu.lock"
 
-
-def load_canary_config():
-    try:
-        with open(CONFIG_PATH, "rt", encoding="utf-8") as f:
-            TOKEN = json.load(f)
-        return TOKEN["canaryUpdate"]
-    except Exception:
-        return False
-
-
-def instance_already_running():
-    fd = os.open(f"{os.getenv('TEMP')}\\mkbot_msu.lock", os.O_WRONLY | os.O_CREAT)
+    fd = os.open(f"{os.getenv('TEMP')}\\{lock_name}", os.O_WRONLY | os.O_CREAT)
 
     try:
         msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
@@ -71,67 +59,83 @@ class VersionInfo:
             self.version = version.parse(self.version)
 
 
-class Updater:
-    def __init__(self, current_data, enabled_canary=False):
-        self.enabled_canary = enabled_canary
+def is_canary_release(version_str: str):
+    version_str = version_str.split("-")
+    return True if (len(version_str) > 1 and version_str[1] == "beta") else False
 
+
+class BaseUpdater:
+    def __init__(
+        self,
+        current_data,
+        download_dir_name="mkbot_update",
+        setup_name="MKBotSetup.exe",
+        beta=False,
+    ):
+        self.enabled_beta = beta
+
+        self.current_data = current_data
         self.current_version = version.parse(current_data["version"])
 
-        self.last_canary = None
+        self.last_beta = None
         self.target = None
-
-        if current_data.get("commit", None) == None:
-            sys.exit(1)
 
         self.session = requests.Session()
         self.session.mount("https://", HTTPAdapter(max_retries=3))
 
-        res = self.session.get(
+        self.download_dir_path = os.getenv("TEMP") + f"\\{download_dir_name}"
+        self.setup_path = self.download_dir_path + f"\\{setup_name}"
+
+    def get_version_info(self, res):
+        res.raise_for_status()
+        data = res.json()
+        asset = self.find_asset(data["assets"])
+
+        if asset == None:
+            return None
+
+        return VersionInfo(asset["label"], asset["browser_download_url"])
+
+    def request_stable_update(self):
+        return self.session.get(
             "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
         )
 
-        res.raise_for_status()
-        data = res.json()
+    def request_beta_update(self):
+        return self.session.get(
+            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+        )
+
+    def check_new_update(self):
+        if self.current_data.get("commit", None) == None:
+            sys.exit(1)
 
         if not exist_flag():
             TelemetryReporter.Event("CheckedForUpdate")
             write_flag()
 
-        asset = self.find_asset(data["assets"])
+        self.last_stable = self.get_version_info(self.request_stable_update())
 
-        if asset == None:
+        if self.last_stable is None:
             sys.exit(1)
 
-        self.setupPath = os.getenv("TEMP") + "\\mkbot-update\\MKBotSetup.exe"
-
-        self.last_stable = VersionInfo(asset["label"], asset["browser_download_url"])
         if self.last_stable.version > self.current_version:
             self.target = self.last_stable
-        elif self.enabled_canary:
-            res = self.session.get(
-                "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
-            )
-            try:
-                res.raise_for_status()
-                asset = self.find_asset(res.json()["assets"])
-                if asset != None:
-                    self.last_canary = VersionInfo(
-                        asset["label"], asset["browser_download_url"]
-                    )
-            except Exception:
-                traceback.print_exc()
+        elif self.enabled_beta:
+            self.last_beta = self.get_version_info(self.request_beta_update())
             if (
-                self.last_canary
-                and self.last_canary.version > self.last_stable.version
-                and self.last_canary.version >= self.current_version
-                and self.last_canary.commit != current_data["commit"]
+                self.last_beta
+                and self.last_beta.version > self.last_stable.version
+                and self.last_beta.version >= self.current_version
+                and self.last_beta.commit != self.current_data["commit"]
             ):
-                self.target = self.last_canary
+                self.target = self.last_beta
             else:
                 sys.exit(1)
         else:
             sys.exit(1)
 
+    @classmethod
     def find_asset(self, assets):
         asset = None
         for d in assets:
@@ -145,35 +149,34 @@ class Updater:
         with self.session.get(self.target.url, stream=True) as r:
             r.raise_for_status()
 
+            with open(download_file_name, "wb") as f:
+                for chunk in r.iter_content(chunk_size=1024 * 1024):
+                    f.write(chunk)
+
             TelemetryReporter.Event(
                 "UpdateDownloaded",
                 {"status": r.status_code, "url": self.target.url},
             )
 
-            with open(download_file_name, "wb") as f:
-                for chunk in r.iter_content(chunk_size=1024 * 1024):
-                    f.write(chunk)
-
     def download(self):
-        DOWNLOAD_PATH = f"{os.getenv('TEMP')}\\mkbot-update"
         if self.check_sha1_hash():
-            subprocess.call([f"{DOWNLOAD_PATH}\\MKBotSetup.exe", "/S", "/unpack"])
+            subprocess.call([self.setup_path, "/S", "/unpack"])
         else:
-            download_file_name = f"{DOWNLOAD_PATH}\\MKBotSetup.zip"
+            download_file_name = f"{self.download_dir_path}\\MKBotSetup.zip"
 
             os.makedirs(os.path.dirname(download_file_name), exist_ok=True)
 
             self.download_file(download_file_name)
 
             _zip = zipfile.ZipFile(download_file_name)
-            _zip.extractall(DOWNLOAD_PATH)
+            _zip.extractall(self.download_dir_path)
 
             if self.check_sha1_hash():
-                subprocess.call([f"{DOWNLOAD_PATH}\\MKBotSetup.exe", "/S", "/unpack"])
+                subprocess.call([self.setup_path, "/S", "/unpack"])
 
     def check_sha1_hash(self):
-        if os.path.isfile(self.setupPath):
-            with open(self.setupPath, "rb") as f:
+        if os.path.isfile(self.setup_path):
+            with open(self.setup_path, "rb") as f:
                 file_data = f.read()
             return hashlib.sha1(file_data).hexdigest() == self.target.sha
         else:
@@ -186,33 +189,59 @@ class Updater:
     def run(self):
         if self.check_ready_to_update():
             sys.exit(0)
+        self.check_new_update()
         self.download()
         if self.check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)
 
-    @staticmethod
-    def can_install():
-        if Updater.check_ready_to_update():
+    @classmethod
+    def can_install(cls):
+        if cls.check_ready_to_update():
             sys.exit(0)
         else:
             sys.exit(1)
 
 
-def main():
-    if instance_already_running():
-        sys.exit(1)
+class StableUpdater(BaseUpdater):
+    def __init__(self, current_data):
+        super().__init__(current_data, beta=False)
 
-    enabled_canary = load_canary_config()
+    def request_stable_update(self):
+        return self.session.get(
+            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
+        )
+
+
+class CanaryUpdater(BaseUpdater):
+    def __init__(self, current_data):
+        super().__init__(current_data, beta=False)
+
+    def request_stable_update(self):
+        return self.session.get(
+            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+        )
+
+
+def main():
     with open("../info/version.json", "rt") as f:
         current_data = json.load(f)
+
+    canary_build = is_canary_release(current_data["version"])
+
+    if instance_already_running(canary_build):
+        sys.exit(1)
+
+    if canary_build:
+        Updater = CanaryUpdater(current_data)
+    else:
+        Updater = StableUpdater(current_data)
 
     if "/s" in sys.argv:
         Updater.can_install()
     elif "/c" in sys.argv:
-        ut = Updater(current_data, enabled_canary)
-        ut.run()
+        Updater.run()
     else:
         sys.exit(1)
 

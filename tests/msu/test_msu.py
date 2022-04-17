@@ -129,7 +129,7 @@ class MSUTest(TestCase):
             )
 
     @patch.object(requests.Session, "get")
-    def test_Updater_init(self, mock_get):
+    def test_Updater_check_new_update(self, mock_get):
         from packaging import version
 
         mock_get.side_effect = self.generate_mock_requests_get(
@@ -139,7 +139,7 @@ class MSUTest(TestCase):
         # --- When commit is set to null
         current_version = self.get_version_json("1.3.2.1", None)
         with self.assertRaises(SystemExit) as se:
-            updater = msu.Updater(current_version, True)
+            msu.BaseUpdater(current_version, beta=True).check_new_update()
 
         self.assertEqual(se.exception.code, 1)
 
@@ -149,7 +149,7 @@ class MSUTest(TestCase):
             "1.5.4.1", "04a87e226add7197f3538b3349e562cc4135451d"
         )
         with self.assertRaises(SystemExit) as se:
-            updater = msu.Updater(current_version, True)
+            msu.BaseUpdater(current_version, beta=True).check_new_update()
 
         self.assertEqual(se.exception.code, 1)
 
@@ -162,7 +162,7 @@ class MSUTest(TestCase):
             "1.4.0.2", "04a87e226add7197f3538b3349e562cc4135451d"
         )
         with self.assertRaises(SystemExit) as se:
-            updater = msu.Updater(current_version, True)
+            msu.BaseUpdater(current_version, beta=True).check_new_update()
 
         self.assertEqual(se.exception.code, 1)
 
@@ -175,7 +175,8 @@ class MSUTest(TestCase):
         current_version = self.get_version_json(
             "1.3.2.1", "5be84dc9dfaa24003dfe4c7c88db1f6d212c226f"
         )
-        updater = msu.Updater(current_version, False)
+        updater = msu.BaseUpdater(current_version, beta=False)
+        updater.check_new_update()
         stable_expected = {
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
@@ -185,7 +186,7 @@ class MSUTest(TestCase):
         }
 
         self.assertEqual(updater.last_stable.__dict__, stable_expected)
-        self.assertEqual(updater.last_canary, None)
+        self.assertEqual(updater.last_beta, None)
         self.assertEqual(updater.target, updater.last_stable)
 
         # --- If current version is canary
@@ -195,7 +196,8 @@ class MSUTest(TestCase):
         current_version = self.get_version_json(
             "1.4.0.1-beta", "82980060b4606ef9bc428932736647d45e400fd9"
         )
-        updater = msu.Updater(current_version, False)
+        updater = msu.BaseUpdater(current_version, beta=False)
+        updater.check_new_update()
         stable_expected = {
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.4.0/MKBotSetup-1.4.0.1.zip",
@@ -205,7 +207,7 @@ class MSUTest(TestCase):
         }
 
         self.assertEqual(updater.last_stable.__dict__, stable_expected)
-        self.assertEqual(updater.last_canary, None)
+        self.assertEqual(updater.last_beta, None)
         self.assertEqual(updater.target, updater.last_stable)
 
         # --- When a canary update is available
@@ -216,7 +218,8 @@ class MSUTest(TestCase):
         current_version = self.get_version_json(
             "1.3.3.1", "04a87e226add7197f3538b3349e562cc4135451d"
         )
-        updater = msu.Updater(current_version, True)
+        updater = msu.BaseUpdater(current_version, beta=True)
+        updater.check_new_update()
         stable_expected = {
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
@@ -233,27 +236,20 @@ class MSUTest(TestCase):
         }
 
         self.assertEqual(updater.last_stable.__dict__, stable_expected)
-        self.assertNotEqual(updater.last_canary, None)
-        self.assertEqual(updater.last_canary.__dict__, canary_expected)
-        self.assertEqual(updater.target, updater.last_canary)
+        self.assertNotEqual(updater.last_beta, None)
+        self.assertEqual(updater.last_beta.__dict__, canary_expected)
+        self.assertEqual(updater.target, updater.last_beta)
 
         # --- If CanaryUpdate is set to false
         current_version = self.get_version_json(
             "1.3.3.1", "04a87e226add7197f3538b3349e562cc4135451d"
         )
         with self.assertRaises(SystemExit) as se:
-            updater = msu.Updater(current_version, False)
-        canary_expected = {
-            "commit": "82980060b4606ef9bc428932736647d45e400fd9",
-            "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
-            "rtype": "canary",
-            "version": version.parse("1.4.0.1-beta"),
-            "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",
-        }
+            updater = msu.BaseUpdater(current_version, beta=False)
+            updater.check_new_update()
 
         self.assertEqual(updater.last_stable.__dict__, stable_expected)
-        self.assertNotEqual(updater.last_canary, None)
-        self.assertEqual(updater.last_canary.__dict__, canary_expected)
+        self.assertEqual(updater.last_beta, None)
         self.assertEqual(se.exception.code, 1)
 
     def test_find_asset(self):
@@ -267,7 +263,7 @@ class MSUTest(TestCase):
                 "browser_download_url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.zip",
             },
         ]
-        self.assertEqual(msu.Updater(current_version).find_asset(assets), assets[0])
+        self.assertEqual(msu.BaseUpdater(current_version).find_asset(assets), assets[0])
 
     @patch(
         "builtins.open",

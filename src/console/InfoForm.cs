@@ -12,6 +12,8 @@ namespace MKBot
         public InfoForm()
         {
             InitializeComponent();
+
+            Icon = Properties.Resources.mkbot;
             button1.Select();
             try
             {

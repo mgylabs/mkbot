@@ -4,6 +4,7 @@
 ; !define EXT_DIR ".mkbot"
 !searchreplace PRODUCT_VERSION_NUMBER "${PRODUCT_VERSION}" " Canary" ""
 !searchreplace PRODUCT_SHORT_NAME "${PRODUCT_NAME}" "Mulgyeol " ""
+!searchreplace PRODUCT_EXE_NAME "${PRODUCT_EXE}" ".exe" ""
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
 !define PRODUCT_WEB_SITE "https://github.com/mgylabs/mulgyeol-mkbot"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE}"
@@ -114,20 +115,20 @@ Section "Apps" SEC01
     RMDir /r "$INSTDIR"
   ${EndIf}
   SetOutPath "$INSTDIR"
-  File "Update.exe"
+  File "tools\${BUILD_TYPE}\Update.exe"
   ${If} $installOption == 0
     Delete "$INSTDIR\..\Update.exe"
     Rename "$INSTDIR\Update.exe" "$INSTDIR\..\Update.exe"
   ${EndIf}
   File /nonfatal /a "..\build\*"
-  File "MKBot.VisualElementsManifest.xml"
+  File "..\resources\${PRODUCT_EXE_NAME}.VisualElementsManifest.xml"
   SetOutPath "$INSTDIR\bin"
   File /nonfatal /a /r "..\build\bin\*"
   SetOutPath "$INSTDIR\info"
   File /nonfatal /a /r "info\*"
   SetOutPath "$INSTDIR\resources\app"
   File /nonfatal /a /r "..\resources\app\*"
-  SetOutPath "$LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot\data"
+  SetOutPath "$LOCALAPPDATA\Mulgyeol\${PRODUCT_NAME}\data"
   SetOverwrite off
   File /nonfatal /a /r "data\*"
   SetOverwrite on
@@ -155,9 +156,6 @@ Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$MAINDIR\${PRODUCT_EXE}"
   WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "Path" "$MAINDIR"
-  ${If} $installOption == 0
-    Call WriteFlag
-  ${EndIf}
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MAINDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$MAINDIR\${PRODUCT_EXE}"
@@ -165,6 +163,12 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" "$MAINDIR\${PRODUCT_EXE}"
+  ; ${If} ${BUILD_TYPE} != "canary"
+  ;   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" "$MAINDIR\${PRODUCT_EXE}"
+  ; ${EndIf}
+  ${If} $installOption == 0
+    Call WriteFlag
+  ${EndIf}
 SectionEnd
 
 Function .onInstSuccess

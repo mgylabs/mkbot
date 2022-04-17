@@ -11,6 +11,7 @@ import traceback
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
+from mgylabs.utils.config import VERSION
 
 from core.controllers.ipc_controller import IPCController
 
@@ -20,7 +21,12 @@ log = logging.getLogger(__name__)
 
 
 def instance_already_running():
-    fd = os.open(f"{os.getenv('TEMP')}\\mkbot.lock", os.O_WRONLY | os.O_CREAT)
+    if VERSION.is_canary():
+        lock_name = "mkbot_can.lock"
+    else:
+        lock_name = "mkbot.lock"
+
+    fd = os.open(f"{os.getenv('TEMP')}\\{lock_name}", os.O_WRONLY | os.O_CREAT)
 
     try:
         msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)

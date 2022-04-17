@@ -16,9 +16,11 @@ namespace MKBot
         [STAThread]
         static void Main()
         {
+            Version.load_version_info();
+
             bool createnew;
 
-            Mutex mutex = new Mutex(true, "MKBot", out createnew);
+            Mutex mutex = new Mutex(true, Version.mutex_name, out createnew);
 
             if (!createnew)
             {

@@ -49,7 +49,7 @@ namespace MKBot
             }
             else
             {
-                UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + "\\Mulgyeol\\Mulgyeol MK Bot\\data";
+                UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + $"\\Mulgyeol\\{Version.product_name}\\data";
             }
 
             MKBotCore = new MKBotCoreManager(args.Contains("--debug"));
