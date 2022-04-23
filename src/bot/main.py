@@ -11,7 +11,7 @@ import traceback
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.config import VERSION
+from mgylabs.utils.version import VERSION
 
 from core.controllers.ipc_controller import IPCController
 

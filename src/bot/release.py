@@ -4,7 +4,7 @@ import os
 import aiofiles
 import aiohttp
 import discord
-from mgylabs.utils.config import VERSION
+from mgylabs.utils.version import VERSION
 
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 

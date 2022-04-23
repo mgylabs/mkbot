@@ -271,7 +271,6 @@ class DiscordBotManger(threading.Thread):
         try:
             CONFIG.load()
             get_event_loop()
-            bot = create_bot()
             asyncio.run(start_bot())
             usage_helper()
         except discord.errors.LoginFailure as e:
