@@ -214,5 +214,5 @@ class Translate(commands.Cog):
                 return params["target_lang"], js["translated_text"][0][0]
 
 
-def setup(bot: commands.Bot):
-    bot.add_cog(Translate(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Translate(bot))
