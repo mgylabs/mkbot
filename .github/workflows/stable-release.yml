@@ -12,6 +12,7 @@ jobs:
     runs-on: windows-2019
     environment:
       name: "Stable"
+      url: ${{ steps.update-changelog.outputs.d_url }}
     defaults:
       run:
         shell: cmd
@@ -86,6 +87,7 @@ jobs:
         run: |
           python package/ghtool.py -ua
       - name: Update CHANGELOG
+        id: update-changelog
         env:
           TAG_NAME: ${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

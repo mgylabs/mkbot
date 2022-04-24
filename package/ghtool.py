@@ -229,6 +229,10 @@ def create_pull_request():
         )
         print(res.text)
 
+    print(
+        f"::set-output name=d_url::https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{TAG_NAME}"
+    )
+
 
 def check_last_commit():
     cur_commit = os.getenv("GITHUB_SHA")
