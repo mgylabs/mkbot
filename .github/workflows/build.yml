@@ -36,14 +36,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
       - name: Install dependencies 1
-        env:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           scripts\prepare.bat
           python -m pip install --upgrade pip
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          if ($Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
         shell: pwsh
       - name: Install dependencies 2
         if: steps.install-ssh.outcome == 'success'
