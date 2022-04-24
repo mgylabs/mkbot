@@ -1,12 +1,15 @@
 import asyncio
 import logging
-from distutils.util import strtobool
+from typing import Dict, List, Optional
 
 import aiohttp
+from core.controllers.discord.utils.command_helper import send
+from core.controllers.discord.utils.register import add_cog
 from langdetect import detect
 from mgylabs.utils.config import CONFIG
 
 import discord
+from discord import app_commands
 from discord.ext import commands
 
 from .utils import listener
@@ -17,123 +20,158 @@ log = logging.getLogger(__name__)
 
 
 class Translate(commands.Cog):
+    conversation_group = app_commands.Group(
+        name="conversation", description="Conversational translation mode"
+    )
+    targets: Dict[int, set] = {}
+    languages = {
+        "korean": "kr",
+        "english": "en",
+        "japanese": "jp",
+        "chinese": "cn",
+        "vietnamese": "vi",
+        "indonesian": "id",
+        "arabic": "ar",
+        "bengali": "bn",
+        "german": "de",
+        "spanish": "es",
+        "french": "fr",
+        "hindi": "hi",
+        "italian": "it",
+        "malay": "ms",
+        "dutch": "nl",
+        "portuguese": "pt",
+        "russian": "ru",
+        "thai": "th",
+        "turkish": "tr",
+    }
+
     def __init__(self, bot):
         self.bot = bot
-        self.conversation = False
-        self.target = {"en"}
-        self.languages = {
-            "korean": "kr",
-            "english": "en",
-            "japanese": "jp",
-            "chinese": "cn",
-            "vietnamese": "vi",
-            "indonesian": "id",
-            "arabic": "ar",
-            "bengali": "bn",
-            "german": "de",
-            "spanish": "es",
-            "french": "fr",
-            "hindi": "hi",
-            "italian": "it",
-            "malay": "ms",
-            "dutch": "nl",
-            "portuguese": "pt",
-            "russian": "ru",
-            "thai": "th",
-            "turkish": "tr",
-        }
+        self.conversation_flag = False
 
     @commands.Cog.listener()
     @listener.on_message()
     async def on_message(self, message: discord.Message):
-        if not self.conversation:
+        if len(self.targets) == 0:
             return
 
-        ctx = await self.bot.get_context(message)
-        _, result = await self._trans(ctx, message.content, self.target)
+        ctx: commands.Context = await self.bot.get_context(message)
+
+        if ctx.channel.id not in self.targets:
+            return
+
+        t = self.targets[ctx.channel.id]
+
+        _, result, _ = await self._trans(ctx, message.content, t)
         if len(result) > 1:
             await ctx.send("\n".join([f"{k.upper()}: {v}" for k, v in result.items()]))
-        else:
+        elif len(result) == 1:
             await ctx.send("\n".join([f"{v}" for _, v in result.items()]))
 
-    @commands.command(aliases=["trans"])
+    @conversation_group.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
-    async def translate(self, ctx: commands.Context, *args):
+    async def enable(self, interaction: discord.Interaction, target: str):
         """
-        Command that translates sentence entered to desired language
-        Language list:
-            Korean          kr
-            English          en
-            Japanese        jp
-            Chinese         cn
-            Vietnamese     vi
-            Inodonesian    id
-            Arabic           ar
-            Bengali         bn
-            German        de
-            Spanish         es
-            French           fr
-            Hindi            hi
-            Italian            it
-            Malay          ms
-            Dutch           nl
-            Portuguese    pt
-            Russian         ru
-            Thai             th
-            Turkish          tr
-
-        {commandPrefix}translate "What does it mean in Korean?" korean
-        {commandPrefix}translate "What does it mean in Korean?" kr
-
-        * Conversation Mode (beta)
-        --conversation <true_or_false>
-            You can also use <t_or_f>, <y_or_n> and <on_or_off>.
-        --target <languages>
-            You can either give multiple languages separated by comma (,).
-
-        Activate
-        {commandPrefix}translate --conversation true --target en
-        {commandPrefix}translate --conversation true --target en,jp,kr
-
-        Deactivate
-        {commandPrefix}translate --conversation false
+        Enable conversational translation mode
         """
+        t = await self._convert_langs(interaction, {target})
 
-        if "--conversation" in args:
-            try:
-                self.conversation = strtobool(args[args.index("--conversation") + 1])
-            except ValueError as e:
-                await ctx.send(embed=MsgFormatter.get(ctx, "Usage Error", str(e)))
-            if "--target" in args:
-                targetLangs = set(args[args.index("--target") + 1].split(","))
-                self.target = await self._convert_langs(ctx, targetLangs)
-            if self.conversation:
-                await ctx.send(
+        if interaction.channel_id in self.targets:
+            self.targets[interaction.channel_id].update(t)
+        else:
+            self.targets[interaction.channel_id] = t
+
+        await send(
+            interaction,
+            embed=MsgFormatter.get(
+                interaction,
+                "Conversation Mode",
+                f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.targets[interaction.channel_id])])}.',
+            ),
+        )
+
+    @conversation_group.command()
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def disable(self, interaction: discord.Interaction, target: str):
+        """
+        Disable conversational translation mode
+        """
+        if interaction.channel_id in self.targets:
+            if target == "all":
+                del self.targets[interaction.channel_id]
+
+                await send(
+                    interaction,
                     embed=MsgFormatter.get(
-                        ctx,
-                        "Start Conversation Mode",
-                        f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.target)])}.',
-                    )
+                        interaction,
+                        "Disable Conversation Mode",
+                    ),
                 )
             else:
-                await ctx.send(embed=MsgFormatter.get(ctx, "Exit Conversation Mode"))
-            return
-        else:
-            msg = args[0]
-            targetLangs = {args[1]} if len(args) > 1 else self.target
+                t = await self._convert_langs(interaction, {target})
+                self.targets[interaction.channel_id].remove(list(t)[0])
+
+                await send(
+                    interaction,
+                    embed=MsgFormatter.get(
+                        interaction,
+                        "Conversation Mode",
+                        f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.targets[interaction.channel_id])])}.',
+                    ),
+                )
+
+    @app_commands.command()
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def translate(
+        self, interaction: discord.Interaction, query: str, target: Optional[str] = "en"
+    ):
+        """
+        Command that translates sentence entered to desired language
+        """
 
         srcLang, result, success = await self._trans(
-            ctx, msg, await self._convert_langs(ctx, targetLangs)
+            interaction, query, await self._convert_langs(interaction, {target})
         )
         if success:
             for t, r in result.items():
-                await ctx.send(
+                await send(
+                    interaction,
                     embed=MsgFormatter.get(
-                        ctx,
+                        interaction,
                         "Translation Successful " + srcLang + " => " + t,
-                        msg + "\n\n" + r,
-                    )
+                        query + "\n\n" + r,
+                    ),
                 )
+
+    @translate.autocomplete("target")
+    @enable.autocomplete("target")
+    async def conversation_enable_target_autocomplete(
+        self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> List[app_commands.Choice[str]]:
+        return [
+            app_commands.Choice(name=k.capitalize(), value=v)
+            for k, v in self.languages.items()
+            if current.lower() in k.lower()
+        ]
+
+    @disable.autocomplete("target")
+    async def conversation_disable_target_autocomplete(
+        self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> List[app_commands.Choice[str]]:
+        ls = [
+            app_commands.Choice(name=k.capitalize(), value=v)
+            for k, v in self.languages.items()
+            if current.lower() in k.lower()
+        ]
+
+        ls.insert(0, app_commands.Choice(name="All", value="all"))
+
+        return ls
 
     async def _convert_langs(self, ctx, langs: set):
         short_langs = {t for t in langs if t.lower() in self.languages}
@@ -142,27 +180,28 @@ class Translate(commands.Cog):
         langs -= invalid_langs
 
         if len(langs) == 0:
-            await ctx.send(
+            await send(
+                ctx,
                 embed=MsgFormatter.get(
                     ctx,
                     f'Translation Fail: {", ".join(invalid_langs)}',
                     "Cannot find target language(s) inputted",
-                )
+                ),
             )
             log.warning("targetlang not identified")
         elif len(invalid_langs) > 0:
-            await ctx.send(
+            await send(
+                ctx,
                 embed=MsgFormatter.get(
                     ctx,
                     f'Translation Warning: {", ".join(invalid_langs)}',
                     "Cannot find target language(s) inputted",
-                )
+                ),
             )
         return langs
 
     async def _trans(self, ctx, msg, targetLangs: set):
         success = True
-        channel = ctx.message.channel
         srcLang = detect(msg)
 
         langDetectDict = {
@@ -180,14 +219,15 @@ class Translate(commands.Cog):
             srcLang = langDetectDict[srcLang]
 
         if srcLang not in self.languages.values():
-            await channel.send(
+            await send(
+                ctx,
                 embed=MsgFormatter.get(
                     ctx,
                     "Translation Fail: Input Language Detection Failed",
                     "Language detected is not supported. \n ** Detected language: "
                     + srcLang
                     + " **\nuse //help translate to find supported languages",
-                )
+                ),
             )
             log.warning("srcLanguage detected is not supported")
             return srcLang, result, False
@@ -215,4 +255,4 @@ class Translate(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Translate(bot))
+    await add_cog(bot, Translate)

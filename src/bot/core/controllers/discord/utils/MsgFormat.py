@@ -32,7 +32,7 @@ class MsgFormatter:
 
     @staticmethod
     def get(
-        ctx,
+        ctx_or_iaction,
         title,
         description="",
         fields: list = [],
@@ -57,10 +57,10 @@ class MsgFormatter:
             embed.add_field(**fd)
 
         if show_req_user:
-            if isinstance(ctx, commands.Context):
-                user_id = ctx.author.id
-            elif isinstance(ctx, discord.Interaction):
-                user_id = ctx.user.id
+            if isinstance(ctx_or_iaction, commands.Context):
+                user_id = ctx_or_iaction.author.id
+            elif isinstance(ctx_or_iaction, discord.Interaction):
+                user_id = ctx_or_iaction.user.id
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
         embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
@@ -82,18 +82,23 @@ class MsgFormatter:
         return embed
 
     @staticmethod
-    def abrt(ctx, issue_link, tb, show_req_user=True):
-        description = f"Please [create an issue]({issue_link}) at GitHub with logs below to help fix this problem."
+    def abrt(ctx_or_iaction, issue_link, tb, show_req_user=True):
+        description = f"An unknown error has occurred. Please [create an issue]({issue_link}) at GitHub with logs below to help fix this problem."
         env = f"Version: {VERSION}\nCommit: {VERSION.commit}\nOS: {platform.platform().replace('-', ' ')}"
 
         embed = discord.Embed(
-            title="ABRT: An unknown error has occurred :face_with_monocle:",
+            title=":rotating_light:  Automatic Bug Reporting Tool",
             description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
             color=color_to_int("#FF0000"),
             timestamp=datetime.datetime.utcnow(),
         )
 
         if show_req_user:
-            embed.add_field(name="Requested by", value="<@{}>".format(ctx.author.id))
+            if isinstance(ctx_or_iaction, commands.Context):
+                user_id = ctx_or_iaction.author.id
+            elif isinstance(ctx_or_iaction, discord.Interaction):
+                user_id = ctx_or_iaction.user.id
+
+            embed.add_field(name="Requested by", value="<@{}>".format(user_id))
         embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
         return embed

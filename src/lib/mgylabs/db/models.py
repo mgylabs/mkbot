@@ -1,7 +1,7 @@
 import datetime
 
 import sqlalchemy
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Query, relationship
 
 from .database import Base, db_session
 
@@ -12,7 +12,7 @@ class CRUD:
         return db_session.query(cls).filter_by(**kwargs).count()
 
     @classmethod
-    def query(cls):
+    def query(cls) -> Query:
         return db_session.query(cls)
 
     @classmethod
@@ -84,6 +84,7 @@ class DiscordUser(CRUD, Base):
     __tablename__ = "discord_users"
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    timezone = sqlalchemy.Column(sqlalchemy.String, default="UTC")
     last_used_at = sqlalchemy.Column(sqlalchemy.DateTime)
     created_at = sqlalchemy.Column(
         sqlalchemy.DateTime, default=datetime.datetime.utcnow()
@@ -114,6 +115,7 @@ class DiscordBotRequestLog(CRUD, Base):
     channel_id = sqlalchemy.Column(sqlalchemy.Integer)
     user_perm = sqlalchemy.Column(sqlalchemy.Integer)
     command = sqlalchemy.Column(sqlalchemy.String)
+    command_type = sqlalchemy.Column(sqlalchemy.String)
     raw = sqlalchemy.Column(sqlalchemy.String)
     created_at = sqlalchemy.Column(
         sqlalchemy.DateTime, default=datetime.datetime.utcnow()
@@ -130,6 +132,7 @@ class DiscordBotRequestLog(CRUD, Base):
         channel_id,
         user_perm,
         command,
+        command_type,
         raw,
         created_at,
     ) -> None:
@@ -141,6 +144,7 @@ class DiscordBotRequestLog(CRUD, Base):
         self.channel_id = channel_id
         self.user_perm = user_perm
         self.command = command
+        self.command_type = command_type
         self.raw = raw
         self.created_at = created_at
 
@@ -172,6 +176,13 @@ class DiscordBotCommandEventLog(CRUD, Base):
     request: DiscordBotRequestLog = relationship(
         "DiscordBotRequestLog", backref="events"
     )
+
+    def __init__(self, message_id, event, properties) -> None:
+        super().__init__()
+
+        self.request_id = DiscordBotRequestLog.get_one(msg_id=message_id).id
+        self.event = event
+        self.properties = properties
 
     def __repr__(self) -> str:
         return f"<DiscordBotCommandEventLog object {self.id}>"

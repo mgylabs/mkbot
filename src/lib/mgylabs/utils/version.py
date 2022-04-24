@@ -21,7 +21,7 @@ class Version:
             )
             else False
         )
-        self.tag = f"v{self.base_version}"
+        self.tag = f"v{'.'.join(self.tuple_version[:-1])}"
 
     def is_release_build(self):
         return (not is_development_mode()) and (self.commit is not None)

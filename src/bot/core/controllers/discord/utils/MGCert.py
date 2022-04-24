@@ -3,6 +3,7 @@ import logging
 from functools import wraps
 
 import discord
+from core.controllers.discord.utils.command_helper import send
 from discord.ext import commands
 from mgylabs.utils.config import CONFIG, USER_DATA_PATH
 
@@ -91,33 +92,41 @@ class MGCertificate:
                 if isinstance(args[0], commands.Context) or isinstance(
                     args[0], discord.Interaction
                 ):
-                    ctx: commands.Context = args[0]
+                    ctx_or_iaction: commands.Context = args[0]
                 else:
-                    ctx: commands.Context = args[1]
+                    ctx_or_iaction: commands.Context = args[1]
 
-                req_user = str(ctx.author)
+                if isinstance(ctx_or_iaction, discord.Interaction):
+                    req_user = str(ctx_or_iaction.user)
+                    req_user_id = ctx_or_iaction.user.id
+                else:
+                    req_user = str(ctx_or_iaction.author)
+                    req_user_id = ctx_or_iaction.author.id
+
                 perm = MGCertificate.getUserLevel(req_user)
 
                 if perm > level:
                     embed = MsgFormatter.get(
-                        ctx,
+                        ctx_or_iaction,
                         "Permission denied",
                         "<@{}> is not in the {}. This incident will be reported.".format(
-                            ctx.author.id, Level.get_description(level)
+                            req_user_id, Level.get_description(level)
                         ),
                         show_req_user=False,
                     )
-                    embed.add_field(name="User", value=str(ctx.author))
+                    embed.add_field(name="User", value=req_user)
                     embed.add_field(
                         name="Command tried",
                         value="{} ({})".format(
-                            ctx.command.name, Level.get_description(level)
+                            ctx_or_iaction.command.name, Level.get_description(level)
                         ),
                     )
-                    await ctx.send(embed=embed)
+                    await send(ctx_or_iaction, embed=embed)
                     logger.critical(
                         '"{}" tried to command "{}" that needs "{}" permission.'.format(
-                            req_user, ctx.command.name, Level.get_description(level)
+                            req_user,
+                            ctx_or_iaction.command.name,
+                            Level.get_description(level),
                         )
                     )
                     return

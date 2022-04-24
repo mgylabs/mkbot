@@ -12,7 +12,6 @@ async def ping(interaction: discord.Interaction):
     """
     Shows the bot's latency
     """
-
     await interaction.response.send_message(
         embed=MsgFormatter.get(
             interaction, f"Pong in {round(interaction.client.latency*1000)}ms"

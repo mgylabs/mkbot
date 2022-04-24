@@ -3,7 +3,7 @@ import os
 
 import aiofiles
 import aiohttp
-import discord
+from mgylabs.db.storage import localStorage
 from mgylabs.utils.version import VERSION
 
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
@@ -46,14 +46,18 @@ class ReleaseNote:
 
 class ReleaseNotify:
     @classmethod
-    async def run(cls, channel):
-        if (
-            (VERSION.is_release_build())
-            and (not VERSION.is_canary())
-            and (not cls.exist_flag())
-        ):
-            await cls.write_flag()
-            await cls.send_release_note(channel)
+    async def run(cls, user_id, send):
+        if (VERSION.is_release_build()) and (not VERSION.is_canary()):
+            if not cls.exist_flag():
+                localStorage["release_notify_user_ids"] = []
+                await cls.write_flag()
+
+            user_ids = localStorage["release_notify_user_ids"]
+
+            if user_id not in user_ids:  # pylint: disable=unsupported-membership-test
+                localStorage["release_notify_user_ids"] += [user_id]
+
+                await cls.send_release_note(send)
 
     @classmethod
     def exist_flag(cls):
@@ -65,7 +69,7 @@ class ReleaseNotify:
             await f.write("flag")
 
     @classmethod
-    async def send_release_note(cls, channel: discord.TextChannel):
+    async def send_release_note(cls, send):
         note_api_url = f"https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/{VERSION.tag}"
         note_url = (
             f"https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}"
@@ -82,4 +86,4 @@ class ReleaseNotify:
             + f"\nPlease see the [Release Note]({note_url}) for more information.",
             note.fields,
         )
-        await channel.send(embed=embed)
+        await send(embed=embed)
