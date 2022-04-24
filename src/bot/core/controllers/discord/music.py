@@ -451,5 +451,5 @@ class Music(commands.Cog):
             await check_reaction(botmsg, timeout=3)
 
 
-def setup(bot: commands.Bot):
-    bot.add_cog(Music(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Music(bot))

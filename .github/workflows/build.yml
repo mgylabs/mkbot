@@ -35,6 +35,16 @@ jobs:
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+        shell: pwsh
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       - name: Install dependencies 1
         run: |
           scripts\prepare.bat
@@ -44,7 +54,7 @@ jobs:
       - name: Install dependencies 2
         if: steps.install-ssh.outcome == 'success'
         run: |
-          pip install git+ssh://git@github.com/MycroftKang/application-insights-python.git
+          pip install --no-cache-dir git+ssh://git@github.com/MycroftKang/application-insights-python.git
         shell: pwsh
       - name: Unit Test
         run: |
@@ -62,10 +72,10 @@ jobs:
           call scripts\build.bat --canary
       - name: Test with dry run
         run: |
-          mkdir $Env:USERPROFILE\.mkbot > $null
-          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" > $null
-          cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" -Recurse
-          cp -Path extensions -Destination $Env:USERPROFILE\.mkbot -Recurse
+          mkdir $Env:USERPROFILE\.mkbot-canary > $null
+          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot Canary" > $null
+          cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot Canary" -Recurse
+          cp -Path extensions -Destination $Env:USERPROFILE\.mkbot-canary -Recurse
           cd .\build\bin
           .\MKBotCore.exe --dry-run
         shell: pwsh

@@ -100,5 +100,5 @@ async def install(ctx: commands.Context, ext_id: str, option=None):
         )
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(install)

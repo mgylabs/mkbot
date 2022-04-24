@@ -35,5 +35,5 @@ async def poll(ctx: commands.Context, question, *candidates):
             await botmsg.add_reaction(reaction)
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(poll)

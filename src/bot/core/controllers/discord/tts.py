@@ -133,5 +133,5 @@ async def tts(ctx: commands.Context, *args):
     await ctx.send(embed=embed)
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(tts)

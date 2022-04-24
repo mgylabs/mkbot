@@ -38,5 +38,5 @@ async def delete(ctx: commands.Context, amount):
     DiscordCommandEventLogEntry.add(ctx, "MessageDeleted", {"count": amount})
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(delete)

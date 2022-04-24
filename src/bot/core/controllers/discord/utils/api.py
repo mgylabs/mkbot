@@ -3,6 +3,9 @@ import os
 import pickle
 import sys
 
+from mgylabs.utils.config import USER_DATA_PATH
+from mgylabs.utils.version import VERSION
+
 LOCALAPPDATA = os.getenv("LOCALAPPDATA")
 
 
@@ -15,11 +18,12 @@ if is_development_mode():
     EXT_CONFIG_PATH = "..\\data\\extensions.json"
     EXT_BIN_PATH = "..\\data\\ext.bin"
 else:
-    loc = os.getenv("USERPROFILE") + "\\.mkbot\\"
-    EXT_CONFIG_PATH = (
-        f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\extensions.json"
-    )
-    EXT_BIN_PATH = f"{LOCALAPPDATA}\\Mulgyeol\\Mulgyeol MK Bot\\data\\ext.bin"
+    if VERSION.is_canary():
+        loc = os.getenv("USERPROFILE") + "\\.mkbot-canary\\"
+    else:
+        loc = os.getenv("USERPROFILE") + "\\.mkbot\\"
+    EXT_CONFIG_PATH = f"{USER_DATA_PATH}\\extensions.json"
+    EXT_BIN_PATH = f"{USER_DATA_PATH}\\ext.bin"
 
 extensions_path = loc + "extensions"
 

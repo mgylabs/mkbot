@@ -3,7 +3,7 @@
     "discordToken": "Your Token",
     "kakaoToken": "Your Token",
     "commandPrefix": ".",
-    "messageColor": "#FAA61A",
+    "messageColor": "#0D7FCA",
     "disabledPrivateChannel": false,
     "connectOnStart": false
 }

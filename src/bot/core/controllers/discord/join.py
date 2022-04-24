@@ -19,5 +19,5 @@ async def join(ctx: commands.Context):
     )
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(join)

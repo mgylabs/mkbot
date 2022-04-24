@@ -27,6 +27,16 @@ jobs:
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+        shell: pwsh
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       - name: Install dependencies 1
         run: |
           python -m pip install --upgrade pip
@@ -35,7 +45,7 @@ jobs:
       - name: Install dependencies 2
         if: steps.install-ssh.outcome == 'success'
         run: |
-          pip install git+ssh://git@github.com/MycroftKang/application-insights-python.git
+          pip install --no-cache-dir git+ssh://git@github.com/MycroftKang/application-insights-python.git
         shell: pwsh
       - name: Version
         env:

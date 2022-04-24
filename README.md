@@ -72,7 +72,9 @@ Self-host discord bot on your own local Windows PC.
 
 ```json
 {
-  "discordToken": "Your Bot TOKEN",
+  "discordToken": "Your Discord Bot Token",
+  "discordAppID": "Your Discord App ID",
+  "discordAppCmdGuilds": ["123456789123456789"],
   "kakaoToken": "Your KakaoTalk REST API Token"
 }
 ```

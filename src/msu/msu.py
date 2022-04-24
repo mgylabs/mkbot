@@ -216,7 +216,9 @@ class StableUpdater(BaseUpdater):
 
 class CanaryUpdater(BaseUpdater):
     def __init__(self, current_data):
-        super().__init__(current_data, beta=False)
+        super().__init__(
+            current_data, beta=False, download_dir_name="mkbot_canary_update"
+        )
 
     def request_stable_update(self):
         return self.session.get(

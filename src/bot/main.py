@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import sys
 
@@ -11,7 +12,7 @@ import traceback
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.config import VERSION
+from mgylabs.utils.version import VERSION
 
 from core.controllers.ipc_controller import IPCController
 
@@ -37,6 +38,11 @@ def instance_already_running():
     return already_running
 
 
+async def dry_run():
+    errorlevel = await create_bot(True)
+    return errorlevel
+
+
 def main():
     if instance_already_running():
         print("MKBotCore is already running.")
@@ -45,7 +51,7 @@ def main():
     run_migrations(SCRIPT_DIR, DB_URL)
 
     if "--dry-run" in sys.argv:
-        errorlevel = create_bot(True)
+        errorlevel = asyncio.run(dry_run())
         if errorlevel == 0:
             print("Test Passed")
         else:

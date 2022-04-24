@@ -14,8 +14,8 @@ async def logout(ctx: commands.Context):
         embed=MsgFormatter.get(ctx, "Logs out of Discord and closes all connections")
     )
     print("Logged out")
-    await ctx.bot.logout()
+    await ctx.bot.close()
 
 
-def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot):
     bot.add_command(logout)
