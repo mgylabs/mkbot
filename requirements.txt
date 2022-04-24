@@ -2,7 +2,7 @@ aiofiles==0.8.0
 alembic==1.7.5
 black==22.3.0
 bs4==0.0.1
-debugpy==1.5.1
+debugpy==1.6.0
 discord.py @ git+https://github.com/Rapptz/discord.py.git@5456c0cae944f5e0dffb5de19cf18175e0d73011
 flake8==4.0.1
 git+https://github.com/MycroftKang/mulgyeol-bot-framework.git@6b1401dfa4930932b10b9eb16321125c3c9b1707
