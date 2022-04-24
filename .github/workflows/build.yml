@@ -62,10 +62,10 @@ jobs:
           call scripts\build.bat --canary
       - name: Test with dry run
         run: |
-          mkdir $Env:USERPROFILE\.mkbot > $null
-          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" > $null
-          cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot" -Recurse
-          cp -Path extensions -Destination $Env:USERPROFILE\.mkbot -Recurse
+          mkdir $Env:USERPROFILE\.mkbot-canary > $null
+          mkdir "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot Canary" > $null
+          cp -Path package\data -Destination "$Env:LOCALAPPDATA\Mulgyeol\Mulgyeol MK Bot Canary" -Recurse
+          cp -Path extensions -Destination $Env:USERPROFILE\.mkbot-canary -Recurse
           cd .\build\bin
           .\MKBotCore.exe --dry-run
         shell: pwsh

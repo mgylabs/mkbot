@@ -16,8 +16,7 @@ sys.path.append("..\\lib")
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.config import (CONFIG, MGCERT_PATH, VERSION,
-                                  is_development_mode)
+from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from mgylabs.utils.helper import usage_helper
 from mgylabs.utils.LogEntry import DiscordRequestLogEntry
 
