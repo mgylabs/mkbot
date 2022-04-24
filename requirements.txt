@@ -1,5 +1,5 @@
 aiofiles==0.8.0
-alembic==1.7.5
+alembic==1.7.7
 black==22.3.0
 bs4==0.0.1
 debugpy==1.5.1
