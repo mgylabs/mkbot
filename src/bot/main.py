@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import sys
 
@@ -37,6 +38,11 @@ def instance_already_running():
     return already_running
 
 
+async def dry_run():
+    errorlevel = await create_bot(True)
+    return errorlevel
+
+
 def main():
     if instance_already_running():
         print("MKBotCore is already running.")
@@ -45,7 +51,7 @@ def main():
     run_migrations(SCRIPT_DIR, DB_URL)
 
     if "--dry-run" in sys.argv:
-        errorlevel = create_bot(True)
+        errorlevel = asyncio.run(dry_run())
         if errorlevel == 0:
             print("Test Passed")
         else:

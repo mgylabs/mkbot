@@ -38,7 +38,7 @@ class SettingItem:
 
 class Settings:
     discordToken = SettingItem("Your Token")
-    discordAppID = SettingItem("Your Token")
+    discordAppID = SettingItem("1234")
     discordAppCmdGuilds = SettingItem([])
     kakaoToken = SettingItem("Your Token")
     commandPrefix = SettingItem(".")
