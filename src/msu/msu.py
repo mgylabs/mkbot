@@ -110,7 +110,9 @@ class BaseUpdater:
         if self.current_data.get("commit", None) == None:
             sys.exit(1)
 
-        if not exist_flag():
+        if exist_flag():
+            TelemetryReporter.Health()
+        else:
             TelemetryReporter.Event("CheckedForUpdate")
             write_flag()
 
