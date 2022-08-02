@@ -30,6 +30,13 @@ class TelemetryReporter:
             threading.Thread(target=callback).start()
 
     @classmethod
+    def Health(cls, callback=None):
+        if cls.reporter is not None:
+            return cls.reporter.Health(callback)
+        else:
+            cls._run_callback_(callback)
+
+    @classmethod
     def Event(cls, event_name, properties={}, callback=None):
         properties["commit"] = VERSION.commit
         properties["OS"] = platform.platform().replace("-", " ")
