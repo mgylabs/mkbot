@@ -2,7 +2,7 @@
 
 ## 1.6.1 (2022-08-02)
 ### Others
-* Security update (CVE-2022-2309) (#166)
+* Security update CVE-2022-2309 (#166)
 
 
 ## 1.6.0 (2022-04-17)
