@@ -10,6 +10,9 @@ jobs:
     name: Stable Release
     if: github.repository == 'mgylabs/mulgyeol-mkbot'
     runs-on: windows-2019
+    environment:
+      name: "Stable"
+      url: ${{ steps.update-changelog.outputs.d_url }}
     defaults:
       run:
         shell: cmd
@@ -25,19 +28,25 @@ jobs:
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+        shell: pwsh
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       - name: Install dependencies 1
-        env:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          if ($Env:DEPLOY_TOKEN) { pip install -U mulgyeol-oauthlib --index-url https://${Env:DEPLOY_USER}:${Env:DEPLOY_TOKEN}@gitlab.com/api/v4/projects/20530638/packages/pypi/simple --extra-index-url https://pypi.org/simple }
         shell: pwsh
       - name: Install dependencies 2
         if: steps.install-ssh.outcome == 'success'
         run: |
-          pip install git+ssh://git@github.com/MycroftKang/application-insights-python.git
+          pip install --no-cache-dir git+ssh://git@github.com/MycroftKang/application-insights-python.git
         shell: pwsh
       - name: Version
         env:
@@ -78,6 +87,7 @@ jobs:
         run: |
           python package/ghtool.py -ua
       - name: Update CHANGELOG
+        id: update-changelog
         env:
           TAG_NAME: ${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
