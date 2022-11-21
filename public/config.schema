@@ -15,7 +15,10 @@
             "description": "Sets your discord bot app ID."
         },
         "discordAppCmdGuilds": {
-            "type": ["integer"],
+            "type": array,
+            "items": {
+                "type": "integer"
+            }
             "description": "Sets your discord bot guild IDs to use app commands."
         },
         "kakaoToken": {
