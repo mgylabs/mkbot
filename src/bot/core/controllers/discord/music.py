@@ -1,11 +1,11 @@
 import asyncio
+from typing import Union
 
 import aiohttp
-from bs4 import BeautifulSoup
-from yt_dlp import YoutubeDL
-
 import discord
+from bs4 import BeautifulSoup
 from discord.ext import commands
+from yt_dlp import YoutubeDL
 
 from .utils.exceptions import NonFatalError, UsageError
 from .utils.MGCert import Level, MGCertificate
@@ -13,6 +13,22 @@ from .utils.MsgFormat import MsgFormatter
 from .utils.voice import validate_voice_client
 
 song_list_dict = dict()
+
+
+def human_duration(duration):
+    duration = int(duration)
+    hours, remainder = divmod(duration, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    if hours == 0:
+        if minutes == 0:
+            human_duration = "0:{:02}".format(int(seconds))
+        else:
+            human_duration = "{}:{:02}".format(int(minutes), int(seconds))
+    else:
+        human_duration = "{}:{:02}:{:02}".format(int(hours), int(minutes), int(seconds))
+
+    return human_duration
 
 
 class Song:
@@ -60,7 +76,7 @@ async def ytsearch(text, count):
         title: str = info["title"]
         duration: int = info["duration"]
 
-        ls.append(Song().searchSong(music_url, title, str(duration) + "sec"))
+        ls.append(Song().searchSong(music_url, title, human_duration(duration)))
 
     return ls
 
@@ -376,7 +392,7 @@ class Music(commands.Cog):
             song_list_dict[guild_id] = [0, list()]
 
         song = " ".join(song)
-        reactions = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣"]
+        reactions = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "❌"]
 
         if song == "":
             await ctx.send(
@@ -385,18 +401,23 @@ class Music(commands.Cog):
                 )
             )
         else:
+            search_msg: discord.Message = await ctx.send(f"🔍 Searching... `{song}`")
+
             search_song_list = await ytsearch(song, 5)
 
-            async def check_reaction(botmsg, timeout):
+            async def check_reaction(botmsg: discord.Message, timeout):
                 await asyncio.sleep(timeout)
                 added = False
                 cached_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id)
+                await botmsg.delete()
                 for reaction in cached_msg.reactions:
                     if reaction.count >= 2:
+                        added = True
+                        if reactions.index(str(reaction.emoji)) == 5:
+                            break
                         song_list_dict[guild_id][1].append(
                             search_song_list[reactions.index(str(reaction.emoji))]
                         )
-                        added = True
                         await ctx.send(
                             embed=MsgFormatter.get(
                                 ctx,
@@ -418,37 +439,36 @@ class Music(commands.Cog):
                         )
                     )
 
-            timeout = 3
+            msg = "\n".join(
+                f"{i+1}. `{search_song_list[i].length}` {search_song_list[i].title}"
+                for i in range(len(search_song_list))
+            )
 
-            msg = ""
-            for i in range(len(search_song_list)):
-                msg += (
-                    str(i + 1)
-                    + ". "
-                    + search_song_list[i].title
-                    + " - "
-                    + search_song_list[i].length
-                    + "\n"
-                )
-            botmsg = await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx, f"{song} searched, {timeout} seconds to choose", msg
-                )
+            await search_msg.edit(content=f"🔍 `{song}` searched, choose in 30 seconds.")
+            botmsg: discord.Message = await ctx.send(
+                embed=MsgFormatter.get(ctx, None, msg)
             )
 
             for reaction in reactions:
                 await botmsg.add_reaction(reaction)
 
-            while timeout > 0:
-                await asyncio.sleep(timeout)
-                timeout -= 1
-                await botmsg.edit(
-                    embed=MsgFormatter.get(
-                        ctx, f"{song} searched, {timeout} seconds to choose", msg
-                    )
+            def check(r: discord.Reaction, u: Union[discord.Member, discord.User]):
+                return (
+                    u.id == ctx.author.id
+                    and r.message.channel.id == ctx.channel.id
+                    and str(r.emoji) in reactions
                 )
 
-            await check_reaction(botmsg, timeout=3)
+            try:
+                reaction, _ = await ctx.bot.wait_for(
+                    "reaction_add", check=check, timeout=30.0
+                )
+            except asyncio.TimeoutError:
+                return
+            else:
+                await search_msg.delete()
+
+            await check_reaction(botmsg, timeout=0)
 
 
 async def setup(bot: commands.Bot):

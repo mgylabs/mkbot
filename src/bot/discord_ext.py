@@ -9,8 +9,8 @@ discord_extensions = (
     "core.controllers.discord.roulette",
     "core.controllers.discord.translate",
     "core.controllers.discord.music",
-    "core.controllers.discord.highlighter",
     "core.controllers.discord.tic_tac_toe",
     "core.controllers.discord.feedback",
     "core.controllers.discord.timezone",
+    "core.controllers.discord.clock",
 )

@@ -1,21 +1,22 @@
 from datetime import datetime
 from typing import Optional
 
+import discord
 import pytz
 from core.controllers.discord.utils.command_helper import send
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
-from mgylabs.db.models import DiscordUser
-
-import discord
 from discord import app_commands
 from discord.ext import commands
+from mgylabs.db.models import DiscordUser
 
 from .utils.MsgFormat import MsgFormatter
 from .utils.register import add_cog, add_command
 
 
 class TimeZone(commands.Cog):
-    timezone_group = app_commands.Group(name="timezone", description="Timezone")
+    timezone_group = app_commands.Group(
+        name="timezone", description="Shows user's local time"
+    )
 
     @timezone_group.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -121,7 +122,7 @@ class TimeZone(commands.Cog):
                 ephemeral=True,
             )
 
-    @timezone_group.command(name="local-time")
+    @timezone_group.command(name="localtime")
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def localtime(
         self,

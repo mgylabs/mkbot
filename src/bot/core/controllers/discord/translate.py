@@ -3,14 +3,13 @@ import logging
 from typing import Dict, List, Optional
 
 import aiohttp
+import discord
 from core.controllers.discord.utils.command_helper import send
 from core.controllers.discord.utils.register import add_cog
-from langdetect import detect
-from mgylabs.utils.config import CONFIG
-
-import discord
 from discord import app_commands
 from discord.ext import commands
+from langdetect import detect
+from mgylabs.utils.config import CONFIG
 
 from .utils import listener
 from .utils.MGCert import Level, MGCertificate
@@ -73,7 +72,7 @@ class Translate(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def enable(self, interaction: discord.Interaction, target: str):
         """
-        Enable conversational translation mode
+        Enables conversational translation mode
         """
         t = await self._convert_langs(interaction, {target})
 
@@ -95,7 +94,7 @@ class Translate(commands.Cog):
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def disable(self, interaction: discord.Interaction, target: str):
         """
-        Disable conversational translation mode
+        Disables conversational translation mode
         """
         if interaction.channel_id in self.targets:
             if target == "all":

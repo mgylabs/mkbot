@@ -1,9 +1,8 @@
 import traceback
 
+import discord
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.register import add_command
-
-import discord
 from discord import app_commands
 from discord.ext import commands
 
@@ -14,12 +13,12 @@ class Dropdown(discord.ui.Select):
             discord.SelectOption(
                 label="Bug Report",
                 description="Report broken or incorrect behaviour",
-                emoji="💡",
+                emoji="🪲",
             ),
             discord.SelectOption(
                 label="Feature Request",
                 description="Suggest a feature for this library",
-                emoji="🪲",
+                emoji="💡",
             ),
         ]
 
@@ -103,7 +102,7 @@ async def feedback(interaction: discord.Interaction):
     await view.wait()
     view.clear_items()
 
-    await interaction.edit_original_message(
+    await interaction.edit_original_response(
         content=f"Thanks for your feedback, {interaction.user.name}!", view=view
     )
 

@@ -24,7 +24,18 @@ def is_youtube_url(data):
 
 
 def human_info(title, duration):
-    human_duration = f"{int(duration // 60)}:{int(duration % 60)}"
+    duration = int(duration)
+    hours, remainder = divmod(duration, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    if hours == 0:
+        if minutes == 0:
+            human_duration = "0:{:02}".format(int(seconds))
+        else:
+            human_duration = "{}:{:02}".format(int(minutes), int(seconds))
+    else:
+        human_duration = "{}:{:02}:{:02}".format(int(hours), int(minutes), int(seconds))
+
     return f"{title} ({human_duration})"
 
 
