@@ -55,7 +55,8 @@ Self-host discord bot on your own local Windows PC.
 
 4. Run `MKBotSetup.exe` to install `MK Bot`.
 
-> **Note** If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
+> **Note**  
+> If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
 ## Development Guide
 
@@ -70,11 +71,11 @@ Self-host discord bot on your own local Windows PC.
 
 - config.json
 
-```json
+```jsonc
 {
   "discordToken": "Your Discord Bot Token",
-  "discordAppID": "Your Discord App ID",
-  "discordAppCmdGuilds": ["123456789123456789"],
+  "discordAppID": 1234567890,  //Your Discord App ID
+  "discordAppCmdGuilds": [123456789123456789],  //Your Discord Guild ID
   "kakaoToken": "Your KakaoTalk REST API Token"
 }
 ```

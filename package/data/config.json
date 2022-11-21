@@ -1,7 +1,7 @@
 {
     "$schema": "https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema",
     "discordToken": "Your Token",
-    "discordAppID": "Your App ID",
+    "discordAppID": 1234567890,
     "discordAppCmdGuilds": [],
     "kakaoToken": "Your Token",
     "commandPrefix": ".",

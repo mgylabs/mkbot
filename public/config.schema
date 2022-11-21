@@ -11,11 +11,11 @@
             "description": "Sets your discord bot token."
         },
         "discordAppID": {
-            "type": "string",
+            "type": "integer",
             "description": "Sets your discord bot app ID."
         },
         "discordAppCmdGuilds": {
-            "type": "string",
+            "type": ["integer"],
             "description": "Sets your discord bot guild IDs to use app commands."
         },
         "kakaoToken": {
