@@ -13,19 +13,18 @@ from discord.ext import commands, tasks
 
 sys.path.append("..\\lib")
 
-from mgylabs.db.database import run_migrations
-from mgylabs.db.paths import DB_URL, SCRIPT_DIR
-from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
-from mgylabs.utils.helper import usage_helper
-from mgylabs.utils.LogEntry import DiscordRequestLogEntry
-
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
 from core.controllers.discord.utils.exceptions import NonFatalError, UsageError
 from core.controllers.discord.utils.MGCert import MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from discord_ext import discord_extensions
+from mgylabs.db.database import run_migrations
+from mgylabs.db.paths import DB_URL, SCRIPT_DIR
+from mgylabs.services.telemetry_service import TelemetryReporter
+from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+from mgylabs.utils.helper import usage_helper
+from mgylabs.utils.LogEntry import DiscordRequestLogEntry
 from release import ReleaseNotify
 
 log = logging.getLogger(__name__)
@@ -79,17 +78,17 @@ async def create_bot(return_error_level=False):
     async def on_ready():
         TelemetryReporter.start("Login")
 
-        for guild in CONFIG.discordAppCmdGuilds:
-            cmds = await bot.tree.sync(guild=discord.Object(guild))
-            print(guild, cmds)
-
-        bot.tree.on_error = on_app_command_error
-
         print("Logged in within {:0.2f}s".format(time.time() - stime))
 
+        bot.tree.on_error = on_app_command_error
         replyformat.set_avatar_url(
             "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
         )
+
+        for guild in CONFIG.discordAppCmdGuilds:
+            cmds = await bot.tree.sync(guild=discord.Object(guild))
+            print(f"App commands sync for {guild} ({', '.join(c.name for c in cmds)})")
+
         if is_development_mode():
             name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
             activity_type = discord.ActivityType.playing
@@ -137,8 +136,8 @@ async def create_bot(return_error_level=False):
                 await bot.change_presence(
                     status=discord.Status.online, activity=activity
                 )
-                if not is_development_mode():
-                    await ReleaseNotify.run(message.author.id, message.channel.send)
+
+            await ReleaseNotify.run(message.author.id, message.channel.send)
 
     @bot.event
     async def on_command_error(ctx: commands.Context, error: commands.CommandError):
@@ -298,6 +297,7 @@ async def create_bot(return_error_level=False):
     print("Mulgyeol MK Bot")
     print(f"Version {VERSION}" if VERSION != None else "Test Mode")
     print("Copyright (c) 2022 Mulgyeol Labs. All rights reserved.\n")
+    print(f"{time.strftime('%a, %d %b %Y %H:%M:%S (GMT%z)', time.localtime())}\n")
 
     return bot if not return_error_level else errorlevel
 

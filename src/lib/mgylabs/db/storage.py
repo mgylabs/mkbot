@@ -29,5 +29,18 @@ class Storage:
     def __delitem__(self, key):
         HashStore.get(key=key).first().delete()
 
+    def dict_update(self, key, value: dict):
+        obj = self.__getitem__(key)
+        assert isinstance(obj, dict)
+        obj.update(value)
+        self.__setitem__(key, obj)
+
+    def dict_pop(self, key, value):
+        obj = self.__getitem__(key)
+        assert isinstance(obj, dict)
+        r = obj.pop(value)
+        self.__setitem__(key, obj)
+        return r
+
 
 localStorage = Storage()

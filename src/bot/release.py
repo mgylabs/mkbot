@@ -3,10 +3,9 @@ import os
 
 import aiofiles
 import aiohttp
+from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.db.storage import localStorage
 from mgylabs.utils.version import VERSION
-
-from core.controllers.discord.utils.MsgFormat import MsgFormatter
 
 log = logging.getLogger(__name__)
 

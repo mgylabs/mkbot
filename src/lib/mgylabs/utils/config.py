@@ -1,4 +1,3 @@
-import hashlib
 import json
 import os
 import sys
@@ -155,9 +154,4 @@ def add_data(key, value):
         json.dump(TOKEN, f, indent=4, ensure_ascii=False)
 
 
-def get_discriminator(key):
-    return hashlib.sha1(key.encode()).hexdigest()
-
-
 CONFIG = Settings(invoke())
-DISCRIMINATOR = get_discriminator(CONFIG.discordToken)

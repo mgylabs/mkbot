@@ -1,3 +1,6 @@
+import itertools
+
+import discord
 from discord.ext import commands
 from mgylabs.utils.version import VERSION
 
@@ -12,7 +15,71 @@ class CommandHelp(commands.DefaultHelpCommand):
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
 
-    def add_indented_commands(self, commands, *, heading, max_size=None):
+    async def send_bot_help(self, mapping) -> None:
+        ctx = self.context
+        bot = ctx.bot
+
+        if bot.description:
+            # <description> portion
+            self.paginator.add_line(bot.description, empty=True)
+
+        no_category = f"\u200b{self.no_category}:"
+
+        def get_category(command, *, no_category=no_category):
+            cog = command.cog
+            return cog.qualified_name + ":" if cog is not None else no_category
+
+        filtered = await self.filter_commands(bot.commands, sort=True, key=get_category)
+        max_size = self.get_max_size(filtered)
+        to_iterate = itertools.groupby(filtered, key=get_category)
+
+        # Now we can add the commands to the page.
+        for category, cmds in to_iterate:
+            cmds = (
+                sorted(cmds, key=lambda c: c.name) if self.sort_commands else list(cmds)
+            )
+            self.add_indented_commands(cmds, heading=category, max_size=max_size)
+
+        note = self.get_app_commands_help()
+        if note:
+            self.paginator.add_line()
+            self.paginator.add_line(note)
+
+        note = self.get_ending_note()
+        if note:
+            self.paginator.add_line()
+            self.paginator.add_line(note)
+
+        await self.send_pages()
+
+    def get_app_commands_help(self):
+        bot = self.context.bot
+
+        cmd_builder = ["Slash Command:"]
+        menu_builder = ["Context Menu:"]
+        cmds = bot.tree._get_all_commands(guild=self.context.guild)
+        for command in cmds:
+            if isinstance(command, discord.app_commands.ContextMenu):
+                menu_builder.append(f"{self.indent * ' '}`{command.name}`")
+            else:
+                cmd_builder.append(
+                    f"{self.indent * ' '}`/{command.name}` - {command.description}"
+                )
+
+        if len(cmd_builder) == 1:
+            if self.context.guild is not None:
+                cmd_builder.append(
+                    f"{self.indent * ' '}⚠️ Slash commands are not set up for use in this guild(ID: {self.context.guild.id}).\n{self.indent * ' '}For more information, See https://github.com/mgylabs/mulgyeol-mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands"
+                )
+                builder = cmd_builder
+            else:
+                builder = []
+        else:
+            builder = cmd_builder + [""] + menu_builder
+
+        return "\n".join(builder)
+
+    def add_indented_commands(self, cmds, *, heading, max_size=None):
         """Indents a list of commands after the specified heading.
         The formatting is added to the :attr:`paginator`.
         The default implementation is the command name indented by
@@ -32,18 +99,22 @@ class CommandHelp(commands.DefaultHelpCommand):
             commands parameter.
         """
 
-        if not commands:
+        if not cmds:
             return
 
         if len(self.paginator) != 0:
             self.paginator.add_line()
 
         self.paginator.add_line(heading)
-        max_size = max_size or self.get_max_size(commands)
+        max_size = max_size or self.get_max_size(cmds)
 
-        for command in commands:
+        for command in cmds:
             name = command.name
-            entry = "{0}`{1}` - {2}".format(self.indent * " ", name, command.short_doc)
+            entry = "{0}`{1}` - {2}".format(
+                self.indent * " ",
+                f"{self.context.clean_prefix}{name}",
+                command.short_doc,
+            )
             self.paginator.add_line(self.shorten_text(entry))
 
     async def send_pages(self):

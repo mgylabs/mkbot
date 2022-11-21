@@ -8,7 +8,15 @@
     "properties": {
         "discordToken": {
             "type": "string",
-            "description":"Sets your discord bot token."
+            "description": "Sets your discord bot token."
+        },
+        "discordAppID": {
+            "type": "string",
+            "description": "Sets your discord bot app ID."
+        },
+        "discordAppCmdGuilds": {
+            "type": "string",
+            "description": "Sets your discord bot guild IDs to use app commands."
         },
         "kakaoToken": {
             "type": "string",
@@ -44,9 +52,9 @@
                 true
             ]
         },
-        "canaryUpdate": {
+        "betaUpdate": {
             "type": "boolean",
-            "description": "When set to true, this enables canary update.",
+            "description": "When set to true, this enables beta update.",
             "default": false,
             "examples": [
                 true

@@ -1,6 +1,8 @@
 {
     "$schema": "https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema",
     "discordToken": "Your Token",
+    "discordAppID": "Your App ID",
+    "discordAppCmdGuilds": [],
     "kakaoToken": "Your Token",
     "commandPrefix": ".",
     "messageColor": "#0D7FCA",

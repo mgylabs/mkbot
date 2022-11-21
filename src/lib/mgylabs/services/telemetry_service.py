@@ -2,7 +2,7 @@ import platform
 import threading
 import traceback
 
-from ..utils.config import DISCRIMINATOR, VERSION
+from ..utils.config import VERSION
 
 try:
     # pylint: disable=import-error,no-name-in-module
@@ -61,9 +61,7 @@ class TelemetryReporter:
     @classmethod
     def start(cls, callback_event_name=None):
         if telemetry_enabled and VERSION.is_release_build() and cls.reporter is None:
-            cls.reporter = TelemetryClient(
-                INSIGHTS_APPLICATION_KEY, str(VERSION), DISCRIMINATOR
-            )
+            cls.reporter = TelemetryClient(INSIGHTS_APPLICATION_KEY, str(VERSION))
 
         if callback_event_name is not None:
             cls.Event(str(callback_event_name))
