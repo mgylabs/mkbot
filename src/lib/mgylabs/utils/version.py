@@ -37,7 +37,7 @@ class Version:
         if self.is_canary():
             return "Mulgyeol MK Bot Canary"
         else:
-            return "Mulgyeol MK Bot Stable"
+            return "Mulgyeol MK Bot"
 
     def __str__(self) -> str:
         if is_development_mode():
