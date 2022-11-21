@@ -6,9 +6,7 @@ from sqlalchemy.orm import joinedload
 
 def row2dict(r, excepts=[]):
     return {
-        c.name: str(getattr(r, c.name))
-        for c in r.__table__.columns
-        if c.name not in excepts
+        c.name: getattr(r, c.name) for c in r.__table__.columns if c.name not in excepts
     }
 
 
