@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -13,6 +14,12 @@ namespace MKBot
         [STAThread]
         static void Main()
         {
+#if DEBUG
+            Environment.CurrentDirectory = Path.GetFullPath(Environment.CurrentDirectory + "\\..") + "\\build";
+#else
+            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);;
+#endif
+
             Version.load_version_info();
 
             bool createnew;

@@ -37,11 +37,10 @@ namespace MKBot
         {
 #if DEBUG
             DirectoryPath = Path.GetFullPath(Environment.CurrentDirectory + "\\..");
-            Environment.CurrentDirectory = DirectoryPath + "\\build";
 #else
             DirectoryPath = Path.GetDirectoryName(Application.ExecutablePath);
-            Environment.CurrentDirectory = DirectoryPath;
 #endif
+
             args = Environment.GetCommandLineArgs();
             if (args.Contains("--debug"))
             {
