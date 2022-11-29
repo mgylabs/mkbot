@@ -37,7 +37,7 @@ Self-host discord bot on your own local Windows PC.
 #### Install dependencies
 
 - Visual Studio Code
-- Python 3.8
+- Python 3.10
 - NSIS 3.06
 - msbuild 16.5
 
@@ -82,7 +82,7 @@ Self-host discord bot on your own local Windows PC.
 
 - mgcert.json
 
-```json
+```jsonc
 {
   "adminUsers": ["admin_username#0000"],
   "trustedUsers": ["trusted_username#0000"]
