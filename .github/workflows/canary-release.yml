@@ -8,7 +8,8 @@ on:
       manual:
         description: "Manual Build"
         required: true
-        default: "true"
+        type: boolean
+        default: true
 
 jobs:
   check:
