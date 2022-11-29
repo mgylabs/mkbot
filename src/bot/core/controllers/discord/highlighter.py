@@ -1,17 +1,16 @@
 import datetime
-import logging
 import re
 
 import aiohttp
-from mgylabs.utils.config import CONFIG
-
 from discord.ext import commands
+from mgylabs.utils import logger
+from mgylabs.utils.config import CONFIG
 
 from .utils.exceptions import UsageError
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 base_url = "https://mgylabs.herokuapp.com"
 accessToken = None

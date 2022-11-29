@@ -1,8 +1,9 @@
-import logging
 import socket
 import threading
 
-log = logging.getLogger(__name__)
+from mgylabs.utils import logger
+
+log = logger.get_logger(__name__)
 
 pool_sema = threading.BoundedSemaphore()
 
@@ -53,3 +54,4 @@ class IPCService:
 
     def send(self, data: str):
         self.client_socket.send(data.encode())
+        log.info(f"Send to server {data}")

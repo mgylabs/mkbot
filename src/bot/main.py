@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import sys
 
 from discord_host import create_bot
@@ -13,12 +12,13 @@ from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils.version import VERSION
+from mgylabs.utils import logger
 
 from core.controllers.ipc_controller import IPCController
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 
 def instance_already_running():

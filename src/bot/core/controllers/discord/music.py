@@ -16,6 +16,9 @@ song_list_dict = dict()
 
 
 def human_duration(duration):
+    if duration is None:
+        return "Live"
+
     duration = int(duration)
     hours, remainder = divmod(duration, 3600)
     minutes, seconds = divmod(remainder, 60)
@@ -32,15 +35,17 @@ def human_duration(duration):
 
 
 class Song:
-    def addSong(self, title, url):
+    def addSong(self, title, url, user=None):
         self.url = url
         self.title = title
         self.length = ""
+        self.user = user
 
-    def searchSong(self, url, title, length):
+    def searchSong(self, url, title, length, user=None):
         self.url = url
         self.title = title
         self.length = length
+        self.user = user
 
         return self
 
@@ -255,8 +260,10 @@ class Music(commands.Cog):
 
             else:
                 ls = await ytsearch(song, 1)
+                t = ls[0]
+                t.user = ctx.author
 
-                song_list_dict[guild_id][1].append(ls[0])
+                song_list_dict[guild_id][1].append(t)
 
                 await ctx.send(
                     embed=MsgFormatter.get(
@@ -366,13 +373,9 @@ class Music(commands.Cog):
 
         message = ""
         for i in range(len(song_list_dict[guild_id][1]) - song_list_dict[guild_id][0]):
+            music = song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]]
             message += (
-                str(i + 1)
-                + ". "
-                + song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]].title
-                + " - "
-                + song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]].length
-                + "\n"
+                f"{str(i + 1)}. `{music.length} `{music.title} - {music.user.mention}\n"
             )
         await ctx.send(embed=MsgFormatter.get(ctx, "Song Queue", message))
 
@@ -404,6 +407,9 @@ class Music(commands.Cog):
             search_msg: discord.Message = await ctx.send(f"🔍 Searching... `{song}`")
 
             search_song_list = await ytsearch(song, 5)
+
+            for s in search_song_list:
+                s.user = ctx.author
 
             async def check_reaction(botmsg: discord.Message, timeout):
                 await asyncio.sleep(timeout)
@@ -440,11 +446,13 @@ class Music(commands.Cog):
                     )
 
             msg = "\n".join(
-                f"{i+1}. `{search_song_list[i].length}` {search_song_list[i].title}"
+                f"{reactions[i]} `{search_song_list[i].length}` {search_song_list[i].title}"
                 for i in range(len(search_song_list))
             )
 
-            await search_msg.edit(content=f"🔍 `{song}` searched, choose in 30 seconds.")
+            await search_msg.edit(
+                content=f"🔍 Search results for `{song}`, choose in 30 seconds."
+            )
             botmsg: discord.Message = await ctx.send(
                 embed=MsgFormatter.get(ctx, None, msg)
             )

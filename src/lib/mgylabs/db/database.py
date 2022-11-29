@@ -4,13 +4,14 @@ import sys
 
 from alembic import command
 from alembic.config import Config
+from mgylabs.utils import logger
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 
 from .paths import DB_URL
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 engine = create_engine(DB_URL, echo=False)
 

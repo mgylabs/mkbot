@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from typing import Dict, List, Optional
 
 import aiohttp
@@ -9,13 +8,14 @@ from core.controllers.discord.utils.register import add_cog
 from discord import app_commands
 from discord.ext import commands
 from langdetect import detect
+from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
 
 from .utils import listener
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 
 class Translate(commands.Cog):

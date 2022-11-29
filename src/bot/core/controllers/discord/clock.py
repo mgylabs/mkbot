@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import random
 import time
 import traceback
@@ -10,13 +9,14 @@ import pytz
 from discord import app_commands
 from discord.ext import commands
 from mgylabs.db.storage import localStorage
+from mgylabs.utils import logger
 
 from .utils.command_helper import send
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 from .utils.register import add_cog
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 
 class Sleeper:
@@ -60,9 +60,9 @@ clock_emoji = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "
 
 def get_clock_content(tz, offset):
     now = datetime.now()
-
-    ct = tz.localize(now).strftime("%I:%M %p")
-    return f"{clock_emoji[now.hour%12]} {ct} ({offset})"
+    d = pytz.utc.localize(datetime.utcnow()).astimezone(tz)
+    ct = d.strftime("%I:%M %p")
+    return f"{clock_emoji[d.hour%12]} {ct} ({offset})"
 
 
 async def clock_updater(bot: commands.Bot):

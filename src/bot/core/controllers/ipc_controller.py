@@ -1,5 +1,5 @@
-import logging
 import threading
+import time
 from urllib.parse import parse_qs, quote, unquote
 
 from core.controllers.shell.music_controller import FFPlayer
@@ -7,9 +7,10 @@ from core.services.ipc_serivce import IPCService
 from discord_host import BotStateFlags, DiscordBotManger
 from MGBotBuilder import Request
 from MGBotBuilder.exceptions import CommandNotFoundError
+from mgylabs.utils import logger
 from shell_host import shell
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 shell_sema = threading.BoundedSemaphore()
 discord_sema = threading.BoundedSemaphore()
@@ -63,7 +64,7 @@ class IPCController:
 
                 with BotStateFlags.Terminate():
                     while self.discord_manger.is_alive():
-                        pass
+                        time.sleep(1)
 
     def send_response(self, data):
         self.ipc_service.send(f"action=shell&response={quote(data)}")

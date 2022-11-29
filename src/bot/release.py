@@ -1,4 +1,3 @@
-import logging
 import os
 
 import aiofiles
@@ -6,8 +5,9 @@ import aiohttp
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.db.storage import localStorage
 from mgylabs.utils.version import VERSION
+from mgylabs.utils import logger
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 
 class Field:

@@ -1,21 +1,20 @@
 import io
-import logging
 import shlex
 import subprocess
 
 import aiohttp
-from mgylabs.utils.config import CONFIG
-
 import discord
 from discord.ext import commands
 from discord.opus import Encoder
+from mgylabs.utils import logger
+from mgylabs.utils.config import CONFIG
 
 from .utils.exceptions import UsageError
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 from .utils.voice import validate_voice_client
 
-log = logging.getLogger(__name__)
+log = logger.get_logger(__name__)
 
 
 class FFmpegPCMAudio(discord.AudioSource):
