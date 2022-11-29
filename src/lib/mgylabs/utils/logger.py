@@ -72,28 +72,3 @@ def configure_logger(file_path=LogPath.get(), cleanup=True):
 def get_logger(name):
     log = logging.getLogger(f"mkbot.{name}")
     return log
-
-
-# class DiscordFilter(logging.Filter):
-#     def filter(self, record: logging.LogRecord) -> bool:
-#         return not record.name.startswith("discord")
-
-
-# log = logging.getLogger()
-# formatter = logging.Formatter(
-#     "[%(asctime)s] %(name)s (line %(lineno)d): %(levelname)s - %(message)s",
-#     "%Y-%m-%d %H:%M:%S",
-# )
-# stream_handler = logging.StreamHandler()
-# stream_handler.addFilter(DiscordFilter())
-# if is_development_mode():
-#     LOG_LEVEL = logging.INFO
-# else:
-#     LOG_LEVEL = logging.WARNING
-# stream_handler.setLevel(LOG_LEVEL)
-# stream_handler.setFormatter(formatter)
-# log.addHandler(stream_handler)
-# log.setLevel(LOG_LEVEL)
-
-# print("__init__.py")
-# log.info("J")
