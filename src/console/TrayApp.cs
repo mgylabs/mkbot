@@ -33,6 +33,8 @@ namespace MKBot
         private string UserDataPath;
         private string[] args;
 
+        private bool trayicon_middle_click_enabled = true;
+
         public TrayApp()
         {
 #if DEBUG
@@ -110,6 +112,7 @@ namespace MKBot
 
         private void MKbotCore_Exit(object sender, MKBotCoreExitEventArgs e)
         {
+            trayicon_middle_click_enabled = true;
             notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
             if (can_update)
@@ -124,6 +127,7 @@ namespace MKBot
 
         private void MKBotCore_Started(object sender, EventArgs e)
         {
+            trayicon_middle_click_enabled = true;
             notifyIcon1.Icon = Properties.Resources.mkbot_on;
         }
 
@@ -140,6 +144,15 @@ namespace MKBot
                 else
                 {
                     Shellwin.Show();
+                }
+            }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                if (trayicon_middle_click_enabled)
+                {
+                    trayicon_middle_click_enabled = false;
+                    notifyIcon1.Icon = Properties.Resources.mkbot_intermediate;
+                    ((ShellForm)this.Shellwin).Toggle_Discord_Bot_Button();
                 }
             }
         }

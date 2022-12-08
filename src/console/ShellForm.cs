@@ -39,6 +39,12 @@ namespace MKBot
             }
         }
 
+        public void Toggle_Discord_Bot_Button()
+        {
+            discordCheckBox.Checked = !discordCheckBox.Checked;
+            discordCheckBox_Click(new object(), new EventArgs());
+        }
+
         private void MKBotCore_Shell_Response(object sender, MKBotCoreShellResponseEventArgs e)
         {
             var text = "MK Bot: " + e.response;

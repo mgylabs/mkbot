@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mkbot_on.ico" />
+    <None Include="..\..\resources\console\mkbot_intermediate.ico" />
     <None Include="..\..\resources\console\mkbot.ico" />
     <None Include="..\..\resources\console\mkbot_logo.png" />
   </ItemGroup>

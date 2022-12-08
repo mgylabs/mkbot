@@ -121,6 +121,9 @@
   <data name="mkbot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\..\resources\console\mkbot.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="mkbot_intermediate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\resources\console\mkbot_intermediate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="mkbot_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\..\resources\console\mkbot_logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
