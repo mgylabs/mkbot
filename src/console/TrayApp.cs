@@ -5,6 +5,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Windows.UI.Notifications;
 
@@ -85,17 +87,10 @@ namespace MKBot
                 new ToolStripMenuItem("Exit", null, Click_Exit)
             });
 
-            if (check_ready_to_update())
-            {
-                Run_setup(true);
-            }
-            else
-            {
-                msu_process.Exited += new EventHandler(ProcessExited_msu);
-                msu_process.EnableRaisingEvents = true;
-                notifyIcon1.Visible = true;
-                notifyIcon1.Icon = Properties.Resources.mkbot_off;
-            }
+            msu_process.Exited += new EventHandler(ProcessExited_msu);
+            msu_process.EnableRaisingEvents = true;
+            notifyIcon1.Visible = true;
+            notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
             bool auto_connect = false;
             if (configjson["connectOnStart"] != null)
@@ -332,11 +327,6 @@ namespace MKBot
             }
         }
 
-        private bool check_ready_to_update()
-        {
-            return File.Exists("./Update.flag");
-        }
-
         private void checkForTime_Elapsed_At_Startup(object sender, System.Timers.ElapsedEventArgs e)
         {
             checkForTime.Enabled = false;
@@ -353,7 +343,7 @@ namespace MKBot
         {
             if (can_update && !MKBotCore.discord_online)
             {
-                Run_setup(true, false);
+                Run_setup(true);
             }
             else
             {
@@ -405,25 +395,42 @@ namespace MKBot
             }
         }
 
-        private void Run_setup(bool autorun, bool gui = true)
+        private void Run_setup(bool autorun)
         {
-            string param;
-
-            param = "--start";
-
-            if (gui)
-            {
-                param += " --gui";
-            }
+            var flag = File.ReadAllText("bin\\msu_update.flag");
 
             if (autorun)
             {
-                param += " --auto-run";
+                if (File.Exists(flag))
+                {
+                    File.Delete(flag);
+                }
             }
 
             notifyIcon1.Visible = false;
-            Process.Start("Update.exe", param);
             Environment.Exit(0);
+        }
+
+        private async void poll_until()
+        {
+            while (!mutex_is_active($"{Version.mutex_name}-ready"))
+            {
+                await Task.Delay(1000);
+            }
+        }
+
+        private bool mutex_is_active(string name)
+        {
+            try
+            {
+                Mutex foundMutex = Mutex.OpenExisting(name);
+
+                return true;
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                return false;
+            }
         }
 
         private void ProcessExited_msu(object sender, EventArgs e)
@@ -431,13 +438,16 @@ namespace MKBot
             if (msu_process.ExitCode == 0)
             {
                 Console.WriteLine("> msu exit: 0");
+
+                poll_until();
+
                 can_update = true;
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Restart to Update";
 
                 if (!(checking_update || MKBotCore.discord_online))
                 {
-                    Run_setup(true, false);
+                    Run_setup(true);
                 }
                 else
                 {
