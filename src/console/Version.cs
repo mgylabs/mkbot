@@ -36,7 +36,7 @@ namespace MKBot
                 canary = true;
                 mutex_name = "MKBotCanary";
                 product_name = "Mulgyeol MK Bot Canary";
-                dname = "com.mgylabs.mkbot-can";
+                dname = "com.mgylabs.mkbot-canary";
             }
             else
             {

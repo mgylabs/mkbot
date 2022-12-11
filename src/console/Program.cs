@@ -24,20 +24,22 @@ namespace MKBot
 
             bool createnew;
 
-            Mutex mutex = new Mutex(true, Version.mutex_name, out createnew);
-
-            if (!createnew)
+            using (Mutex mutex = new Mutex(true, Version.mutex_name, out createnew))
             {
-                MessageBox.Show("Mulgyeol MK Bot is already running.");
-                return;
+                if (!createnew)
+                {
+                    MessageBox.Show("Mulgyeol MK Bot is already running.");
+                    return;
+                }
+
+                DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>(Version.dname);
+                DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                TrayApp app = new TrayApp();
+                Application.ApplicationExit += new EventHandler(app.Application_Exit);
+                Application.Run(app);
             }
-            DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>(Version.dname);
-            DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            TrayApp app = new TrayApp();
-            Application.ApplicationExit += new EventHandler(app.Application_Exit);
-            Application.Run(app);
         }
     }
 }

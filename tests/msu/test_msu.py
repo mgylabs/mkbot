@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import mock_open, patch
 
 import requests
+
 from src.msu import msu
 
 
@@ -43,6 +44,8 @@ class MSUTest(TestCase):
         expected = {
             "commit": None,
             "url": url,
+            "base_version": "1.3.3.1",
+            "version_str": "1.3.3.1",
             "rtype": "stable",
             "version": version.parse("1.3.3.1"),
             "sha": "16bb694a133c33fe80c4b67be2a3e000facd883c",
@@ -60,6 +63,8 @@ class MSUTest(TestCase):
         expected = {
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
             "url": url,
+            "base_version": "1.3.3.1",
+            "version_str": "1.3.3.1.8298006",
             "rtype": "canary",
             "version": version.parse("1.3.3.1-beta"),
             "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",
@@ -180,6 +185,8 @@ class MSUTest(TestCase):
         stable_expected = {
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
+            "base_version": "1.3.3.1",
+            "version_str": "1.3.3.1",
             "rtype": "stable",
             "version": version.parse("1.3.3.1"),
             "sha": "16bb694a133c33fe80c4b67be2a3e000facd883c",
@@ -201,6 +208,8 @@ class MSUTest(TestCase):
         stable_expected = {
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.4.0/MKBotSetup-1.4.0.1.zip",
+            "base_version": "1.4.0.1",
+            "version_str": "1.4.0.1",
             "rtype": "stable",
             "version": version.parse("1.4.0.1"),
             "sha": "16bb694a133c33fe80c4b67be2a3e000facd883c",
@@ -224,12 +233,16 @@ class MSUTest(TestCase):
             "commit": None,
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
             "rtype": "stable",
+            "base_version": "1.3.3.1",
+            "version_str": "1.3.3.1",
             "version": version.parse("1.3.3.1"),
             "sha": "16bb694a133c33fe80c4b67be2a3e000facd883c",
         }
         canary_expected = {
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
             "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
+            "base_version": "1.4.0.1",
+            "version_str": "1.4.0.1.8298006",
             "rtype": "canary",
             "version": version.parse("1.4.0.1-beta"),
             "sha": "8214d361d2826779517f7fb0502405aafdf0ec54",

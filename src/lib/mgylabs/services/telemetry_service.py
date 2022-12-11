@@ -24,6 +24,13 @@ else:
 class TelemetryReporter:
     reporter = None
 
+    def __enter__(self, callback_event_name=None):
+        TelemetryReporter.start(callback_event_name)
+        return self
+
+    def __exit__(self, type, value, traceback):
+        TelemetryReporter.terminate()
+
     @classmethod
     def _run_callback_(cls, callback):
         if callback is not None:

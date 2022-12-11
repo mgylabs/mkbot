@@ -6,15 +6,13 @@ from discord_host import create_bot
 sys.path.append("..\\lib")
 import msvcrt
 import os
-import traceback
 
+from core.controllers.ipc_controller import IPCController
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.version import VERSION
 from mgylabs.utils import logger
-
-from core.controllers.ipc_controller import IPCController
+from mgylabs.utils.version import VERSION
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -72,17 +70,10 @@ def main():
 
 
 if __name__ == "__main__":
-    error = 0
-
-    try:
-        TelemetryReporter.start()
-        main()
-    except SystemExit as e:
-        error = e.code
-    except Exception as e:
-        TelemetryReporter.Exception(e)
-        traceback.print_exc()
-        error = 1
-    finally:
-        TelemetryReporter.terminate()
-        sys.exit(error)
+    with TelemetryReporter():
+        try:
+            main()
+        except Exception as error:
+            TelemetryReporter.Exception(error)
+            log.error(error, exc_info=True)
+            sys.exit(1)
