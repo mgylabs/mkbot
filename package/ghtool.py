@@ -29,8 +29,8 @@ def requests_API(method, link, datadict=None):
     return x
 
 
-def file_hash():
-    with open("MKBotSetup.exe", "rb") as f:
+def file_hash(version_str):
+    with open(f"MKBotSetup-{version_str}.exe", "rb") as f:
         setup = f.read()
 
     sha1Hash = hashlib.sha1(setup)
@@ -155,7 +155,7 @@ def upload_asset():
         data=fdata,
         params={
             "name": f"MKBotSetup-{version}.zip",
-            "label": f"MKBotSetup-stable-{version}-{file_hash()}",
+            "label": f"MKBotSetup-stable-{version}-{file_hash(version)}",
         },
     )
     print(r.text)
@@ -199,7 +199,7 @@ def upload_canary_asset():
         data=fdata,
         params={
             "name": f"MKBotCanarySetup-{version}.{sha[:7]}.zip",
-            "label": f"MKBotSetup-canary-{version}.{sha}-{file_hash()}",
+            "label": f"MKBotSetup-canary-{version}.{sha}-{file_hash(f'{version}.{sha[:7]}')}",
         },
     )
     print(r.text)

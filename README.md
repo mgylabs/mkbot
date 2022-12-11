@@ -38,7 +38,7 @@ Self-host discord bot on your own local Windows PC.
 
 - Visual Studio Code
 - Python 3.10
-- NSIS 3.06
+- Inno Setup 6.2
 - msbuild 16.5
 
 #### Build and Package

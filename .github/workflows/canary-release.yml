@@ -88,12 +88,11 @@ jobs:
           call scripts\build.bat --canary
       - name: Packaging
         run: |
-          $Env:Path += ";C:\Program Files (x86)\NSIS\"
-          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot Canary" "/DPRODUCT_EXE=MKBot-Canary.exe" "/DDNAME=mkbot-can" "/DBUILD_TYPE=canary" "/DEXT_DIR=.mkbot-canary" package\MKBot.nsi
+          & "${Env:programfiles(x86)}\Inno Setup 6\iscc.exe" "/DNameLong=Mulgyeol MK Bot Canary" "/DNameShort=MK Bot Canary" "/DVersion=${Env:mkbot_version}" "/DAppExeName=MKBot-Canary.exe" "/DAppMutex=MKBotCanary" "/DExtDirName=.mkbot-canary" "/DDName=mkbot-canary" "package\MKBot.iss"
         shell: pwsh
       - name: Compress Setup
         run: |
-          Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
+          Compress-Archive -Path MKBotSetup-${Env:mkbot_version}.exe -DestinationPath MKBotSetup.zip
         shell: pwsh
       - name: Upload Release Asset
         env:

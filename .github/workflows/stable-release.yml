@@ -61,12 +61,11 @@ jobs:
           call scripts\build.bat --stable
       - name: Packaging
         run: |
-          $Env:Path += ";C:\Program Files (x86)\NSIS\"
-          makensis.exe /INPUTCHARSET UTF8 "/DPRODUCT_VERSION=${Env:mkbot_version}" "/DPRODUCT_NAME=Mulgyeol MK Bot" "/DPRODUCT_EXE=MKBot.exe" "/DDNAME=mkbot" "/DBUILD_TYPE=stable" "/DEXT_DIR=.mkbot" package\MKBot.nsi
+          & "${Env:programfiles(x86)}\Inno Setup 6\iscc.exe" "/DNameLong=Mulgyeol MK Bot" "/DNameShort=MK Bot" "/DVersion=${Env:mkbot_version}" "/DAppExeName=MKBot.exe" "/DAppMutex=MKBot" "/DExtDirName=.mkbot" "/DDName=mkbot" "package\MKBot.iss"
         shell: pwsh
       - name: Compress Setup
         run: |
-          Compress-Archive -Path MKBotSetup.exe -DestinationPath MKBotSetup.zip
+          Compress-Archive -Path MKBotSetup-${Env:mkbot_version}.exe -DestinationPath MKBotSetup.zip
         shell: pwsh
       - name: Create Release
         id: create_release

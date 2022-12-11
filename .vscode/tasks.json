@@ -66,17 +66,16 @@
     {
       "label": "package",
       "type": "shell",
-      "command": "C:\\Program Files (x86)\\NSIS\\makensis.exe",
+      "command": "%programfiles(x86)%\\Inno Setup 6\\iscc.exe",
       "args": [
-        "/INPUTCHARSET",
-        "UTF8",
-        "/DPRODUCT_VERSION=Pre-release",
-        "/DPRODUCT_NAME=Mulgyeol MK Bot OSS",
-        "/DPRODUCT_EXE=MKBot-OSS.exe",
-        "/DBUILD_TYPE=canary",
-        "/DDNAME=mkbot-oss",
-        "/DEXT_DIR=.mkbot",
-        "package\\MKBot.nsi"
+        "/DNameLong=Mulgyeol MK Bot OSS",
+        "/DNameShort=MK Bot",
+        "/DVersion=Pre",
+        "/DAppExeName=MKBot.exe",
+        "/DAppMutex=MKBotOSS",
+        "/DExtDirName=.mkbot-oss",
+        "/DDName=mkbot-oss",
+        "package\\MKBot.iss"
       ],
       "options": {
         "cwd": "${workspaceFolder}"

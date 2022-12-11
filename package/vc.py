@@ -287,7 +287,7 @@ def github_release(stable):
     else:
         save_version_txt(
             package_version_data["version"].replace(
-                "-beta", f".{package_version_data['commit'][:7]} Canary"
+                "-beta", f".{package_version_data['commit'][:7]}"
             )
         )
     update_AssemblyInfo(
