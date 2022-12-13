@@ -80,23 +80,16 @@ namespace MKBot
         public static void StartListener(ListenerReceiveCallback callback = null)
         {
             // Connect to a remote device.
-            try
-            {
-                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
 
-                // Create a TCP/IP socket.
-                listener = new Socket(AddressFamily.InterNetwork,
-                    SocketType.Stream, ProtocolType.Tcp);
+            // Create a TCP/IP socket.
+            listener = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
 
-                listener.Bind(localEndPoint);
-                listener.Listen(1);
+            listener.Bind(localEndPoint);
+            listener.Listen(1);
 
-                BeginAccept(callback);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            BeginAccept(callback);
         }
 
         private static void BeginAccept(ListenerReceiveCallback callback, bool wait=false)
@@ -264,14 +257,17 @@ namespace MKBot
             psi1.WorkingDirectory = "bin";
             psi1.CreateNoWindow = true;
             psi1.UseShellExecute = false;
-#if !DEBUG
-            make_app_process_args();
-#endif
-
             app_process.StartInfo = psi1;
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
-            AsyncListener.StartListener(recv_callback);
+
+            Utils.retry("Start Listener", (attempt) => {
+#if !DEBUG
+                make_app_process_args();
+#endif
+                AsyncListener.StartListener(recv_callback);
+            });
+
 #if !DEBUG
             app_process.Start();
 #endif
@@ -283,11 +279,11 @@ namespace MKBot
         {
             var random = new Random();
             var port = AsyncListener.GetAvailablePort(random.Next(2000, 49151));
-            psi1.Arguments = "--port " + port.ToString();
+            app_process.StartInfo.Arguments = "--port " + port.ToString();
 
             if (debug)
             {
-                psi1.Arguments += "--debug";
+                app_process.StartInfo.Arguments += " --debug";
             }
         }
 
@@ -305,13 +301,13 @@ namespace MKBot
             {
                 case "enableDiscordBot":
                     discord_online = true;
-                    OnMKBotCoreStarted(EventArgs.Empty);
+                    OnDiscordBotStarted(EventArgs.Empty);
                     break;
                 case "disableDiscordBot":
                     discord_online = false;
                     MKBotCoreExitEventArgs eargs = new MKBotCoreExitEventArgs();
                     eargs.ExitCode = Int32.Parse(args["exitcode"]);
-                    OnMKBotCoreExit(eargs);
+                    OnDiscordBotExit(eargs);
                     break;
                 case "shell":
                     MKBotCoreShellResponseEventArgs sargs = new MKBotCoreShellResponseEventArgs();
@@ -323,7 +319,22 @@ namespace MKBot
             }
         }
 
-        public void Run()
+        public void Kill()
+        {
+            try
+            {
+                if (!app_process.HasExited)
+                {
+                    app_process.Kill();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Kill MKBotCore");
+            }
+        }
+
+        public void EnableDiscordBot()
         {
             if (!discord_online)
             {
@@ -331,7 +342,7 @@ namespace MKBot
             }
         }
 
-        public void Kill()
+        public void DisableDiscordBot()
         {
             if (discord_online)
             {
@@ -353,7 +364,6 @@ namespace MKBot
 
             MKBotCoreExitEventArgs eargs = new MKBotCoreExitEventArgs();
             eargs.ExitCode = 1234;
-            OnMKBotCoreExit(eargs);
         }
 
         private void EnsureProcessRunning()
@@ -374,27 +384,27 @@ namespace MKBot
             }
         }
 
-        protected virtual void OnMKBotCoreStarted(EventArgs e)
+        protected virtual void OnDiscordBotStarted(EventArgs e)
         {
-            EventHandler handler = MKBotCoreStarted;
+            EventHandler handler = DiscordBotStarted;
             if (handler != null)
             {
                 handler(this, e);
             }
         }
 
-        public event EventHandler MKBotCoreStarted;
+        public event EventHandler DiscordBotStarted;
 
-        protected virtual void OnMKBotCoreExit(MKBotCoreExitEventArgs e)
+        protected virtual void OnDiscordBotExit(MKBotCoreExitEventArgs e)
         {
-            EventHandler<MKBotCoreExitEventArgs> handler = MKBotCoreExit;
+            EventHandler<MKBotCoreExitEventArgs> handler = DiscordBotExit;
             if (handler != null)
             {
                 handler(this, e);
             }
         }
 
-        public event EventHandler<MKBotCoreExitEventArgs> MKBotCoreExit;
+        public event EventHandler<MKBotCoreExitEventArgs> DiscordBotExit;
 
         protected virtual void OnMKBotCoreShellResponse(MKBotCoreShellResponseEventArgs e)
         {

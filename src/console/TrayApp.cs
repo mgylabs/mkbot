@@ -57,8 +57,8 @@ namespace MKBot
             }
 
             MKBotCore = new MKBotCoreManager(args.Contains("--debug"));
-            MKBotCore.MKBotCoreStarted += MKBotCore_Started;
-            MKBotCore.MKBotCoreExit += MKbotCore_Exit;
+            MKBotCore.DiscordBotStarted += DiscordBot_Started;
+            MKBotCore.DiscordBotExit += DiscordBot_Exit;
 
             var jsonString = File.ReadAllText(UserDataPath + "\\config.json");
             JObject configjson = JObject.Parse(jsonString);
@@ -106,13 +106,14 @@ namespace MKBot
             checkForTime.Enabled = true;
         }
 
-        private void MKbotCore_Exit(object sender, MKBotCoreExitEventArgs e)
+        private void DiscordBot_Exit(object sender, MKBotCoreExitEventArgs e)
         {
             trayicon_middle_click_enabled = true;
             notifyIcon1.Icon = Properties.Resources.mkbot_off;
 
             if (can_update)
             {
+                MKBotCore.Kill();
                 Run_setup(true);
             }
             if (e.ExitCode == 1)
@@ -121,7 +122,7 @@ namespace MKBot
             }
         }
 
-        private void MKBotCore_Started(object sender, EventArgs e)
+        private void DiscordBot_Started(object sender, EventArgs e)
         {
             trayicon_middle_click_enabled = true;
             notifyIcon1.Icon = Properties.Resources.mkbot_on;
@@ -174,7 +175,7 @@ namespace MKBot
             {
                 if (MKBotCore.discord_online)
                 {
-                    MKBotCore.Kill();
+                    MKBotCore.DisableDiscordBot();
                 }
                 else
                 {
@@ -206,10 +207,11 @@ namespace MKBot
             notifyIcon1.Visible = false;
             if (MKBotCore.discord_online)
             {
-                MKBotCore.Kill();
+                MKBotCore.DisableDiscordBot();
             }
             if (can_update)
             {
+                MKBotCore.Kill();
                 Run_setup(false);
             }
             Environment.Exit(0);
@@ -344,10 +346,7 @@ namespace MKBot
         {
             if (can_update)
             {
-                if (!MKBotCore.discord_online)
-                {
-                    Run_setup(true);
-                }
+                Install_update();
             }
             else
             {
@@ -396,10 +395,11 @@ namespace MKBot
             {
                 if (MKBotCore.discord_online)
                 {
-                    MKBotCore.Kill();
+                    MKBotCore.DisableDiscordBot();
                 }
                 else
                 {
+                    MKBotCore.Kill();
                     Run_setup(true);
                 }
             }
@@ -421,11 +421,11 @@ namespace MKBot
             Environment.Exit(0);
         }
 
-        private async void poll_until()
+        private void poll_until()
         {
             while (!mutex_is_active($"{Version.mutex_name}-ready"))
             {
-                await Task.Delay(1000);
+                Task.Delay(1000).Wait();
             }
         }
 
@@ -457,9 +457,9 @@ namespace MKBot
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Restart to Update";
 
-                if (!(manual_checking_update || MKBotCore.discord_online))
+                if (!(manual_checking_update))
                 {
-                    Run_setup(true);
+                    Install_update();
                 }
                 else
                 {

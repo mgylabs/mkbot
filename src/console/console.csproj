@@ -107,6 +107,7 @@
       <DependentUpon>ShellForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TrayApp.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Version.cs" />
     <EmbeddedResource Include="InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>

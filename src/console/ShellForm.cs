@@ -26,8 +26,8 @@ namespace MKBot
 
             this.discordCheckBox.Checked = MKBotCore.discord_online;
 
-            MKBotCore.MKBotCoreStarted += MKBotCore_Started;
-            MKBotCore.MKBotCoreExit += MKbotCore_Exit;
+            MKBotCore.DiscordBotStarted += DiscordBot_Started;
+            MKBotCore.DiscordBotExit += DiscordBot_Exit;
             MKBotCore.MKBotCoreShellResponse += MKBotCore_Shell_Response;
 
             if (auto_connect)
@@ -35,7 +35,7 @@ namespace MKBot
                 discordCheckBox.Enabled = false;
                 discordCheckBox.Checked = true;
 
-                MKBotCore.Run();
+                MKBotCore.EnableDiscordBot();
             }
         }
 
@@ -69,12 +69,12 @@ namespace MKBot
             }
         }
 
-        private void MKbotCore_Exit(object sender, MKBotCoreExitEventArgs e)
+        private void DiscordBot_Exit(object sender, MKBotCoreExitEventArgs e)
         {
             setDiscordBotCheckedSafe(false);
         }
 
-        private void MKBotCore_Started(object sender, EventArgs e)
+        private void DiscordBot_Started(object sender, EventArgs e)
         {
             setDiscordBotCheckedSafe(true);
         }
@@ -131,11 +131,11 @@ namespace MKBot
             discordCheckBox.Enabled = false;
             if (discordCheckBox.Checked)
             {
-                MKBotCore.Run();
+                MKBotCore.EnableDiscordBot();
             }
             else
             {
-                MKBotCore.Kill();
+                MKBotCore.DisableDiscordBot();
             }
         }
 
