@@ -2,10 +2,11 @@ import os
 
 import aiofiles
 import aiohttp
+
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.db.storage import localStorage
-from mgylabs.utils.version import VERSION
 from mgylabs.utils import logger
+from mgylabs.utils.version import VERSION
 
 log = logger.get_logger(__name__)
 
@@ -46,7 +47,7 @@ class ReleaseNote:
 class ReleaseNotify:
     @classmethod
     async def run(cls, user_id, send):
-        if (VERSION.is_release_build()) and (not VERSION.is_canary()):
+        if (VERSION.is_release_build()) and (not VERSION.is_prerelease()):
             if not cls.exist_flag():
                 localStorage["release_notify_user_ids"] = []
                 await cls.write_flag()
@@ -69,10 +70,10 @@ class ReleaseNotify:
 
     @classmethod
     async def send_release_note(cls, send):
-        note_api_url = f"https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/{VERSION.tag}"
-        note_url = (
-            f"https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/{VERSION.tag}"
+        note_api_url = (
+            f"https://api.github.com/repos/mgylabs/mkbot/releases/tags/{VERSION.tag}"
         )
+        note_url = f"https://github.com/mgylabs/mkbot/releases/tag/{VERSION.tag}"
         async with aiohttp.ClientSession(raise_for_status=True) as session:
             async with session.get(note_api_url) as res:
                 js = await res.json()

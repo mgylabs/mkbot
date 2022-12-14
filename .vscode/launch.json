@@ -11,7 +11,10 @@
       "program": "${workspaceFolder}\\src\\bot\\discord_host.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}\\src\\bot",
-      "python": "${command:python.interpreterPath}"
+      "python": "${command:python.interpreterPath}",
+      "autoReload": {
+        "enable": true,
+      }
     },
     {
       "name": "Python: main.py",
@@ -20,7 +23,10 @@
       "program": "${workspaceFolder}\\src\\bot\\main.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}\\src\\bot",
-      "python": "${command:python.interpreterPath}"
+      "python": "${command:python.interpreterPath}",
+      "autoReload": {
+        "enable": true,
+      }
     },
     {
       "name": "Python: nodemon",
@@ -44,7 +50,10 @@
       "program": "${file}",
       "console": "integratedTerminal",
       "cwd": "${fileDirname}",
-      "python": "${command:python.interpreterPath}"
-    }
+      "python": "${command:python.interpreterPath}",
+      "autoReload": {
+        "enable": true,
+      }
+    },
   ]
 }

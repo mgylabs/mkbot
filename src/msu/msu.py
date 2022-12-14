@@ -6,6 +6,7 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import traceback
 import zipfile
 
 import requests
@@ -15,13 +16,26 @@ from requests.sessions import HTTPAdapter
 sys.path.append("..\\lib")
 
 from mgylabs.services.telemetry_service import TelemetryReporter
-from mgylabs.utils.logger import get_logger
-
-log = get_logger(__name__)
+from mgylabs.utils.version import VERSION
 
 
 def is_development_mode():
     return not getattr(sys, "frozen", False)
+
+
+if is_development_mode():
+    CONFIG_PATH = "..\\data\\config.json"
+else:
+    CONFIG_PATH = f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\{VERSION.product_name}\\data\\config.json"
+
+
+def load_beta_update_config():
+    try:
+        with open(CONFIG_PATH, "rt", encoding="utf-8") as f:
+            Config = json.load(f)
+        return Config["betaUpdate"]
+    except Exception:
+        return False
 
 
 def write_flag():
@@ -65,6 +79,11 @@ class VersionInfo:
             self.base_version = self.base_version.replace(f".{self.commit}", "")
             self.version_str = f"{self.base_version}.{self.commit[:7]}"
             self.version = version.parse(self.base_version + "-beta")
+        elif self.rtype.lower() == "beta":
+            self.commit = self.base_version.split(".")[-1]
+            self.base_version = self.base_version.replace(f".{self.commit}", "")
+            self.version_str = f"{self.base_version}.{self.commit[:7]}"
+            self.version = version.parse(self.base_version + "-beta2")
         else:
             self.version = version.parse(self.base_version)
             self.version_str = self.base_version
@@ -73,6 +92,11 @@ class VersionInfo:
 def is_canary_release(version_str: str):
     version_str = version_str.split("-")
     return True if (len(version_str) > 1 and version_str[1] == "beta") else False
+
+
+def is_beta_release(version_str: str):
+    version_str = version_str.split("-")
+    return True if (len(version_str) > 1 and version_str[1] == "beta2") else False
 
 
 class BaseUpdater:
@@ -109,12 +133,12 @@ class BaseUpdater:
 
     def request_stable_update(self):
         return self.session.get(
-            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
+            "https://api.github.com/repos/mgylabs/mkbot/releases/latest"
         )
 
     def request_beta_update(self):
         return self.session.get(
-            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+            "https://api.github.com/repos/mgylabs/mkbot/releases/tags/canary"
         )
 
     def check_new_update(self):
@@ -234,12 +258,17 @@ class BaseUpdater:
 
 
 class StableUpdater(BaseUpdater):
-    def __init__(self, current_data):
-        super().__init__(current_data, beta=False)
+    def __init__(self, current_data, beta):
+        super().__init__(current_data, beta=beta)
 
     def request_stable_update(self):
         return self.session.get(
-            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
+            "https://api.github.com/repos/mgylabs/mkbot/releases/latest"
+        )
+
+    def request_beta_update(self):
+        return self.session.get(
+            "https://api.github.com/repos/mgylabs/mkbot/releases/tags/beta"
         )
 
 
@@ -251,7 +280,7 @@ class CanaryUpdater(BaseUpdater):
 
     def request_stable_update(self):
         return self.session.get(
-            "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+            "https://api.github.com/repos/mgylabs/mkbot/releases/tags/canary"
         )
 
 
@@ -267,7 +296,8 @@ def main():
     if canary_build:
         Updater = CanaryUpdater(current_data)
     else:
-        Updater = StableUpdater(current_data)
+        enabled_beta = load_beta_update_config()
+        Updater = StableUpdater(current_data, enabled_beta)
 
     if "/c" in sys.argv:
         Updater.run()
@@ -281,5 +311,5 @@ if __name__ == "__main__":
             main()
         except Exception as error:
             TelemetryReporter.Exception(error)
-            log.error(error, exc_info=True)
+            traceback.print_exc()
             sys.exit(1)

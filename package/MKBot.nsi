@@ -6,7 +6,7 @@
 !searchreplace PRODUCT_SHORT_NAME "${PRODUCT_NAME}" "Mulgyeol " ""
 !searchreplace PRODUCT_EXE_NAME "${PRODUCT_EXE}" ".exe" ""
 !define PRODUCT_PUBLISHER "Mulgyeol Labs"
-!define PRODUCT_WEB_SITE "https://github.com/mgylabs/mulgyeol-mkbot"
+!define PRODUCT_WEB_SITE "https://github.com/mgylabs/mkbot"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE}"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"

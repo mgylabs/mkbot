@@ -21,6 +21,15 @@ class Version:
             )
             else False
         )
+        self.beta = (
+            True
+            if (
+                len(version_str) > 1
+                and version_str[1] == "beta2"
+                and self.commit != None
+            )
+            else False
+        )
         self.tag = f"v{'.'.join(self.tuple_version[:-1])}"
 
     def is_release_build(self):
@@ -28,6 +37,12 @@ class Version:
 
     def is_canary(self) -> bool:
         return self.canary
+
+    def is_beta(self) -> bool:
+        return self.beta
+
+    def is_prerelease(self) -> bool:
+        return self.beta or self.canary
 
     @property
     def product_name(self):
@@ -46,6 +61,8 @@ class Version:
             return f"{self.base_version} Test Mode"
         if self.is_canary():
             return f"{self.base_version} Canary"
+        if self.is_beta():
+            return f"{self.base_version} Beta"
         else:
             return f"{self.base_version} Stable"
 

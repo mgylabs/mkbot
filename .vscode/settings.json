@@ -35,7 +35,9 @@
   ],
   "python.testing.pytestEnabled": false,
   "files.insertFinalNewline": true,
+  "editor.formatOnType": true,
   "editor.formatOnPaste": false,
   "editor.formatOnSaveMode": "file",
-  "prettier.tabWidth": 2
+  "prettier.tabWidth": 2,
+  "omnisharp.useModernNet": false,
 }

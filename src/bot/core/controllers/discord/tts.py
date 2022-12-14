@@ -122,7 +122,7 @@ async def tts(ctx: commands.Context, *args):
     embed = MsgFormatter.get(
         ctx,
         string,
-        "[MK Bot](https://github.com/mgylabs/mulgyeol-mkbot) said on behalf of <@{}>".format(
+        "[MK Bot](https://github.com/mgylabs/mkbot) said on behalf of <@{}>".format(
             ctx.author.id
         ),
     )

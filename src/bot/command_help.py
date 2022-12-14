@@ -2,6 +2,7 @@ import itertools
 
 import discord
 from discord.ext import commands
+
 from mgylabs.utils.version import VERSION
 
 
@@ -69,7 +70,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         if len(cmd_builder) == 1:
             if self.context.guild is not None:
                 cmd_builder.append(
-                    f"{self.indent * ' '}⚠️ Slash commands are not set up for use in this guild(ID: {self.context.guild.id}).\n{self.indent * ' '}For more information, See https://github.com/mgylabs/mulgyeol-mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands"
+                    f"{self.indent * ' '}⚠️ Slash commands are not set up for use in this guild(ID: {self.context.guild.id}).\n{self.indent * ' '}For more information, See https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands"
                 )
                 builder = cmd_builder
             else:
@@ -120,7 +121,7 @@ class CommandHelp(commands.DefaultHelpCommand):
     async def send_pages(self):
         """A helper utility to send the page output from :attr:`paginator` to the destination."""
 
-        description = "> MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://github.com/mgylabs/mulgyeol-mkbot"
+        description = "> Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://github.com/mgylabs/mkbot"
         if VERSION != None:
             version_desc = (
                 f"Version {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**Be warned: Canary can be unstable.**"

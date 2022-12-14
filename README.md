@@ -4,7 +4,7 @@ Mulgyeol MK Bot is an open source local-hosted discord Bot.
 Self-host discord bot on your own local Windows PC.
 
 <div align="center">
-  <a href="https://github.com/mgylabs/mulgyeol-mkbot"><img src="https://user-images.githubusercontent.com/58393346/107910325-882aff80-6f9d-11eb-992d-115948014d3b.png" alt="Mulgyeol MK Bot"></a>
+  <a href="https://github.com/mgylabs/mkbot"><img src="https://user-images.githubusercontent.com/58393346/107910325-882aff80-6f9d-11eb-992d-115948014d3b.png" alt="Mulgyeol MK Bot"></a>
 </div>
 
 ## Features
@@ -24,13 +24,13 @@ Self-host discord bot on your own local Windows PC.
 
 ### Mulgyeol MK Bot Stable
 
-- See [Release Note for Stable](https://github.com/mgylabs/mulgyeol-mkbot/releases/latest) for downloading stable release
+- See [Release Note for Stable](https://github.com/mgylabs/mkbot/releases/latest) for downloading stable release
 
 ### Mulgyeol MK Bot Canary
 
 > Be warned: Canary can be unstable.
 
-- See [Release Note for Nightly](https://github.com/mgylabs/mulgyeol-mkbot/releases/tag/canary) for downloading nightly build
+- See [Release Note for Nightly](https://github.com/mgylabs/mkbot/releases/tag/canary) for downloading nightly build
 
 ### Build from Source
 
@@ -53,7 +53,7 @@ Self-host discord bot on your own local Windows PC.
 
 3. When `build` task is complete, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> again and select `package`.
 
-4. Run `MKBotSetup.exe` to install `MK Bot`.
+4. Run `MKBotSetup-Pre.exe` to install `MK Bot`.
 
 > **Note**  
 > If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
@@ -74,7 +74,6 @@ Self-host discord bot on your own local Windows PC.
 ```jsonc
 {
   "discordToken": "Your Discord Bot Token",
-  "discordAppID": 1234567890,  //Your Discord App ID
   "discordAppCmdGuilds": [123456789123456789],  //Your Discord Guild ID
   "kakaoToken": "Your KakaoTalk REST API Token"
 }
@@ -91,4 +90,4 @@ Self-host discord bot on your own local Windows PC.
 
 ---
 
-For more infomation, See [Project Wiki](https://github.com/mgylabs/mulgyeol-mkbot/wiki/How-to-Contribute).
+For more infomation, See [Project Wiki](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute).

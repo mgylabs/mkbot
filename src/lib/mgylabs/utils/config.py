@@ -37,7 +37,6 @@ class SettingItem:
 
 class Settings:
     discordToken = SettingItem("Your Token")
-    discordAppID = SettingItem("1234")
     discordAppCmdGuilds = SettingItem([])
     kakaoToken = SettingItem("Your Token")
     commandPrefix = SettingItem(".")
@@ -129,7 +128,9 @@ def invoke():
     else:
         return {}
 
-    sch_url = "https://mgylabs.gitlab.io/mulgyeol-mkbot/config.schema"
+    sch_url = (
+        "https://raw.githubusercontent.com/mgylabs/mkbot/main/public/config.schema.json"
+    )
 
     if TOKEN.get("$schema", None) != sch_url:
         with open(CONFIG_PATH, "wt", encoding="utf-8") as f:

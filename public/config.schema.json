@@ -5,21 +5,19 @@
     "required": [
         "discordToken"
     ],
+    "additionalProperties": false,
     "properties": {
         "discordToken": {
             "type": "string",
             "description": "Sets your discord bot token."
         },
-        "discordAppID": {
-            "type": "integer",
-            "description": "Sets your discord bot app ID."
-        },
         "discordAppCmdGuilds": {
-            "type": array,
+            "type": "array",
             "items": {
                 "type": "integer"
-            }
-            "description": "Sets your discord bot guild IDs to use app commands."
+            },
+            "description": "Sets your discord bot guild IDs to use app commands.",
+            "additionalItems": false
         },
         "kakaoToken": {
             "type": "string",

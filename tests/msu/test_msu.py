@@ -36,7 +36,7 @@ class MSUTest(TestCase):
 
     def test_VersionInfo_stable(self):
         info = "MKBotSetup-stable-1.3.3.1-16bb694a133c33fe80c4b67be2a3e000facd883c"
-        url = "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/assets/29427634"
+        url = "https://api.github.com/repos/mgylabs/mkbot/releases/assets/29427634"
 
         vi = msu.VersionInfo(info, url)
         from packaging import version
@@ -55,7 +55,7 @@ class MSUTest(TestCase):
 
     def test_VersionInfo_canary(self):
         info = "MKBotSetup-canary-1.3.3.1.82980060b4606ef9bc428932736647d45e400fd9-8214d361d2826779517f7fb0502405aafdf0ec54"
-        url = "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/assets/29427634"
+        url = "https://api.github.com/repos/mgylabs/mkbot/releases/assets/29427634"
 
         vi = msu.VersionInfo(info, url)
         from packaging import version
@@ -86,30 +86,27 @@ class MSUTest(TestCase):
                 def raise_for_status(self):
                     pass
 
-            if (
-                args[0]
-                == "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/latest"
-            ):
+            if args[0] == "https://api.github.com/repos/mgylabs/mkbot/releases/latest":
                 test_json = {
                     "assets": [
                         {
                             "name": f"MKBotSetup-{stable_version}.zip",
                             "label": f"MKBotSetup-stable-{stable_version}-16bb694a133c33fe80c4b67be2a3e000facd883c",
-                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v{stable_version[:5]}/MKBotSetup-{stable_version}.zip",
+                            "browser_download_url": f"https://github.com/mgylabs/mkbot/releases/download/v{stable_version[:5]}/MKBotSetup-{stable_version}.zip",
                         },
                     ],
                 }
                 return MockResponse(test_json, 200)
             elif (
                 args[0]
-                == "https://api.github.com/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary"
+                == "https://api.github.com/repos/mgylabs/mkbot/releases/tags/canary"
             ):
                 test_json = {
                     "assets": [
                         {
                             "name": f"MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip",
                             "label": f"MKBotSetup-canary-{canary_version}.{canary_commit}-8214d361d2826779517f7fb0502405aafdf0ec54",
-                            "browser_download_url": f"https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip",
+                            "browser_download_url": f"https://github.com/mgylabs/mkbot/releases/download/canary/MKBotCanarySetup-{canary_version}.{canary_commit[:7]}.zip",
                         },
                     ],
                 }
@@ -184,7 +181,7 @@ class MSUTest(TestCase):
         updater.check_new_update()
         stable_expected = {
             "commit": None,
-            "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
+            "url": "https://github.com/mgylabs/mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
             "base_version": "1.3.3.1",
             "version_str": "1.3.3.1",
             "rtype": "stable",
@@ -207,7 +204,7 @@ class MSUTest(TestCase):
         updater.check_new_update()
         stable_expected = {
             "commit": None,
-            "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.4.0/MKBotSetup-1.4.0.1.zip",
+            "url": "https://github.com/mgylabs/mkbot/releases/download/v1.4.0/MKBotSetup-1.4.0.1.zip",
             "base_version": "1.4.0.1",
             "version_str": "1.4.0.1",
             "rtype": "stable",
@@ -231,7 +228,7 @@ class MSUTest(TestCase):
         updater.check_new_update()
         stable_expected = {
             "commit": None,
-            "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
+            "url": "https://github.com/mgylabs/mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.1.zip",
             "rtype": "stable",
             "base_version": "1.3.3.1",
             "version_str": "1.3.3.1",
@@ -240,7 +237,7 @@ class MSUTest(TestCase):
         }
         canary_expected = {
             "commit": "82980060b4606ef9bc428932736647d45e400fd9",
-            "url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
+            "url": "https://github.com/mgylabs/mkbot/releases/download/canary/MKBotCanarySetup-1.4.0.1.8298006.zip",
             "base_version": "1.4.0.1",
             "version_str": "1.4.0.1.8298006",
             "rtype": "canary",
@@ -273,7 +270,7 @@ class MSUTest(TestCase):
             {
                 "name": "MKBotSetup-1.3.3.zip",
                 "label": "MKBotSetup-stable-1.3.3-16bb694a133c33fe80c4b67be2a3e000facd883c",
-                "browser_download_url": "https://github.com/mgylabs/mulgyeol-mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.zip",
+                "browser_download_url": "https://github.com/mgylabs/mkbot/releases/download/v1.3.3/MKBotSetup-1.3.3.zip",
             },
         ]
         self.assertEqual(msu.BaseUpdater(current_version).find_asset(assets), assets[0])

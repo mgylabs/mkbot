@@ -31,7 +31,7 @@ namespace MKBot
                     Console.WriteLine(ex.ToString());
                 }
 
-                Task.Delay(1000).Wait();
+                Task.Delay(500).Wait();
             }
         }
     }

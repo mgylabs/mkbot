@@ -1,4 +1,4 @@
 {
-    "$schema": "https://mgylabs.gitlab.io/mulgyeol-mkbot/extensions.schema",
+    "$schema": "https://raw.githubusercontent.com/mgylabs/mkbot/main/public/extensions.schema.json",
     "extensions": []
 }

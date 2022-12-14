@@ -31,6 +31,10 @@ namespace MKBot
                 {
                     version_str += " Canary";
                 }
+                else if (version_array.Length > 1 && version_array[1] == "beta2")
+                {
+                    version_str += " Beta";
+                }
                 else
                 {
                     version_str += " Stable";
@@ -50,17 +54,17 @@ namespace MKBot
 
         private void InfoForm_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/wiki");
+            Process.Start("https://github.com/mgylabs/mkbot/wiki");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/releases");
+            Process.Start("https://github.com/mgylabs/mkbot/releases");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/mgylabs/mulgyeol-mkbot/issues");
+            Process.Start("https://github.com/mgylabs/mkbot/issues/new/choose");
         }
     }
 }

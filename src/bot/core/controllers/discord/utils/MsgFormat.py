@@ -48,7 +48,7 @@ class MsgFormatter:
         embed = discord.Embed(
             title=title,
             description=description.format(commandPrefix=CONFIG.commandPrefix)
-            + "\n\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
+            + "\n\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
             color=color,
             timestamp=datetime.datetime.utcnow(),
         )
@@ -88,7 +88,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=":rotating_light:  Automatic Bug Reporting Tool",
-            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mulgyeol-mkbot)",
+            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
             color=color_to_int("#FF0000"),
             timestamp=datetime.datetime.utcnow(),
         )

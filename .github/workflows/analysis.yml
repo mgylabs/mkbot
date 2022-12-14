@@ -57,7 +57,7 @@ jobs:
       - name: pylint
         if: ${{ always() }}
         run: |
-          pylint src tests
+          pylint src/bot src/msu src/lib
       - name: black
         if: ${{ always() }}
         run: |

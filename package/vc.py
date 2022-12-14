@@ -13,6 +13,12 @@ else:
     req_headers = {}
 
 
+class BuildType:
+    Stable = 0
+    Beta = 1
+    Canary = 2
+
+
 def requests_API(method, link, datadict=None):
     method = method.upper()
     if method == "POST":
@@ -34,7 +40,7 @@ def isfile(filename):
     return os.path.isfile(filename)
 
 
-def version(v):
+def to_list_version(v):
     return list(map(int, (v.split("."))))
 
 
@@ -73,9 +79,9 @@ def build():
     else:
         last = cur["version"]
 
-    cur_ver = version(cur["version"])
+    cur_ver = to_list_version(cur["version"])
     try:
-        last_ver = version(last)
+        last_ver = to_list_version(last)
     except Exception:
         last_ver = cur_ver
 
@@ -143,14 +149,18 @@ def release():
         json.dump(last_version_data, f)
 
 
-def create_temp_changelog(stable, commit=None):
+def create_temp_changelog(build_type, version=None, commit=None):
     changelogs = []
     index_box = {}
-    if stable:
+    if build_type == BuildType.Stable:
         templog = []
+    elif build_type == BuildType.Beta:
+        templog = [
+            f"## Try new features with Mulgyeol MK Bot Beta\n### 🧭 Feeling adventurous? Preview upcoming features before they’re released.\n> **Version** {version} Beta\n> **Commit** {commit}\n"
+        ]
     else:
         templog = [
-            f"## Nightly build for developers\n### Be warned: Canary can be unstable.\n* commit: {commit}\n"
+            f"## Nightly build for developers\n### Be warned: Canary can be unstable.\n> **Version** {version} Canary\n> **Commit** {commit}\n"
         ]
 
     for dirpath, _, filenames in os.walk("changelogs/unreleased"):
@@ -241,59 +251,85 @@ def github_build():
     update_AssemblyInfo(package_version_data["version"].replace("-beta", ""))
 
 
-def github_release(stable):
+def get_last_build_version_number_commit(asset):
+    if asset != None:
+        _, release_type, ver, _ = asset["label"].split("-")
+        build_list_version = to_list_version(".".join(ver.split(".")[:-1]))
+        build_number = build_list_version[3] if len(build_list_version) > 3 else 1
+        if release_type.lower() == "stable":
+            build_commit = None
+        else:
+            build_commit = ver.split(".")[-1]
+    else:
+        build_number = 1
+        build_commit = None
+        build_list_version = [0, 0, 0, 0]
+
+    return build_list_version, build_number, build_commit
+
+
+def github_release(build_type):
+    class BuildInfo:
+        def __init__(self, list_version, build_number, commit) -> None:
+            self.list_version = list_version
+            self.number = build_number
+            self.commit = commit
+
     with open("package/info/version.json", "rt") as f:
         package_version_data = json.load(f)
 
     cur_commit = os.getenv("GITHUB_SHA")
     base_version = package_version_data["version"].split("-")[0]
-    list_version = version(base_version)
+    list_version = to_list_version(base_version)
+
+    res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/beta")
+    asset = find_asset(res.json().get("assets"))
+    beta_build = BuildInfo(*get_last_build_version_number_commit(asset))
 
     res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary")
+    asset = find_asset(res.json().get("assets"))
+    canary_build = BuildInfo(*get_last_build_version_number_commit(asset))
 
-    asset = find_asset(res.json()["assets"])
-
-    last_build_number = 0
-
-    last_build_commit = None
-    if asset != None:
-        _, _, ver, _ = asset["label"].split("-")
-        last_build_list_version = version(".".join(ver.split(".")[:-1]))
-        last_build_number = (
-            last_build_list_version[3] if len(last_build_list_version) > 3 else 1
-        )
-        last_build_commit = ver.split(".")[-1]
-
-    if stable:
-        if last_build_commit != cur_commit:
-            list_version[3] = last_build_number + 1
-        else:
-            list_version[3] = last_build_number
-        package_version_data["version"] = list_to_version_str(list_version)
+    if canary_build.list_version[:3] == beta_build.list_version[:3]:
+        if canary_build.list_version[:3] == list_version[:3]:
+            last_build = (
+                canary_build if canary_build.number > beta_build.number else beta_build
+            )
+    elif canary_build.list_version[:3] == list_version[:3]:
+        last_build = canary_build
+    elif beta_build.list_version[:3] == list_version[:3]:
+        last_build = beta_build
     else:
-        if last_build_list_version[:3] == list_version[:3]:
-            list_version[3] = last_build_number + 1
-        else:
-            list_version[3] = 1
-        package_version_data["version"] = list_to_version_str(list_version) + "-beta"
+        last_build = None
+
+    if last_build is None:
+        list_version[3] = 1
+    elif last_build.commit != cur_commit:
+        list_version[3] = last_build.number + 1
+    else:
+        list_version[3] = last_build.number
+
+    version_str = list_to_version_str(list_version)
+
+    if build_type == BuildType.Stable:
+        package_version_data["version"] = version_str
+    elif build_type == BuildType.Beta:
+        package_version_data["version"] = version_str + "-beta2"
+    else:
+        package_version_data["version"] = version_str + "-beta"
 
     package_version_data["commit"] = os.getenv("GITHUB_SHA")
 
     with open("package/info/version.json", "wt") as f:
         json.dump(package_version_data, f)
 
-    if stable:
-        save_version_txt(package_version_data["version"])
+    if build_type == BuildType.Stable:
+        save_version_txt(version_str)
     else:
-        save_version_txt(
-            package_version_data["version"].replace(
-                "-beta", f".{package_version_data['commit'][:7]}"
-            )
-        )
-    update_AssemblyInfo(
-        package_version_data["version"].replace("-dev", "").replace("-beta", "")
-    )
-    create_temp_changelog(stable, package_version_data["commit"])
+        save_version_txt(f"{version_str}.{package_version_data['commit'][:7]}")
+
+    update_AssemblyInfo(version_str)
+    create_temp_changelog(build_type, version_str, package_version_data["commit"])
     update_changelog(list_to_version_str(list_version[:3]))
 
 
@@ -301,7 +337,7 @@ def github_bump_version():
     with open("package/info/version.json", "rt") as f:
         package_version_data = json.load(f)
 
-    next_version = version(package_version_data["version"].replace("-dev", ""))
+    next_version = to_list_version(package_version_data["version"].replace("-dev", ""))
 
     if next_version[2] == 0:
         next_version[1] += 1
@@ -315,7 +351,7 @@ def github_revert_version():
     with open("package/info/version.json", "rt") as f:
         package_version_data = json.load(f)
 
-    next_version = version(package_version_data["version"].replace("-dev", ""))
+    next_version = to_list_version(package_version_data["version"].replace("-dev", ""))
 
     if next_version[2] == 0:
         next_version[1] -= 1
@@ -331,10 +367,12 @@ elif "-r" in sys.argv:
     release()
 elif "-gb" in sys.argv:
     github_build()
-elif "-gr" in sys.argv:
-    github_release(True)
-elif "-gn" in sys.argv:
-    github_release(False)
+elif "--stable" in sys.argv:
+    github_release(BuildType.Stable)
+elif "--beta" in sys.argv:
+    github_release(BuildType.Beta)
+elif "--canary" in sys.argv:
+    github_release(BuildType.Canary)
 elif "-gu" in sys.argv:
     github_bump_version()
 elif "-gur" in sys.argv:

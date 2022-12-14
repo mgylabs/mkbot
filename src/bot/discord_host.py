@@ -69,7 +69,6 @@ async def create_bot(return_error_level=False):
         command_prefix=CONFIG.commandPrefix,
         intents=intent,
         help_command=CommandHelp(replyformat),
-        application_id=CONFIG.discordAppID,
     )
     cert = MGCertificate(MGCERT_PATH)
     bot.__dict__.update({"MGCert": cert, "replyformat": replyformat})
@@ -187,9 +186,7 @@ async def create_bot(return_error_level=False):
                 {"template": "bug_report.md", "title": str(error)}
             )
 
-            issue_link = (
-                f"https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}"
-            )
+            issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
             await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb))
             raise error
 
@@ -224,9 +221,7 @@ async def create_bot(return_error_level=False):
                     {"template": "bug_report.md", "title": str(error)}
                 )
 
-                issue_link = (
-                    f"https://github.com/mgylabs/mulgyeol-mkbot/issues/new?{query_str}"
-                )
+                issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
                 await interaction.response.send_message(
                     embed=MsgFormatter.abrt(interaction, issue_link, tb)
                 )
