@@ -63,12 +63,29 @@ async def create_bot(return_error_level=False):
     errorlevel = 0
     pending = True
 
+    if is_development_mode():
+        name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
+        activity_type = discord.ActivityType.playing
+    elif VERSION == None:
+        name = "MK Bot Test Mode"
+        activity_type = discord.ActivityType.playing
+    elif CONFIG.connectOnStart:
+        name = f"MK Bot {VERSION}"
+        activity_type = discord.ActivityType.listening
+        pending = False
+    else:
+        name = f"{CONFIG.commandPrefix}help"
+        activity_type = discord.ActivityType.listening
+
+    activity = discord.Activity(name=name, type=activity_type)
+
     intent = discord.Intents.all()
     replyformat = MsgFormatter()
     bot = MKBot(
         command_prefix=CONFIG.commandPrefix,
         intents=intent,
         help_command=CommandHelp(replyformat),
+        activity=activity,
     )
     cert = MGCertificate(MGCERT_PATH)
     bot.__dict__.update({"MGCert": cert, "replyformat": replyformat})
@@ -87,22 +104,6 @@ async def create_bot(return_error_level=False):
         for guild in CONFIG.discordAppCmdGuilds:
             cmds = await bot.tree.sync(guild=discord.Object(guild))
             print(f"App commands sync for {guild} ({', '.join(c.name for c in cmds)})")
-
-        if is_development_mode():
-            name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
-            activity_type = discord.ActivityType.playing
-        elif VERSION == None:
-            name = "MK Bot Test Mode"
-            activity_type = discord.ActivityType.playing
-        elif CONFIG.connectOnStart:
-            name = f"MK Bot {VERSION}"
-            nonlocal pending
-            pending = False
-        else:
-            name = f"{bot.command_prefix}help"
-            activity_type = discord.ActivityType.listening
-        activity = discord.Activity(name=name, type=activity_type)
-        await bot.change_presence(status=discord.Status.online, activity=activity)
 
     @bot.event
     async def on_message(message: discord.Message):

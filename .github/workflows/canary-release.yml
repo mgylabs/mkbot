@@ -15,7 +15,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     name: Check Latest Commit
-    if: github.repository == 'mgylabs/mkbot'
+    if: github.repository == 'mgylabs/mkbot' && github.event_name != 'workflow_dispatch'
     outputs:
       is_new: ${{ steps.checkcommit.outputs.is_new }}
     steps:
@@ -35,7 +35,7 @@ jobs:
   canary-release:
     name: Nightly Build
     needs: check
-    if: needs.check.outputs.is_new == 'true' || github.event.inputs.manual == 'true'
+    if: always() && (needs.check.result == 'skipped' || needs.check.outputs.is_new == 'true')
     runs-on: windows-2019
     environment:
       name: "Canary"
