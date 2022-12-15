@@ -156,7 +156,7 @@ def create_temp_changelog(build_type, version=None, commit=None):
         templog = []
     elif build_type == BuildType.Beta:
         templog = [
-            f"## Try new features with Mulgyeol MK Bot Beta\n### 🧭 Feeling adventurous? Preview upcoming features before they’re released.\n> **Version** {version} Beta\n> **Commit** {commit}\n"
+            f"## Try new features with Mulgyeol MK Bot Beta\n### 🧭 Preview upcoming features before they’re released.\n> **Version** {version} Beta\n> **Commit** {commit}\n"
         ]
     else:
         templog = [
@@ -290,6 +290,8 @@ def github_release(build_type):
     asset = find_asset(res.json().get("assets"))
     canary_build = BuildInfo(*get_last_build_version_number_commit(asset))
 
+    last_build = None
+
     if canary_build.list_version[:3] == beta_build.list_version[:3]:
         if canary_build.list_version[:3] == list_version[:3]:
             last_build = (
@@ -299,8 +301,6 @@ def github_release(build_type):
         last_build = canary_build
     elif beta_build.list_version[:3] == list_version[:3]:
         last_build = beta_build
-    else:
-        last_build = None
 
     if last_build is None:
         list_version[3] = 1

@@ -45,7 +45,7 @@ class Settings:
     connectOnStart = SettingItem(False)
     gitlabToken = SettingItem("")
     mgylabsToken = SettingItem("")
-    canaryUpdate = SettingItem(False)
+    betaUpdate = SettingItem(False)
 
     def __init__(self, data):
         self.update_dict(data)

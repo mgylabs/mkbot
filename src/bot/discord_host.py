@@ -94,6 +94,10 @@ async def create_bot(return_error_level=False):
         elif VERSION == None:
             name = "MK Bot Test Mode"
             activity_type = discord.ActivityType.playing
+        elif CONFIG.connectOnStart:
+            name = f"MK Bot {VERSION}"
+            nonlocal pending
+            pending = False
         else:
             name = f"{bot.command_prefix}help"
             activity_type = discord.ActivityType.listening
@@ -126,17 +130,18 @@ async def create_bot(return_error_level=False):
             await bot.process_commands(request_id, message)
 
             nonlocal pending
-            if pending and message.content.startswith(bot.command_prefix):
-                pending = False
-                name = f"MK Bot {VERSION}"
-                activity = discord.Activity(
-                    name=name, type=discord.ActivityType.listening
-                )
-                await bot.change_presence(
-                    status=discord.Status.online, activity=activity
-                )
+            if message.content.startswith(bot.command_prefix):
+                if pending:
+                    pending = False
+                    name = f"MK Bot {VERSION}"
+                    activity = discord.Activity(
+                        name=name, type=discord.ActivityType.listening
+                    )
+                    await bot.change_presence(
+                        status=discord.Status.online, activity=activity
+                    )
 
-            await ReleaseNotify.run(message.author.id, message.channel.send)
+                await ReleaseNotify.run(message.author.id, message.channel.send)
 
     @bot.event
     async def on_command_error(ctx: commands.Context, error: commands.CommandError):
