@@ -375,7 +375,7 @@ class Music(commands.Cog):
         for i in range(len(song_list_dict[guild_id][1]) - song_list_dict[guild_id][0]):
             music = song_list_dict[guild_id][1][i + song_list_dict[guild_id][0]]
             message += (
-                f"{str(i + 1)}. `{music.length} `{music.title} - {music.user.mention}\n"
+                f"{str(i + 1)}. `{music.length}`{music.title} - {music.user.mention}\n"
             )
         await ctx.send(embed=MsgFormatter.get(ctx, "Song Queue", message))
 

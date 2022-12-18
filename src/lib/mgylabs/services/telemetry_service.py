@@ -7,8 +7,7 @@ from ..utils.config import VERSION
 try:
     # pylint: disable=import-error,no-name-in-module
 
-    from mulgyeol_telemetry.telemetry import TelemetryClient
-
+    from mulgyeol_telemetry.telemetry import TelemetryClient  # type: ignore @IgnoreException isort:skip
     from ..constants.APIKey import INSIGHTS_APPLICATION_KEY
 
     # pylint: disable=import-error,no-name-in-module

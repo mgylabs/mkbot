@@ -3,6 +3,7 @@ import platform
 
 import discord
 from discord.ext import commands
+
 from mgylabs.utils.config import CONFIG, VERSION
 
 Msg_Color = None
@@ -83,7 +84,7 @@ class MsgFormatter:
 
     @staticmethod
     def abrt(ctx_or_iaction, issue_link, tb, show_req_user=True):
-        description = f"An unknown error has occurred. Please [create an issue]({issue_link}) at GitHub with logs below to help fix this problem."
+        description = f"ABRT has detected an unknown error.\nPlease [create an issue]({issue_link}) at GitHub with below logs to help fix this problem."
         env = f"Version: {VERSION}\nCommit: {VERSION.commit}\nOS: {platform.platform().replace('-', ' ')}"
 
         embed = discord.Embed(

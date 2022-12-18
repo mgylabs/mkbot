@@ -12,6 +12,11 @@ from discord.ext import commands, tasks
 
 sys.path.append("..\\lib")
 
+import platform
+
+from discord import ButtonStyle
+from discord.ui import Button, View
+
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
 from core.controllers.discord.utils.exceptions import NonFatalError, UsageError
@@ -189,11 +194,26 @@ async def create_bot(return_error_level=False):
             )[0].strip()
 
             query_str = urllib.parse.urlencode(
-                {"template": "bug_report.md", "title": str(error)}
+                {
+                    "template": "bug_report.yml",
+                    "labels": "bug,Needs-Triage",
+                    "title": str(error).replace(
+                        "Command raised an exception:", f"[{ctx.command.name}]"
+                    ),
+                    "version": f"{VERSION} ({VERSION.commit})",
+                    "os_version": platform.platform()
+                    .replace("-", " ")
+                    .replace("SP0", ""),
+                }
             )
 
             issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
-            await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb))
+
+            view = View()
+            view.add_item(
+                Button(label="Report Issue", style=ButtonStyle.url, url=issue_link)
+            )
+            await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb), view=view)
             raise error
 
         await ctx.send(
@@ -224,13 +244,29 @@ async def create_bot(return_error_level=False):
                 )[0].strip()
 
                 query_str = urllib.parse.urlencode(
-                    {"template": "bug_report.md", "title": str(error)}
+                    {
+                        "template": "bug_report.yml",
+                        "labels": "bug,Needs-Triage",
+                        "title": str(error).replace(
+                            "Command raised an exception:",
+                            f"[{interaction.data['name']}]",
+                        ),
+                        "version": f"{VERSION} ({VERSION.commit})",
+                        "os_version": platform.platform()
+                        .replace("-", " ")
+                        .replace("SP0", ""),
+                    }
                 )
 
                 issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
-                await interaction.response.send_message(
-                    embed=MsgFormatter.abrt(interaction, issue_link, tb)
+                view = View()
+                view.add_item(
+                    Button(label="Report Issue", style=ButtonStyle.url, url=issue_link)
                 )
+                await interaction.response.send_message(
+                    embed=MsgFormatter.abrt(interaction, issue_link, tb), view=view
+                )
+                raise error
 
             await interaction.response.send_message(
                 embed=MsgFormatter.get(
