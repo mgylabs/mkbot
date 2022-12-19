@@ -110,9 +110,6 @@ class Minigame(commands.GroupCog):
         )
 
     @commands.hybrid_command()
-    @commands.guild_only()
-    @app_commands.guild_only()
-    # @app_commands.describe(command="Only valid `exit`")
     @app_commands.choices(
         command=[
             app_commands.Choice(name="start", value="start"),

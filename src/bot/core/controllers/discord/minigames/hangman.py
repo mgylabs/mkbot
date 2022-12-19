@@ -8,8 +8,6 @@ class Hangman:
         self.usedLetters = ""
         self.VALID_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         self.lives = 0
-        self.letterState = ""
-        self.gameState = ""
         self.debug = False
         self.send = None
 
@@ -20,7 +18,12 @@ class Hangman:
         # get the word
         self.word = self.getWordFromFile()
         # initialise hiddenLetters to be underscores equal to the length of word
-        self.hiddenLetters = ["_"] * len(self.word)
+        self.hiddenLetters = []
+        for i in range(len(self.word)):
+            if self.word[i] == "-":
+                self.hiddenLetters.append("-")
+            else:
+                self.hiddenLetters.append("_")
         # initialise usedLetters to be an empty string
         self.usedLetters = ""
         # set lives to zero
@@ -32,6 +35,7 @@ class Hangman:
 
         # Select the word from wordList
         word = random.choice(nouns)
+        word = word.replace(" ", "-")
         # Convert the word to uppercase and return the word
         word = word.upper()
         return word
@@ -239,10 +243,10 @@ class Hangman:
         return self.render(builder)
 
     def checkLetter(self, letter):
-        # Set the letterstate to unknown
-        letter_state = "UNKNOWN"
+        if letter not in self.VALID_LETTERS:
+            letter_state = "UNKNOWN"
         # if the letter is in the set of hiddenLeters set the state to already selected
-        if letter in self.hiddenLetters:
+        elif letter in self.hiddenLetters:
             letter_state = "ALREADY SELECTED"
             # else if the letter is in the set of usedLeters set the state to already selected
         elif letter in self.usedLetters:
