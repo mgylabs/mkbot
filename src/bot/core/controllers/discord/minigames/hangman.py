@@ -1,5 +1,7 @@
 import random
 
+from .constants.nouns import get_nouns
+
 
 class Hangman:
     def __init__(self) -> None:
@@ -31,10 +33,8 @@ class Hangman:
         # initialise number of vowels
 
     def getWordFromFile(self):
-        from .constants.nouns import nouns
-
         # Select the word from wordList
-        word = random.choice(nouns)
+        word = random.choice(get_nouns())
         word = word.replace(" ", "-")
         # Convert the word to uppercase and return the word
         word = word.upper()
