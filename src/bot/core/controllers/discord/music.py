@@ -436,7 +436,8 @@ class Music(commands.Cog):
                                 + "\n added in queue",
                             )
                         )
-                        await self.player(ctx)
+                        if not ctx.voice_client.is_playing():
+                            await self.player(ctx)
                         break
                 if not added:
                     await ctx.send(
