@@ -199,13 +199,13 @@ class Music(commands.Cog):
             )
 
         if len(song) == 0:
-            if ctx.voice_client.is_playing:
+            if ctx.voice_client.is_playing():
                 await self.playMusic(ctx)
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
                         "Already Playing",
-                        "The player is already playing "
+                        "The player is already playing"
                         + song_list_dict[guild_id][1][
                             song_list_dict[guild_id][0]
                         ].title,
@@ -256,7 +256,8 @@ class Music(commands.Cog):
                         ctx, song_list_dict[guild_id][1][-1].title, " in Queue"
                     )
                 )
-                await self.player(ctx)
+                if not ctx.voice_client.is_playing():
+                    await self.player(ctx)
 
             else:
                 ls = await ytsearch(song, 1)
@@ -274,7 +275,8 @@ class Music(commands.Cog):
                         + song_list_dict[guild_id][1][-1].length,
                     )
                 )
-                await self.player(ctx)
+                if not ctx.voice_client.is_playing():
+                    await self.player(ctx)
 
     @commands.command(aliases=["pp"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
