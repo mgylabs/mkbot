@@ -1,0 +1,24 @@
+name: Crowdin Download
+
+on:
+  workflow_dispatch:
+
+jobs:
+  synchronize-with-crowdin-download:
+    if: github.repository == 'mgylabs/mkbot'
+    runs-on: ubuntu-latest
+    environment: Crowdin
+    name: Download
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: crowdin action
+        uses: crowdin/github-action@1.0.4
+        with:
+          upload_sources: false
+          download_translations: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
