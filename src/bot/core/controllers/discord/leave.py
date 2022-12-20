@@ -19,7 +19,7 @@ async def leave(ctx: commands.Context):
         if x.guild == ctx.message.guild:
             await x.disconnect()
             await channel.send(
-                embed=MsgFormatter.get(ctx, _("Leaved {}") % voice_channel.name)
+                embed=MsgFormatter.get(ctx, _("Leaved %s") % voice_channel.name)
             )
 
 

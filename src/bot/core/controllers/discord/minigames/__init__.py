@@ -12,6 +12,7 @@ from core.controllers.discord.utils import listener
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from core.controllers.discord.utils.register import add_cog
+from mgylabs.i18n import _
 from mgylabs.utils import logger
 
 log = logger.get_logger(__name__)
@@ -76,15 +77,18 @@ class Minigame(commands.GroupCog):
     async def gobblet(self, ctx: commands.Context, *, other: discord.Member):
         """Play a game of Gobblet Gobblers with someone else"""
         if other.bot:
-            return await ctx.send("You cannot play against a bot", ephemeral=True)
+            return await ctx.send(_("You cannot play against a bot"), ephemeral=True)
 
         prompt = gobblet.Prompt(ctx.author, other)
         msg = await ctx.send(
-            f"{other.mention} has been challenged to a game of Gobblet Gobblers by {ctx.author.mention}.\n"
-            "This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. "
-            "A higher strength value eats a piece even if it's already on the board. "
-            "Careful, you only have 1 piece of each strength value!\n\n"
-            f"Do you accept this challenge, {other.mention}?",
+            _(
+                "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
+                "This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. "
+                "A higher strength value eats a piece even if it's already on the board. "
+                "Careful, you only have 1 piece of each strength value!\n\n"
+                "Do you accept this challenge, %(other)s?"
+            )
+            % {"other": other.mention, "author": ctx.author.mention},
             view=prompt,
         )
 
@@ -106,6 +110,14 @@ class Minigame(commands.GroupCog):
         prompt.message = await ctx.send(
             f"{other.mention} has been challenged to a game of Battleship by {ctx.author.mention}.\n"
             f"In order to accept, please press your button below to ready up.",
+            view=prompt,
+        )
+        prompt.message = await ctx.send(
+            _(
+                "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
+                "In order to accept, please press your button below to ready up."
+            )
+            % {"other": other.mention, "author": ctx.author.mention},
             view=prompt,
         )
 
@@ -141,10 +153,14 @@ class Minigame(commands.GroupCog):
             if channel_id in self.channels:
                 self.channels.pop(channel_id)
 
-            await ctx.send(embed=MsgFormatter.get(ctx, "Hangman", "Exit Hangman Game"))
+            await ctx.send(
+                embed=MsgFormatter.get(ctx, _("Hangman"), _("Exit Hangman Game"))
+            )
             return
         else:
-            await ctx.send(embed=MsgFormatter.get(ctx, "Hangman", "Invalid Argument"))
+            await ctx.send(
+                embed=MsgFormatter.get(ctx, _("Hangman"), _("Invalid Argument"))
+            )
             return
 
         hangman = Hangman()
@@ -152,10 +168,14 @@ class Minigame(commands.GroupCog):
 
         ds = hangman.displayScreen()
         log.debug(ds)
-        message = await ctx.send(embed=MsgFormatter.get(ctx, "Hangman", f"```{ds}```"))
+        message = await ctx.send(
+            embed=MsgFormatter.get(ctx, _("Hangman"), f"```{ds}```")
+        )
 
         async def display(text):
-            await message.edit(embed=MsgFormatter.get(ctx, "Hangman", f"```{text}```"))
+            await message.edit(
+                embed=MsgFormatter.get(ctx, _("Hangman"), f"```{text}```")
+            )
 
         hangman.send = display
 

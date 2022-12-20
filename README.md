@@ -7,6 +7,8 @@ Self-host discord bot on your own local Windows PC.
   <a href="https://github.com/mgylabs/mkbot"><img src="https://user-images.githubusercontent.com/58393346/107910325-882aff80-6f9d-11eb-992d-115948014d3b.png" alt="Mulgyeol MK Bot"></a>
 </div>
 
+[![Crowdin](https://badges.crowdin.net/mkbot/localized.svg)](https://crowdin.com/project/mkbot)
+
 ## Features
 
 - [x] TTS voices

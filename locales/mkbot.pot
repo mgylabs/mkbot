@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-20 22:44+0900\n"
+"POT-Creation-Date: 2022-12-20 23:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,7 +181,7 @@ msgid "Leaves voice channel where the user who typed the command is in."
 msgstr ""
 
 #: src/bot/core/controllers/discord/leave.py:22
-msgid "Leaved {}"
+msgid "Leaved %s"
 msgstr ""
 
 #: src/bot/core/controllers/discord/logout.py:12
@@ -193,33 +193,66 @@ msgstr ""
 msgid "Logs out of Discord and closes all connections"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:21
+#: src/bot/core/controllers/discord/minigames/__init__.py:22
 #, docstring
 msgid "Simple minigames to play with others"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:77
+#: src/bot/core/controllers/discord/minigames/__init__.py:78
 #, docstring
 msgid "Play a game of Gobblet Gobblers with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:101
+#: src/bot/core/controllers/discord/minigames/__init__.py:80
+msgid "You cannot play against a bot"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:84
+msgid ""
+"%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
+"This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. A higher strength value eats a piece even if it's already on the board. Careful, you only have 1 piece of each strength value!\n"
+"\n"
+"Do you accept this challenge, %(other)s?"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:105
 #, docstring
 msgid "Play a game of battleship with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:127
+#: src/bot/core/controllers/discord/minigames/__init__.py:116
+msgid ""
+"%(other)s has been challenged to a game of Battleship by %(author)s.\n"
+"In order to accept, please press your button below to ready up."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:139
 #, docstring
 msgid "Play a game of Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:127
+#: src/bot/core/controllers/discord/minigames/__init__.py:139
 #, docstring
 msgid ""
 "Play a game of Hangman\n"
 "\n"
 "{commandPrefix}hangman\n"
 "{commandPrefix}hangman exit"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
+msgid "Exit Hangman Game"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py:159
+#: src/bot/core/controllers/discord/minigames/__init__.py:167
+#: src/bot/core/controllers/discord/minigames/__init__.py:170
+msgid "Hangman"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:159
+msgid "Invalid Argument"
 msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:181
@@ -497,3 +530,4 @@ msgstr ""
 #: src/bot/release.py:88
 msgid "Please see the [Release Note](%s) for more information."
 msgstr ""
+
