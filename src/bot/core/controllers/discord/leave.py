@@ -1,5 +1,7 @@
 from discord.ext import commands
 
+from mgylabs.i18n import _
+
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
@@ -8,7 +10,7 @@ from .utils.MsgFormat import MsgFormatter
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def leave(ctx: commands.Context):
     """
-    Leaves voice channel where the user who typed the command is in
+    Leaves voice channel where the user who typed the command is in.
     """
     channel = ctx.message.channel
     voice_channel = ctx.author.voice.channel
@@ -17,7 +19,7 @@ async def leave(ctx: commands.Context):
         if x.guild == ctx.message.guild:
             await x.disconnect()
             await channel.send(
-                embed=MsgFormatter.get(ctx, "leaved {}".format(voice_channel.name))
+                embed=MsgFormatter.get(ctx, _("Leaved {}") % voice_channel.name)
             )
 
 

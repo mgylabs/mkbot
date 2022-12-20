@@ -468,7 +468,7 @@ class Music(commands.Cog):
                 )
 
             try:
-                reaction, _ = await ctx.bot.wait_for(
+                reaction, __ = await ctx.bot.wait_for(
                     "reaction_add", check=check, timeout=30.0
                 )
             except asyncio.TimeoutError:

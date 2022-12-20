@@ -1,13 +1,13 @@
-import logging
 import os
 import sys
 
 from alembic import command
 from alembic.config import Config
-from mgylabs.utils import logger
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
 from sqlalchemy.orm.decl_api import DeclarativeMeta
+
+from mgylabs.utils import logger
 
 from .paths import DB_URL
 

@@ -2,10 +2,11 @@
 
 from typing import List
 
-from core.controllers.discord.utils.MGCert import Level, MGCertificate
-
 import discord
 from discord.ext import commands
+
+from core.controllers.discord.utils.MGCert import Level, MGCertificate
+from mgylabs.i18n import _
 
 
 # Defines a custom button that contains the logic of the game.
@@ -128,7 +129,7 @@ class TicTacToe(discord.ui.View):
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def tic(ctx: commands.Context):
     """Starts a tic-tac-toe game with yourself."""
-    await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe())
+    await ctx.send(f"Tic Tac Toe: {_('X goes first')}", view=TicTacToe())
 
 
 async def setup(bot: commands.Bot):

@@ -3,7 +3,13 @@ import itertools
 import discord
 from discord.ext import commands
 
+from mgylabs.i18n import _
+from mgylabs.utils.config import CONFIG
 from mgylabs.utils.version import VERSION
+
+
+def render_help_text(text: str):
+    return text.format(commandPrefix=CONFIG.commandPrefix)
 
 
 class CommandHelp(commands.DefaultHelpCommand):
@@ -11,10 +17,19 @@ class CommandHelp(commands.DefaultHelpCommand):
 
     def __init__(self, formatter):
         super().__init__(
-            no_category="General", paginator=commands.Paginator(None, None)
+            show_parameter_descriptions=False,
+            paginator=commands.Paginator(None, None),
         )
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
+
+    async def prepare_help_command(self, ctx, command, /) -> None:
+        self.arguments_heading = _("Arguments:")
+        self.commands_heading = _("Commands:")
+        self.default_argument_description = _("No description given")
+        self.no_category = _("General")
+
+        return await super().prepare_help_command(ctx, command)
 
     async def send_bot_help(self, mapping) -> None:
         ctx = self.context
@@ -56,21 +71,21 @@ class CommandHelp(commands.DefaultHelpCommand):
     def get_app_commands_help(self):
         bot = self.context.bot
 
-        cmd_builder = ["Slash Command:"]
-        menu_builder = ["Context Menu:"]
+        cmd_builder = [_("Slash Command:")]
+        menu_builder = [_("Context Menu:")]
         cmds = bot.tree._get_all_commands(guild=self.context.guild)
         for command in cmds:
             if isinstance(command, discord.app_commands.ContextMenu):
                 menu_builder.append(f"{self.indent * ' '}`{command.name}`")
             else:
                 cmd_builder.append(
-                    f"{self.indent * ' '}`/{command.name}` - {command.description}"
+                    f"{self.indent * ' '}`/{command.name}` - {render_help_text(_(command.description))}"
                 )
 
         if len(cmd_builder) == 1:
             if self.context.guild is not None:
                 cmd_builder.append(
-                    f"{self.indent * ' '}⚠️ Slash commands are not set up for use in this guild(ID: {self.context.guild.id}).\n{self.indent * ' '}For more information, See https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands"
+                    f"{self.indent * ' '}{_('Slash commands are not set up for use in this guild(ID: %s).') % self.context.guild.id}\n{self.indent * ' '}{_('For more information, See %s') % 'https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands'}"
                 )
                 builder = cmd_builder
             else:
@@ -80,25 +95,25 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         return "\n".join(builder)
 
-    def add_indented_commands(self, cmds, *, heading, max_size=None):
-        """Indents a list of commands after the specified heading.
-        The formatting is added to the :attr:`paginator`.
-        The default implementation is the command name indented by
-        :attr:`indent` spaces, padded to ``max_size`` followed by
-        the command's :attr:`Command.short_doc` and then shortened
-        to fit into the :attr:`width`.
-        Parameters
-        -----------
-        commands: Sequence[:class:`Command`]
-            A list of commands to indent for output.
-        heading: :class:`str`
-            The heading to add to the output. This is only added
-            if the list of commands is greater than 0.
-        max_size: Optional[:class:`int`]
-            The max size to use for the gap between indents.
-            If unspecified, calls :meth:`get_max_size` on the
-            commands parameter.
-        """
+    def add_indented_commands(self, cmds, *, heading, max_size=None, prefix=True):
+        # """Indents a list of commands after the specified heading.
+        # The formatting is added to the :attr:`paginator`.
+        # The default implementation is the command name indented by
+        # :attr:`indent` spaces, padded to ``max_size`` followed by
+        # the command's :attr:`Command.short_doc` and then shortened
+        # to fit into the :attr:`width`.
+        # Parameters
+        # -----------
+        # commands: Sequence[:class:`Command`]
+        #     A list of commands to indent for output.
+        # heading: :class:`str`
+        #     The heading to add to the output. This is only added
+        #     if the list of commands is greater than 0.
+        # max_size: Optional[:class:`int`]
+        #     The max size to use for the gap between indents.
+        #     If unspecified, calls :meth:`get_max_size` on the
+        #     commands parameter.
+        # """
 
         if not cmds:
             return
@@ -113,18 +128,67 @@ class CommandHelp(commands.DefaultHelpCommand):
             name = command.name
             entry = "{0}`{1}` - {2}".format(
                 self.indent * " ",
-                f"{self.context.clean_prefix}{name}",
-                command.short_doc,
+                f"{self.context.clean_prefix}{name}" if prefix else name,
+                render_help_text(_(command.short_doc)),
             )
             self.paginator.add_line(self.shorten_text(entry))
 
-    async def send_pages(self):
-        """A helper utility to send the page output from :attr:`paginator` to the destination."""
+    def add_command_formatting(self, command: commands.Command, /) -> None:
+        # """A utility function to format the non-indented block of commands and groups.
 
-        description = "> Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot\n> Everyone can contribute to MK Bot project on https://github.com/mgylabs/mkbot"
+        # .. versionchanged:: 2.0
+
+        #     ``command`` parameter is now positional-only.
+
+        # .. versionchanged:: 2.0
+        #     :meth:`.add_command_arguments` is now called if :attr:`.show_parameter_descriptions` is ``True``.
+
+        # Parameters
+        # ------------
+        # command: :class:`Command`
+        #     The command to format.
+        # """
+
+        if command.description:
+            self.paginator.add_line(command.description, empty=True)
+
+        signature = self.get_command_signature(command)
+        self.paginator.add_line(signature, empty=True)
+
+        if command.help:
+            try:
+                self.paginator.add_line(render_help_text(_(command.help)), empty=True)
+            except RuntimeError:
+                for line in render_help_text(_(command.help)).splitlines():
+                    self.paginator.add_line(line)
+                self.paginator.add_line()
+
+        if self.show_parameter_descriptions:
+            self.add_command_arguments(command)
+
+    async def send_group_help(self, group, /) -> None:
+        self.add_command_formatting(group)
+
+        filtered = await self.filter_commands(group.commands, sort=self.sort_commands)
+        self.add_indented_commands(
+            filtered, heading=self.commands_heading, prefix=False
+        )
+
+        if filtered:
+            note = self.get_ending_note()
+            if note:
+                self.paginator.add_line()
+                self.paginator.add_line(note)
+
+        await self.send_pages()
+
+    async def send_pages(self):
+        # """A helper utility to send the page output from :attr:`paginator` to the destination."""
+
+        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot')}\n> {_('Everyone can contribute to MK Bot project on %s') % 'https://github.com/mgylabs/mkbot'}"
         if VERSION != None:
             version_desc = (
-                f"Version {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**Be warned: Canary can be unstable.**"
+                f"Version {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{_('Be warned: Canary can be unstable.')}**"
                 if VERSION.is_canary()
                 else f"Version {VERSION}"
             )
@@ -134,5 +198,5 @@ class CommandHelp(commands.DefaultHelpCommand):
         for page in self.paginator.pages:
             page = page.rstrip()
             await self.context.send(
-                f"Mulgyeol MK Bot Help\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2022"
+                f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2022"
             )

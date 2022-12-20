@@ -76,6 +76,8 @@ xcopy /q /I /Y /E Update\* bin
 del *.pdb
 rmdir /q /s Update
 
+pybabel compile -d locales -D mkbot
+
 exit /b 0
 
 :error

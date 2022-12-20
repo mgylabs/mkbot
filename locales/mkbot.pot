@@ -1,0 +1,499 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2022-12-20 22:44+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: src/bot/command_help.py:27
+msgid "Arguments:"
+msgstr ""
+
+#: src/bot/command_help.py:28
+msgid "Commands:"
+msgstr ""
+
+#: src/bot/command_help.py:29
+msgid "No description given"
+msgstr ""
+
+#: src/bot/command_help.py:30
+msgid "General"
+msgstr ""
+
+#: src/bot/command_help.py:74
+msgid "Slash Command:"
+msgstr ""
+
+#: src/bot/command_help.py:75
+msgid "Context Menu:"
+msgstr ""
+
+#: src/bot/command_help.py:88
+msgid "For more information, See %s"
+msgstr ""
+
+#: src/bot/command_help.py:88
+msgid "Slash commands are not set up for use in this guild(ID: %s)."
+msgstr ""
+
+#: src/bot/command_help.py:188
+msgid "Everyone can contribute to MK Bot project on %s"
+msgstr ""
+
+#: src/bot/command_help.py:188
+msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot"
+msgstr ""
+
+#: src/bot/command_help.py:191
+msgid "Be warned: Canary can be unstable."
+msgstr ""
+
+#: src/bot/command_help.py:201
+msgid "Help"
+msgstr ""
+
+#: src/bot/core/controllers/discord/clock.py:126
+#, docstring
+msgid "Enables live world time."
+msgstr ""
+
+#: src/bot/core/controllers/discord/clock.py:157
+msgid "Successfully set live clock."
+msgstr ""
+
+#: src/bot/core/controllers/discord/delete.py:13
+#, docstring
+msgid "Deletes messages. (Requires Admin Permission)"
+msgstr ""
+
+#: src/bot/core/controllers/discord/delete.py:13
+#, docstring
+msgid ""
+"Deletes messages. (Requires Admin Permission)\n"
+"{commandPrefix}delete amount : deletes 'amount' number of messages\n"
+"{commandPrefix}delete all : deletes all(maximum 200) messages"
+msgstr ""
+
+#: src/bot/core/controllers/discord/delete.py:26
+#: src/bot/core/controllers/discord/delete.py:36
+msgid "%d Messages Deleted"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:17
+msgid "Report broken or incorrect behaviour"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:22
+msgid "Suggest a feature for this library"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:28
+msgid "Select feedback type..."
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:63
+msgid "Feedback"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:68
+#: src/bot/core/controllers/discord/feedback.py:108
+msgid "Thanks for your feedback, %s!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:89
+msgid "Oops! Something went wrong."
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py:98
+#, docstring
+msgid "Sends feedback."
+msgstr ""
+
+#: src/bot/core/controllers/discord/join.py:12
+#, docstring
+msgid "Joins voice channel that the user who typed the command is in."
+msgstr ""
+
+#: src/bot/core/controllers/discord/join.py:19
+msgid "Joined %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:19
+#, docstring
+msgid "Sets or shows user's display language."
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:19
+#, docstring
+msgid ""
+"Sets or shows user's display language.\n"
+"\n"
+"{commandPrefix}language set English\n"
+"\n"
+"{commandPrefix}language show"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:35
+#, docstring
+msgid "Sets user's display language."
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:45
+#: src/bot/core/controllers/discord/language.py:103
+#: src/bot/core/controllers/discord/timezone.py:45
+#: src/bot/core/controllers/discord/timezone.py:103
+#: src/bot/core/controllers/discord/utils/MGCert.py:110
+msgid "Permission denied"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:55
+msgid "Invalid language"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:68
+msgid "Successfully set display language of %(member)s to %(language)s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:93
+#, docstring
+msgid "Shows user's display language."
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:114
+#: src/bot/core/controllers/discord/language.py:123
+msgid "Display language of %(member)s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/leave.py:12
+#, docstring
+msgid "Leaves voice channel where the user who typed the command is in."
+msgstr ""
+
+#: src/bot/core/controllers/discord/leave.py:22
+msgid "Leaved {}"
+msgstr ""
+
+#: src/bot/core/controllers/discord/logout.py:12
+#, docstring
+msgid "Terminates bot. (Requires Admin Permission)"
+msgstr ""
+
+#: src/bot/core/controllers/discord/logout.py:16
+msgid "Logs out of Discord and closes all connections"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:21
+#, docstring
+msgid "Simple minigames to play with others"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:77
+#, docstring
+msgid "Play a game of Gobblet Gobblers with someone else"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:101
+#, docstring
+msgid "Play a game of battleship with someone else"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:127
+#, docstring
+msgid "Play a game of Hangman"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:127
+#, docstring
+msgid ""
+"Play a game of Hangman\n"
+"\n"
+"{commandPrefix}hangman\n"
+"{commandPrefix}hangman exit"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:181
+#, docstring
+msgid "Plays the keyword searched or plays the song in queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:181
+#, docstring
+msgid ""
+"Plays the keyword searched or plays the song in queue\n"
+"{commandPrefix}play \"keyword\"\n"
+"{commandPrefix}play\n"
+"{commandPrefix}p \"keyword\"\n"
+"{commandPrefix}p\n"
+"Searches the keyword in Youtube and puts it in queue\n"
+"If there is no keyword inputted and the player isn't playing anything, it starts the player"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:282
+#, docstring
+msgid "Pauses the song that is playing"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:282
+#, docstring
+msgid ""
+"Pauses the song that is playing\n"
+"{commandPrefix}pause\n"
+"{commandPrefix}pp\n"
+"Cannot pause the player if the player is already paused"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:317
+#, docstring
+msgid "Skips the song that is playing and plays the next song in queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:317
+#, docstring
+msgid ""
+"Skips the song that is playing and plays the next song in queue\n"
+"{commandPrefix}skip\n"
+"{commandPrefix}ss"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:353
+#, docstring
+msgid "Stops Player"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:353
+#, docstring
+msgid ""
+"Stops Player\n"
+"{commandPrefix}stop"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:363
+#, docstring
+msgid "Shows songs in queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:363
+#, docstring
+msgid ""
+"Shows songs in queue\n"
+"{commandPrefix}queue\n"
+"{commandPrefix}q"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:385
+#, docstring
+msgid "Searches music in youtube"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:385
+#, docstring
+msgid ""
+"Searches music in youtube\n"
+"{commandPrefix}search \"keyword\"\n"
+"{commandPrefix}s \"keyword\"\n"
+"Shows 5 candidates that you can choose using emotes"
+msgstr ""
+
+#: src/bot/core/controllers/discord/ping.py:16
+#, docstring
+msgid "Shows the bot's latency."
+msgstr ""
+
+#: src/bot/core/controllers/discord/ping.py:21
+msgid "Pong in %sms"
+msgstr ""
+
+#: src/bot/core/controllers/discord/poll.py:12
+#, docstring
+msgid "Poll command"
+msgstr ""
+
+#: src/bot/core/controllers/discord/poll.py:12
+#, docstring
+msgid ""
+"Poll command\n"
+"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll with three candidates. (do not use ,)\n"
+"you can vote using reactions"
+msgstr ""
+
+#: src/bot/core/controllers/discord/poll.py:21
+msgid "You need more than two candidates!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/poll.py:26
+msgid "You cannot make more than 10 candidates!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:16
+#, docstring
+msgid "Play roulette"
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:16
+#, docstring
+msgid ""
+"Play roulette\n"
+"\n"
+"Examples:\n"
+"{commandPrefix}roulette \"Player\" @user1 @user2 @user3\n"
+"{commandPrefix}rou \"title\" \"item 1\" \"item 2\"\n"
+"\n"
+"Note:\n"
+"This bot cannot be added to items."
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:27
+#: src/bot/core/controllers/discord/roulette.py:33
+msgid "Roulette is running. Please wait."
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:33
+msgid "%dsec left"
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:40
+msgid "Roulette for %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/roulette.py:40
+msgid "chose... %s!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:131
+#, docstring
+msgid "Starts a tic-tac-toe game with yourself."
+msgstr ""
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:132
+msgid "X goes first"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:32
+#, docstring
+msgid "Sets user's timezone."
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:53
+msgid "Invalid timezone: %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:64
+msgid "Successfully set timezone of %(member)s to %(timezone)s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:90
+#, docstring
+msgid "Shows user's timezone."
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:114
+#: src/bot/core/controllers/discord/timezone.py:124
+msgid "Timezone of %(member)s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:136
+#, docstring
+msgid "Shows the user's local time."
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:158
+msgid "Local time of %(member)s (%(timezone)s)"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:166
+#, docstring
+msgid "Show local time"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:75
+#, docstring
+msgid "Enables conversational translation mode."
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:97
+#, docstring
+msgid "Disables conversational translation mode."
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:129
+#, docstring
+msgid "Command that translates sentence entered to desired language"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tts.py:75
+#, docstring
+msgid "TTS voice available"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tts.py:75
+#, docstring
+msgid ""
+"TTS voice available\n"
+"{commandPrefix}tts [option] \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n"
+"\n"
+"*Example*\n"
+"{commandPrefix}tts \"Content\"\n"
+"{commandPrefix}tts -m \"Content\"\n"
+"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:111
+msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:120
+msgid "User"
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:122
+msgid "Command tried"
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MsgFormat.py:89
+msgid ""
+"ABRT has detected an unknown error.\n"
+"Please [create an issue](%s) at GitHub with below logs to help fix this problem."
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MsgFormat.py:97
+msgid "Automatic Bug Reporting Tool"
+msgstr ""
+
+#: src/bot/discord_host.py:245 src/bot/discord_host.py:296
+msgid "Report Issue"
+msgstr ""
+
+#: src/bot/discord_host.py:252
+msgid "Command Error: %s"
+msgstr ""
+
+#: src/bot/discord_host.py:334
+msgid "Your display language has been changed to %s."
+msgstr ""
+
+#: src/bot/discord_host.py:335
+msgid "Type `{commandPrefix}language set` to change your display language."
+msgstr ""
+
+#: src/bot/release.py:83
+msgid "Welcome to the %s release of MK Bot."
+msgstr ""
+
+#: src/bot/release.py:85
+msgid "Release"
+msgstr ""
+
+#: src/bot/release.py:88
+msgid "Please see the [Release Note](%s) for more information."
+msgstr ""

@@ -1,6 +1,7 @@
-from mgylabs.utils.LogEntry import DiscordCommandEventLogEntry
-
 from discord.ext import commands
+
+from mgylabs.i18n import _
+from mgylabs.utils.LogEntry import DiscordCommandEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -10,7 +11,7 @@ from .utils.MsgFormat import MsgFormatter
 @MGCertificate.verify(level=Level.ADMIN_USERS)
 async def delete(ctx: commands.Context, amount):
     """
-    Deletes messages (Requires Admin Permission)
+    Deletes messages. (Requires Admin Permission)
     {commandPrefix}delete amount : deletes 'amount' number of messages
     {commandPrefix}delete all : deletes all(maximum 200) messages
     """
@@ -22,7 +23,7 @@ async def delete(ctx: commands.Context, amount):
     if amount.isdigit():
         await channel.purge(limit=int(amount))
         await channel.send(
-            embed=MsgFormatter.get(ctx, "{} Messages deleted".format(amount))
+            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % amount)
         )
 
     elif amount == "all":
@@ -32,7 +33,7 @@ async def delete(ctx: commands.Context, amount):
         amount = len(messages)
         await channel.purge(limit=amount)
         await channel.send(
-            embed=MsgFormatter.get(ctx, "{} Messages deleted".format(amount))
+            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % amount)
         )
 
     DiscordCommandEventLogEntry.add(ctx, "MessageDeleted", {"count": amount})

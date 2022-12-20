@@ -3,9 +3,11 @@ import logging
 from functools import wraps
 
 import discord
-from core.controllers.discord.utils.command_helper import send
 from discord.ext import commands
-from mgylabs.utils.config import CONFIG, USER_DATA_PATH
+
+from core.controllers.discord.utils.command_helper import send
+from mgylabs.i18n import _
+from mgylabs.utils.config import USER_DATA_PATH
 
 from .MsgFormat import MsgFormatter
 
@@ -84,9 +86,6 @@ class MGCertificate:
     @staticmethod
     def verify(level=Level.TRUSTED_USERS):
         def deco(func):
-            if func.__doc__ != None:
-                func.__doc__ = func.__doc__.format(commandPrefix=CONFIG.commandPrefix)
-
             @wraps(func)
             async def outerfunc(*args, **kwargs):
                 if isinstance(args[0], commands.Context) or isinstance(
@@ -108,15 +107,19 @@ class MGCertificate:
                 if perm > level:
                     embed = MsgFormatter.get(
                         ctx_or_iaction,
-                        "Permission denied",
-                        "<@{}> is not in the {}. This incident will be reported.".format(
-                            req_user_id, Level.get_description(level)
-                        ),
+                        _("Permission denied"),
+                        _(
+                            "%(member)s is not in the %(userlist)s. This incident will be reported."
+                        )
+                        % {
+                            "member": f"<@{req_user_id}>",
+                            "userlist": Level.get_description(level),
+                        },
                         show_req_user=False,
                     )
-                    embed.add_field(name="User", value=req_user)
+                    embed.add_field(name=_("User"), value=req_user)
                     embed.add_field(
-                        name="Command tried",
+                        name=_("Command tried"),
                         value="{} ({})".format(
                             ctx_or_iaction.command.name, Level.get_description(level)
                         ),

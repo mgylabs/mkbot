@@ -2,19 +2,24 @@ import asyncio
 import os
 import re
 import sys
+
+sys.path.append("..\\lib")
+
+import platform
 import threading
 import time
 import traceback
 import urllib.parse
 
 import discord
+from discord import ButtonStyle, Locale
+from discord.app_commands import (
+    CommandTree,
+    TranslationContextTypes,
+    Translator,
+    locale_str,
+)
 from discord.ext import commands, tasks
-
-sys.path.append("..\\lib")
-
-import platform
-
-from discord import ButtonStyle
 from discord.ui import Button, View
 
 from command_help import CommandHelp
@@ -25,6 +30,9 @@ from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from discord_ext import discord_extensions
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
+from mgylabs.i18n import _
+from mgylabs.i18n.extension import I18nExtension
+from mgylabs.i18n.utils import get_user_locale_code, init_user_locale
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
@@ -33,6 +41,7 @@ from mgylabs.utils.LogEntry import DiscordRequestLogEntry
 from release import ReleaseNotify
 
 log = logger.get_logger(__name__)
+i18n = I18nExtension()
 
 
 class BotStateFlags:
@@ -49,6 +58,24 @@ class BotStateFlags:
 
 class MKBotContext(commands.Context):
     pass
+
+
+class MKBotCommandTree(CommandTree):
+    async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
+        i18n.set_current_locale(get_user_locale_code(interaction.user.id))
+        return await super().interaction_check(interaction)
+
+
+class MKBotTranslator(Translator):
+    async def translate(
+        self, string: locale_str, locale: Locale, context: TranslationContextTypes
+    ):
+        try:
+            result = i18n.gettext(str(string), locale.value, False)
+        except Exception:
+            result = None
+
+        return result
 
 
 class MKBot(commands.Bot):
@@ -91,9 +118,12 @@ async def create_bot(return_error_level=False):
         intents=intent,
         help_command=CommandHelp(replyformat),
         activity=activity,
+        tree_cls=MKBotCommandTree,
     )
     cert = MGCertificate(MGCERT_PATH)
     bot.__dict__.update({"MGCert": cert, "replyformat": replyformat})
+
+    i18n.init_bot(bot, lambda ctx: get_user_locale_code(ctx.author.id))
 
     @bot.event
     async def on_ready():
@@ -102,6 +132,7 @@ async def create_bot(return_error_level=False):
         print("Logged in within {:0.2f}s".format(time.time() - stime))
 
         bot.tree.on_error = on_app_command_error
+        await bot.tree.set_translator(MKBotTranslator())
         replyformat.set_avatar_url(
             "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
         )
@@ -211,14 +242,14 @@ async def create_bot(return_error_level=False):
 
             view = View()
             view.add_item(
-                Button(label="Report Issue", style=ButtonStyle.url, url=issue_link)
+                Button(label=_("Report Issue"), style=ButtonStyle.url, url=issue_link)
             )
             await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb), view=view)
             raise error
 
         await ctx.send(
             embed=MsgFormatter.get(
-                ctx, f"Command Error: {ctx.command.name}", str(error)
+                ctx, _("Command Error: %s") % ctx.command.name, str(error)
             )
         )
 
@@ -261,7 +292,9 @@ async def create_bot(return_error_level=False):
                 issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
                 view = View()
                 view.add_item(
-                    Button(label="Report Issue", style=ButtonStyle.url, url=issue_link)
+                    Button(
+                        label=_("Report Issue"), style=ButtonStyle.url, url=issue_link
+                    )
                 )
                 await interaction.response.send_message(
                     embed=MsgFormatter.abrt(interaction, issue_link, tb), view=view
@@ -291,6 +324,19 @@ async def create_bot(return_error_level=False):
             DiscordRequestLogEntry.add_for_iaction(
                 interaction, MGCertificate.getUserLevel(str(interaction.user))
             )
+
+            i18n.set_current_locale(get_user_locale_code(interaction.user.id))
+
+            if language := init_user_locale(interaction):
+                await interaction.client.get_channel(interaction.channel_id).send(
+                    embed=MsgFormatter.get(
+                        interaction,
+                        _("Your display language has been changed to %s.") % language,
+                        _(
+                            "Type `{commandPrefix}language set` to change your display language."
+                        ),
+                    )
+                )
 
             await ReleaseNotify.run(
                 interaction.user.id,
