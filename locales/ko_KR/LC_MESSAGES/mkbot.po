@@ -1,21 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022 ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Project-Id-Version: mkbot\n"
 "POT-Creation-Date: 2022-12-20 22:44+0900\n"
-"PO-Revision-Date: 2022-12-20 22:44+0900\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: ko_KR\n"
-"Language-Team: ko_KR <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2022-12-20 14:05\n"
+"Last-Translator: \n"
+"Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mkbot\n"
+"X-Crowdin-Project-ID: 556659\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /main/locales/mkbot.pot\n"
+"X-Crowdin-File-ID: 9\n"
+"Language: ko_KR\n"
 
 #: src/bot/command_help.py:27
 msgid "Arguments:"
@@ -42,17 +42,14 @@ msgid "Context Menu:"
 msgstr ""
 
 #: src/bot/command_help.py:88
-#, python-format
 msgid "For more information, See %s"
 msgstr ""
 
 #: src/bot/command_help.py:88
-#, python-format
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
 #: src/bot/command_help.py:188
-#, python-format
 msgid "Everyone can contribute to MK Bot project on %s"
 msgstr ""
 
@@ -84,15 +81,13 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/delete.py:13
 #, docstring
-msgid ""
-"Deletes messages. (Requires Admin Permission)\n"
+msgid "Deletes messages. (Requires Admin Permission)\n"
 "{commandPrefix}delete amount : deletes 'amount' number of messages\n"
 "{commandPrefix}delete all : deletes all(maximum 200) messages"
 msgstr ""
 
 #: src/bot/core/controllers/discord/delete.py:26
 #: src/bot/core/controllers/discord/delete.py:36
-#, python-format
 msgid "%d Messages Deleted"
 msgstr ""
 
@@ -114,7 +109,6 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/feedback.py:68
 #: src/bot/core/controllers/discord/feedback.py:108
-#, python-format
 msgid "Thanks for your feedback, %s!"
 msgstr ""
 
@@ -133,7 +127,6 @@ msgid "Joins voice channel that the user who typed the command is in."
 msgstr ""
 
 #: src/bot/core/controllers/discord/join.py:19
-#, python-format
 msgid "Joined %s"
 msgstr ""
 
@@ -144,11 +137,8 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/language.py:19
 #, docstring
-msgid ""
-"Sets or shows user's display language.\n"
-"\n"
-"{commandPrefix}language set English\n"
-"\n"
+msgid "Sets or shows user's display language.\n\n"
+"{commandPrefix}language set English\n\n"
 "{commandPrefix}language show"
 msgstr ""
 
@@ -170,7 +160,6 @@ msgid "Invalid language"
 msgstr ""
 
 #: src/bot/core/controllers/discord/language.py:68
-#, python-format
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
@@ -181,7 +170,6 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/language.py:114
 #: src/bot/core/controllers/discord/language.py:123
-#, python-format
 msgid "Display language of %(member)s"
 msgstr ""
 
@@ -225,9 +213,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/minigames/__init__.py:127
 #, docstring
-msgid ""
-"Play a game of Hangman\n"
-"\n"
+msgid "Play a game of Hangman\n\n"
 "{commandPrefix}hangman\n"
 "{commandPrefix}hangman exit"
 msgstr ""
@@ -239,15 +225,13 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:181
 #, docstring
-msgid ""
-"Plays the keyword searched or plays the song in queue\n"
+msgid "Plays the keyword searched or plays the song in queue\n"
 "{commandPrefix}play \"keyword\"\n"
 "{commandPrefix}play\n"
 "{commandPrefix}p \"keyword\"\n"
 "{commandPrefix}p\n"
 "Searches the keyword in Youtube and puts it in queue\n"
-"If there is no keyword inputted and the player isn't playing anything, it"
-" starts the player"
+"If there is no keyword inputted and the player isn't playing anything, it starts the player"
 msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:282
@@ -257,8 +241,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:282
 #, docstring
-msgid ""
-"Pauses the song that is playing\n"
+msgid "Pauses the song that is playing\n"
 "{commandPrefix}pause\n"
 "{commandPrefix}pp\n"
 "Cannot pause the player if the player is already paused"
@@ -271,8 +254,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:317
 #, docstring
-msgid ""
-"Skips the song that is playing and plays the next song in queue\n"
+msgid "Skips the song that is playing and plays the next song in queue\n"
 "{commandPrefix}skip\n"
 "{commandPrefix}ss"
 msgstr ""
@@ -284,8 +266,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:353
 #, docstring
-msgid ""
-"Stops Player\n"
+msgid "Stops Player\n"
 "{commandPrefix}stop"
 msgstr ""
 
@@ -296,8 +277,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:363
 #, docstring
-msgid ""
-"Shows songs in queue\n"
+msgid "Shows songs in queue\n"
 "{commandPrefix}queue\n"
 "{commandPrefix}q"
 msgstr ""
@@ -309,8 +289,7 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:385
 #, docstring
-msgid ""
-"Searches music in youtube\n"
+msgid "Searches music in youtube\n"
 "{commandPrefix}search \"keyword\"\n"
 "{commandPrefix}s \"keyword\"\n"
 "Shows 5 candidates that you can choose using emotes"
@@ -322,7 +301,6 @@ msgid "Shows the bot's latency."
 msgstr ""
 
 #: src/bot/core/controllers/discord/ping.py:21
-#, python-format
 msgid "Pong in %sms"
 msgstr ""
 
@@ -333,10 +311,8 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/poll.py:12
 #, docstring
-msgid ""
-"Poll command\n"
-"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll "
-"with three candidates. (do not use ,)\n"
+msgid "Poll command\n"
+"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll with three candidates. (do not use ,)\n"
 "you can vote using reactions"
 msgstr ""
 
@@ -355,13 +331,10 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/roulette.py:16
 #, docstring
-msgid ""
-"Play roulette\n"
-"\n"
+msgid "Play roulette\n\n"
 "Examples:\n"
 "{commandPrefix}roulette \"Player\" @user1 @user2 @user3\n"
-"{commandPrefix}rou \"title\" \"item 1\" \"item 2\"\n"
-"\n"
+"{commandPrefix}rou \"title\" \"item 1\" \"item 2\"\n\n"
 "Note:\n"
 "This bot cannot be added to items."
 msgstr ""
@@ -372,17 +345,14 @@ msgid "Roulette is running. Please wait."
 msgstr ""
 
 #: src/bot/core/controllers/discord/roulette.py:33
-#, python-format
 msgid "%dsec left"
 msgstr ""
 
 #: src/bot/core/controllers/discord/roulette.py:40
-#, python-format
 msgid "Roulette for %s"
 msgstr ""
 
 #: src/bot/core/controllers/discord/roulette.py:40
-#, python-format
 msgid "chose... %s!"
 msgstr ""
 
@@ -401,12 +371,10 @@ msgid "Sets user's timezone."
 msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:53
-#, python-format
 msgid "Invalid timezone: %s"
 msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:64
-#, python-format
 msgid "Successfully set timezone of %(member)s to %(timezone)s"
 msgstr ""
 
@@ -417,7 +385,6 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:114
 #: src/bot/core/controllers/discord/timezone.py:124
-#, python-format
 msgid "Timezone of %(member)s"
 msgstr ""
 
@@ -427,7 +394,6 @@ msgid "Shows the user's local time."
 msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:158
-#, python-format
 msgid "Local time of %(member)s (%(timezone)s)"
 msgstr ""
 
@@ -458,21 +424,15 @@ msgstr ""
 
 #: src/bot/core/controllers/discord/tts.py:75
 #, docstring
-msgid ""
-"TTS voice available\n"
-"{commandPrefix}tts [option] \"Content\" : Says the content in "
-"\"content\". You do not have to use Quotation marks even if there are "
-"spaces included in content.\n"
-"\n"
+msgid "TTS voice available\n"
+"{commandPrefix}tts [option] \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n\n"
 "*Example*\n"
 "{commandPrefix}tts \"Content\"\n"
 "{commandPrefix}tts -m \"Content\"\n"
-"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks "
-"in female voice. Default voice is male."
+"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
 msgstr ""
 
 #: src/bot/core/controllers/discord/utils/MGCert.py:111
-#, python-format
 msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
 msgstr ""
 
@@ -485,11 +445,8 @@ msgid "Command tried"
 msgstr ""
 
 #: src/bot/core/controllers/discord/utils/MsgFormat.py:89
-#, python-format
-msgid ""
-"ABRT has detected an unknown error.\n"
-"Please [create an issue](%s) at GitHub with below logs to help fix this "
-"problem."
+msgid "ABRT has detected an unknown error.\n"
+"Please [create an issue](%s) at GitHub with below logs to help fix this problem."
 msgstr ""
 
 #: src/bot/core/controllers/discord/utils/MsgFormat.py:97
@@ -501,12 +458,10 @@ msgid "Report Issue"
 msgstr ""
 
 #: src/bot/discord_host.py:252
-#, python-format
 msgid "Command Error: %s"
 msgstr ""
 
 #: src/bot/discord_host.py:334
-#, python-format
 msgid "Your display language has been changed to %s."
 msgstr ""
 
@@ -515,7 +470,6 @@ msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr ""
 
 #: src/bot/release.py:83
-#, python-format
 msgid "Welcome to the %s release of MK Bot."
 msgstr ""
 
@@ -524,6 +478,6 @@ msgid "Release"
 msgstr ""
 
 #: src/bot/release.py:88
-#, python-format
 msgid "Please see the [Release Note](%s) for more information."
 msgstr ""
+
