@@ -19,7 +19,7 @@ class Dropdown(discord.ui.Select):
             ),
             discord.SelectOption(
                 label="Feature Request",
-                description=_("Suggest a feature for this library"),
+                description=_("Suggest a feature for MK Bot"),
                 emoji="💡",
             ),
         ]

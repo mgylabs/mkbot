@@ -310,10 +310,10 @@ class BoardSetupView(discord.ui.View):
 
             content = _(
                 "Game currently in progress between %(player)s and %(enemy)s...\n\n"
-                "**Guide**"
-                "Red button → You hit the enemy ship successfully."
-                "Disabled blue button → Your hit missed the enemy ship."
-                "\N{CYCLONE} → The enemy's hit missed."
+                "**Guide**\n"
+                "Red button → You hit the enemy ship successfully.\n"
+                "Disabled blue button → Your hit missed the enemy ship.\n"
+                "\N{CYCLONE} → The enemy's hit missed.\n"
                 "\N{COLLISION SYMBOL} → The enemy hit your ship.\n"
                 "If you accidentally dismissed your board, press the button below to bring it back. "
                 "Note that it invalidates your previous board"

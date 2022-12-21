@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-21 14:55+0900\n"
+"POT-Creation-Date: 2022-12-21 15:10+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgid "Report broken or incorrect behaviour"
 msgstr ""
 
 #: src/bot/core/controllers/discord/feedback.py:22
-msgid "Suggest a feature for this library"
+msgid "Suggest a feature for MK Bot"
 msgstr ""
 
 #: src/bot/core/controllers/discord/feedback.py:28
@@ -313,51 +313,55 @@ msgstr ""
 msgid "%(player)s is ready!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:317
+#: src/bot/core/controllers/discord/minigames/battleship.py:311
 msgid ""
 "Game currently in progress between %(player)s and %(enemy)s...\n"
 "\n"
-"**Guide**Red button → You hit the enemy ship successfully.Disabled blue button → Your hit missed the enemy ship.🌀 → The enemy's hit missed.💥 → The enemy hit your ship.\n"
+"**Guide**\n"
+"Red button → You hit the enemy ship successfully.\n"
+"Disabled blue button → Your hit missed the enemy ship.\n"
+"🌀 → The enemy's hit missed.\n"
+"💥 → The enemy hit your ship.\n"
 "If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:345
+#: src/bot/core/controllers/discord/minigames/battleship.py:339
 msgid "Sorry, you can't have diagonal pieces"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:357
+#: src/bot/core/controllers/discord/minigames/battleship.py:351
 msgid "Sorry, couldn't figure out what you wanted to do here"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:368
+#: src/bot/core/controllers/discord/minigames/battleship.py:362
 msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:375
+#: src/bot/core/controllers/discord/minigames/battleship.py:369
 msgid "You already have a boat that is %d units long."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:379
+#: src/bot/core/controllers/discord/minigames/battleship.py:373
 msgid "This ship would be blocked off"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:401
+#: src/bot/core/controllers/discord/minigames/battleship.py:395
 msgid "Reopen Your Board"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:419
+#: src/bot/core/controllers/discord/minigames/battleship.py:413
 msgid "This is your board!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:429
+#: src/bot/core/controllers/discord/minigames/battleship.py:423
 msgid "%(player)s's Button"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:441
+#: src/bot/core/controllers/discord/minigames/battleship.py:435
 msgid "This ready button is not for you, sorry"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:446
+#: src/bot/core/controllers/discord/minigames/battleship.py:440
 msgid ""
 "Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n"
 "\n"
@@ -369,11 +373,11 @@ msgid ""
 "You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:483
+#: src/bot/core/controllers/discord/minigames/battleship.py:477
 msgid "This prompt has timed out..."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:488
+#: src/bot/core/controllers/discord/minigames/battleship.py:482
 msgid "This prompt is not for you"
 msgstr ""
 
@@ -680,19 +684,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:258 src/bot/discord_host.py:309
+#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:265
+#: src/bot/discord_host.py:262
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:347
+#: src/bot/discord_host.py:344
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:348
+#: src/bot/discord_host.py:345
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr ""
 
