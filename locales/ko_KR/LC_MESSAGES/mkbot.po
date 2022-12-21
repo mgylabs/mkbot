@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"POT-Creation-Date: 2022-12-20 23:59+0900\n"
-"PO-Revision-Date: 2022-12-21 02:28\n"
+"POT-Creation-Date: 2022-12-21 15:36+0900\n"
+"PO-Revision-Date: 2022-12-21 06:41\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -49,54 +49,61 @@ msgstr "자세한 내용은 %s을(를) 참조하세요."
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설정되지 않았습니다."
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:187
+msgid "Type {0} command for more info on a command.\n"
+"You can also type {0} category for more info on a category."
+msgstr ""
+
+#: src/bot/command_help.py:195
 msgid "Everyone can contribute to MK Bot project on %s"
-msgstr ""
+msgstr "%s에서 누구나 MK Bot 프로젝트에 기여할 수 있습니다"
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:195
 msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot"
-msgstr ""
+msgstr "물결 MK Bot은 오픈소스 로컬 호스트 디스코드 봇입니다"
 
-#: src/bot/command_help.py:191
+#: src/bot/command_help.py:198
 msgid "Be warned: Canary can be unstable."
-msgstr ""
+msgstr "경고: Canary 버전은 불안정할 수 있습니다"
 
-#: src/bot/command_help.py:201
+#: src/bot/command_help.py:208
 msgid "Help"
 msgstr "도움말"
 
 #: src/bot/core/controllers/discord/clock.py:126
 #, docstring
 msgid "Enables live world time."
-msgstr ""
+msgstr "실시간 세계 시각을 활성화합니다"
 
 #: src/bot/core/controllers/discord/clock.py:157
 msgid "Successfully set live clock."
-msgstr ""
+msgstr "실시간 시각 성공적 활성화"
 
 #: src/bot/core/controllers/discord/delete.py:13
 #, docstring
 msgid "Deletes messages. (Requires Admin Permission)"
-msgstr ""
+msgstr "메세지를 삭제합니다. (관리자 권한 필요)"
 
 #: src/bot/core/controllers/discord/delete.py:13
 #, docstring
 msgid "Deletes messages. (Requires Admin Permission)\n"
 "{commandPrefix}delete amount : deletes 'amount' number of messages\n"
 "{commandPrefix}delete all : deletes all(maximum 200) messages"
-msgstr ""
+msgstr "메세지를 삭제합니다. (관리자 권한 필요)\n"
+"{commandPrefix}delete 개수 : '개수'만큼의 메세지들을 삭제합니다\n"
+"{commandPrefix}delete all : 메세지를 전부(최대 200) 삭제합니다"
 
 #: src/bot/core/controllers/discord/delete.py:26
 #: src/bot/core/controllers/discord/delete.py:36
 msgid "%d Messages Deleted"
-msgstr ""
+msgstr "%d개 메세지 삭제 완료"
 
 #: src/bot/core/controllers/discord/feedback.py:17
 msgid "Report broken or incorrect behaviour"
 msgstr ""
 
 #: src/bot/core/controllers/discord/feedback.py:22
-msgid "Suggest a feature for this library"
+msgid "Suggest a feature for MK Bot"
 msgstr ""
 
 #: src/bot/core/controllers/discord/feedback.py:28
@@ -130,46 +137,47 @@ msgstr ""
 msgid "Joined %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:19
+#: src/bot/core/controllers/discord/language.py:16
+#: src/bot/core/controllers/discord/language.py:21
 #, docstring
 msgid "Sets or shows user's display language."
 msgstr "사용자의 표시 언어를 설정하거나 보여줍니다."
 
-#: src/bot/core/controllers/discord/language.py:19
+#: src/bot/core/controllers/discord/language.py:21
 #, docstring
 msgid "Sets or shows user's display language.\n\n"
 "{commandPrefix}language set English\n\n"
 "{commandPrefix}language show"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:35
+#: src/bot/core/controllers/discord/language.py:37
 #, docstring
 msgid "Sets user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:45
-#: src/bot/core/controllers/discord/language.py:103
+#: src/bot/core/controllers/discord/language.py:47
+#: src/bot/core/controllers/discord/language.py:105
 #: src/bot/core/controllers/discord/timezone.py:45
 #: src/bot/core/controllers/discord/timezone.py:103
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
 msgid "Permission denied"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:55
+#: src/bot/core/controllers/discord/language.py:57
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:68
+#: src/bot/core/controllers/discord/language.py:70
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:93
+#: src/bot/core/controllers/discord/language.py:95
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:114
-#: src/bot/core/controllers/discord/language.py:123
+#: src/bot/core/controllers/discord/language.py:116
+#: src/bot/core/controllers/discord/language.py:125
 msgid "Display language of %(member)s"
 msgstr ""
 
@@ -233,19 +241,187 @@ msgid "Play a game of Hangman\n\n"
 "{commandPrefix}hangman exit"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py:157
 msgid "Exit Hangman Game"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
-#: src/bot/core/controllers/discord/minigames/__init__.py:159
-#: src/bot/core/controllers/discord/minigames/__init__.py:167
-#: src/bot/core/controllers/discord/minigames/__init__.py:170
+#: src/bot/core/controllers/discord/minigames/__init__.py:157
+#: src/bot/core/controllers/discord/minigames/__init__.py:162
+#: src/bot/core/controllers/discord/minigames/__init__.py:172
+#: src/bot/core/controllers/discord/minigames/__init__.py:177
 msgid "Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:159
+#: src/bot/core/controllers/discord/minigames/__init__.py:162
 msgid "Invalid Argument"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:161
+msgid "You win!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:167
+msgid "You lose :("
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:170
+msgid "%(player)s wins this game of Battleship! Congratulations."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:175
+msgid "%(enemy)s's turn."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:176
+msgid "Your (%(enemy)s) turn!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:178
+msgid "You sunk their %(emoji)s!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:179
+msgid "Your %(emoji)s was sunk :("
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:210
+msgid "Your enemy is not ready yet, please wait until they are"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:217
+msgid "It is not your turn yet."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "first"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "second"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:292
+msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:301
+msgid "%(player)s is ready!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:311
+msgid "Game currently in progress between %(player)s and %(enemy)s...\n\n"
+"**Guide**\n"
+"Red button → You hit the enemy ship successfully.\n"
+"Disabled blue button → Your hit missed the enemy ship.\n"
+"🌀 → The enemy's hit missed.\n"
+"💥 → The enemy hit your ship.\n"
+"If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:339
+msgid "Sorry, you can't have diagonal pieces"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:351
+msgid "Sorry, couldn't figure out what you wanted to do here"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:362
+msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:369
+msgid "You already have a boat that is %d units long."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:373
+msgid "This ship would be blocked off"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:395
+msgid "Reopen Your Board"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:413
+msgid "This is your board!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:423
+msgid "%(player)s's Button"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:435
+msgid "This ready button is not for you, sorry"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:440
+msgid "Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n\n"
+"There are 3 boats, 🚢, ⛵, and 🛶. You can only have one of each. They have the following lengths:\n"
+"🚢 → 4\n"
+"⛵ → 3\n"
+"🛶 → 2\n\n"
+"You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:477
+msgid "This prompt has timed out..."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:482
+msgid "This prompt is not for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:57
+msgid "It is now %(kind)s %(member)s's turn."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:96
+msgid "This is not meant for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:122
+msgid "You already have this piece"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:128
+msgid "You do not have the strength necessary to take down this piece"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:135
+msgid "You've already selected a piece, you can't select multiple pieces."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:144
+msgid "Select a piece strength"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:164
+msgid "%(winning_player)s won!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:168
+msgid "It's a tie!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:196
+msgid "This is a game between two other people, sorry."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:202
+msgid "It's not your turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:282
+msgid "This prompt is not meant for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:301
+msgid "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n\n"
+"It is now 🟦 %(first_member)s's turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:316
+msgid "Challenge declined :("
 msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:181
@@ -483,19 +659,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr "자동 버그 보고 도구"
 
-#: src/bot/discord_host.py:245 src/bot/discord_host.py:296
+#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
 msgid "Report Issue"
 msgstr "문제 보고"
 
-#: src/bot/discord_host.py:252
+#: src/bot/discord_host.py:262
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:334
+#: src/bot/discord_host.py:344
 msgid "Your display language has been changed to %s."
 msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
 
-#: src/bot/discord_host.py:335
+#: src/bot/discord_host.py:345
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr "귀하의 표시 언어를 변경하려면 `{commandPrefix}language set`을(를) 입력하세요."
 
