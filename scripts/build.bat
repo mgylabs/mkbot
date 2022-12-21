@@ -76,6 +76,7 @@ xcopy /q /I /Y /E Update\* bin
 del *.pdb
 rmdir /q /s Update
 
+cd %CI_PROJECT_DIR%
 pybabel compile -d locales -D mkbot
 
 exit /b 0

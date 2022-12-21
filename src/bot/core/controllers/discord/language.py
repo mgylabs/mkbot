@@ -13,6 +13,8 @@ from .utils.register import add_cog
 
 
 class Language(commands.GroupCog):
+    """Sets or shows user's display language."""
+
     @commands.hybrid_group(name="language", aliases=["lang"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def language_command(self, ctx: commands.Context) -> None:

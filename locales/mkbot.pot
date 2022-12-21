@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-21 15:10+0900\n"
+"POT-Creation-Date: 2022-12-21 15:36+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,12 +135,13 @@ msgstr ""
 msgid "Joined %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:19
+#: src/bot/core/controllers/discord/language.py:16
+#: src/bot/core/controllers/discord/language.py:21
 #, docstring
 msgid "Sets or shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:19
+#: src/bot/core/controllers/discord/language.py:21
 #, docstring
 msgid ""
 "Sets or shows user's display language.\n"
@@ -150,34 +151,34 @@ msgid ""
 "{commandPrefix}language show"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:35
+#: src/bot/core/controllers/discord/language.py:37
 #, docstring
 msgid "Sets user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:45
-#: src/bot/core/controllers/discord/language.py:103
+#: src/bot/core/controllers/discord/language.py:47
+#: src/bot/core/controllers/discord/language.py:105
 #: src/bot/core/controllers/discord/timezone.py:45
 #: src/bot/core/controllers/discord/timezone.py:103
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
 msgid "Permission denied"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:55
+#: src/bot/core/controllers/discord/language.py:57
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:68
+#: src/bot/core/controllers/discord/language.py:70
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:93
+#: src/bot/core/controllers/discord/language.py:95
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:114
-#: src/bot/core/controllers/discord/language.py:123
+#: src/bot/core/controllers/discord/language.py:116
+#: src/bot/core/controllers/discord/language.py:125
 msgid "Display language of %(member)s"
 msgstr ""
 
