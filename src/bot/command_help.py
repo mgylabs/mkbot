@@ -182,6 +182,13 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         await self.send_pages()
 
+    def get_ending_note(self) -> str:
+        command_name = self.invoked_with
+        return _(
+            "Type {0} command for more info on a command.\n"
+            "You can also type {0} category for more info on a category."
+        ).format(f"{self.context.clean_prefix}{command_name}")
+
     async def send_pages(self):
         # """A helper utility to send the page output from :attr:`paginator` to the destination."""
 

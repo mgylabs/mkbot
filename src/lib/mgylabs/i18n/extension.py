@@ -36,6 +36,10 @@ class I18nExtension:
         return self._current_locale.get(None)
 
     @classmethod
+    def gettext_lazy(cls, message):
+        return message
+
+    @classmethod
     def get_translation(cls, locale=None, fallback=True):
         i18n = cls.default_i18n_instance
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-20 23:59+0900\n"
+"POT-Creation-Date: 2022-12-21 14:55+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,19 +47,25 @@ msgstr ""
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:187
+msgid ""
+"Type {0} command for more info on a command.\n"
+"You can also type {0} category for more info on a category."
+msgstr ""
+
+#: src/bot/command_help.py:195
 msgid "Everyone can contribute to MK Bot project on %s"
 msgstr ""
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:195
 msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot"
 msgstr ""
 
-#: src/bot/command_help.py:191
+#: src/bot/command_help.py:198
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
-#: src/bot/command_help.py:201
+#: src/bot/command_help.py:208
 msgid "Help"
 msgstr ""
 
@@ -240,19 +246,190 @@ msgid ""
 "{commandPrefix}hangman exit"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py:157
 msgid "Exit Hangman Game"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
-#: src/bot/core/controllers/discord/minigames/__init__.py:159
-#: src/bot/core/controllers/discord/minigames/__init__.py:167
-#: src/bot/core/controllers/discord/minigames/__init__.py:170
+#: src/bot/core/controllers/discord/minigames/__init__.py:157
+#: src/bot/core/controllers/discord/minigames/__init__.py:162
+#: src/bot/core/controllers/discord/minigames/__init__.py:172
+#: src/bot/core/controllers/discord/minigames/__init__.py:177
 msgid "Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:159
+#: src/bot/core/controllers/discord/minigames/__init__.py:162
 msgid "Invalid Argument"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:161
+msgid "You win!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:167
+msgid "You lose :("
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:170
+msgid "%(player)s wins this game of Battleship! Congratulations."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:175
+msgid "%(enemy)s's turn."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:176
+msgid "Your (%(enemy)s) turn!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:178
+msgid "You sunk their %(emoji)s!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:179
+msgid "Your %(emoji)s was sunk :("
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:210
+msgid "Your enemy is not ready yet, please wait until they are"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:217
+msgid "It is not your turn yet."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "first"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "second"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:292
+msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:301
+msgid "%(player)s is ready!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:317
+msgid ""
+"Game currently in progress between %(player)s and %(enemy)s...\n"
+"\n"
+"**Guide**Red button → You hit the enemy ship successfully.Disabled blue button → Your hit missed the enemy ship.🌀 → The enemy's hit missed.💥 → The enemy hit your ship.\n"
+"If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:345
+msgid "Sorry, you can't have diagonal pieces"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:357
+msgid "Sorry, couldn't figure out what you wanted to do here"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:368
+msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:375
+msgid "You already have a boat that is %d units long."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:379
+msgid "This ship would be blocked off"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:401
+msgid "Reopen Your Board"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:419
+msgid "This is your board!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:429
+msgid "%(player)s's Button"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:441
+msgid "This ready button is not for you, sorry"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:446
+msgid ""
+"Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n"
+"\n"
+"There are 3 boats, 🚢, ⛵, and 🛶. You can only have one of each. They have the following lengths:\n"
+"🚢 → 4\n"
+"⛵ → 3\n"
+"🛶 → 2\n"
+"\n"
+"You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:483
+msgid "This prompt has timed out..."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:488
+msgid "This prompt is not for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:57
+msgid "It is now %(kind)s %(member)s's turn."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:96
+msgid "This is not meant for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:122
+msgid "You already have this piece"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:128
+msgid "You do not have the strength necessary to take down this piece"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:135
+msgid "You've already selected a piece, you can't select multiple pieces."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:144
+msgid "Select a piece strength"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:164
+msgid "%(winning_player)s won!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:168
+msgid "It's a tie!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:196
+msgid "This is a game between two other people, sorry."
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:202
+msgid "It's not your turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:282
+msgid "This prompt is not meant for you"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:301
+msgid ""
+"Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n"
+"\n"
+"It is now 🟦 %(first_member)s's turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:316
+msgid "Challenge declined :("
 msgstr ""
 
 #: src/bot/core/controllers/discord/music.py:181
@@ -503,19 +680,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:245 src/bot/discord_host.py:296
+#: src/bot/discord_host.py:258 src/bot/discord_host.py:309
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:252
+#: src/bot/discord_host.py:265
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:334
+#: src/bot/discord_host.py:347
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:335
+#: src/bot/discord_host.py:348
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr ""
 

@@ -173,7 +173,7 @@ import tokenize
 
 __version__ = "1.5"
 
-default_keywords = ["_"]
+default_keywords = ["_", "L_"]
 DEFAULTKEYWORDS = ", ".join(default_keywords)
 
 EMPTYSTRING = ""

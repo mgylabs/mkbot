@@ -44,6 +44,16 @@ log = logger.get_logger(__name__)
 i18n = I18nExtension()
 
 
+async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
+    print("Call Patched interaction_check")
+    i18n.set_current_locale(get_user_locale_code(interaction.user.id))
+
+    return True
+
+
+discord.ui.View.interaction_check = interaction_check
+
+
 class BotStateFlags:
     online = False
     terminate = False
