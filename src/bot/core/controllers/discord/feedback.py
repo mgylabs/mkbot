@@ -5,7 +5,6 @@ from discord import app_commands
 from discord.ext import commands
 
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
-from core.controllers.discord.utils.register import add_command
 from mgylabs.i18n import _
 
 
@@ -110,4 +109,4 @@ async def feedback(interaction: discord.Interaction):
 
 
 async def setup(bot: commands.Bot):
-    add_command(bot, feedback)
+    bot.tree.add_command(feedback)

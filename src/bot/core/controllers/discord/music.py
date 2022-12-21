@@ -480,4 +480,5 @@ class Music(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
+    """Music"""
     await bot.add_cog(Music(bot))

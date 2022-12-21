@@ -8,7 +8,7 @@ from discord.ext import commands
 from langdetect import detect
 
 from core.controllers.discord.utils.command_helper import send
-from core.controllers.discord.utils.register import add_cog
+from mgylabs.i18n import L_, _
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
 
@@ -21,7 +21,7 @@ log = logger.get_logger(__name__)
 
 class Translate(commands.Cog):
     conversation_group = app_commands.Group(
-        name="conversation", description="Conversational translation mode"
+        name="conversation", description=L_("Conversational translation mode")
     )
     targets: Dict[int, set] = {}
     languages = {
@@ -86,8 +86,15 @@ class Translate(commands.Cog):
             interaction,
             embed=MsgFormatter.get(
                 interaction,
-                "Conversation Mode",
-                f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.targets[interaction.channel_id])])}.',
+                _("Conversation Mode"),
+                _("All messages are automatically translated to {0}.").format(
+                    ", ".join(
+                        [
+                            x.upper()
+                            for x in sorted(self.targets[interaction.channel_id])
+                        ]
+                    )
+                ),
             ),
         )
 
@@ -105,7 +112,7 @@ class Translate(commands.Cog):
                     interaction,
                     embed=MsgFormatter.get(
                         interaction,
-                        "Disable Conversation Mode",
+                        _("Conversation mode was disabled"),
                     ),
                 )
             else:
@@ -116,8 +123,17 @@ class Translate(commands.Cog):
                     interaction,
                     embed=MsgFormatter.get(
                         interaction,
-                        "Conversation Mode",
-                        f'All messages are automatically translated to {", ".join([x.upper() for x in sorted(self.targets[interaction.channel_id])])}.',
+                        _("Conversation Mode"),
+                        _("All messages are automatically translated to {0}.").format(
+                            ", ".join(
+                                [
+                                    x.upper()
+                                    for x in sorted(
+                                        self.targets[interaction.channel_id]
+                                    )
+                                ]
+                            )
+                        ),
                     ),
                 )
 
@@ -139,7 +155,9 @@ class Translate(commands.Cog):
                     interaction,
                     embed=MsgFormatter.get(
                         interaction,
-                        "Translation Successful " + srcLang + " => " + t,
+                        _("Translation Successful {srcLang} -> {result}").format(
+                            srcLang=srcLang, result=t
+                        ),
                         query + "\n\n" + r,
                     ),
                 )
@@ -184,8 +202,8 @@ class Translate(commands.Cog):
                 ctx,
                 embed=MsgFormatter.get(
                     ctx,
-                    f'Translation Fail: {", ".join(invalid_langs)}',
-                    "Cannot find target language(s) inputted",
+                    _("Translation Fail: {0}").format(", ".join(invalid_langs)),
+                    _("Cannot find target language(s) inputted"),
                 ),
             )
             log.warning("targetlang not identified")
@@ -194,8 +212,8 @@ class Translate(commands.Cog):
                 ctx,
                 embed=MsgFormatter.get(
                     ctx,
-                    f'Translation Warning: {", ".join(invalid_langs)}',
-                    "Cannot find target language(s) inputted",
+                    _("Translation Warning: {0}").format(", ".join(invalid_langs)),
+                    _("Cannot find target language(s) inputted"),
                 ),
             )
         return langs
@@ -223,10 +241,10 @@ class Translate(commands.Cog):
                 ctx,
                 embed=MsgFormatter.get(
                     ctx,
-                    "Translation Fail: Input Language Detection Failed",
-                    "Language detected is not supported. \n ** Detected language: "
-                    + srcLang
-                    + " **\nuse //help translate to find supported languages",
+                    _("Translation Fail: Input Language Detection Failed"),
+                    _(
+                        "Language detected is not supported. \n ** Detected language: {srcLang} **\nuse //help translate to find supported languages"
+                    ).format(srcLang=srcLang),
                 ),
             )
             log.warning("srcLanguage detected is not supported")
@@ -255,4 +273,4 @@ class Translate(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
-    await add_cog(bot, Translate)
+    await bot.add_cog(Translate(bot))

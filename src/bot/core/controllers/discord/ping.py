@@ -6,7 +6,6 @@ from mgylabs.i18n import _
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
-from .utils.register import add_command
 
 
 @app_commands.command()
@@ -24,4 +23,4 @@ async def ping(interaction: discord.Interaction):
 
 
 async def setup(bot: commands.Bot):
-    add_command(bot, ping)
+    bot.tree.add_command(ping)

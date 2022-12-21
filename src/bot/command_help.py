@@ -3,7 +3,7 @@ import itertools
 import discord
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import L_, _
 from mgylabs.utils.config import CONFIG
 from mgylabs.utils.version import VERSION
 
@@ -19,6 +19,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         super().__init__(
             show_parameter_descriptions=False,
             paginator=commands.Paginator(None, None),
+            command_attrs={"help": L_("Shows this message")},  # Lazy Translate
         )
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
@@ -43,7 +44,7 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         def get_category(command, *, no_category=no_category):
             cog = command.cog
-            return cog.qualified_name + ":" if cog is not None else no_category
+            return _(cog.qualified_name) + ":" if cog is not None else no_category
 
         filtered = await self.filter_commands(bot.commands, sort=True, key=get_category)
         max_size = self.get_max_size(filtered)
@@ -76,7 +77,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         cmds = bot.tree._get_all_commands(guild=self.context.guild)
         for command in cmds:
             if isinstance(command, discord.app_commands.ContextMenu):
-                menu_builder.append(f"{self.indent * ' '}`{command.name}`")
+                menu_builder.append(f"{self.indent * ' '}- {_(command.name)}")
             else:
                 cmd_builder.append(
                     f"{self.indent * ' '}`/{command.name}` - {render_help_text(_(command.description))}"
@@ -85,7 +86,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         if len(cmd_builder) == 1:
             if self.context.guild is not None:
                 cmd_builder.append(
-                    f"{self.indent * ' '}{_('Slash commands are not set up for use in this guild(ID: %s).') % self.context.guild.id}\n{self.indent * ' '}{_('For more information, See %s') % '<https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands>'}"
+                    f"{self.indent * ' '}⚠️ {_('Slash commands are not set up for use in this guild(ID: %s).') % self.context.guild.id}\n{self.indent * ' '}{_('For more information, See %s') % '<https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands>'}"
                 )
                 builder = cmd_builder
             else:
@@ -192,7 +193,7 @@ class CommandHelp(commands.DefaultHelpCommand):
     async def send_pages(self):
         # """A helper utility to send the page output from :attr:`paginator` to the destination."""
 
-        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot')}\n> {_('Everyone can contribute to MK Bot project on %s') % '<https://github.com/mgylabs/mkbot>'}"
+        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {_('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
         if VERSION != None:
             version_desc = (
                 f"{_('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{_('Be warned: Canary can be unstable.')}**"

@@ -148,6 +148,7 @@ async def create_bot(return_error_level=False):
         )
 
         for guild in CONFIG.discordAppCmdGuilds:
+            bot.tree.copy_global_to(guild=discord.Object(guild))
             cmds = await bot.tree.sync(guild=discord.Object(guild))
             print(f"App commands sync for {guild} ({', '.join(c.name for c in cmds)})")
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-21 16:57+0900\n"
+"POT-Creation-Date: 2022-12-22 00:12+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,70 +15,78 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: src/bot/command_help.py:27
-msgid "Arguments:"
+#: src/bot/command_help.py:22
+msgid "Shows this message"
 msgstr ""
 
 #: src/bot/command_help.py:28
-msgid "Commands:"
+msgid "Arguments:"
 msgstr ""
 
 #: src/bot/command_help.py:29
-msgid "No description given"
+msgid "Commands:"
 msgstr ""
 
 #: src/bot/command_help.py:30
+msgid "No description given"
+msgstr ""
+
+#: src/bot/command_help.py:31
 msgid "General"
 msgstr ""
 
-#: src/bot/command_help.py:74
+#: src/bot/command_help.py:75
 msgid "Slash Command:"
 msgstr ""
 
-#: src/bot/command_help.py:75
+#: src/bot/command_help.py:76
 msgid "Context Menu:"
 msgstr ""
 
-#: src/bot/command_help.py:88
+#: src/bot/command_help.py:89
 msgid "For more information, See %s"
 msgstr ""
 
-#: src/bot/command_help.py:88
+#: src/bot/command_help.py:89
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
-#: src/bot/command_help.py:187
+#: src/bot/command_help.py:188
 msgid ""
 "Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
 msgstr ""
 
-#: src/bot/command_help.py:195
-msgid "Everyone can contribute to MK Bot project on %s"
+#: src/bot/command_help.py:196
+msgid "Everyone can contribute to MK Bot project on %s."
 msgstr ""
 
-#: src/bot/command_help.py:195
-msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot"
+#: src/bot/command_help.py:196
+msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot."
 msgstr ""
 
-#: src/bot/command_help.py:198
+#: src/bot/command_help.py:199
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
-#: src/bot/command_help.py:198 src/bot/command_help.py:200
+#: src/bot/command_help.py:199 src/bot/command_help.py:201
 msgid "Version"
 msgstr ""
 
-#: src/bot/command_help.py:208
+#: src/bot/command_help.py:209
 msgid "Help"
 msgstr ""
 
-#: src/bot/core/controllers/discord/clock.py:126
+#: src/bot/core/controllers/discord/clock.py:104
+msgid "Shows live world time"
+msgstr ""
+
+#: src/bot/core/controllers/discord/clock.py:127
 #, docstring
 msgid "Enables live world time."
 msgstr ""
 
-#: src/bot/core/controllers/discord/clock.py:157
+#: src/bot/core/controllers/discord/clock.py:158
 msgid "Successfully set live clock."
 msgstr ""
 
@@ -100,32 +108,32 @@ msgstr ""
 msgid "%d Messages Deleted"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:17
+#: src/bot/core/controllers/discord/feedback.py:16
 msgid "Report broken or incorrect behaviour"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:22
+#: src/bot/core/controllers/discord/feedback.py:21
 msgid "Suggest a feature for MK Bot"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:28
+#: src/bot/core/controllers/discord/feedback.py:27
 msgid "Select feedback type..."
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:63
+#: src/bot/core/controllers/discord/feedback.py:62
 msgid "Feedback"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:68
-#: src/bot/core/controllers/discord/feedback.py:108
+#: src/bot/core/controllers/discord/feedback.py:67
+#: src/bot/core/controllers/discord/feedback.py:107
 msgid "Thanks for your feedback, %s!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:89
+#: src/bot/core/controllers/discord/feedback.py:88
 msgid "Oops! Something went wrong."
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:98
+#: src/bot/core/controllers/discord/feedback.py:97
 #, docstring
 msgid "Sends feedback."
 msgstr ""
@@ -139,13 +147,13 @@ msgstr ""
 msgid "Joined %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:16
-#: src/bot/core/controllers/discord/language.py:21
+#: src/bot/core/controllers/discord/language.py:15
+#: src/bot/core/controllers/discord/language.py:20
 #, docstring
 msgid "Sets or shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:21
+#: src/bot/core/controllers/discord/language.py:20
 #, docstring
 msgid ""
 "Sets or shows user's display language.\n"
@@ -155,35 +163,40 @@ msgid ""
 "{commandPrefix}language show"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:37
+#: src/bot/core/controllers/discord/language.py:36
 #, docstring
 msgid "Sets user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:47
-#: src/bot/core/controllers/discord/language.py:105
-#: src/bot/core/controllers/discord/timezone.py:45
-#: src/bot/core/controllers/discord/timezone.py:103
+#: src/bot/core/controllers/discord/language.py:46
+#: src/bot/core/controllers/discord/language.py:104
+#: src/bot/core/controllers/discord/timezone.py:44
+#: src/bot/core/controllers/discord/timezone.py:102
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
 msgid "Permission denied"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:57
+#: src/bot/core/controllers/discord/language.py:56
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:70
+#: src/bot/core/controllers/discord/language.py:69
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:95
+#: src/bot/core/controllers/discord/language.py:94
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:116
-#: src/bot/core/controllers/discord/language.py:125
+#: src/bot/core/controllers/discord/language.py:115
+#: src/bot/core/controllers/discord/language.py:124
 msgid "Display language of %(member)s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/language.py:131
+#, docstring
+msgid "Language"
 msgstr ""
 
 #: src/bot/core/controllers/discord/leave.py:12
@@ -204,21 +217,21 @@ msgstr ""
 msgid "Logs out of Discord and closes all connections"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:22
+#: src/bot/core/controllers/discord/minigames/__init__.py:21
 #, docstring
 msgid "Simple minigames to play with others"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:78
+#: src/bot/core/controllers/discord/minigames/__init__.py:77
 #, docstring
 msgid "Play a game of Gobblet Gobblers with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:80
+#: src/bot/core/controllers/discord/minigames/__init__.py:79
 msgid "You cannot play against a bot"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:84
+#: src/bot/core/controllers/discord/minigames/__init__.py:83
 msgid ""
 "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
 "This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. A higher strength value eats a piece even if it's already on the board. Careful, you only have 1 piece of each strength value!\n"
@@ -226,23 +239,23 @@ msgid ""
 "Do you accept this challenge, %(other)s?"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:105
+#: src/bot/core/controllers/discord/minigames/__init__.py:104
 #, docstring
 msgid "Play a game of battleship with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:116
+#: src/bot/core/controllers/discord/minigames/__init__.py:115
 msgid ""
 "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
 "In order to accept, please press your button below to ready up."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:139
+#: src/bot/core/controllers/discord/minigames/__init__.py:138
 #, docstring
 msgid "Play a game of Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:139
+#: src/bot/core/controllers/discord/minigames/__init__.py:138
 #, docstring
 msgid ""
 "Play a game of Hangman\n"
@@ -251,19 +264,24 @@ msgid ""
 "{commandPrefix}hangman exit"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:157
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
 msgid "Exit Hangman Game"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:157
-#: src/bot/core/controllers/discord/minigames/__init__.py:162
-#: src/bot/core/controllers/discord/minigames/__init__.py:172
-#: src/bot/core/controllers/discord/minigames/__init__.py:177
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py:161
+#: src/bot/core/controllers/discord/minigames/__init__.py:171
+#: src/bot/core/controllers/discord/minigames/__init__.py:176
 msgid "Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:162
+#: src/bot/core/controllers/discord/minigames/__init__.py:161
 msgid "Invalid Argument"
+msgstr ""
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:185
+#, docstring
+msgid "Minigame"
 msgstr ""
 
 #: src/bot/core/controllers/discord/minigames/battleship.py:161
@@ -415,6 +433,7 @@ msgid "%(winning_player)s won!"
 msgstr ""
 
 #: src/bot/core/controllers/discord/minigames/gobblet.py:168
+#: src/bot/core/controllers/discord/tic_tac_toe.py:56
 msgid "It's a tie!"
 msgstr ""
 
@@ -524,12 +543,17 @@ msgid ""
 "Shows 5 candidates that you can choose using emotes"
 msgstr ""
 
-#: src/bot/core/controllers/discord/ping.py:16
+#: src/bot/core/controllers/discord/music.py:483
+#, docstring
+msgid "Music"
+msgstr ""
+
+#: src/bot/core/controllers/discord/ping.py:15
 #, docstring
 msgid "Shows the bot's latency."
 msgstr ""
 
-#: src/bot/core/controllers/discord/ping.py:21
+#: src/bot/core/controllers/discord/ping.py:20
 msgid "Pong in %sms"
 msgstr ""
 
@@ -589,6 +613,22 @@ msgstr ""
 msgid "chose... %s!"
 msgstr ""
 
+#: src/bot/core/controllers/discord/tic_tac_toe.py:40
+msgid "It is now O's turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:47
+msgid "It is now X's turn"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:52
+msgid "X won!"
+msgstr ""
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:54
+msgid "O won!"
+msgstr ""
+
 #: src/bot/core/controllers/discord/tic_tac_toe.py:131
 #, docstring
 msgid "Starts a tic-tac-toe game with yourself."
@@ -598,41 +638,48 @@ msgstr ""
 msgid "X goes first"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:32
+#: src/bot/core/controllers/discord/timezone.py:20
+msgid "Shows user's local time"
+msgstr ""
+
+#: src/bot/core/controllers/discord/timezone.py:31
 #, docstring
 msgid "Sets user's timezone."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:53
+#: src/bot/core/controllers/discord/timezone.py:52
 msgid "Invalid timezone: %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:64
+#: src/bot/core/controllers/discord/timezone.py:63
 msgid "Successfully set timezone of %(member)s to %(timezone)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:90
+#: src/bot/core/controllers/discord/timezone.py:89
 #, docstring
 msgid "Shows user's timezone."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:114
-#: src/bot/core/controllers/discord/timezone.py:124
+#: src/bot/core/controllers/discord/timezone.py:113
+#: src/bot/core/controllers/discord/timezone.py:123
 msgid "Timezone of %(member)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:136
+#: src/bot/core/controllers/discord/timezone.py:135
 #, docstring
 msgid "Shows the user's local time."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:158
+#: src/bot/core/controllers/discord/timezone.py:157
 msgid "Local time of %(member)s (%(timezone)s)"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:166
-#, docstring
+#: src/bot/core/controllers/discord/timezone.py:162
 msgid "Show local time"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:24
+msgid "Conversational translation mode"
 msgstr ""
 
 #: src/bot/core/controllers/discord/translate.py:75
@@ -640,14 +687,56 @@ msgstr ""
 msgid "Enables conversational translation mode."
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:97
+#: src/bot/core/controllers/discord/translate.py:89
+#: src/bot/core/controllers/discord/translate.py:126
+msgid "Conversation Mode"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:90
+#: src/bot/core/controllers/discord/translate.py:127
+msgid "All messages are automatically translated to {0}."
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:104
 #, docstring
 msgid "Disables conversational translation mode."
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:129
+#: src/bot/core/controllers/discord/translate.py:115
+msgid "Conversation mode was disabled"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:145
 #, docstring
 msgid "Command that translates sentence entered to desired language"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:158
+msgid "Translation Successful {srcLang} -> {result}"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:205
+msgid "Translation Fail: {0}"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:206
+#: src/bot/core/controllers/discord/translate.py:216
+msgid "Cannot find target language(s) inputted"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:215
+msgid "Translation Warning: {0}"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:244
+msgid "Translation Fail: Input Language Detection Failed"
+msgstr ""
+
+#: src/bot/core/controllers/discord/translate.py:245
+msgid ""
+"Language detected is not supported. \n"
+" ** Detected language: {srcLang} **\n"
+"use //help translate to find supported languages"
 msgstr ""
 
 #: src/bot/core/controllers/discord/tts.py:75
@@ -689,19 +778,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
+#: src/bot/discord_host.py:256 src/bot/discord_host.py:307
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:262
+#: src/bot/discord_host.py:263
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:344
+#: src/bot/discord_host.py:345
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:345
+#: src/bot/discord_host.py:346
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr ""
 

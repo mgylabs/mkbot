@@ -9,10 +9,9 @@ from mgylabs.db.models import DiscordUser
 from mgylabs.i18n import _
 
 from .utils.MsgFormat import MsgFormatter
-from .utils.register import add_cog
 
 
-class Language(commands.GroupCog):
+class Language(commands.Cog):
     """Sets or shows user's display language."""
 
     @commands.hybrid_group(name="language", aliases=["lang"])
@@ -32,7 +31,7 @@ class Language(commands.GroupCog):
         self,
         ctx: commands.Context,
         language: str,
-        member: Optional[discord.Member],
+        member: Optional[discord.Member] = None,
     ):
         """
         Sets user's display language.
@@ -68,7 +67,7 @@ class Language(commands.GroupCog):
                 ctx,
                 "Language",
                 _("Successfully set display language of %(member)s to %(language)s")
-                % {"member": member.mention, "language": language},
+                % {"member": member.mention, "language": user.get_language_name()},
             )
         )
 
@@ -129,4 +128,7 @@ class Language(commands.GroupCog):
 
 
 async def setup(bot: commands.Bot):
-    await add_cog(bot, Language)
+    """
+    Language
+    """
+    await bot.add_cog(Language(bot))

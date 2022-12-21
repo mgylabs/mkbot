@@ -23,7 +23,7 @@ async def delete(ctx: commands.Context, amount):
     if amount.isdigit():
         await channel.purge(limit=int(amount))
         await channel.send(
-            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % amount)
+            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % int(amount))
         )
 
     elif amount == "all":
@@ -33,10 +33,10 @@ async def delete(ctx: commands.Context, amount):
         amount = len(messages)
         await channel.purge(limit=amount)
         await channel.send(
-            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % amount)
+            embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % int(amount))
         )
 
-    DiscordCommandEventLogEntry.add(ctx, "MessageDeleted", {"count": amount})
+    DiscordCommandEventLogEntry.add(ctx, "MessageDeleted", {"count": int(amount)})
 
 
 async def setup(bot: commands.Bot):

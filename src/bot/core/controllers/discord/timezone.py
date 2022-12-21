@@ -10,15 +10,14 @@ from discord.ext import commands
 from core.controllers.discord.utils.command_helper import send
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from mgylabs.db.models import DiscordUser
-from mgylabs.i18n import _
+from mgylabs.i18n import L_, _
 
 from .utils.MsgFormat import MsgFormatter
-from .utils.register import add_cog, add_command
 
 
 class TimeZone(commands.Cog):
     timezone_group = app_commands.Group(
-        name="timezone", description="Shows user's local time"
+        name="timezone", description=L_("Shows user's local time")
     )
 
     @timezone_group.command()
@@ -160,15 +159,14 @@ def _make_local_time_embed_(interaction, member):
     )
 
 
-@app_commands.context_menu(name=locale_str("Show local time"))
+@app_commands.context_menu(name=locale_str(L_("Show local time")))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def local_time(interaction: discord.Interaction, member: discord.Member):
-    """Show local time"""
     embed = _make_local_time_embed_(interaction, member)
 
     await send(interaction, embed=embed, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
-    add_command(bot, local_time)
-    await add_cog(bot, TimeZone)
+    bot.tree.add_command(local_time)
+    await bot.add_cog(TimeZone(bot))

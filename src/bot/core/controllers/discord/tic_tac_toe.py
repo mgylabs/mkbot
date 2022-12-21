@@ -37,23 +37,23 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
             self.disabled = True
             view.board[self.y][self.x] = view.X
             view.current_player = view.O
-            content = "It is now O's turn"
+            content = _("It is now O's turn")
         else:
             self.style = discord.ButtonStyle.success
             self.label = "O"
             self.disabled = True
             view.board[self.y][self.x] = view.O
             view.current_player = view.X
-            content = "It is now X's turn"
+            content = _("It is now X's turn")
 
         winner = view.check_board_winner()
         if winner is not None:
             if winner == view.X:
-                content = "X won!"
+                content = _("X won!")
             elif winner == view.O:
-                content = "O won!"
+                content = _("O won!")
             else:
-                content = "It's a tie!"
+                content = _("It's a tie!")
 
             for child in view.children:
                 child.disabled = True

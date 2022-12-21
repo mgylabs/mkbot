@@ -11,7 +11,6 @@ from core.controllers.discord.minigames.hangman import Hangman
 from core.controllers.discord.utils import listener
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
-from core.controllers.discord.utils.register import add_cog
 from mgylabs.i18n import _
 from mgylabs.utils import logger
 
@@ -183,4 +182,7 @@ class Minigame(commands.GroupCog):
 
 
 async def setup(bot: commands.Bot):
-    await add_cog(bot, Minigame)
+    """
+    Minigame
+    """
+    await bot.add_cog(Minigame(bot))
