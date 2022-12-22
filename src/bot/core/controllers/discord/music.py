@@ -405,7 +405,7 @@ class Music(commands.Cog):
         for i in range(len(guild_sl[gid].slist) - guild_sl[gid].queue):
             music = guild_sl[gid].slist[i + guild_sl[gid].queue]
             message += (
-                f"{str(i + 1)}. `{music.length} `{music.title} - {music.user.mention}\n"
+                f"{str(i + 1)}. `{music.length}`{music.title} - {music.user.mention}\n"
             )
         await ctx.send(embed=MsgFormatter.get(ctx, "Song Queue", message))
 
@@ -501,7 +501,7 @@ class Music(commands.Cog):
                 )
 
             try:
-                reaction, _ = await ctx.bot.wait_for(
+                reaction, __ = await ctx.bot.wait_for(
                     "reaction_add", check=check, timeout=30.0
                 )
             except asyncio.TimeoutError:
@@ -547,4 +547,5 @@ class Music(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
+    """Music"""
     await bot.add_cog(Music(bot))

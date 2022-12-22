@@ -1,0 +1,835 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: mkbot\n"
+"POT-Creation-Date: 2022-12-22 15:50+0900\n"
+"PO-Revision-Date: 2022-12-22 06:55\n"
+"Last-Translator: \n"
+"Language-Team: Korean\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mkbot\n"
+"X-Crowdin-Project-ID: 556659\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /locales/mkbot.pot\n"
+"X-Crowdin-File-ID: 15\n"
+"Language: ko_KR\n"
+
+#: src/bot/command_help.py:22
+msgid "Shows this message"
+msgstr "이 도움말 메시지를 표시합니다."
+
+#: src/bot/command_help.py:28
+msgid "Arguments:"
+msgstr "매개변수:"
+
+#: src/bot/command_help.py:29
+msgid "Commands:"
+msgstr "명령어:"
+
+#: src/bot/command_help.py:30
+msgid "No description given"
+msgstr "설명 없음"
+
+#: src/bot/command_help.py:31
+msgid "General"
+msgstr "일반"
+
+#: src/bot/command_help.py:79
+msgid "Slash Command:"
+msgstr "빗금 명령어:"
+
+#: src/bot/command_help.py:80
+msgid "Context Menu:"
+msgstr "오른쪽 클릭 메뉴:"
+
+#: src/bot/command_help.py:93
+msgid "For more information, See %s"
+msgstr "자세한 내용은 %s을(를) 참조하세요."
+
+#: src/bot/command_help.py:93
+msgid "Slash commands are not set up for use in this guild(ID: %s)."
+msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설정되지 않았습니다."
+
+#: src/bot/command_help.py:192
+msgid "Type {0} command for more info on a command.\n"
+"You can also type {0} category for more info on a category."
+msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어를 입력하세요.\n"
+"카테고리에 대한 자세한 내용을 보려면 {0} 카테고리 (을)를 입력할 수도 있습니다."
+
+#: src/bot/command_help.py:200
+msgid "Everyone can contribute to MK Bot project on %s."
+msgstr "%s에서 누구나 MK Bot 프로젝트에 기여할 수 있습니다."
+
+#: src/bot/command_help.py:200
+msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot."
+msgstr "Mulgyeol MK Bot은 오픈소스 로컬 호스트 디스코드 봇입니다."
+
+#: src/bot/command_help.py:203
+msgid "Be warned: Canary can be unstable."
+msgstr "경고: Canary 버전은 불안정할 수 있습니다."
+
+#: src/bot/command_help.py:203 src/bot/command_help.py:205
+msgid "Version"
+msgstr "버전"
+
+#: src/bot/command_help.py:213
+msgid "Help"
+msgstr "도움말"
+
+#: src/bot/core/controllers/discord/clock.py:104
+msgid "Shows live world clock."
+msgstr "실시간 세계 시각을 표시합니다."
+
+#: src/bot/core/controllers/discord/clock.py:127
+#, docstring
+msgid "Enables live world clock."
+msgstr "실시간 세계 시각을 활성화합니다."
+
+#: src/bot/core/controllers/discord/clock.py:158
+msgid "Successfully set live clock."
+msgstr "실시간 시각 성공적 활성화되었습니다."
+
+#: src/bot/core/controllers/discord/delete.py:13
+#, docstring
+msgid "Deletes messages. (Requires Admin Permission)"
+msgstr "메세지를 삭제합니다. (관리자 권한 필요)"
+
+#: src/bot/core/controllers/discord/delete.py:13
+#, docstring
+msgid "Deletes messages. (Requires Admin Permission)\n"
+"{commandPrefix}delete amount : deletes 'amount' number of messages\n"
+"{commandPrefix}delete all : deletes all(maximum 200) messages"
+msgstr "메세지를 삭제합니다. (관리자 권한 필요)\n"
+"{commandPrefix}delete 개수 : '개수'만큼의 메세지들을 삭제합니다\n"
+"{commandPrefix}delete all : 메세지를 전부(최대 200) 삭제합니다"
+
+#: src/bot/core/controllers/discord/delete.py:26
+#: src/bot/core/controllers/discord/delete.py:36
+msgid "%d Messages Deleted"
+msgstr "%d개 메세지 삭제 완료"
+
+#: src/bot/core/controllers/discord/feedback.py:16
+msgid "Report broken or incorrect behaviour"
+msgstr "고장또는 틀린 동작 신고"
+
+#: src/bot/core/controllers/discord/feedback.py:21
+msgid "Suggest a feature for MK Bot"
+msgstr "MK 봇을 위한 기능을 제안하세요"
+
+#: src/bot/core/controllers/discord/feedback.py:27
+msgid "Select feedback type..."
+msgstr "피드백 타입 선택..."
+
+#: src/bot/core/controllers/discord/feedback.py:62
+msgid "Feedback"
+msgstr "피드백"
+
+#: src/bot/core/controllers/discord/feedback.py:67
+#: src/bot/core/controllers/discord/feedback.py:107
+msgid "Thanks for your feedback, %s!"
+msgstr "피드백 감사합니다!, %s"
+
+#: src/bot/core/controllers/discord/feedback.py:88
+msgid "Oops! Something went wrong."
+msgstr "어라! 뭔가 잘못됐네요."
+
+#: src/bot/core/controllers/discord/feedback.py:97
+#, docstring
+msgid "Sends feedback."
+msgstr "피드백을 보냅니다."
+
+#: src/bot/core/controllers/discord/join.py:12
+#, docstring
+msgid "Joins voice channel that the user who typed the command is in."
+msgstr "명령어를 입력한 유저가 있는 음성채널에 입장합니다."
+
+#: src/bot/core/controllers/discord/join.py:19
+msgid "Joined %s"
+msgstr "%s에 입장했습니다"
+
+#: src/bot/core/controllers/discord/language.py:15
+#: src/bot/core/controllers/discord/language.py:20
+#, docstring
+msgid "Sets or shows user's display language."
+msgstr "사용자의 표시 언어를 설정하거나 보여줍니다."
+
+#: src/bot/core/controllers/discord/language.py:20
+#, docstring
+msgid "Sets or shows user's display language.\n\n"
+"{commandPrefix}language set English\n\n"
+"{commandPrefix}language show"
+msgstr "사용자의 표시 언어를 설정하거나 보여줍니다.\n\n"
+"{commandPrefix}language set 한국어\n\n"
+"{commandPrefix}language show"
+
+#: src/bot/core/controllers/discord/language.py:36
+#, docstring
+msgid "Sets user's display language."
+msgstr "사용자의 표시 언어를 설정합니다."
+
+#: src/bot/core/controllers/discord/language.py:46
+#: src/bot/core/controllers/discord/language.py:107
+#: src/bot/core/controllers/discord/timezone.py:44
+#: src/bot/core/controllers/discord/timezone.py:102
+#: src/bot/core/controllers/discord/utils/MGCert.py:110
+msgid "Permission denied"
+msgstr "권한 거부됨"
+
+#: src/bot/core/controllers/discord/language.py:56
+msgid "Invalid language"
+msgstr "유효하지 않은 언어"
+
+#: src/bot/core/controllers/discord/language.py:72
+msgid "Successfully set display language of %(member)s to %(language)s"
+msgstr "사용자 %(member)s의 표시 언어를 %(language)s로 설정했습니다."
+
+#: src/bot/core/controllers/discord/language.py:97
+#, docstring
+msgid "Shows user's display language."
+msgstr "사용자 표시 언어를 보여줍니다."
+
+#: src/bot/core/controllers/discord/language.py:118
+#: src/bot/core/controllers/discord/language.py:127
+msgid "Display language of %(member)s"
+msgstr "사용자 %(member)s의 표시 언어"
+
+#: src/bot/core/controllers/discord/language.py:134
+#, docstring
+msgid "Language"
+msgstr "언어"
+
+#: src/bot/core/controllers/discord/leave.py:12
+#, docstring
+msgid "Leaves voice channel where the user who typed the command is in."
+msgstr "명령어를 입력한 유저가 있는 음성채널에서 퇴장합니다."
+
+#: src/bot/core/controllers/discord/leave.py:22
+msgid "Leaved %s"
+msgstr "%s 퇴장함"
+
+#: src/bot/core/controllers/discord/logout.py:12
+#, docstring
+msgid "Terminates bot. (Requires Admin Permission)"
+msgstr "봇을 종료합니다. (관리자 권한 필요)"
+
+#: src/bot/core/controllers/discord/logout.py:16
+msgid "Logs out of Discord and closes all connections"
+msgstr "디스코드에서 로그아웃하고 모든 연결을 끊습니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:21
+#, docstring
+msgid "Simple minigames to play with others"
+msgstr "친구들과 놀 수 있는 간단한 미니게임들"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:77
+#, docstring
+msgid "Play a game of Gobblet Gobblers with someone else"
+msgstr "가블리트 가블러스 게임을 친구와 플레이합니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:79
+msgid "You cannot play against a bot"
+msgstr "봇을 상대로는 게임할 수 없습니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:83
+msgid "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
+"This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. A higher strength value eats a piece even if it's already on the board. Careful, you only have 1 piece of each strength value!\n\n"
+"Do you accept this challenge, %(other)s?"
+msgstr "%(author)s가 %(other)s에게 가블레트 가블레스 게임으로 도전합니다!\n"
+"이 게임은 틱택토와 유사하지만 각 피스가 레벨을 가지고 있습니다. \n"
+"더 높은 레벨을 가진 피스는 이미 다른 피스가 보드에 있더라도 먹어치울 수 있습니다.\n"
+"하지만 조심하세요, 각 피스는 서로 다른 레벨을 하나씩만 가질 수 있습니다.\n\n"
+"%(other)s, 도전을 받아들이시나요?"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:104
+#, docstring
+msgid "Play a game of battleship with someone else"
+msgstr "친구와 배틀쉽을 플레이합니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:115
+msgid "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
+"In order to accept, please press your button below to ready up."
+msgstr "%(author)s가 %(other)s 에게 배틀쉽으로 도전합니다!\n"
+"승낙하시려면, 버튼을 눌러 준비하십시오"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:138
+#, docstring
+msgid "Play a game of Hangman"
+msgstr "행맨 게임을 플레이합니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:138
+#, docstring
+msgid "Play a game of Hangman\n\n"
+"{commandPrefix}hangman\n"
+"{commandPrefix}hangman exit"
+msgstr "행맨 게임을 플레이합니다\n\n"
+"{commandPrefix}hangman\n"
+"{commandPrefix}hangman exit"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
+msgid "Exit Hangman Game"
+msgstr "행맨 게임을 종료합니다"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py:161
+#: src/bot/core/controllers/discord/minigames/__init__.py:171
+#: src/bot/core/controllers/discord/minigames/__init__.py:176
+msgid "Hangman"
+msgstr "행맨"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:161
+msgid "Invalid Argument"
+msgstr "잘못된 매개변수"
+
+#: src/bot/core/controllers/discord/minigames/__init__.py:185
+#, docstring
+msgid "Minigame"
+msgstr "미니게임"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:161
+msgid "You win!"
+msgstr "승리!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:167
+msgid "You lose :("
+msgstr "패배 :("
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:170
+msgid "%(player)s wins this game of Battleship! Congratulations."
+msgstr "%(player)s가 배틀쉽에서 승리했습니다! 영광스러운 승리자에게 박수를"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:175
+msgid "%(enemy)s's turn."
+msgstr "%(enemy)s의 턴!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:176
+msgid "Your (%(enemy)s) turn!"
+msgstr "당신(%(enemy)s)의 턴!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:178
+msgid "You sunk their %(emoji)s!"
+msgstr "그들의 %(emoji)s를 가라앉혔습니다!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:179
+msgid "Your %(emoji)s was sunk :("
+msgstr "당신의 %(emoji)s는 가라앉았습니다... :("
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:210
+msgid "Your enemy is not ready yet, please wait until they are"
+msgstr "적이 아직 준비되지 않았습니다, 잠시 기다려주세요"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:217
+msgid "It is not your turn yet."
+msgstr "아직 당신의 턴이 아닙니다"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "first"
+msgstr "첫 번째"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:291
+msgid "second"
+msgstr "두 번째"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:292
+msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
+msgstr "준비되셨군요! 이게 당신의 보드입니다. 당신은 %(ordinal)s입니다! 이 메세지를 무시하지 마세요!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:301
+msgid "%(player)s is ready!"
+msgstr "%(player)s 준비완료!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:311
+msgid "Game currently in progress between %(player)s and %(enemy)s...\n\n"
+"**Guide**\n"
+"Red button → You hit the enemy ship successfully.\n"
+"Disabled blue button → Your hit missed the enemy ship.\n"
+"🌀 → The enemy's hit missed.\n"
+"💥 → The enemy hit your ship.\n"
+"If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
+msgstr "%(player)s와 %(enemy)s 사이에 현재 게임이 진행 중입니다.\n\n"
+"**가이드**\n"
+"빨간색 버튼 → 귀하가 상대방의 배를 성공적으로 공격했습니다.\n"
+"비활성화된 파란색 버튼 → 귀하기 상대방의 배를 놓쳤습니다.\n"
+"🌀 → 상대방이 귀하의 배를 놓쳤습니다.\n"
+"💥 → 상대방이 귀하의 배를 성공적으로 공격했습니다.\n"
+"실수로 귀하의 보드를 닫은 경우 아래 버튼을 눌러 다시 가져오십시오. 이는 이전 보드를 초기화합니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:339
+msgid "Sorry, you can't have diagonal pieces"
+msgstr "대각선 조각은 사용할 수 없습니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:351
+msgid "Sorry, couldn't figure out what you wanted to do here"
+msgstr "여기서 무엇을 하려는지 알 수 없습니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:362
+msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
+msgstr "죄송합니다,이 배는 너무 큽니다. 배송 크기 4, 3 또는 2만 지원됩니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:369
+msgid "You already have a boat that is %d units long."
+msgstr "이미 %d 단위 길이의 보트가 있습니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:373
+msgid "This ship would be blocked off"
+msgstr "이 배는 차단될 것입니다."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:395
+msgid "Reopen Your Board"
+msgstr "보드 다시 열기"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:413
+msgid "This is your board!"
+msgstr "이것은 당신의 보드입니다!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:423
+msgid "%(player)s's Button"
+msgstr "%(player)s의 버튼"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:435
+msgid "This ready button is not for you, sorry"
+msgstr "이 준비 버튼은 당신을위한 것이 아닙니다, 죄송합니다"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:440
+msgid "Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n\n"
+"There are 3 boats, 🚢, ⛵, and 🛶. You can only have one of each. They have the following lengths:\n"
+"🚢 → 4\n"
+"⛵ → 3\n"
+"🛶 → 2\n\n"
+"You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
+msgstr "아래에서 보드를 설정합니다. 보드를 설정하려면 2 포인트를 누르면 우주선이 자동으로 생성됩니다. 대각선 보트는 가질 수 없습니다.\n\n"
+"3척의 배 🚢, , , ⛵ 가 있습니다 🛶. 각각 하나만 가질 수 있습니다. 길이는 다음과 같습니다.\n"
+"🚢 → 4\n"
+"⛵ → 3\n"
+"🛶 → 2\n\n"
+"버튼을 다시 눌러 진행 중인 배치를 실행 취소할 수 있습니다. 보트가 배치되면 이동할 수 없습니다. 모든 보트 설정을 마치면 플레이 할 준비가됩니다!"
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:477
+msgid "This prompt has timed out..."
+msgstr "이 프롬프트가 시간 초과되었습니다..."
+
+#: src/bot/core/controllers/discord/minigames/battleship.py:482
+msgid "This prompt is not for you"
+msgstr "이 프롬프트는 귀하를위한 것이 아닙니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:57
+msgid "It is now %(kind)s %(member)s's turn."
+msgstr "이제 %(kind)s %(member)s차례입니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:96
+msgid "This is not meant for you"
+msgstr "이것은 당신을위한 것이 아닙니다"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:122
+msgid "You already have this piece"
+msgstr "당신은 이미이 조각을 가지고 있습니다"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:128
+msgid "You do not have the strength necessary to take down this piece"
+msgstr "이 조각을 쓰러뜨리는 데 필요한 힘이 없습니다"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:135
+msgid "You've already selected a piece, you can't select multiple pieces."
+msgstr "이미 조각을 선택했으며 여러 조각을 선택할 수 없습니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:144
+msgid "Select a piece strength"
+msgstr "조각 강도 선택"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:164
+msgid "%(winning_player)s won!"
+msgstr "%(winning_player)s 이겼다!"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:168
+#: src/bot/core/controllers/discord/tic_tac_toe.py:56
+msgid "It's a tie!"
+msgstr "무승부"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:196
+msgid "This is a game between two other people, sorry."
+msgstr "이것은 다른 두 사람 사이의 게임입니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:202
+msgid "It's not your turn"
+msgstr "귀하의 차례가 아닙니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:282
+msgid "This prompt is not meant for you"
+msgstr "이 프롬프트는 귀하를위한 것이 아닙니다."
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:301
+msgid "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n\n"
+"It is now 🟦 %(first_member)s's turn"
+msgstr "도전 수락! %(first_member)s 먼저 가고 %(second_member)s 두 번째입니다.\n\n"
+"이제 🟦 %(first_member)s차례입니다"
+
+#: src/bot/core/controllers/discord/minigames/gobblet.py:316
+msgid "Challenge declined :("
+msgstr "챌린지가 거부되었습니다:("
+
+#: src/bot/core/controllers/discord/music.py:181
+#, docstring
+msgid "Plays the keyword searched or plays the song in queue"
+msgstr "검색된 키워드를 재생하거나 대기열에 있는 노래를 재생합니다."
+
+#: src/bot/core/controllers/discord/music.py:181
+#, docstring
+msgid "Plays the keyword searched or plays the song in queue\n"
+"{commandPrefix}play \"keyword\"\n"
+"{commandPrefix}play\n"
+"{commandPrefix}p \"keyword\"\n"
+"{commandPrefix}p\n"
+"Searches the keyword in Youtube and puts it in queue\n"
+"If there is no keyword inputted and the player isn't playing anything, it starts the player"
+msgstr "검색된 키워드를 재생하거나 대기열에 있는 노래를 재생\n"
+"{commandPrefix}\"키워드\"를 재생\n"
+"{commandPrefix}재생\n"
+"{commandPrefix}p \"keyword\"\n"
+"{commandPrefix}p\n"
+"Youtube에서 키워드를 검색하여 대기열에 넣습니다\n"
+"입력 된 키워드가없고 플레이어가 아무 것도 재생하지 않는 경우,  플레이어를 시작합니다."
+
+#: src/bot/core/controllers/discord/music.py:282
+#, docstring
+msgid "Pauses the song that is playing"
+msgstr "재생 중인 노래를 일시 정지합니다."
+
+#: src/bot/core/controllers/discord/music.py:282
+#, docstring
+msgid "Pauses the song that is playing\n"
+"{commandPrefix}pause\n"
+"{commandPrefix}pp\n"
+"Cannot pause the player if the player is already paused"
+msgstr "재생 중인 노래를 일시 중지\n"
+"{commandPrefix}일시 중지\n"
+"{commandPrefix}pp\n"
+"플레이어가 이미 일시 중지된 경우 플레이어를 일시 중지할 수 없습니다."
+
+#: src/bot/core/controllers/discord/music.py:317
+#, docstring
+msgid "Skips the song that is playing and plays the next song in queue"
+msgstr "재생 중인 곡을 건너뛰고 대기열에 있는 다음 곡을 재생합니다."
+
+#: src/bot/core/controllers/discord/music.py:317
+#, docstring
+msgid "Skips the song that is playing and plays the next song in queue\n"
+"{commandPrefix}skip\n"
+"{commandPrefix}ss"
+msgstr "재생 중인 노래를 건너뛰고 대기열의 다음 노래를 재생\n"
+"{commandPrefix}ss\n"
+"{commandPrefix}건너뜁니다."
+
+#: src/bot/core/controllers/discord/music.py:353
+#, docstring
+msgid "Stops Player"
+msgstr "플레이어를 중지합니다."
+
+#: src/bot/core/controllers/discord/music.py:353
+#, docstring
+msgid "Stops Player\n"
+"{commandPrefix}stop"
+msgstr "중지 플레이어\n"
+"{commandPrefix}중지"
+
+#: src/bot/core/controllers/discord/music.py:363
+#, docstring
+msgid "Shows songs in queue"
+msgstr "대기열에 있는 노래 표시"
+
+#: src/bot/core/controllers/discord/music.py:363
+#, docstring
+msgid "Shows songs in queue\n"
+"{commandPrefix}queue\n"
+"{commandPrefix}q"
+msgstr "대기열\n"
+"{commandPrefix}대기열\n"
+"{commandPrefix}q에 있는 노래를 표시합니다."
+
+#: src/bot/core/controllers/discord/music.py:385
+#, docstring
+msgid "Searches music in youtube"
+msgstr "유튜브에서 음악 검색"
+
+#: src/bot/core/controllers/discord/music.py:385
+#, docstring
+msgid "Searches music in youtube\n"
+"{commandPrefix}search \"keyword\"\n"
+"{commandPrefix}s \"keyword\"\n"
+"Shows 5 candidates that you can choose using emotes"
+msgstr "YouTube에서 음악을 검색\n"
+"{commandPrefix}\"키워드\"\n"
+"{commandPrefix}\"키워드\"\n"
+"검색 이모티콘을 사용하여 선택할 수있는 5 가지 후보를 보여줍니다."
+
+#: src/bot/core/controllers/discord/music.py:483
+#, docstring
+msgid "Music"
+msgstr "음악"
+
+#: src/bot/core/controllers/discord/ping.py:15
+#, docstring
+msgid "Shows the bot's latency."
+msgstr "봇의 레이턴시를 보여줍니다."
+
+#: src/bot/core/controllers/discord/ping.py:20
+msgid "Pong in %sms"
+msgstr "핑 %sms"
+
+#: src/bot/core/controllers/discord/poll.py:12
+#, docstring
+msgid "Poll command"
+msgstr "투표 명령어"
+
+#: src/bot/core/controllers/discord/poll.py:12
+#, docstring
+msgid "Poll command\n"
+"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll with three candidates. (do not use ,)\n"
+"you can vote using reactions"
+msgstr "투표 명령어\n"
+"{commandPrefix}poll \"어느 것을 선택하시겠습니까?\" 가 나 다 : 가, 나, 다 세 개의 선택지가 있는 투표를 생성합니다. (,를 사용하지 마세요.)\n"
+"반응을 사용하여 투표 할 수 있습니다."
+
+#: src/bot/core/controllers/discord/poll.py:21
+msgid "You need more than two candidates!"
+msgstr "두 개 이상의 선택지가 필요합니다!"
+
+#: src/bot/core/controllers/discord/poll.py:26
+msgid "You cannot make more than 10 candidates!"
+msgstr "10개 이상의 후보를 만들 수 없습니다!"
+
+#: src/bot/core/controllers/discord/roulette.py:16
+#, docstring
+msgid "Play roulette"
+msgstr "룰렛 플레이"
+
+#: src/bot/core/controllers/discord/roulette.py:16
+#, docstring
+msgid "Play roulette\n\n"
+"Examples:\n"
+"{commandPrefix}roulette \"Player\" @user1 @user2 @user3\n"
+"{commandPrefix}rou \"title\" \"item 1\" \"item 2\"\n\n"
+"Note:\n"
+"This bot cannot be added to items."
+msgstr "룰렛 플레이\n\n"
+"예:\n"
+"{commandPrefix}룰렛 \"플레이어\" @user1 @user2 @user3\n"
+"{commandPrefix}rou \"제목\" \"항목 1\" \"항목 2\"\n\n"
+"참고:\n"
+"이 봇은 항목에 추가할 수 없습니다."
+
+#: src/bot/core/controllers/discord/roulette.py:27
+#: src/bot/core/controllers/discord/roulette.py:33
+msgid "Roulette is running. Please wait."
+msgstr "룰렛이 실행 중입니다. 기다리세요."
+
+#: src/bot/core/controllers/discord/roulette.py:33
+msgid "%dsec left"
+msgstr "%d초 남음"
+
+#: src/bot/core/controllers/discord/roulette.py:40
+msgid "Roulette for %s"
+msgstr "%s용 룰렛"
+
+#: src/bot/core/controllers/discord/roulette.py:40
+msgid "chose... %s!"
+msgstr "선택... %s!"
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:40
+msgid "It is now O's turn"
+msgstr "이제 O의 차례입니다"
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:47
+msgid "It is now X's turn"
+msgstr "이제 X의 차례입니다"
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:52
+msgid "X won!"
+msgstr "X가 이겼습니다."
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:54
+msgid "O won!"
+msgstr "O가 이겼습니다."
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:131
+#, docstring
+msgid "Starts a tic-tac-toe game with yourself."
+msgstr "자신과 틱택토 게임을 시작합니다."
+
+#: src/bot/core/controllers/discord/tic_tac_toe.py:132
+msgid "X goes first"
+msgstr "X가 먼저 입니다."
+
+#: src/bot/core/controllers/discord/timezone.py:20
+msgid "Shows user's local time."
+msgstr "사용자의 로컬 시간을 보여줍니다."
+
+#: src/bot/core/controllers/discord/timezone.py:31
+#, docstring
+msgid "Sets user's timezone."
+msgstr "사용자의 시간대를 설정합니다."
+
+#: src/bot/core/controllers/discord/timezone.py:52
+msgid "Invalid timezone: %s"
+msgstr "유효하지 않은 시간대: %s"
+
+#: src/bot/core/controllers/discord/timezone.py:63
+msgid "Successfully set timezone of %(member)s to %(timezone)s"
+msgstr "사용자 %(member)s의 시간대를 %(timezone)s로 설정했습니다"
+
+#: src/bot/core/controllers/discord/timezone.py:89
+#, docstring
+msgid "Shows user's timezone."
+msgstr "사용자의 시간대를 확인합니다."
+
+#: src/bot/core/controllers/discord/timezone.py:113
+#: src/bot/core/controllers/discord/timezone.py:123
+msgid "Timezone of %(member)s"
+msgstr "사용자 %(member)s의 시간대"
+
+#: src/bot/core/controllers/discord/timezone.py:135
+#, docstring
+msgid "Shows the user's local time."
+msgstr "사용자의 로컬 시간을 보여줍니다."
+
+#: src/bot/core/controllers/discord/timezone.py:157
+msgid "Local time of %(member)s (%(timezone)s)"
+msgstr "사용자 %(member)s의 로컬 시간 (%(timezone)s)"
+
+#: src/bot/core/controllers/discord/timezone.py:162
+msgid "Show local time"
+msgstr "로컬 시간 표시"
+
+#: src/bot/core/controllers/discord/translate.py:24
+msgid "Conversational translation mode"
+msgstr "대화형 번역 모드"
+
+#: src/bot/core/controllers/discord/translate.py:75
+#, docstring
+msgid "Enables conversational translation mode."
+msgstr "대화형 번역 모드를 활성화합니다."
+
+#: src/bot/core/controllers/discord/translate.py:89
+#: src/bot/core/controllers/discord/translate.py:126
+msgid "Conversation Mode"
+msgstr "대화 모드"
+
+#: src/bot/core/controllers/discord/translate.py:90
+#: src/bot/core/controllers/discord/translate.py:127
+msgid "All messages are automatically translated to {0}."
+msgstr "모든 메시지는 자동으로 {0} (으)로 번역됩니다."
+
+#: src/bot/core/controllers/discord/translate.py:104
+#, docstring
+msgid "Disables conversational translation mode."
+msgstr "대화형 번역 모드를 비활성화합니다."
+
+#: src/bot/core/controllers/discord/translate.py:115
+msgid "Conversation mode was disabled"
+msgstr "대화 모드가 비활성화되었습니다"
+
+#: src/bot/core/controllers/discord/translate.py:145
+#, docstring
+msgid "Command that translates sentence entered to desired language"
+msgstr "입력한 문장을 원하는 언어로 번역하는 명령"
+
+#: src/bot/core/controllers/discord/translate.py:158
+msgid "Translation Successful {srcLang} -> {result}"
+msgstr "번역 성공 {srcLang} -> {result}"
+
+#: src/bot/core/controllers/discord/translate.py:205
+msgid "Translation Fail: {0}"
+msgstr "번역 실패: {0}"
+
+#: src/bot/core/controllers/discord/translate.py:206
+#: src/bot/core/controllers/discord/translate.py:216
+msgid "Cannot find target language(s) inputted"
+msgstr "입력한 대상 언어를 찾을 수 없습니다."
+
+#: src/bot/core/controllers/discord/translate.py:215
+msgid "Translation Warning: {0}"
+msgstr "번역 경고: {0}"
+
+#: src/bot/core/controllers/discord/translate.py:244
+msgid "Translation Fail: Input Language Detection Failed"
+msgstr "번역 실패: 입력 언어 검색 실패"
+
+#: src/bot/core/controllers/discord/translate.py:245
+msgid "Language detected is not supported. \n"
+" ** Detected language: {srcLang} **\n"
+"use //help translate to find supported languages"
+msgstr "감지된 언어는 지원되지 않습니다. \n"
+" ** 감지된 언어: {srcLang} **\n"
+"//help 번역을 사용하여 지원되는 언어 찾기"
+
+#: src/bot/core/controllers/discord/tts.py:75
+#, docstring
+msgid "TTS voice available"
+msgstr "TTS 음성 사용 가능"
+
+#: src/bot/core/controllers/discord/tts.py:75
+#, docstring
+msgid "TTS voice available\n"
+"{commandPrefix}tts [option] \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n\n"
+"*Example*\n"
+"{commandPrefix}tts \"Content\"\n"
+"{commandPrefix}tts -m \"Content\"\n"
+"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
+msgstr "TTS 음성\n"
+"{commandPrefix}사용 가능 TTS [option] \"콘텐츠\" : \"콘텐츠\"의 콘텐츠를 말합니다. 콘텐츠에 공백이 포함된 경우에도 따옴표를 사용할 필요가 없습니다.\n\n"
+"*예*\n"
+"{commandPrefix}tts \"콘텐츠\"\n"
+"{commandPrefix}tts -m \"콘텐츠\"\n"
+"{commandPrefix}tts -w \"콘텐츠\": -m은 남성 음성으로 말하고 -w는 여성 음성으로 말합니다. 기본 음성은 남성입니다."
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:111
+msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
+msgstr "사용자 %(member)s은(는) %(userlist)s 목록에 등록되어 있지 않습니다. 이 시도를 보고합니다."
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:120
+msgid "User"
+msgstr "사용자"
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:122
+msgid "Command tried"
+msgstr "시도한 명령어"
+
+#: src/bot/core/controllers/discord/utils/MsgFormat.py:89
+msgid "ABRT has detected an unknown error.\n"
+"Please [create an issue](%s) at GitHub with below logs to help fix this problem."
+msgstr "ABRT가 알 수 없는 오류를 감지했습니다.\n"
+"이 문제를 해결하기 위해 아래 로그와 함께 [GitHub에서 문제를 보고](%s)해주세요."
+
+#: src/bot/core/controllers/discord/utils/MsgFormat.py:97
+msgid "Automatic Bug Reporting Tool"
+msgstr "자동 버그 보고 도구"
+
+#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
+msgid "Report Issue"
+msgstr "문제 보고"
+
+#: src/bot/discord_host.py:262
+msgid "Command Error: %s"
+msgstr "명령어 오류: %s"
+
+#: src/bot/discord_host.py:343
+msgid "Your display language has been changed to %s."
+msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
+
+#: src/bot/discord_host.py:344
+msgid "Type `{commandPrefix}language set` to change your display language."
+msgstr "귀하의 표시 언어를 변경하려면 `{commandPrefix}language set`을(를) 입력하세요."
+
+#: src/bot/release.py:83
+msgid "Welcome to the %s release of MK Bot."
+msgstr "MK Bot이 %s (으)로 업데이트 되었습니다."
+
+#: src/bot/release.py:85
+msgid "Release"
+msgstr "릴리스"
+
+#: src/bot/release.py:88
+msgid "Please see the [Release Note](%s) for more information."
+msgstr "자세한 내용은 [릴리스 노트](%s)를 참조하십시오."
+

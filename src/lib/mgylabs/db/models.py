@@ -1,6 +1,7 @@
 import datetime
 
 import sqlalchemy
+from babel import Locale
 from sqlalchemy.orm import Query, relationship
 
 from .database import Base, db_session
@@ -84,7 +85,8 @@ class DiscordUser(CRUD, Base):
     __tablename__ = "discord_users"
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-    timezone = sqlalchemy.Column(sqlalchemy.String, default="UTC")
+    locale = sqlalchemy.Column(sqlalchemy.String)
+    timezone = sqlalchemy.Column(sqlalchemy.String, default="UTC", nullable=False)
     last_used_at = sqlalchemy.Column(sqlalchemy.DateTime)
     created_at = sqlalchemy.Column(
         sqlalchemy.DateTime, default=datetime.datetime.utcnow()
@@ -100,6 +102,12 @@ class DiscordUser(CRUD, Base):
         if self.last_used_at is None:
             self.last_used_at = self.created_at
         return super().save(commit=commit)
+
+    def get_language_name(self):
+        if self.locale is None:
+            return "English"
+        else:
+            return Locale.parse(self.locale).get_language_name()
 
 
 class DiscordBotRequestLog(CRUD, Base):

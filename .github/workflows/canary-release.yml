@@ -78,6 +78,7 @@ jobs:
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python package/vc.py --canary ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV

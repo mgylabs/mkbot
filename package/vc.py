@@ -283,12 +283,20 @@ def github_release(build_type):
     list_version = to_list_version(base_version)
 
     res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/beta")
-    asset = find_asset(res.json().get("assets"))
-    beta_build = BuildInfo(*get_last_build_version_number_commit(asset))
+    if json_assets := res.json().get("assets"):
+        asset = find_asset(json_assets)
+        beta_build = BuildInfo(*get_last_build_version_number_commit(asset))
+    else:
+        print(res.status_code, res.json())
+        raise Exception("API Error")
 
     res = requests_API("GET", "/repos/mgylabs/mulgyeol-mkbot/releases/tags/canary")
-    asset = find_asset(res.json().get("assets"))
-    canary_build = BuildInfo(*get_last_build_version_number_commit(asset))
+    if json_assets := res.json().get("assets"):
+        asset = find_asset(json_assets)
+        canary_build = BuildInfo(*get_last_build_version_number_commit(asset))
+    else:
+        print(res.status_code, res.json())
+        raise Exception("API Error")
 
     last_build = None
 

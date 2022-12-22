@@ -7,6 +7,11 @@
     ],
     "additionalProperties": false,
     "properties": {
+        "$schema": {
+            "type": "string",
+            "title": "Schema",
+            "description": "Pointer to the schema against which this document should be validated."
+        },
         "discordToken": {
             "type": "string",
             "description": "Sets your discord bot token."

@@ -3,6 +3,8 @@ import platform
 
 import discord
 from discord.ext import commands
+
+from mgylabs.i18n import _
 from mgylabs.utils.config import CONFIG, VERSION
 
 Msg_Color = None
@@ -83,11 +85,16 @@ class MsgFormatter:
 
     @staticmethod
     def abrt(ctx_or_iaction, issue_link, tb, show_req_user=True):
-        description = f"An unknown error has occurred. Please [create an issue]({issue_link}) at GitHub with logs below to help fix this problem."
+        description = (
+            _(
+                "ABRT has detected an unknown error.\nPlease [create an issue](%s) at GitHub with below logs to help fix this problem."
+            )
+            % issue_link
+        )
         env = f"Version: {VERSION}\nCommit: {VERSION.commit}\nOS: {platform.platform().replace('-', ' ')}"
 
         embed = discord.Embed(
-            title=":rotating_light:  Automatic Bug Reporting Tool",
+            title=f":rotating_light:  {_('Automatic Bug Reporting Tool')}",
             description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
             color=color_to_int("#FF0000"),
             timestamp=datetime.datetime.utcnow(),

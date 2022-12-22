@@ -8,19 +8,20 @@ import discord
 import pytz
 from discord import app_commands
 from discord.ext import commands
+
 from mgylabs.db.storage import localStorage
+from mgylabs.i18n import L_, _
 from mgylabs.utils import logger
 
 from .utils.command_helper import send
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
-from .utils.register import add_cog
 
 log = logger.get_logger(__name__)
 
 
 class Sleeper:
-    "Group sleep calls allowing instant cancellation of all"
+    # "Group sleep calls allowing instant cancellation of all"
 
     def __init__(self):
         self.tasks = set()
@@ -37,7 +38,7 @@ class Sleeper:
             self.tasks.remove(task)
 
     def cancel_all_helper(self):
-        "Cancel all pending sleep tasks"
+        # "Cancel all pending sleep tasks"
         cancelled = set()
         for task in self.tasks:
             if task.cancel():
@@ -45,7 +46,7 @@ class Sleeper:
         return cancelled
 
     async def cancel_all(self):
-        "Coroutine cancelling tasks"
+        # "Coroutine cancelling tasks"
         cancelled = self.cancel_all_helper()
         if self.tasks:
             await asyncio.wait(self.tasks)
@@ -99,7 +100,9 @@ async def clock_updater(bot: commands.Bot):
 
 
 class Clock(commands.Cog):
-    clock_group = app_commands.Group(name="clock", description="Shows live world time")
+    clock_group = app_commands.Group(
+        name="clock", description=L_("Shows live world clock.")
+    )
     clock_updater_running = False
 
     def __init__(self, bot):
@@ -121,9 +124,7 @@ class Clock(commands.Cog):
     @clock_group.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def set(self, interaction: discord.Interaction, timezone: str):
-        """
-        Enables live world time
-        """
+        """Enables live world clock."""
         try:
             tz = pytz.timezone(timezone)
         except Exception as error:
@@ -154,7 +155,7 @@ class Clock(commands.Cog):
             embed=MsgFormatter.get(
                 interaction,
                 "Clock",
-                "Successfully set live clock",
+                _("Successfully set live clock."),
             ),
         )
 
@@ -174,4 +175,4 @@ class Clock(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
-    await add_cog(bot, Clock)
+    await bot.add_cog(Clock(bot))

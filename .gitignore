@@ -390,6 +390,8 @@ $RECYCLE.BIN/
 src/data/
 package/vc.py
 
+*.mo
+
 .env/
 .venv*/
 src/msu/build

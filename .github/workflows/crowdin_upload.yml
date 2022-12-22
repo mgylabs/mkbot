@@ -1,0 +1,33 @@
+name: Crowdin Upload
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "locales/mkbot.pot"
+
+jobs:
+  synchronize-with-crowdin-upload:
+    if: github.repository == 'mgylabs/mkbot'
+    runs-on: ubuntu-latest
+    environment: Crowdin
+    name: Upload
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: crowdin action
+        uses: crowdin/github-action@1.5.2
+        with:
+          upload_sources: true
+          download_translations: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

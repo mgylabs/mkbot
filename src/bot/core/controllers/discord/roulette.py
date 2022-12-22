@@ -4,6 +4,8 @@ import random
 import discord
 from discord.ext import commands
 
+from mgylabs.i18n import _
+
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
@@ -22,20 +24,20 @@ async def roulette(ctx: commands.Context, title, *items):
     This bot cannot be added to items.
     """
     msg: discord.Message = await ctx.send(
-        embed=MsgFormatter.get(ctx, "Roulette is running. Please wait.", "...")
+        embed=MsgFormatter.get(ctx, _("Roulette is running. Please wait."), "...")
     )
 
     for i in range(5, 0, -1):
         await msg.edit(
             embed=MsgFormatter.get(
-                ctx, "Roulette is running. Please wait.", f"{i} sec left"
+                ctx, _("Roulette is running. Please wait."), _("%dsec left") % i
             )
         )
         asyncio.sleep(1)
 
     await msg.edit(
         embed=MsgFormatter.get(
-            ctx, f"Roulette for {title}", f"chose... {random.choice(items)}!"
+            ctx, _("Roulette for %s") % title, _("chose... %s!") % random.choice(items)
         )
     )
 

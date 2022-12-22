@@ -1,10 +1,11 @@
 import traceback
 
 import discord
-from core.controllers.discord.utils.MGCert import Level, MGCertificate
-from core.controllers.discord.utils.register import add_command
 from discord import app_commands
 from discord.ext import commands
+
+from core.controllers.discord.utils.MGCert import Level, MGCertificate
+from mgylabs.i18n import _
 
 
 class Dropdown(discord.ui.Select):
@@ -12,18 +13,18 @@ class Dropdown(discord.ui.Select):
         options = [
             discord.SelectOption(
                 label="Bug Report",
-                description="Report broken or incorrect behaviour",
+                description=_("Report broken or incorrect behaviour"),
                 emoji="🪲",
             ),
             discord.SelectOption(
                 label="Feature Request",
-                description="Suggest a feature for this library",
+                description=_("Suggest a feature for MK Bot"),
                 emoji="💡",
             ),
         ]
 
         super().__init__(
-            placeholder="Select feedback type...",
+            placeholder=_("Select feedback type..."),
             min_values=1,
             max_values=1,
             options=options,
@@ -58,12 +59,12 @@ class Feedback(discord.ui.Modal):
     )
 
     def __init__(self, feedback_type, **kwargs) -> None:
-        super().__init__(title=f"Feedback ({feedback_type})", **kwargs)
+        super().__init__(title=f"{_('Feedback')} ({feedback_type})", **kwargs)
         self.feedback_type = feedback_type
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.send_message(
-            f"Thanks for your feedback, {interaction.user.name}!", ephemeral=True
+            _("Thanks for your feedback, %s!") % interaction.user.name, ephemeral=True
         )
 
         if self.feedback_type == "Bug Report":
@@ -84,7 +85,7 @@ class Feedback(discord.ui.Modal):
         self, error: Exception, interaction: discord.Interaction
     ) -> None:
         await interaction.response.send_message(
-            "Oops! Something went wrong.", ephemeral=True
+            _("Oops! Something went wrong."), ephemeral=True
         )
 
         traceback.print_tb(error.__traceback__)
@@ -94,7 +95,7 @@ class Feedback(discord.ui.Modal):
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def feedback(interaction: discord.Interaction):
     """
-    Sends feedback
+    Sends feedback.
     """
     view = DropdownView()
     await interaction.response.send_message(view=view, ephemeral=True)
@@ -103,9 +104,9 @@ async def feedback(interaction: discord.Interaction):
     view.clear_items()
 
     await interaction.edit_original_response(
-        content=f"Thanks for your feedback, {interaction.user.name}!", view=view
+        content=_("Thanks for your feedback, %s!") % interaction.user.name, view=view
     )
 
 
 async def setup(bot: commands.Bot):
-    add_command(bot, feedback)
+    bot.tree.add_command(feedback)

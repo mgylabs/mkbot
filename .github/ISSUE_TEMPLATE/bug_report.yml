@@ -1,0 +1,62 @@
+name: "Bug report 🐛"
+description: Report errors or unexpected behavior
+labels: [bug, Needs-Triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please make sure to [search for existing issues](https://github.com/mgylabs/mkbot/issues) and [check the FAQ](https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#frequently-asked-questions-faq) before filing a new one!
+
+  - type: input
+    id: version
+    attributes:
+      label: Mulgyeol MK Bot Version
+      placeholder: "1.7.2.4"
+      description: |
+        You can copy the version number from the About dialog.
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS Version
+      placeholder: "Windows 10.0.19042.0"
+      description: |
+        Operating system version
+    validations:
+      required: false
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: Tell us the steps required to trigger your bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: If you want to include screenshots, paste them into the markdown editor below.
+      placeholder: What were you expecting?
+    validations:
+      required: false
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      placeholder: If applicable, provide relevant logs.
+      render: pytb
+    validations:
+      required: false

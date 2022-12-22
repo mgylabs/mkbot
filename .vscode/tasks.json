@@ -69,9 +69,9 @@
       "command": "%programfiles(x86)%\\Inno Setup 6\\iscc.exe",
       "args": [
         "/DNameLong=Mulgyeol MK Bot OSS",
-        "/DNameShort=MK Bot",
+        "/DNameShort=MK Bot OSS",
         "/DVersion=Pre",
-        "/DAppExeName=MKBot.exe",
+        "/DAppExeName=MKBot-OSS.exe",
         "/DAppMutex=MKBotOSS",
         "/DExtDirName=.mkbot-oss",
         "/DDName=mkbot-oss",

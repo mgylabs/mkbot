@@ -59,6 +59,7 @@ Source: "{#RepoDir}\build\bin\*"; DestDir: "{code:GetDestDir}\bin"; Flags: ignor
 Source: "{#RepoDir}\package\info\*"; DestDir: "{code:GetDestDir}\info"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\resources\app\*"; DestDir: "{code:GetDestDir}\resources\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\resources\*"; DestDir: "{code:GetDestDir}"; Flags: ignoreversion
+Source: "{#RepoDir}\locales\*.mo"; DestDir: "{code:GetDestDir}\bin\locales"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\package\tools\Update.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}\package\data\*"; DestDir: "{localappdata}\Mulgyeol\{#NameLong}\data"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
 Source: "{#RepoDir}\extensions\*"; DestDir: "{%USERPROFILE}\{#ExtDirName}\extensions"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
