@@ -119,7 +119,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        print("init")
+        self.tmp_id = 0
 
     async def player(self, ctx: commands.Context):
         if await validate_voice_client(ctx):
@@ -217,6 +217,7 @@ class Music(commands.Cog):
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
         """
+        self.tmp_id = ctx.message.channel.id
         gid = ctx.message.guild.id
         try:
             guild_sl[gid]
@@ -417,6 +418,7 @@ class Music(commands.Cog):
         {commandPrefix}s "keyword"
         Shows 5 candidates that you can choose using emotes
         """
+        self.tmp_id = ctx.message.channel.id
         gid = ctx.message.guild.id
         try:
             guild_sl[gid]
@@ -511,7 +513,7 @@ class Music(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        channel = before.channel.guild.text_channels[0]
+        channel = before.channel.guild.get_channel(self.tmp_id)
         if not member.id == self.bot.user.id:
             if after.channel is None:
                 voice = before.channel.guild.voice_client
