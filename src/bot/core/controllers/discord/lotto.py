@@ -24,7 +24,6 @@ async def lotto(ctx: commands.Context):
         ":eight:",
         ":nine:",
     ]
-    # 1부터 45, 6개
     lotto = ""
 
     for i in range(6):
@@ -32,8 +31,6 @@ async def lotto(ctx: commands.Context):
         ones = rand % 10
         tens = int((rand - ones) / 10)
         lotto += reactions[tens] + reactions[ones] + " "
-
-    print(lotto)
 
     await ctx.send(
         embed=MsgFormatter.get(
