@@ -509,6 +509,22 @@ class Music(commands.Cog):
 
             await check_reaction(botmsg, timeout=0)
 
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if not member.id == self.bot.user.id:
+            if after.channel is None:
+                voice = before.channel.guild.voice_client
+                if voice.is_playing() and not voice.is_paused():
+                    print("vc playing")
+                    await asyncio.sleep(180)
+                    await voice.disconnect()
+                else:
+                    await asyncio.sleep(3)
+                    await voice.disconnect()
+        else:
+            # bot forcefully disconnected
+            pass
+
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Music(bot))
