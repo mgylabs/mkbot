@@ -525,7 +525,7 @@ class Music(commands.Cog):
                     await channel.send(
                         embed=MsgFormatter.get(
                             self,
-                            _("left {} due to inactivity".format(before.channel.name)),
+                            _("left {} due to inactivity").format(before.channel.name),
                             show_req_user=False,
                         )
                     )
@@ -535,14 +535,14 @@ class Music(commands.Cog):
                     await channel.send(
                         embed=MsgFormatter.get(
                             self,
-                            _("left {} due to inactivity".format(before.channel.name)),
+                            _("left {} due to inactivity").format(before.channel.name),
                             show_req_user=False,
                         )
                     )
         else:
             # bot forcefully disconnected
             await channel.send(
-                embed=MsgFormatter.get(self, _("left {}".format(before.channel.name))),
+                embed=MsgFormatter.get(self, _("left {}").format(before.channel.name)),
                 show_req_user=False,
             )
 
