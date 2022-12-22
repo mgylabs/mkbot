@@ -515,14 +515,24 @@ class Music(commands.Cog):
             if after.channel is None:
                 voice = before.channel.guild.voice_client
                 if voice.is_playing() and not voice.is_paused():
-                    print("vc playing")
                     await asyncio.sleep(180)
                     await voice.disconnect()
+                    # channel.send(
+                    #    embed=MsgFormatter.get(
+                    #        self, "left {} due to inactivity".format(before.name)
+                    #    )
+                    # )
                 else:
                     await asyncio.sleep(3)
                     await voice.disconnect()
+                    # channel.send(
+                    #    embed=MsgFormatter.get(
+                    #        self, "left {} due to inactivity".format(before.name)
+                    #    )
+                    # )
         else:
             # bot forcefully disconnected
+            # channel.send(embed=MsgFormatter.get(self, "left {}".format(before.name)))
             pass
 
 
