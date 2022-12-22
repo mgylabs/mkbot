@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from yt_dlp import YoutubeDL
 
+from mgylabs.i18n import _
+
 from .utils.exceptions import NonFatalError, UsageError
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -119,7 +121,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.tmp_id = 0
+        self.tmp_id = {}
 
     async def player(self, ctx: commands.Context):
         if await validate_voice_client(ctx):
@@ -217,8 +219,8 @@ class Music(commands.Cog):
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
         """
-        self.tmp_id = ctx.message.channel.id
         gid = ctx.message.guild.id
+        self.tmp_id[gid] = ctx.message.channel.id
         try:
             guild_sl[gid]
         except KeyError:
@@ -418,8 +420,8 @@ class Music(commands.Cog):
         {commandPrefix}s "keyword"
         Shows 5 candidates that you can choose using emotes
         """
-        self.tmp_id = ctx.message.channel.id
         gid = ctx.message.guild.id
+        self.tmp_id[gid] = ctx.message.channel.id
         try:
             guild_sl[gid]
         except KeyError:
@@ -513,7 +515,7 @@ class Music(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        channel = before.channel.guild.get_channel(self.tmp_id)
+        channel = before.channel.guild.get_channel(self.tmp_id[before.channel.guild.id])
         if not member.id == self.bot.user.id:
             if after.channel is None:
                 voice = before.channel.guild.voice_client
@@ -523,7 +525,7 @@ class Music(commands.Cog):
                     await channel.send(
                         embed=MsgFormatter.get(
                             self,
-                            "left {} due to inactivity".format(before.channel.name),
+                            _("left {} due to inactivity".format(before.channel.name)),
                             show_req_user=False,
                         )
                     )
@@ -533,17 +535,16 @@ class Music(commands.Cog):
                     await channel.send(
                         embed=MsgFormatter.get(
                             self,
-                            "left {} due to inactivity".format(before.channel.name),
+                            _("left {} due to inactivity".format(before.channel.name)),
                             show_req_user=False,
                         )
                     )
         else:
             # bot forcefully disconnected
             await channel.send(
-                embed=MsgFormatter.get(self, "left {}".format(before.channel.name)),
+                embed=MsgFormatter.get(self, _("left {}".format(before.channel.name))),
                 show_req_user=False,
             )
-            pass
 
 
 async def setup(bot: commands.Bot):
