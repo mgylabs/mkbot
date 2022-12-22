@@ -511,28 +511,36 @@ class Music(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
+        channel = before.channel.guild.text_channels[0]
         if not member.id == self.bot.user.id:
             if after.channel is None:
                 voice = before.channel.guild.voice_client
                 if voice.is_playing() and not voice.is_paused():
                     await asyncio.sleep(180)
                     await voice.disconnect()
-                    # channel.send(
-                    #    embed=MsgFormatter.get(
-                    #        self, "left {} due to inactivity".format(before.name)
-                    #    )
-                    # )
+                    await channel.send(
+                        embed=MsgFormatter.get(
+                            self,
+                            "left {} due to inactivity".format(before.channel.name),
+                            show_req_user=False,
+                        )
+                    )
                 else:
                     await asyncio.sleep(3)
                     await voice.disconnect()
-                    # channel.send(
-                    #    embed=MsgFormatter.get(
-                    #        self, "left {} due to inactivity".format(before.name)
-                    #    )
-                    # )
+                    await channel.send(
+                        embed=MsgFormatter.get(
+                            self,
+                            "left {} due to inactivity".format(before.channel.name),
+                            show_req_user=False,
+                        )
+                    )
         else:
             # bot forcefully disconnected
-            # channel.send(embed=MsgFormatter.get(self, "left {}".format(before.name)))
+            await channel.send(
+                embed=MsgFormatter.get(self, "left {}".format(before.channel.name)),
+                show_req_user=False,
+            )
             pass
 
 
