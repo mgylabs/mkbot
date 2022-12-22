@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 00:12+0900\n"
+"POT-Creation-Date: 2022-12-22 15:50+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,55 +35,55 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: src/bot/command_help.py:75
+#: src/bot/command_help.py:79
 msgid "Slash Command:"
 msgstr ""
 
-#: src/bot/command_help.py:76
+#: src/bot/command_help.py:80
 msgid "Context Menu:"
 msgstr ""
 
-#: src/bot/command_help.py:89
+#: src/bot/command_help.py:93
 msgid "For more information, See %s"
 msgstr ""
 
-#: src/bot/command_help.py:89
+#: src/bot/command_help.py:93
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:192
 msgid ""
 "Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
 msgstr ""
 
-#: src/bot/command_help.py:196
+#: src/bot/command_help.py:200
 msgid "Everyone can contribute to MK Bot project on %s."
 msgstr ""
 
-#: src/bot/command_help.py:196
+#: src/bot/command_help.py:200
 msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot."
 msgstr ""
 
-#: src/bot/command_help.py:199
+#: src/bot/command_help.py:203
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
-#: src/bot/command_help.py:199 src/bot/command_help.py:201
+#: src/bot/command_help.py:203 src/bot/command_help.py:205
 msgid "Version"
 msgstr ""
 
-#: src/bot/command_help.py:209
+#: src/bot/command_help.py:213
 msgid "Help"
 msgstr ""
 
 #: src/bot/core/controllers/discord/clock.py:104
-msgid "Shows live world time"
+msgid "Shows live world clock."
 msgstr ""
 
 #: src/bot/core/controllers/discord/clock.py:127
 #, docstring
-msgid "Enables live world time."
+msgid "Enables live world clock."
 msgstr ""
 
 #: src/bot/core/controllers/discord/clock.py:158
@@ -169,7 +169,7 @@ msgid "Sets user's display language."
 msgstr ""
 
 #: src/bot/core/controllers/discord/language.py:46
-#: src/bot/core/controllers/discord/language.py:104
+#: src/bot/core/controllers/discord/language.py:107
 #: src/bot/core/controllers/discord/timezone.py:44
 #: src/bot/core/controllers/discord/timezone.py:102
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
@@ -180,21 +180,21 @@ msgstr ""
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:69
+#: src/bot/core/controllers/discord/language.py:72
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:94
+#: src/bot/core/controllers/discord/language.py:97
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:115
-#: src/bot/core/controllers/discord/language.py:124
+#: src/bot/core/controllers/discord/language.py:118
+#: src/bot/core/controllers/discord/language.py:127
 msgid "Display language of %(member)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:131
+#: src/bot/core/controllers/discord/language.py:134
 #, docstring
 msgid "Language"
 msgstr ""
@@ -639,7 +639,7 @@ msgid "X goes first"
 msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:20
-msgid "Shows user's local time"
+msgid "Shows user's local time."
 msgstr ""
 
 #: src/bot/core/controllers/discord/timezone.py:31
@@ -778,19 +778,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:256 src/bot/discord_host.py:307
+#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:263
+#: src/bot/discord_host.py:262
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:345
+#: src/bot/discord_host.py:343
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:346
+#: src/bot/discord_host.py:344
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr ""
 

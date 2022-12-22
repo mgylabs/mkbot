@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from mgylabs.db.models import DiscordUser
-from mgylabs.i18n import _
+from mgylabs.i18n import I18nExtension, _
 
 from .utils.MsgFormat import MsgFormatter
 
@@ -61,6 +61,9 @@ class Language(commands.Cog):
         user, __ = DiscordUser.get_or_create(id=member.id)
         user.locale = language
         user.save()
+
+        if member.id == ctx.author.id:
+            I18nExtension.change_current_locale(language)
 
         await ctx.send(
             embed=MsgFormatter.get(

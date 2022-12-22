@@ -101,7 +101,7 @@ async def clock_updater(bot: commands.Bot):
 
 class Clock(commands.Cog):
     clock_group = app_commands.Group(
-        name="clock", description=L_("Shows live world time")
+        name="clock", description=L_("Shows live world clock.")
     )
     clock_updater_running = False
 
@@ -124,7 +124,7 @@ class Clock(commands.Cog):
     @clock_group.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def set(self, interaction: discord.Interaction, timezone: str):
-        """Enables live world time."""
+        """Enables live world clock."""
         try:
             tz = pytz.timezone(timezone)
         except Exception as error:

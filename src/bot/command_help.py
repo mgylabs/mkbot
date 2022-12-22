@@ -44,11 +44,15 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         def get_category(command, *, no_category=no_category):
             cog = command.cog
+            return cog.qualified_name + ":" if cog is not None else no_category
+
+        def get_category_with_translate(command, *, no_category=no_category):
+            cog = command.cog
             return _(cog.qualified_name) + ":" if cog is not None else no_category
 
         filtered = await self.filter_commands(bot.commands, sort=True, key=get_category)
         max_size = self.get_max_size(filtered)
-        to_iterate = itertools.groupby(filtered, key=get_category)
+        to_iterate = itertools.groupby(filtered, key=get_category_with_translate)
 
         # Now we can add the commands to the page.
         for category, cmds in to_iterate:

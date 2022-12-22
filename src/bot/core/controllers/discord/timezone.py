@@ -17,7 +17,7 @@ from .utils.MsgFormat import MsgFormatter
 
 class TimeZone(commands.Cog):
     timezone_group = app_commands.Group(
-        name="timezone", description=L_("Shows user's local time")
+        name="timezone", description=L_("Shows user's local time.")
     )
 
     @timezone_group.command()

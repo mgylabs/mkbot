@@ -45,7 +45,6 @@ i18n = I18nExtension()
 
 
 async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
-    print("Call Patched interaction_check")
     i18n.set_current_locale(get_user_locale_code(interaction.user.id))
 
     return True
@@ -336,9 +335,8 @@ async def create_bot(return_error_level=False):
                 interaction, MGCertificate.getUserLevel(str(interaction.user))
             )
 
-            i18n.set_current_locale(get_user_locale_code(interaction.user.id))
-
             if language := init_user_locale(interaction):
+                i18n.set_current_locale(str(interaction.locale))
                 await interaction.client.get_channel(interaction.channel_id).send(
                     embed=MsgFormatter.get(
                         interaction,
@@ -348,6 +346,8 @@ async def create_bot(return_error_level=False):
                         ),
                     )
                 )
+            else:
+                i18n.set_current_locale(get_user_locale_code(interaction.user.id))
 
             await ReleaseNotify.run(
                 interaction.user.id,

@@ -33,7 +33,21 @@ class I18nExtension:
         self._current_locale.set(locale)
 
     def get_current_locale(self) -> str:
-        return self._current_locale.get(None)
+        try:
+            result = self._current_locale.get()
+        except LookupError:
+            log.warning(
+                "current_locale is not set. Content is translated to the default locale."
+            )
+            result = None
+
+        return result
+
+    @classmethod
+    def change_current_locale(cls, locale: str):
+        i18n = cls.default_i18n_instance
+
+        i18n.set_current_locale(locale)
 
     @classmethod
     def gettext_lazy(cls, message):
