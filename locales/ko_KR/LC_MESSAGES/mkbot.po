@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"POT-Creation-Date: 2022-12-22 00:12+0900\n"
-"PO-Revision-Date: 2022-12-22 05:30\n"
+"POT-Creation-Date: 2022-12-22 15:50+0900\n"
+"PO-Revision-Date: 2022-12-22 06:55\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -37,55 +37,55 @@ msgstr "설명 없음"
 msgid "General"
 msgstr "일반"
 
-#: src/bot/command_help.py:75
+#: src/bot/command_help.py:79
 msgid "Slash Command:"
 msgstr "빗금 명령어:"
 
-#: src/bot/command_help.py:76
+#: src/bot/command_help.py:80
 msgid "Context Menu:"
 msgstr "오른쪽 클릭 메뉴:"
 
-#: src/bot/command_help.py:89
+#: src/bot/command_help.py:93
 msgid "For more information, See %s"
 msgstr "자세한 내용은 %s을(를) 참조하세요."
 
-#: src/bot/command_help.py:89
+#: src/bot/command_help.py:93
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설정되지 않았습니다."
 
-#: src/bot/command_help.py:188
+#: src/bot/command_help.py:192
 msgid "Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
 msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어를 입력하세요.\n"
 "카테고리에 대한 자세한 내용을 보려면 {0} 카테고리 (을)를 입력할 수도 있습니다."
 
-#: src/bot/command_help.py:196
+#: src/bot/command_help.py:200
 msgid "Everyone can contribute to MK Bot project on %s."
 msgstr "%s에서 누구나 MK Bot 프로젝트에 기여할 수 있습니다."
 
-#: src/bot/command_help.py:196
+#: src/bot/command_help.py:200
 msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot."
 msgstr "Mulgyeol MK Bot은 오픈소스 로컬 호스트 디스코드 봇입니다."
 
-#: src/bot/command_help.py:199
+#: src/bot/command_help.py:203
 msgid "Be warned: Canary can be unstable."
 msgstr "경고: Canary 버전은 불안정할 수 있습니다."
 
-#: src/bot/command_help.py:199 src/bot/command_help.py:201
+#: src/bot/command_help.py:203 src/bot/command_help.py:205
 msgid "Version"
 msgstr "버전"
 
-#: src/bot/command_help.py:209
+#: src/bot/command_help.py:213
 msgid "Help"
 msgstr "도움말"
 
 #: src/bot/core/controllers/discord/clock.py:104
-msgid "Shows live world time"
+msgid "Shows live world clock."
 msgstr "실시간 세계 시각을 표시합니다."
 
 #: src/bot/core/controllers/discord/clock.py:127
 #, docstring
-msgid "Enables live world time."
+msgid "Enables live world clock."
 msgstr "실시간 세계 시각을 활성화합니다."
 
 #: src/bot/core/controllers/discord/clock.py:158
@@ -171,7 +171,7 @@ msgid "Sets user's display language."
 msgstr "사용자의 표시 언어를 설정합니다."
 
 #: src/bot/core/controllers/discord/language.py:46
-#: src/bot/core/controllers/discord/language.py:104
+#: src/bot/core/controllers/discord/language.py:107
 #: src/bot/core/controllers/discord/timezone.py:44
 #: src/bot/core/controllers/discord/timezone.py:102
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
@@ -182,21 +182,21 @@ msgstr "권한 거부됨"
 msgid "Invalid language"
 msgstr "유효하지 않은 언어"
 
-#: src/bot/core/controllers/discord/language.py:69
+#: src/bot/core/controllers/discord/language.py:72
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr "사용자 %(member)s의 표시 언어를 %(language)s로 설정했습니다."
 
-#: src/bot/core/controllers/discord/language.py:94
+#: src/bot/core/controllers/discord/language.py:97
 #, docstring
 msgid "Shows user's display language."
 msgstr "사용자 표시 언어를 보여줍니다."
 
-#: src/bot/core/controllers/discord/language.py:115
-#: src/bot/core/controllers/discord/language.py:124
+#: src/bot/core/controllers/discord/language.py:118
+#: src/bot/core/controllers/discord/language.py:127
 msgid "Display language of %(member)s"
 msgstr "사용자 %(member)s의 표시 언어"
 
-#: src/bot/core/controllers/discord/language.py:131
+#: src/bot/core/controllers/discord/language.py:134
 #, docstring
 msgid "Language"
 msgstr "언어"
@@ -662,8 +662,8 @@ msgid "X goes first"
 msgstr "X가 먼저 입니다."
 
 #: src/bot/core/controllers/discord/timezone.py:20
-msgid "Shows user's local time"
-msgstr "사용자의 현지 시간 표시"
+msgid "Shows user's local time."
+msgstr "사용자의 로컬 시간을 보여줍니다."
 
 #: src/bot/core/controllers/discord/timezone.py:31
 #, docstring
@@ -805,19 +805,19 @@ msgstr "ABRT가 알 수 없는 오류를 감지했습니다.\n"
 msgid "Automatic Bug Reporting Tool"
 msgstr "자동 버그 보고 도구"
 
-#: src/bot/discord_host.py:256 src/bot/discord_host.py:307
+#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
 msgid "Report Issue"
 msgstr "문제 보고"
 
-#: src/bot/discord_host.py:263
+#: src/bot/discord_host.py:262
 msgid "Command Error: %s"
 msgstr "명령어 오류: %s"
 
-#: src/bot/discord_host.py:345
+#: src/bot/discord_host.py:343
 msgid "Your display language has been changed to %s."
 msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
 
-#: src/bot/discord_host.py:346
+#: src/bot/discord_host.py:344
 msgid "Type `{commandPrefix}language set` to change your display language."
 msgstr "귀하의 표시 언어를 변경하려면 `{commandPrefix}language set`을(를) 입력하세요."
 
