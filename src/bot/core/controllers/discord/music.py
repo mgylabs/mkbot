@@ -212,12 +212,13 @@ class Music(commands.Cog):
     async def play(self, ctx: commands.Context, *song):
         """
         Plays the keyword searched or plays the song in queue
-        {commandPrefix}play "keyword"
+        {commandPrefix}play "keyword" -auto
         {commandPrefix}play
         {commandPrefix}p "keyword"
         {commandPrefix}p
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
+        If '-auto' is included, next song is automatically recommended and played
         """
         gid = ctx.message.guild.id
         self.tmp_id[gid] = ctx.message.channel.id
@@ -226,6 +227,8 @@ class Music(commands.Cog):
         except KeyError:
             sl = SongList(gid)
             guild_sl[gid] = sl
+
+        autoplay = False
 
         if not await validate_voice_client(ctx):
             raise UsageError(
@@ -263,6 +266,8 @@ class Music(commands.Cog):
             else:
                 await self.playMusic(ctx)
         else:
+            if "-auto" in song:
+                autoplay = True
             if len(song) > 1:
                 song = " ".join(song)
             else:
