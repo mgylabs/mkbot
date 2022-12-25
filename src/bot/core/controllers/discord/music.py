@@ -121,6 +121,28 @@ async def ytsearch(text, count):
     return ls
 
 
+async def nextSong():
+    # fetch next song from yt, then return as Song
+    song_url = guild_sl[gid].slist[-1].url
+    async with aiohttp.ClientSession(raise_for_status=True) as session:
+        async with session.get(song_url) as r:
+            text = await r.text()
+    soup = BeautifulSoup(text, "lxml")
+
+    b = soup.find_all("script")[-5]
+    J1 = str(b).split("var ytInitialData = ")
+    u = J1[1].find("url")
+    next_url = J1[1][u + 5 : u + 26]
+
+    title = str(soup.find("title"))[7:-8]
+
+    next_url = "youtube.com" + next_url
+    song_ = Song()
+    song_.addSong(title, next_url)
+
+    return song_
+
+
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -137,7 +159,7 @@ class Music(commands.Cog):
                 )
             )
 
-    async def playMusic(self, ctx: commands.Context, skip=False):
+    async def playMusic(self, ctx: commands.Context, skip=False, autoplay=False):
         gid = ctx.message.guild.id
         try:
             guild_sl[gid]
@@ -155,6 +177,10 @@ class Music(commands.Cog):
                     self.playMusic(ctx), self.bot.loop
                 )
                 fut.result()
+
+        # if autoplay and end of queue
+        if autoplay and len(guild_sl[gid].slist) == guild_sl[gid].queue:
+            nextSong = await nextSong()
 
         if not skip:
             try:
@@ -247,7 +273,9 @@ class Music(commands.Cog):
                     "You are not in any voice channel. Please join a voice channel to use Music bot."
                 )
             )
-
+        if "-auto" in song:
+            autoplay = True
+            song = song[:-1]
         if len(song) == 0:
             if ctx.voice_client.is_playing():
                 await self.playMusic(ctx)
@@ -281,8 +309,6 @@ class Music(commands.Cog):
             else:
                 await self.playMusic(ctx)
         else:
-            if "-auto" in song:
-                autoplay = True
             if len(song) > 1:
                 song = " ".join(song)
             else:
@@ -537,6 +563,89 @@ class Music(commands.Cog):
                 await search_msg.delete()
 
             await check_reaction(botmsg, timeout=0)
+
+    @commands.command(aliases=["au"])
+    @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    async def autoplay(self, ctx: commands.Context, *song):
+        """
+        Plays the keyword searched.
+        Then next song is automatically recommended and played
+        {commandPrefix}autoplay "keyword" -auto
+        {commandPrefix}autoplay -on
+        {commandPrefix}au -off
+        {commandPrefix}au "keyword"
+        {commandPrefix}au -on
+        {commandPrefix}au -off
+        Can enable autoplay of player by using -on
+        """
+        gid = ctx.message.guild.id
+        self.tmp_id[gid] = ctx.message.channel.id
+        try:
+            guild_sl[gid]
+        except KeyError:
+            sl = SongList(gid)
+            guild_sl[gid] = sl
+
+        if not await validate_voice_client(ctx):
+            raise UsageError(
+                "You are not in any voice channel. Please join a voice channel to use Music bot."
+            )
+
+        if len(song) == 0:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Command Error - no keyword",
+                    "No keyword was added. There must be a keyword to play for 'autoplay' command",
+                )
+            )
+        else:
+            if len(song) > 1:
+                song = " ".join(song)
+            else:
+                song = song[0]
+
+            if "youtube.com" in song:
+                if song[:11] != "https://www.":
+                    song = "https://www." + song[song.index("y") :]
+                async with aiohttp.ClientSession(raise_for_status=True) as session:
+                    async with session.get(song) as r:
+                        text = await r.text()
+                soup = BeautifulSoup(text, "lxml")
+                title = str(soup.find("title"))[7:-8]
+                song_ = Song()
+                song_.addSong(title, song)
+                guild_sl[gid].addSong(song_)
+                await ctx.message.delete()
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        guild_sl[gid].lastSong().title,
+                        " in Queue \nAutoplay is on",
+                    )
+                )
+                if not ctx.voice_client.is_playing():
+                    await self.player(ctx)
+
+            else:
+                ls = await ytsearch(song, 1)
+                t = ls[0]
+                t.user = ctx.author
+
+                guild_sl[gid].addSong(t)
+
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        song + " in Queue",
+                        guild_sl[gid].lastSong().title
+                        + "\n Length: "
+                        + guild_sl[gid].lastSong().length,
+                        +"\n Autoplay is on",
+                    )
+                )
+                if not ctx.voice_client.is_playing():
+                    await self.player(ctx)
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
