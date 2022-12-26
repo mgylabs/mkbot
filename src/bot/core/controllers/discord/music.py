@@ -8,11 +8,14 @@ from discord.ext import commands
 from yt_dlp import YoutubeDL
 
 from mgylabs.i18n import _
+from mgylabs.utils import logger
 
-from .utils.exceptions import NonFatalError, UsageError
+from .utils.exceptions import UsageError
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 from .utils.voice import validate_voice_client
+
+log = logger.get_logger(__name__)
 
 guild_sl = dict()
 
@@ -190,7 +193,8 @@ class Music(commands.Cog):
                 )
                 musicFile = info["url"]
             except IndexError:  # end of queue, after=next error
-                raise NonFatalError("End of queue")
+                log.info("End of queue")
+                return
 
         FFMPEG_OPTIONS = {
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",

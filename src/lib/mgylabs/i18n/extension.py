@@ -65,13 +65,15 @@ class I18nExtension:
         else:
             languages = [locale]
 
-        t = gettext.translation("mkbot", LOCALE_DIR, languages, fallback=fallback)
+        t = gettext.translation(  # @IgnoreException
+            "mkbot", LOCALE_DIR, languages, fallback=fallback
+        )
 
         return t
 
     @classmethod
     def gettext(cls, message, locale=None, fallback=True):
-        t = cls.get_translation(locale, fallback)
+        t = cls.get_translation(locale, fallback)  # @IgnoreException
         return t.gettext(message)
 
     @classmethod

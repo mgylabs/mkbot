@@ -80,7 +80,7 @@ class MKBotTranslator(Translator):
         self, string: locale_str, locale: Locale, context: TranslationContextTypes
     ):
         try:
-            result = i18n.gettext(str(string), locale.value, False)
+            result = i18n.gettext(str(string), locale.value, False)  # @IgnoreException
         except Exception:
             result = None
 
