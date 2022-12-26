@@ -1,0 +1,14 @@
+name: "Danger Review"
+on: [pull_request]
+
+jobs:
+  build:
+    name: Danger Review
+    if: github.repository == 'mgylabs/mkbot'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Danger
+        uses: danger/danger-js@11.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
