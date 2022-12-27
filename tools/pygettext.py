@@ -190,7 +190,6 @@ pot_header = _(
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\\n"
-"POT-Creation-Date: %(time)s\\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
 "Language-Team: LANGUAGE <LL@li.org>\\n"
@@ -501,7 +500,7 @@ class TokenEater:
         print(
             pot_header
             % {
-                "time": timestamp,
+                # "time": timestamp,
                 "version": __version__,
                 "charset": encoding,
                 "encoding": "8bit",

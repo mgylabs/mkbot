@@ -22,6 +22,7 @@ from discord.app_commands import (
 from discord.ext import commands, tasks
 from discord.ui import Button, View
 
+import views
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
 from core.controllers.discord.utils.exceptions import NonFatalError, UsageError
@@ -173,6 +174,21 @@ async def create_bot(return_error_level=False):
                 request_id = DiscordRequestLogEntry.add(
                     ctx, message, MGCertificate.getUserLevel(str(message.author))
                 )
+
+            if get_user_locale_code(message.author.id) is None:
+                dv = views.LanguageSettingView(message.author.id)
+
+                dv.message = await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Mulgyeol MK Bot Display Language",
+                        "To continue, set the your language that Mulgyeol MK Bot features appear in.",
+                    ),
+                    view=dv,
+                )
+
+                if await dv.wait():
+                    return
 
             await bot.process_commands(request_id, message)
 
@@ -342,7 +358,7 @@ async def create_bot(return_error_level=False):
                         interaction,
                         _("Your display language has been changed to %s.") % language,
                         _(
-                            "Type `{commandPrefix}language set` to change your display language."
+                            "Type `/language set` or `{commandPrefix}language set` to change your display language."
                         ),
                     )
                 )

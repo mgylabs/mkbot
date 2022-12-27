@@ -5,7 +5,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 04:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,7 +204,7 @@ msgid "Leaves voice channel where the user who typed the command is in."
 msgstr ""
 
 #: src/bot/core/controllers/discord/leave.py:22
-#: src/bot/core/controllers/discord/music.py:545
+#: src/bot/core/controllers/discord/music.py:549
 msgid "left {}"
 msgstr ""
 
@@ -470,12 +469,12 @@ msgstr ""
 msgid "Challenge declined :("
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:213
+#: src/bot/core/controllers/discord/music.py:217
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:213
+#: src/bot/core/controllers/discord/music.py:217
 #, docstring
 msgid ""
 "Plays the keyword searched or plays the song in queue\n"
@@ -487,12 +486,12 @@ msgid ""
 "If there is no keyword inputted and the player isn't playing anything, it starts the player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:313
+#: src/bot/core/controllers/discord/music.py:317
 #, docstring
 msgid "Pauses the song that is playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:313
+#: src/bot/core/controllers/discord/music.py:317
 #, docstring
 msgid ""
 "Pauses the song that is playing\n"
@@ -501,12 +500,12 @@ msgid ""
 "Cannot pause the player if the player is already paused"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:347
+#: src/bot/core/controllers/discord/music.py:351
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:347
+#: src/bot/core/controllers/discord/music.py:351
 #, docstring
 msgid ""
 "Skips the song that is playing and plays the next song in queue\n"
@@ -514,24 +513,24 @@ msgid ""
 "{commandPrefix}ss"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:383
+#: src/bot/core/controllers/discord/music.py:387
 #, docstring
 msgid "Stops Player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:383
+#: src/bot/core/controllers/discord/music.py:387
 #, docstring
 msgid ""
 "Stops Player\n"
 "{commandPrefix}stop"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:394
+#: src/bot/core/controllers/discord/music.py:398
 #, docstring
 msgid "Shows songs in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:394
+#: src/bot/core/controllers/discord/music.py:398
 #, docstring
 msgid ""
 "Shows songs in queue\n"
@@ -539,12 +538,12 @@ msgid ""
 "{commandPrefix}q"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:417
+#: src/bot/core/controllers/discord/music.py:421
 #, docstring
 msgid "Searches music in youtube"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:417
+#: src/bot/core/controllers/discord/music.py:421
 #, docstring
 msgid ""
 "Searches music in youtube\n"
@@ -553,12 +552,12 @@ msgid ""
 "Shows 5 candidates that you can choose using emotes"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:528
-#: src/bot/core/controllers/discord/music.py:538
+#: src/bot/core/controllers/discord/music.py:532
+#: src/bot/core/controllers/discord/music.py:542
 msgid "left {} due to inactivity"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:551
+#: src/bot/core/controllers/discord/music.py:555
 #, docstring
 msgid "Music"
 msgstr ""
@@ -793,20 +792,20 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
+#: src/bot/discord_host.py:271 src/bot/discord_host.py:322
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:262
+#: src/bot/discord_host.py:278
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:343
+#: src/bot/discord_host.py:359 src/bot/views.py:32
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:344
-msgid "Type `{commandPrefix}language set` to change your display language."
+#: src/bot/discord_host.py:360 src/bot/views.py:33
+msgid "Type `/language set` or `{commandPrefix}language set` to change your display language."
 msgstr ""
 
 #: src/bot/release.py:83
