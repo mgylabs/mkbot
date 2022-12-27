@@ -1,8 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"POT-Creation-Date: 2022-12-22 15:50+0900\n"
-"PO-Revision-Date: 2022-12-22 06:55\n"
+"PO-Revision-Date: 2022-12-27 12:58\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -207,8 +206,9 @@ msgid "Leaves voice channel where the user who typed the command is in."
 msgstr "명령어를 입력한 유저가 있는 음성채널에서 퇴장합니다."
 
 #: src/bot/core/controllers/discord/leave.py:22
-msgid "Leaved %s"
-msgstr "%s 퇴장함"
+#: src/bot/core/controllers/discord/music.py:549
+msgid "left {}"
+msgstr ""
 
 #: src/bot/core/controllers/discord/logout.py:12
 #, docstring
@@ -218,6 +218,15 @@ msgstr "봇을 종료합니다. (관리자 권한 필요)"
 #: src/bot/core/controllers/discord/logout.py:16
 msgid "Logs out of Discord and closes all connections"
 msgstr "디스코드에서 로그아웃하고 모든 연결을 끊습니다"
+
+#: src/bot/core/controllers/discord/lotto.py:14
+#, docstring
+msgid "Recommends Korean lotto lucky numbers"
+msgstr ""
+
+#: src/bot/core/controllers/discord/lotto.py:40
+msgid "The lucky numbers are... :sunglasses:"
+msgstr ""
 
 #: src/bot/core/controllers/discord/minigames/__init__.py:21
 #, docstring
@@ -469,12 +478,12 @@ msgstr "도전 수락! %(first_member)s 먼저 가고 %(second_member)s 두 번�
 msgid "Challenge declined :("
 msgstr "챌린지가 거부되었습니다:("
 
-#: src/bot/core/controllers/discord/music.py:181
+#: src/bot/core/controllers/discord/music.py:217
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
 msgstr "검색된 키워드를 재생하거나 대기열에 있는 노래를 재생합니다."
 
-#: src/bot/core/controllers/discord/music.py:181
+#: src/bot/core/controllers/discord/music.py:217
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue\n"
 "{commandPrefix}play \"keyword\"\n"
@@ -491,12 +500,12 @@ msgstr "검색된 키워드를 재생하거나 대기열에 있는 노래를 재
 "Youtube에서 키워드를 검색하여 대기열에 넣습니다\n"
 "입력 된 키워드가없고 플레이어가 아무 것도 재생하지 않는 경우,  플레이어를 시작합니다."
 
-#: src/bot/core/controllers/discord/music.py:282
+#: src/bot/core/controllers/discord/music.py:317
 #, docstring
 msgid "Pauses the song that is playing"
 msgstr "재생 중인 노래를 일시 정지합니다."
 
-#: src/bot/core/controllers/discord/music.py:282
+#: src/bot/core/controllers/discord/music.py:317
 #, docstring
 msgid "Pauses the song that is playing\n"
 "{commandPrefix}pause\n"
@@ -507,12 +516,12 @@ msgstr "재생 중인 노래를 일시 중지\n"
 "{commandPrefix}pp\n"
 "플레이어가 이미 일시 중지된 경우 플레이어를 일시 중지할 수 없습니다."
 
-#: src/bot/core/controllers/discord/music.py:317
+#: src/bot/core/controllers/discord/music.py:351
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr "재생 중인 곡을 건너뛰고 대기열에 있는 다음 곡을 재생합니다."
 
-#: src/bot/core/controllers/discord/music.py:317
+#: src/bot/core/controllers/discord/music.py:351
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue\n"
 "{commandPrefix}skip\n"
@@ -521,24 +530,24 @@ msgstr "재생 중인 노래를 건너뛰고 대기열의 다음 노래를 재�
 "{commandPrefix}ss\n"
 "{commandPrefix}건너뜁니다."
 
-#: src/bot/core/controllers/discord/music.py:353
+#: src/bot/core/controllers/discord/music.py:387
 #, docstring
 msgid "Stops Player"
 msgstr "플레이어를 중지합니다."
 
-#: src/bot/core/controllers/discord/music.py:353
+#: src/bot/core/controllers/discord/music.py:387
 #, docstring
 msgid "Stops Player\n"
 "{commandPrefix}stop"
 msgstr "중지 플레이어\n"
 "{commandPrefix}중지"
 
-#: src/bot/core/controllers/discord/music.py:363
+#: src/bot/core/controllers/discord/music.py:398
 #, docstring
 msgid "Shows songs in queue"
 msgstr "대기열에 있는 노래 표시"
 
-#: src/bot/core/controllers/discord/music.py:363
+#: src/bot/core/controllers/discord/music.py:398
 #, docstring
 msgid "Shows songs in queue\n"
 "{commandPrefix}queue\n"
@@ -547,12 +556,12 @@ msgstr "대기열\n"
 "{commandPrefix}대기열\n"
 "{commandPrefix}q에 있는 노래를 표시합니다."
 
-#: src/bot/core/controllers/discord/music.py:385
+#: src/bot/core/controllers/discord/music.py:421
 #, docstring
 msgid "Searches music in youtube"
 msgstr "유튜브에서 음악 검색"
 
-#: src/bot/core/controllers/discord/music.py:385
+#: src/bot/core/controllers/discord/music.py:421
 #, docstring
 msgid "Searches music in youtube\n"
 "{commandPrefix}search \"keyword\"\n"
@@ -563,7 +572,12 @@ msgstr "YouTube에서 음악을 검색\n"
 "{commandPrefix}\"키워드\"\n"
 "검색 이모티콘을 사용하여 선택할 수있는 5 가지 후보를 보여줍니다."
 
-#: src/bot/core/controllers/discord/music.py:483
+#: src/bot/core/controllers/discord/music.py:532
+#: src/bot/core/controllers/discord/music.py:542
+msgid "left {} due to inactivity"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:555
 #, docstring
 msgid "Music"
 msgstr "음악"
@@ -805,21 +819,21 @@ msgstr "ABRT가 알 수 없는 오류를 감지했습니다.\n"
 msgid "Automatic Bug Reporting Tool"
 msgstr "자동 버그 보고 도구"
 
-#: src/bot/discord_host.py:255 src/bot/discord_host.py:306
+#: src/bot/discord_host.py:271 src/bot/discord_host.py:322
 msgid "Report Issue"
 msgstr "문제 보고"
 
-#: src/bot/discord_host.py:262
+#: src/bot/discord_host.py:278
 msgid "Command Error: %s"
 msgstr "명령어 오류: %s"
 
-#: src/bot/discord_host.py:343
+#: src/bot/discord_host.py:359 src/bot/views.py:32
 msgid "Your display language has been changed to %s."
 msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
 
-#: src/bot/discord_host.py:344
-msgid "Type `{commandPrefix}language set` to change your display language."
-msgstr "귀하의 표시 언어를 변경하려면 `{commandPrefix}language set`을(를) 입력하세요."
+#: src/bot/discord_host.py:360 src/bot/views.py:33
+msgid "Type `/language set` or `{commandPrefix}language set` to change your display language."
+msgstr "귀하의 표시 언어를 변경하려면 `/language set` 또는 `{commandPrefix}language set`을(를) 입력하세요."
 
 #: src/bot/release.py:83
 msgid "Welcome to the %s release of MK Bot."
