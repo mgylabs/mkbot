@@ -17,12 +17,12 @@ def init_user_locale(interaction: discord.Interaction):
 
 def set_user_locale_by_iaction(interaction: discord.Interaction, locale: str):
     user: DiscordUser
-    if user := DiscordUser.get_one(id=interaction.user.id):
-        user.locale = locale
-        user.save()
+    user, __ = DiscordUser.get_or_create(commit=False, id=interaction.user.id)
 
-        return Locale.parse(str(interaction.locale)).get_language_name()
-    return None
+    user.locale = locale
+    user.save()
+
+    return Locale.parse(str(interaction.locale)).get_language_name()
 
 
 def get_user_locale_code(user_id):

@@ -175,20 +175,20 @@ async def create_bot(return_error_level=False):
                     ctx, message, MGCertificate.getUserLevel(str(message.author))
                 )
 
-            if get_user_locale_code(message.author.id) is None:
-                dv = views.LanguageSettingView(message.author.id)
+                if get_user_locale_code(message.author.id) is None:
+                    dv = views.LanguageSettingView(message.author.id)
 
-                dv.message = await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        "Mulgyeol MK Bot Display Language",
-                        "To continue, set the your language that Mulgyeol MK Bot features appear in.",
-                    ),
-                    view=dv,
-                )
+                    dv.message = await ctx.send(
+                        embed=MsgFormatter.get(
+                            ctx,
+                            "Mulgyeol MK Bot Display Language",
+                            "To continue, set the your language that Mulgyeol MK Bot features appear in.",
+                        ),
+                        view=dv,
+                    )
 
-                if await dv.wait():
-                    return
+                    if await dv.wait():
+                        return
 
             await bot.process_commands(request_id, message)
 

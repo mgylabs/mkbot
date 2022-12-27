@@ -26,7 +26,7 @@ jobs:
 
             Created by the [Crowdin download workflow](.github/workflows/crowdin_download.yml).
             Please ensure that there are no errors or invalid files are in the PR.
-          pull_request_labels: "Area-Localization"
+          pull_request_labels: "Area: Localization"
           localization_branch_name: "auto/crowdin"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
