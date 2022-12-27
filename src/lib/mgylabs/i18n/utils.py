@@ -22,7 +22,7 @@ def set_user_locale_by_iaction(interaction: discord.Interaction, locale: str):
     user.locale = locale
     user.save()
 
-    return Locale.parse(str(interaction.locale)).get_language_name()
+    return Locale.parse(str(locale)).get_language_name()
 
 
 def get_user_locale_code(user_id):
