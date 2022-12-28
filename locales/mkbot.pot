@@ -157,43 +157,44 @@ msgstr ""
 msgid ""
 "Sets or shows user's display language.\n"
 "\n"
-"{commandPrefix}language set English\n"
+"{commandPrefix}language set en\n"
+"{commandPrefix}language set ko\n"
 "\n"
 "{commandPrefix}language show"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:36
+#: src/bot/core/controllers/discord/language.py:37
 #, docstring
 msgid "Sets user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:46
-#: src/bot/core/controllers/discord/language.py:107
+#: src/bot/core/controllers/discord/language.py:47
+#: src/bot/core/controllers/discord/language.py:108
 #: src/bot/core/controllers/discord/timezone.py:44
 #: src/bot/core/controllers/discord/timezone.py:102
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
 msgid "Permission denied"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:56
+#: src/bot/core/controllers/discord/language.py:57
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:72
+#: src/bot/core/controllers/discord/language.py:73
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:97
+#: src/bot/core/controllers/discord/language.py:98
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:118
-#: src/bot/core/controllers/discord/language.py:127
+#: src/bot/core/controllers/discord/language.py:119
+#: src/bot/core/controllers/discord/language.py:128
 msgid "Display language of %(member)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:134
+#: src/bot/core/controllers/discord/language.py:135
 #, docstring
 msgid "Language"
 msgstr ""

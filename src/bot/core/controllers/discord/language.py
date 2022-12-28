@@ -20,7 +20,8 @@ class Language(commands.Cog):
         """
         Sets or shows user's display language.
 
-        {commandPrefix}language set English
+        {commandPrefix}language set en
+        {commandPrefix}language set ko
 
         {commandPrefix}language show
         """

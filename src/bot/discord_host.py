@@ -182,7 +182,7 @@ async def create_bot(return_error_level=False):
                         embed=MsgFormatter.get(
                             ctx,
                             "Mulgyeol MK Bot Display Language",
-                            "To continue, set the your language that Mulgyeol MK Bot features appear in.",
+                            "To continue, set your language that Mulgyeol MK Bot features appear in.",
                         ),
                         view=dv,
                     )
