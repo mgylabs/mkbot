@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"PO-Revision-Date: 2022-12-27 12:58\n"
+"PO-Revision-Date: 2022-12-28 09:00\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설
 #: src/bot/command_help.py:192
 msgid "Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
-msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어를 입력하세요.\n"
+msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어 (을)를 입력하세요.\n"
 "카테고리에 대한 자세한 내용을 보려면 {0} 카테고리 (을)를 입력할 수도 있습니다."
 
 #: src/bot/command_help.py:200
@@ -158,44 +158,46 @@ msgstr "사용자의 표시 언어를 설정하거나 보여줍니다."
 #: src/bot/core/controllers/discord/language.py:20
 #, docstring
 msgid "Sets or shows user's display language.\n\n"
-"{commandPrefix}language set English\n\n"
+"{commandPrefix}language set en\n"
+"{commandPrefix}language set ko\n\n"
 "{commandPrefix}language show"
 msgstr "사용자의 표시 언어를 설정하거나 보여줍니다.\n\n"
-"{commandPrefix}language set 한국어\n\n"
+"{commandPrefix}language set en\n"
+"{commandPrefix}language set ko\n\n"
 "{commandPrefix}language show"
 
-#: src/bot/core/controllers/discord/language.py:36
+#: src/bot/core/controllers/discord/language.py:37
 #, docstring
 msgid "Sets user's display language."
 msgstr "사용자의 표시 언어를 설정합니다."
 
-#: src/bot/core/controllers/discord/language.py:46
-#: src/bot/core/controllers/discord/language.py:107
+#: src/bot/core/controllers/discord/language.py:47
+#: src/bot/core/controllers/discord/language.py:108
 #: src/bot/core/controllers/discord/timezone.py:44
 #: src/bot/core/controllers/discord/timezone.py:102
 #: src/bot/core/controllers/discord/utils/MGCert.py:110
 msgid "Permission denied"
 msgstr "권한 거부됨"
 
-#: src/bot/core/controllers/discord/language.py:56
+#: src/bot/core/controllers/discord/language.py:57
 msgid "Invalid language"
 msgstr "유효하지 않은 언어"
 
-#: src/bot/core/controllers/discord/language.py:72
+#: src/bot/core/controllers/discord/language.py:73
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr "사용자 %(member)s의 표시 언어를 %(language)s로 설정했습니다."
 
-#: src/bot/core/controllers/discord/language.py:97
+#: src/bot/core/controllers/discord/language.py:98
 #, docstring
 msgid "Shows user's display language."
 msgstr "사용자 표시 언어를 보여줍니다."
 
-#: src/bot/core/controllers/discord/language.py:118
-#: src/bot/core/controllers/discord/language.py:127
+#: src/bot/core/controllers/discord/language.py:119
+#: src/bot/core/controllers/discord/language.py:128
 msgid "Display language of %(member)s"
 msgstr "사용자 %(member)s의 표시 언어"
 
-#: src/bot/core/controllers/discord/language.py:134
+#: src/bot/core/controllers/discord/language.py:135
 #, docstring
 msgid "Language"
 msgstr "언어"
