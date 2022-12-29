@@ -104,6 +104,7 @@ async def create_bot(return_error_level=False):
     stime = time.time()
     errorlevel = 0
     pending = True
+    synced = False
 
     if is_development_mode():
         name = "IN DEBUG" if "--debug" in sys.argv else "IN DEV"
@@ -141,16 +142,39 @@ async def create_bot(return_error_level=False):
 
         print("Logged in within {:0.2f}s".format(time.time() - stime))
 
-        bot.tree.on_error = on_app_command_error
-        await bot.tree.set_translator(MKBotTranslator())
-        replyformat.set_avatar_url(
-            "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
-        )
+        nonlocal synced
+        if not synced:
+            bot.tree.on_error = on_app_command_error
 
-        for guild in CONFIG.discordAppCmdGuilds:
-            bot.tree.copy_global_to(guild=discord.Object(guild))
-            cmds = await bot.tree.sync(guild=discord.Object(guild))
-            print(f"App commands sync for {guild} ({', '.join(c.name for c in cmds)})")
+            await bot.tree.set_translator(MKBotTranslator())
+
+            replyformat.set_avatar_url(
+                "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
+            )
+
+            guilds = (
+                CONFIG.discordAppCmdGuilds
+                if is_development_mode()
+                else [guild.id for guild in bot.guilds]
+            )
+
+            result = {}
+
+            for guild in guilds:
+                try:
+                    guild = int(guild)
+                except ValueError:
+                    continue
+
+                bot.tree.copy_global_to(guild=discord.Object(guild))
+                cmds = await bot.tree.sync(guild=discord.Object(guild))
+
+                result[guild] = [c.name for c in cmds]
+                print(f"App commands synced for {guild} ({', '.join(result[guild])})")
+
+            TelemetryReporter.Event("AppCommandSynced", {"guilds": result})
+
+            synced = True
 
     @bot.event
     async def on_message(message: discord.Message):
