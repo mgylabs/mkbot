@@ -1,7 +1,7 @@
 import asyncio
 import sys
 
-from discord_host import create_bot
+from discord_host import create_bot, start_bot
 
 sys.path.append("..\\lib")
 import msvcrt
@@ -47,6 +47,10 @@ def main():
         sys.exit(0)
 
     run_migrations(SCRIPT_DIR, DB_URL)
+
+    if "--test-bot" in sys.argv:
+        asyncio.run(start_bot())
+        sys.exit()
 
     if "--dry-run" in sys.argv:
         errorlevel = asyncio.run(dry_run())

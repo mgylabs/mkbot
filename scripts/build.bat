@@ -48,7 +48,7 @@ move dist\bin ..\..\build
     cd %CI_PROJECT_DIR%
     xcopy /q /I /Y src\data build\data
     cd build\bin
-    start cmd /k "MKBotCore.exe --debug & pause & exit"
+    start cmd /k "MKBotCore.exe --debug --test-bot & pause & exit"
     echo.
     echo Start MK Bot in Test Mode
     exit /b 0
