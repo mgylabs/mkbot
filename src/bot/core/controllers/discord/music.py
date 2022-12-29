@@ -173,6 +173,8 @@ class Music(commands.Cog):
         # if autoplay and end of queue
         if autoplay and len(guild_sl[gid].slist) == guild_sl[gid].queue:
             nextSong = await nextSong()
+            guild_sl[gid].queue += 1
+            await guild_sl[gid].slist.append(nextSong)
 
         if not skip:
             try:
