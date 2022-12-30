@@ -23,5 +23,5 @@ if (requirmentsChanged) {
     schedule(async () => {
         await danger.github.api.issues.addLabels({owner: danger.github.thisPR.owner, repo: danger.github.thisPR.repo, issue_number: danger.github.thisPR.number, labels: ["dependencies", "python"]})
     })
-    message("This pull request adds, or changes a Python dependency. Please [validate hook files](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#add-hook-files).")
+    message("This pull request adds, or changes a Python dependency. Please [validate hook files](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#validate-hook-files).")
 }

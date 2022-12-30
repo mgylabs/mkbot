@@ -14,6 +14,6 @@
 ### Dependency Changes
 
 - [ ] Labeled as <https://github.com/mgylabs/mkbot/labels/dependencies>
-- [ ] [Validated hook files](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#add-hook-files)
+- [ ] [Validated hook files](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#validate-hook-files)
 
 ## Detailed Description of the Pull Request / Additional comments <!-- Provide a more detailed description of the PR, other things fixed or any additional comments/features here -->
