@@ -61,7 +61,7 @@ class CommandHelp(commands.DefaultHelpCommand):
             )
             self.add_indented_commands(cmds, heading=category, max_size=max_size)
 
-        note = self.get_app_commands_help()
+        note = await self.get_app_commands_help()
         if note:
             self.paginator.add_line()
             self.paginator.add_line(note)
@@ -73,19 +73,40 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         await self.send_pages()
 
-    def get_app_commands_help(self):
+    async def get_app_commands_help(self):
         bot = self.context.bot
 
         cmd_builder = [_("Slash Command:")]
         menu_builder = [_("Context Menu:")]
-        cmds = bot.tree._get_all_commands()
+        cmds = await bot.tree.fetch_commands()
+
+        if not cmds:
+            cmds = await bot.tree.fetch_commands(guild=self.context.guild)
+
         for command in cmds:
-            if isinstance(command, discord.app_commands.ContextMenu):
+            if command.type in [
+                discord.AppCommandType.user,
+                discord.AppCommandType.message,
+            ]:
                 menu_builder.append(f"{self.indent * ' '}- {_(command.name)}")
             else:
-                cmd_builder.append(
-                    f"{self.indent * ' '}`/{command.name}` - {render_help_text(_(command.description))}"
-                )
+                sub_builder = []
+
+                if command.options:
+                    sub_builder = [
+                        f"{self.indent * ' '}{sub.mention} - {render_help_text(_(sub.description))}"
+                        for sub in command.options
+                        if isinstance(sub, discord.app_commands.AppCommandGroup)
+                    ]
+
+                    cmd_builder.extend(sub_builder)
+
+                if not sub_builder:
+                    cmd_builder.append(
+                        f"{self.indent * ' '}{command.mention} - {render_help_text(_(command.description))}"
+                    )
+
+                cmd_builder.append("")
 
         if len(cmd_builder) == 1:
             if self.context.guild is not None:
@@ -96,6 +117,7 @@ class CommandHelp(commands.DefaultHelpCommand):
             else:
                 builder = []
         else:
+            cmd_builder.pop()
             builder = cmd_builder + [""] + menu_builder
 
         return "\n".join(builder)
