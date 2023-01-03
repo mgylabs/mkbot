@@ -112,10 +112,6 @@ async def create_bot(return_error_level=False):
     elif VERSION == None:
         name = "MK Bot Test Mode"
         activity_type = discord.ActivityType.playing
-    elif CONFIG.connectOnStart:
-        name = f"MK Bot {VERSION}"
-        activity_type = discord.ActivityType.listening
-        pending = False
     else:
         name = f"{CONFIG.commandPrefix}help"
         activity_type = discord.ActivityType.listening
@@ -217,7 +213,7 @@ async def create_bot(return_error_level=False):
             await bot.process_commands(request_id, message)
 
             nonlocal pending
-            if message.content.startswith(bot.command_prefix):
+            if ctx.command is not None:
                 if pending:
                     pending = False
                     name = f"MK Bot {VERSION}"

@@ -171,9 +171,11 @@ class Minigame(commands.GroupCog):
             embed=MsgFormatter.get(ctx, _("Hangman"), f"```{ds}```")
         )
 
+        locale_hangman = _("Hangman")
+
         async def display(text):
             await message.edit(
-                embed=MsgFormatter.get(ctx, _("Hangman"), f"```{text}```")
+                embed=MsgFormatter.get(ctx, locale_hangman, f"```{text}```")
             )
 
         hangman.send = display
