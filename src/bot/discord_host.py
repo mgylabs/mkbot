@@ -148,27 +148,26 @@ async def create_bot(return_error_level=False):
                 "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
             )
 
-            guilds = (
-                CONFIG.discordAppCmdGuilds
-                if is_development_mode()
-                else [guild.id for guild in bot.guilds]
-            )
+            if is_development_mode():
+                for guild in CONFIG.discordAppCmdGuilds:
+                    try:
+                        guild = int(guild)
+                    except ValueError:
+                        continue
 
-            result = {}
+                    bot.tree.copy_global_to(guild=discord.Object(guild))
+                    cmds = await bot.tree.sync(guild=discord.Object(guild))
 
-            for guild in guilds:
-                try:
-                    guild = int(guild)
-                except ValueError:
-                    continue
+                    print(
+                        f"App commands synced for {guild} ({', '.join([c.name for c in cmds])})"
+                    )
+            else:
+                cmds = await bot.tree.sync()
 
-                bot.tree.copy_global_to(guild=discord.Object(guild))
-                cmds = await bot.tree.sync(guild=discord.Object(guild))
-
-                result[guild] = [c.name for c in cmds]
-                print(f"App commands synced for {guild} ({', '.join(result[guild])})")
-
-            TelemetryReporter.Event("AppCommandSynced", {"guilds": result})
+                TelemetryReporter.Event(
+                    "AppCommandSynced",
+                    {"cmds": [{"id": c.id, "name": c.name} for c in cmds]},
+                )
 
             synced = True
 

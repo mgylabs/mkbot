@@ -1,7 +1,7 @@
 setlocal
 cd "%~dp0.."
 
-python -m pip install --upgrade pip
+python -m pip install -U pip wheel
 
 @ If EXIST "build" (
     rmdir /s /q build

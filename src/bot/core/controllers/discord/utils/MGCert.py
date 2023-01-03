@@ -96,13 +96,19 @@ class MGCertificate:
                     ctx_or_iaction: commands.Context = args[1]
 
                 if isinstance(ctx_or_iaction, discord.Interaction):
-                    req_user = str(ctx_or_iaction.user)
-                    req_user_id = ctx_or_iaction.user.id
+                    bot = ctx_or_iaction.client
+                    user = ctx_or_iaction.user
                 else:
-                    req_user = str(ctx_or_iaction.author)
-                    req_user_id = ctx_or_iaction.author.id
+                    bot = ctx_or_iaction.bot
+                    user = ctx_or_iaction.author
 
-                perm = MGCertificate.getUserLevel(req_user)
+                req_user = str(user)
+                req_user_id = user.id
+
+                if await bot.is_owner(user):
+                    perm = Level.ADMIN_USERS
+                else:
+                    perm = MGCertificate.getUserLevel(req_user)
 
                 if perm > level:
                     embed = MsgFormatter.get(

@@ -40,7 +40,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       - name: Install dependencies 1
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install -U pip wheel
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
         shell: pwsh
       - name: Install dependencies 2

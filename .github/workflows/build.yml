@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies 1
         run: |
           scripts\prepare.bat
-          python -m pip install --upgrade pip
+          python -m pip install -U pip wheel
           pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
         shell: pwsh
       - name: Install dependencies 2

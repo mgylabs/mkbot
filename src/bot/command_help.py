@@ -78,7 +78,7 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         cmd_builder = [_("Slash Command:")]
         menu_builder = [_("Context Menu:")]
-        cmds = bot.tree._get_all_commands(guild=self.context.guild)
+        cmds = bot.tree._get_all_commands()
         for command in cmds:
             if isinstance(command, discord.app_commands.ContextMenu):
                 menu_builder.append(f"{self.indent * ' '}- {_(command.name)}")
