@@ -172,7 +172,7 @@ msgstr ""
 #: src/bot/core/controllers/discord/language.py:108
 #: src/bot/core/controllers/discord/timezone.py:44
 #: src/bot/core/controllers/discord/timezone.py:102
-#: src/bot/core/controllers/discord/utils/MGCert.py:110
+#: src/bot/core/controllers/discord/utils/MGCert.py:116
 msgid "Permission denied"
 msgstr ""
 
@@ -205,7 +205,7 @@ msgid "Leaves voice channel where the user who typed the command is in."
 msgstr ""
 
 #: src/bot/core/controllers/discord/leave.py:22
-#: src/bot/core/controllers/discord/music.py:549
+#: src/bot/core/controllers/discord/music.py:562
 msgid "left {}"
 msgstr ""
 
@@ -281,7 +281,7 @@ msgstr ""
 #: src/bot/core/controllers/discord/minigames/__init__.py:156
 #: src/bot/core/controllers/discord/minigames/__init__.py:161
 #: src/bot/core/controllers/discord/minigames/__init__.py:171
-#: src/bot/core/controllers/discord/minigames/__init__.py:176
+#: src/bot/core/controllers/discord/minigames/__init__.py:174
 msgid "Hangman"
 msgstr ""
 
@@ -289,7 +289,7 @@ msgstr ""
 msgid "Invalid Argument"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:185
+#: src/bot/core/controllers/discord/minigames/__init__.py:187
 #, docstring
 msgid "Minigame"
 msgstr ""
@@ -470,12 +470,29 @@ msgstr ""
 msgid "Challenge declined :("
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:217
+#: src/bot/core/controllers/discord/music.py:134
+#: src/bot/core/controllers/discord/music.py:240
+msgid "You are not in any voice channel. Please join a voice channel to use Music bot."
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:161
+msgid "Now Playing"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:171
+msgid "End of Song Queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:172
+msgid "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:221
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:217
+#: src/bot/core/controllers/discord/music.py:221
 #, docstring
 msgid ""
 "Plays the keyword searched or plays the song in queue\n"
@@ -487,12 +504,50 @@ msgid ""
 "If there is no keyword inputted and the player isn't playing anything, it starts the player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:317
+#: src/bot/core/controllers/discord/music.py:251
+msgid "Already Playing"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:252
+msgid "The player is already playing"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:261
+msgid "Player Resumed"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:262
+msgid "Now playing: %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:269
+msgid "No Song in Queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:270
+msgid "The player doesn't have any song to play. Use {commandPrefix}search to add songs in queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:297
+msgid "in Queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:313
+msgid "%s in Queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:314
+msgid ""
+"{title}\n"
+" Length: {length}"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:326
 #, docstring
 msgid "Pauses the song that is playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:317
+#: src/bot/core/controllers/discord/music.py:326
 #, docstring
 msgid ""
 "Pauses the song that is playing\n"
@@ -501,12 +556,25 @@ msgid ""
 "Cannot pause the player if the player is already paused"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:351
+#: src/bot/core/controllers/discord/music.py:344
+msgid "Player Paused"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:345
+#: src/bot/core/controllers/discord/music.py:353
+msgid "Paused at: %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:352
+msgid "Player Already Paused"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:360
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:351
+#: src/bot/core/controllers/discord/music.py:360
 #, docstring
 msgid ""
 "Skips the song that is playing and plays the next song in queue\n"
@@ -514,24 +582,44 @@ msgid ""
 "{commandPrefix}ss"
 msgstr ""
 
+#: src/bot/core/controllers/discord/music.py:378
+msgid "Not Playing Error"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:379
+msgid "The player isn't playing anything. Add a song to skip."
+msgstr ""
+
 #: src/bot/core/controllers/discord/music.py:387
+msgid "Song Skipped"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:388
+msgid "Skipped %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:396
 #, docstring
 msgid "Stops Player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:387
+#: src/bot/core/controllers/discord/music.py:396
 #, docstring
 msgid ""
 "Stops Player\n"
 "{commandPrefix}stop"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:398
+#: src/bot/core/controllers/discord/music.py:402
+msgid "Player Stopped"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:407
 #, docstring
 msgid "Shows songs in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:398
+#: src/bot/core/controllers/discord/music.py:407
 #, docstring
 msgid ""
 "Shows songs in queue\n"
@@ -539,12 +627,16 @@ msgid ""
 "{commandPrefix}q"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:421
+#: src/bot/core/controllers/discord/music.py:425
+msgid "Song Queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:430
 #, docstring
 msgid "Searches music in youtube"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:421
+#: src/bot/core/controllers/discord/music.py:430
 #, docstring
 msgid ""
 "Searches music in youtube\n"
@@ -553,12 +645,46 @@ msgid ""
 "Shows 5 candidates that you can choose using emotes"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:532
-#: src/bot/core/controllers/discord/music.py:542
+#: src/bot/core/controllers/discord/music.py:450
+msgid "No Search Word Error"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:450
+msgid "Please Enter a word."
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:455
+msgid "🔍 Searching... `%s`"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:479
+msgid "Chose %s"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:480
+msgid ""
+"{title} - {length}\n"
+"added in queue"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:493
+msgid "Timeout Error"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:494
+msgid "No reaction was added. Please add a reaction to choose a song"
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:506
+msgid "🔍 Search results for `%s`, choose in 30 seconds."
+msgstr ""
+
+#: src/bot/core/controllers/discord/music.py:545
+#: src/bot/core/controllers/discord/music.py:555
 msgid "left {} due to inactivity"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:555
+#: src/bot/core/controllers/discord/music.py:568
 #, docstring
 msgid "Music"
 msgstr ""
@@ -754,12 +880,12 @@ msgid ""
 "use //help translate to find supported languages"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:75
+#: src/bot/core/controllers/discord/tts.py:76
 #, docstring
 msgid "TTS voice available"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:75
+#: src/bot/core/controllers/discord/tts.py:76
 #, docstring
 msgid ""
 "TTS voice available\n"
@@ -771,15 +897,27 @@ msgid ""
 "{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:111
+#: src/bot/core/controllers/discord/tts.py:88
+msgid "You are not in any voice channel. Please join a voice channel to use TTS."
+msgstr ""
+
+#: src/bot/core/controllers/discord/tts.py:107
+msgid "Invalid parameter. For more information, type `{commandPrefix}help tts`."
+msgstr ""
+
+#: src/bot/core/controllers/discord/tts.py:131
+msgid "[MK Bot]({url}) said on behalf of {author})"
+msgstr ""
+
+#: src/bot/core/controllers/discord/utils/MGCert.py:117
 msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:120
+#: src/bot/core/controllers/discord/utils/MGCert.py:126
 msgid "User"
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:122
+#: src/bot/core/controllers/discord/utils/MGCert.py:128
 msgid "Command tried"
 msgstr ""
 
@@ -793,19 +931,19 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:271 src/bot/discord_host.py:322
+#: src/bot/discord_host.py:290 src/bot/discord_host.py:341
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:278
+#: src/bot/discord_host.py:297
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:359 src/bot/views.py:32
+#: src/bot/discord_host.py:378 src/bot/views.py:32
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:360 src/bot/views.py:33
+#: src/bot/discord_host.py:379 src/bot/views.py:33
 msgid "Type `/language set` or `{commandPrefix}language set` to change your display language."
 msgstr ""
 

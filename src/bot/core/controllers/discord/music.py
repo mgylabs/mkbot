@@ -131,7 +131,9 @@ class Music(commands.Cog):
             await self.playMusic(ctx)
         else:
             raise UsageError(
-                "You are not in any voice channel. Please join a voice channel to use Music bot."
+                _(
+                    "You are not in any voice channel. Please join a voice channel to use Music bot."
+                )
             )
 
     async def playMusic(self, ctx: commands.Context, skip=False):
@@ -156,7 +158,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        "Now Playing",
+                        _("Now Playing"),
                         guild_sl[gid].songPlaying().title
                         + "  "
                         + guild_sl[gid].songPlaying().length,
@@ -166,8 +168,10 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        "End of Song Queue",
-                        "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more",
+                        _("End of Song Queue"),
+                        _(
+                            "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more"
+                        ),
                     )
                 )
 
@@ -233,7 +237,9 @@ class Music(commands.Cog):
 
         if not await validate_voice_client(ctx):
             raise UsageError(
-                "You are not in any voice channel. Please join a voice channel to use Music bot."
+                _(
+                    "You are not in any voice channel. Please join a voice channel to use Music bot."
+                )
             )
 
         if len(song) == 0:
@@ -242,8 +248,8 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        "Already Playing",
-                        "The player is already playing"
+                        _("Already Playing"),
+                        _("The player is already playing")
                         + guild_sl[gid].songPlaying().title,
                     )
                 )
@@ -252,16 +258,18 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        "Player Resumed",
-                        "Now playing: " + guild_sl[gid].songPlaying().title,
+                        _("Player Resumed"),
+                        _("Now playing: %s") % guild_sl[gid].songPlaying().title,
                     )
                 )
             elif len(guild_sl[gid].slist) == guild_sl[gid].queue:
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        "No Song in Queue",
-                        "The player doesn't have any song to play. Use {commandPrefix}search to add songs in queue",
+                        _("No Song in Queue"),
+                        _(
+                            "The player doesn't have any song to play. Use {commandPrefix}search to add songs in queue"
+                        ),
                     )
                 )
             else:
@@ -286,7 +294,7 @@ class Music(commands.Cog):
                 await ctx.message.delete()
                 await ctx.send(
                     embed=MsgFormatter.get(
-                        ctx, guild_sl[gid].lastSong().title, " in Queue"
+                        ctx, guild_sl[gid].lastSong().title, _("in Queue")
                     )
                 )
                 if not ctx.voice_client.is_playing():
@@ -302,10 +310,11 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        song + " in Queue",
-                        guild_sl[gid].lastSong().title
-                        + "\n Length: "
-                        + guild_sl[gid].lastSong().length,
+                        _("%s in Queue") % song,
+                        _("{title}\n Length: {length}").format(
+                            title=guild_sl[gid].lastSong().title,
+                            length=guild_sl[gid].lastSong().length,
+                        ),
                     )
                 )
                 if not ctx.voice_client.is_playing():
@@ -332,16 +341,16 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
-                    "Player Paused",
-                    "Paused at: " + guild_sl[gid].songPlaying().title,
+                    _("Player Paused"),
+                    _("Paused at: %s") % guild_sl[gid].songPlaying().title,
                 )
             )
         else:
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
-                    "Player Already Paused",
-                    "Paused at: " + guild_sl[gid].songPlaying().title,
+                    _("Player Already Paused"),
+                    _("Paused at: %s") % guild_sl[gid].songPlaying().title,
                 )
             )
 
@@ -366,8 +375,8 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
-                    "Not Playing Error",
-                    "The player isn't playing anything. Add a song to skip.",
+                    _("Not Playing Error"),
+                    _("The player isn't playing anything. Add a song to skip."),
                 )
             )
         else:
@@ -375,8 +384,8 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
-                    "Song Skipped",
-                    "Skipped " + guild_sl[gid].songPlaying().title,
+                    _("Song Skipped"),
+                    _("Skipped %s") % guild_sl[gid].songPlaying().title,
                 )
             )
             await self.playMusic(ctx, skip=True)
@@ -390,7 +399,7 @@ class Music(commands.Cog):
         """
         ctx.voice_client.stop()
         ctx.voice_client.pause()
-        await ctx.send(embed=MsgFormatter.get(ctx, "Player Stopped"))
+        await ctx.send(embed=MsgFormatter.get(ctx, _("Player Stopped")))
 
     @commands.command(aliases=["q"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -413,7 +422,7 @@ class Music(commands.Cog):
             message += (
                 f"{str(i + 1)}. `{music.length}`{music.title} - {music.user.mention}\n"
             )
-        await ctx.send(embed=MsgFormatter.get(ctx, "Song Queue", message))
+        await ctx.send(embed=MsgFormatter.get(ctx, _("Song Queue"), message))
 
     @commands.command(aliases=["s"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -438,11 +447,13 @@ class Music(commands.Cog):
         if song == "":
             await ctx.send(
                 embed=MsgFormatter.get(
-                    ctx, "No Search Word Error", "Please Enter a word."
+                    ctx, _("No Search Word Error"), _("Please Enter a word.")
                 )
             )
         else:
-            search_msg: discord.Message = await ctx.send(f"🔍 Searching... `{song}`")
+            search_msg: discord.Message = await ctx.send(
+                _("🔍 Searching... `%s`") % song
+            )
 
             search_song_list = await ytsearch(song, 5)
 
@@ -465,11 +476,11 @@ class Music(commands.Cog):
                         await ctx.send(
                             embed=MsgFormatter.get(
                                 ctx,
-                                "Chose " + guild_sl[gid].lastSong().title,
-                                guild_sl[gid].lastSong().title
-                                + " - "
-                                + guild_sl[gid].lastSong().length
-                                + "\n added in queue",
+                                _("Chose %s") % guild_sl[gid].lastSong().title,
+                                _("{title} - {length}\nadded in queue").format(
+                                    title=guild_sl[gid].lastSong().title,
+                                    length=guild_sl[gid].lastSong().length,
+                                ),
                             )
                         )
                         if not ctx.voice_client.is_playing():
@@ -479,8 +490,10 @@ class Music(commands.Cog):
                     await ctx.send(
                         embed=MsgFormatter.get(
                             ctx,
-                            "Timeout Error",
-                            "No reaction was added. Please add a reaction to choose a song",
+                            _("Timeout Error"),
+                            _(
+                                "No reaction was added. Please add a reaction to choose a song"
+                            ),
                         )
                     )
 
@@ -490,7 +503,7 @@ class Music(commands.Cog):
             )
 
             await search_msg.edit(
-                content=f"🔍 Search results for `{song}`, choose in 30 seconds."
+                content=_("🔍 Search results for `%s`, choose in 30 seconds.") % song
             )
             botmsg: discord.Message = await ctx.send(
                 embed=MsgFormatter.get(ctx, None, msg)
