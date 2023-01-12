@@ -6,7 +6,7 @@ from mgylabs.db.models import DiscordUser
 
 def init_user_locale(interaction: discord.Interaction):
     user: DiscordUser
-    if user := DiscordUser.get_one(id=interaction.user.id):
+    if user := DiscordUser.get_one_or_none(id=interaction.user.id):
         if user.locale is None:
             user.locale = str(interaction.locale)
             user.save()
@@ -17,7 +17,7 @@ def init_user_locale(interaction: discord.Interaction):
 
 def set_user_locale_by_iaction(interaction: discord.Interaction, locale: str):
     user: DiscordUser
-    user, __ = DiscordUser.get_or_create(commit=False, id=interaction.user.id)
+    user, __ = DiscordUser.get_or_create(id=interaction.user.id)
 
     user.locale = locale
     user.save()
@@ -27,6 +27,7 @@ def set_user_locale_by_iaction(interaction: discord.Interaction, locale: str):
 
 def get_user_locale_code(user_id):
     user: DiscordUser
-    if user := DiscordUser.get_one(id=user_id):
+    if user := DiscordUser.get_one_or_none(id=user_id):
         return user.locale
-    return None
+    else:
+        return None

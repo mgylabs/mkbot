@@ -210,5 +210,5 @@ class CommandHelp(commands.DefaultHelpCommand):
         for page in self.paginator.pages:
             page = page.rstrip()
             await self.context.send(
-                f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2022"
+                f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2023"
             )

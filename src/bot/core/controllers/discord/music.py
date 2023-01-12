@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from yt_dlp import YoutubeDL
 
-from mgylabs.i18n import _
+from mgylabs.db import database
+from mgylabs.i18n import I18nExtension, _
 from mgylabs.utils import logger
 
 from .utils.exceptions import UsageError
@@ -144,7 +145,9 @@ class Music(commands.Cog):
             sl = SongList(gid)
             guild_sl[gid] = sl
 
+        @database.using_database
         def next():
+            I18nExtension.set_current_locale_by_user(ctx.author.id)
             # if number of songs > queue num
             if len(guild_sl[gid].slist) > guild_sl[gid].queue:
                 guild_sl[gid].queue += 1

@@ -29,6 +29,7 @@ from core.controllers.discord.utils.exceptions import NonFatalError, UsageError
 from core.controllers.discord.utils.MGCert import MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from discord_ext import discord_extensions
+from mgylabs.db import database
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.i18n import _
@@ -51,6 +52,9 @@ async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
     return True
 
 
+discord.ui.View._scheduled_task = database.using_database(
+    discord.ui.View._scheduled_task
+)
 discord.ui.View.interaction_check = interaction_check
 
 
@@ -72,8 +76,12 @@ class MKBotContext(commands.Context):
 
 class MKBotCommandTree(CommandTree):
     async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
-        i18n.set_current_locale(get_user_locale_code(interaction.user.id))
         return await super().interaction_check(interaction)
+
+    def _from_interaction(self, interaction: discord.Interaction) -> None:
+        with database.db_session():
+            i18n.set_current_locale(get_user_locale_code(interaction.user.id))
+            return super()._from_interaction(interaction)
 
 
 class MKBotTranslator(Translator):
@@ -89,6 +97,10 @@ class MKBotTranslator(Translator):
 
 
 class MKBot(commands.Bot):
+    async def _run_event(self, coro, event_name: str, *args, **kwargs) -> None:
+        with database.db_session():
+            return await super()._run_event(coro, event_name, *args, **kwargs)
+
     async def process_commands(self, request_id, message):
         if message.author.bot:
             return
@@ -425,7 +437,7 @@ async def create_bot(return_error_level=False):
 
     print("Mulgyeol MK Bot")
     print(f"Version {VERSION}" if VERSION != None else "Test Mode")
-    print("Copyright (c) 2022 Mulgyeol Labs. All rights reserved.\n")
+    print("Copyright (c) 2023 Mulgyeol Labs. All rights reserved.\n")
     print(f"{time.strftime('%a, %d %b %Y %H:%M:%S (GMT%z)', time.localtime())}\n")
 
     return bot if not return_error_level else errorlevel

@@ -65,7 +65,7 @@ class MsgFormatter:
                 user_id = ctx_or_iaction.user.id
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
-        embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
         return embed
 
     @staticmethod
@@ -80,7 +80,7 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
-        embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
         return embed
 
     @staticmethod
@@ -107,5 +107,5 @@ class MsgFormatter:
                 user_id = ctx_or_iaction.user.id
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
-        embed.set_footer(text="© Mulgyeol Labs 2022", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
         return embed

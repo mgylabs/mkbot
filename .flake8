@@ -8,6 +8,7 @@ ignore =
     W503,
     W605,
 per-file-ignores =
+    mkbot.py: E402
     src/bot/main.py: E402,
     src/bot/discord_host.py: E402,
     src/msu/msu.py: E402,

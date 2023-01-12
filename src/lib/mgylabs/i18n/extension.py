@@ -7,6 +7,7 @@ from discord.ext import commands
 from mgylabs.utils import logger
 
 from .paths import LOCALE_DIR
+from .utils import get_user_locale_code
 
 log = logger.get_logger(__name__)
 
@@ -39,9 +40,15 @@ class I18nExtension:
             log.warning(
                 "current_locale is not set. Content is translated to the default locale."
             )
-            result = None
+            result = "en"
 
         return result
+
+    @classmethod
+    def set_current_locale_by_user(cls, user_id):
+        i18n = cls.default_i18n_instance
+
+        i18n.set_current_locale(get_user_locale_code(user_id))
 
     @classmethod
     def change_current_locale(cls, locale: str):

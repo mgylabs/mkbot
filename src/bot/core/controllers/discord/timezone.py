@@ -104,7 +104,7 @@ class TimeZone(commands.Cog):
             )
             return
 
-        if user := DiscordUser.get_one(id=member.id):
+        if user := DiscordUser.get_one_or_none(id=member.id):
             await send(
                 interaction,
                 embed=MsgFormatter.get(
@@ -140,7 +140,7 @@ class TimeZone(commands.Cog):
 
 
 def _make_local_time_embed_(interaction, member):
-    user = DiscordUser.get_one(id=member.id)
+    user = DiscordUser.get_one_or_none(id=member.id)
 
     if user is None:
         tz = pytz.timezone("UTC")

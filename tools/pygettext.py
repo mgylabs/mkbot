@@ -543,9 +543,10 @@ class TokenEater:
                     for filename, lineno in v:
                         d = {
                             "filename": pathlib.Path(filename).as_posix(),
-                            "lineno": lineno,
+                            # "lineno": lineno,
                         }
-                        s = _(" %(filename)s:%(lineno)d") % d
+                        # s = _(" %(filename)s:%(lineno)d") % d
+                        s = _(" %(filename)s") % d
                         if len(locline) + len(s) <= options.width:
                             locline = locline + s
                         else:

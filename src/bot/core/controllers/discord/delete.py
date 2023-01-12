@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 from mgylabs.i18n import _
-from mgylabs.utils.LogEntry import DiscordCommandEventLogEntry
+from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -36,7 +36,7 @@ async def delete(ctx: commands.Context, amount):
             embed=MsgFormatter.get(ctx, _("%d Messages Deleted") % int(amount))
         )
 
-    DiscordCommandEventLogEntry.add(ctx, "MessageDeleted", {"count": int(amount)})
+    DiscordEventLogEntry.Add(ctx, "MessageDeleted", {"count": int(amount)})
 
 
 async def setup(bot: commands.Bot):

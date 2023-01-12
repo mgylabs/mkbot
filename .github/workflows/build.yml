@@ -58,7 +58,7 @@ jobs:
         shell: pwsh
       - name: Unit Test
         run: |
-          python -m unittest discover -v -s tests -p test_*.py
+          pytest
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}

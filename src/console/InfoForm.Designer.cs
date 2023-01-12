@@ -100,7 +100,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(284, 60);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Version 1.0.4\r\nCommit 1234567\r\n\r\nCopyright © 2022 Mulgyeol Labs. All rights reser" +
+            this.label1.Text = "Version 1.0.4\r\nCommit 1234567\r\n\r\nCopyright © 2023 Mulgyeol Labs. All rights reser" +
     "ved.";
             //
             // button1

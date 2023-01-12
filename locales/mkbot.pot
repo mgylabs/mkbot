@@ -14,87 +14,87 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: src/bot/command_help.py:22
+#: src/bot/command_help.py
 msgid "Shows this message"
 msgstr ""
 
-#: src/bot/command_help.py:28
+#: src/bot/command_help.py
 msgid "Arguments:"
 msgstr ""
 
-#: src/bot/command_help.py:29
+#: src/bot/command_help.py
 msgid "Commands:"
 msgstr ""
 
-#: src/bot/command_help.py:30
+#: src/bot/command_help.py
 msgid "No description given"
 msgstr ""
 
-#: src/bot/command_help.py:31
+#: src/bot/command_help.py
 msgid "General"
 msgstr ""
 
-#: src/bot/command_help.py:79
+#: src/bot/command_help.py
 msgid "Slash Command:"
 msgstr ""
 
-#: src/bot/command_help.py:80
+#: src/bot/command_help.py
 msgid "Context Menu:"
 msgstr ""
 
-#: src/bot/command_help.py:93
+#: src/bot/command_help.py
 msgid "For more information, See %s"
 msgstr ""
 
-#: src/bot/command_help.py:93
+#: src/bot/command_help.py
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
-#: src/bot/command_help.py:192
+#: src/bot/command_help.py
 msgid ""
 "Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
 msgstr ""
 
-#: src/bot/command_help.py:200
+#: src/bot/command_help.py
 msgid "Everyone can contribute to MK Bot project on %s."
 msgstr ""
 
-#: src/bot/command_help.py:200
+#: src/bot/command_help.py
 msgid "Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot."
 msgstr ""
 
-#: src/bot/command_help.py:203
+#: src/bot/command_help.py
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
-#: src/bot/command_help.py:203 src/bot/command_help.py:205
+#: src/bot/command_help.py src/bot/command_help.py
 msgid "Version"
 msgstr ""
 
-#: src/bot/command_help.py:213
+#: src/bot/command_help.py
 msgid "Help"
 msgstr ""
 
-#: src/bot/core/controllers/discord/clock.py:104
+#: src/bot/core/controllers/discord/clock.py
 msgid "Shows live world clock."
 msgstr ""
 
-#: src/bot/core/controllers/discord/clock.py:127
+#: src/bot/core/controllers/discord/clock.py
 #, docstring
 msgid "Enables live world clock."
 msgstr ""
 
-#: src/bot/core/controllers/discord/clock.py:158
+#: src/bot/core/controllers/discord/clock.py
 msgid "Successfully set live clock."
 msgstr ""
 
-#: src/bot/core/controllers/discord/delete.py:13
+#: src/bot/core/controllers/discord/delete.py
 #, docstring
 msgid "Deletes messages. (Requires Admin Permission)"
 msgstr ""
 
-#: src/bot/core/controllers/discord/delete.py:13
+#: src/bot/core/controllers/discord/delete.py
 #, docstring
 msgid ""
 "Deletes messages. (Requires Admin Permission)\n"
@@ -102,57 +102,138 @@ msgid ""
 "{commandPrefix}delete all : deletes all(maximum 200) messages"
 msgstr ""
 
-#: src/bot/core/controllers/discord/delete.py:26
-#: src/bot/core/controllers/discord/delete.py:36
+#: src/bot/core/controllers/discord/delete.py
+#: src/bot/core/controllers/discord/delete.py
 msgid "%d Messages Deleted"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:16
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid "Evaluates a code."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid ""
+"Evaluates a code.\n"
+"\n"
+"Environment Variables:\n"
+"    `ctx`      - the command invocation context\n"
+"    `bot`      - the bot object\n"
+"    `guild`    - the current guild object\n"
+"    `channel`  - the current channel object\n"
+"    `message`  - the command's message object\n"
+"    `author`   - the command author's member object\n"
+"    `_`        - the result of the last dev command\n"
+"    `aiohttp`  - the aiohttp library\n"
+"    `asyncio`  - the asyncio library\n"
+"    `discord`  - the discord.py library"
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid "Launches an interactive REPL session."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid ""
+"Launches an interactive REPL session.\n"
+"\n"
+"The REPL will only recognise code as messages which start with a backtick.\n"
+"This includes codeblocks, and as such multiple lines can be evaluated.\n"
+"\n"
+"Use `exit()` or `quit` to exit the REPL session, prefixed with a backtick so they may be interpreted.\n"
+"\n"
+"Environment Variables:\n"
+"    `ctx`      - the command invocation context\n"
+"    `bot`      - the bot object\n"
+"    `guild`    - the current guild object\n"
+"    `channel`  - the current channel object\n"
+"    `message`  - the command's message object\n"
+"    `author`   - the command author's member object\n"
+"    `_`        - the result of the last dev command\n"
+"    `aiohttp`  - the aiohttp library\n"
+"    `asyncio`  - the asyncio library\n"
+"    `discord`  - the discord.py library"
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+msgid "Already running a REPL session in this channel. Exit it with `quit`."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+msgid "Enter code to execute or evaluate. `exit()` or `quit` to exit."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+msgid "Exiting REPL session."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+msgid "Exiting."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+msgid "Content too big to be printed."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid "Run a command as another user optionally in another channel."
+msgstr ""
+
+#: src/bot/core/controllers/discord/dev.py
+#, docstring
+msgid "Dev"
+msgstr ""
+
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Report broken or incorrect behaviour"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:21
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Suggest a feature for MK Bot"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:27
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Select feedback type..."
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:62
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Feedback"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:67
-#: src/bot/core/controllers/discord/feedback.py:107
+#: src/bot/core/controllers/discord/feedback.py
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Thanks for your feedback, %s!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:88
+#: src/bot/core/controllers/discord/feedback.py
 msgid "Oops! Something went wrong."
 msgstr ""
 
-#: src/bot/core/controllers/discord/feedback.py:97
+#: src/bot/core/controllers/discord/feedback.py
 #, docstring
 msgid "Sends feedback."
 msgstr ""
 
-#: src/bot/core/controllers/discord/join.py:12
+#: src/bot/core/controllers/discord/join.py
 #, docstring
 msgid "Joins voice channel that the user who typed the command is in."
 msgstr ""
 
-#: src/bot/core/controllers/discord/join.py:19
+#: src/bot/core/controllers/discord/join.py
 msgid "Joined %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:15
-#: src/bot/core/controllers/discord/language.py:20
+#: src/bot/core/controllers/discord/language.py
+#: src/bot/core/controllers/discord/language.py
 #, docstring
 msgid "Sets or shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:20
+#: src/bot/core/controllers/discord/language.py
 #, docstring
 msgid ""
 "Sets or shows user's display language.\n"
@@ -163,85 +244,85 @@ msgid ""
 "{commandPrefix}language show"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:37
+#: src/bot/core/controllers/discord/language.py
 #, docstring
 msgid "Sets user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:47
-#: src/bot/core/controllers/discord/language.py:108
-#: src/bot/core/controllers/discord/timezone.py:44
-#: src/bot/core/controllers/discord/timezone.py:102
-#: src/bot/core/controllers/discord/utils/MGCert.py:116
+#: src/bot/core/controllers/discord/language.py
+#: src/bot/core/controllers/discord/language.py
+#: src/bot/core/controllers/discord/timezone.py
+#: src/bot/core/controllers/discord/timezone.py
+#: src/bot/core/controllers/discord/utils/MGCert.py
 msgid "Permission denied"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:57
+#: src/bot/core/controllers/discord/language.py
 msgid "Invalid language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:73
+#: src/bot/core/controllers/discord/language.py
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:98
+#: src/bot/core/controllers/discord/language.py
 #, docstring
 msgid "Shows user's display language."
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:119
-#: src/bot/core/controllers/discord/language.py:128
+#: src/bot/core/controllers/discord/language.py
+#: src/bot/core/controllers/discord/language.py
 msgid "Display language of %(member)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/language.py:135
+#: src/bot/core/controllers/discord/language.py
 #, docstring
 msgid "Language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/leave.py:12
+#: src/bot/core/controllers/discord/leave.py
 #, docstring
 msgid "Leaves voice channel where the user who typed the command is in."
 msgstr ""
 
-#: src/bot/core/controllers/discord/leave.py:22
-#: src/bot/core/controllers/discord/music.py:562
+#: src/bot/core/controllers/discord/leave.py
+#: src/bot/core/controllers/discord/music.py
 msgid "left {}"
 msgstr ""
 
-#: src/bot/core/controllers/discord/logout.py:12
+#: src/bot/core/controllers/discord/logout.py
 #, docstring
 msgid "Terminates bot. (Requires Admin Permission)"
 msgstr ""
 
-#: src/bot/core/controllers/discord/logout.py:16
+#: src/bot/core/controllers/discord/logout.py
 msgid "Logs out of Discord and closes all connections"
 msgstr ""
 
-#: src/bot/core/controllers/discord/lotto.py:14
+#: src/bot/core/controllers/discord/lotto.py
 #, docstring
 msgid "Recommends Korean lotto lucky numbers"
 msgstr ""
 
-#: src/bot/core/controllers/discord/lotto.py:40
+#: src/bot/core/controllers/discord/lotto.py
 msgid "The lucky numbers are... :sunglasses:"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:21
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid "Simple minigames to play with others"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:77
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid "Play a game of Gobblet Gobblers with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:79
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid "You cannot play against a bot"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:83
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid ""
 "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
 "This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. A higher strength value eats a piece even if it's already on the board. Careful, you only have 1 piece of each strength value!\n"
@@ -249,23 +330,23 @@ msgid ""
 "Do you accept this challenge, %(other)s?"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:104
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid "Play a game of battleship with someone else"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:115
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid ""
 "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
 "In order to accept, please press your button below to ready up."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:138
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid "Play a game of Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:138
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid ""
 "Play a game of Hangman\n"
@@ -274,79 +355,79 @@ msgid ""
 "{commandPrefix}hangman exit"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid "Exit Hangman Game"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:156
-#: src/bot/core/controllers/discord/minigames/__init__.py:161
-#: src/bot/core/controllers/discord/minigames/__init__.py:171
-#: src/bot/core/controllers/discord/minigames/__init__.py:174
+#: src/bot/core/controllers/discord/minigames/__init__.py
+#: src/bot/core/controllers/discord/minigames/__init__.py
+#: src/bot/core/controllers/discord/minigames/__init__.py
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid "Hangman"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:161
+#: src/bot/core/controllers/discord/minigames/__init__.py
 msgid "Invalid Argument"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/__init__.py:187
+#: src/bot/core/controllers/discord/minigames/__init__.py
 #, docstring
 msgid "Minigame"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:161
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "You win!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:167
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "You lose :("
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:170
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "%(player)s wins this game of Battleship! Congratulations."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:175
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "%(enemy)s's turn."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:176
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Your (%(enemy)s) turn!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:178
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "You sunk their %(emoji)s!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:179
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Your %(emoji)s was sunk :("
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:210
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Your enemy is not ready yet, please wait until they are"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:217
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "It is not your turn yet."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:291
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "first"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:291
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "second"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:292
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:301
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "%(player)s is ready!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:311
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid ""
 "Game currently in progress between %(player)s and %(enemy)s...\n"
 "\n"
@@ -358,43 +439,43 @@ msgid ""
 "If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:339
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Sorry, you can't have diagonal pieces"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:351
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Sorry, couldn't figure out what you wanted to do here"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:362
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:369
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "You already have a boat that is %d units long."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:373
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "This ship would be blocked off"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:395
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "Reopen Your Board"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:413
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "This is your board!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:423
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "%(player)s's Button"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:435
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "This ready button is not for you, sorry"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:440
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid ""
 "Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n"
 "\n"
@@ -406,93 +487,93 @@ msgid ""
 "You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:477
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "This prompt has timed out..."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/battleship.py:482
+#: src/bot/core/controllers/discord/minigames/battleship.py
 msgid "This prompt is not for you"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:57
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "It is now %(kind)s %(member)s's turn."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:96
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "This is not meant for you"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:122
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "You already have this piece"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:128
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "You do not have the strength necessary to take down this piece"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:135
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "You've already selected a piece, you can't select multiple pieces."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:144
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "Select a piece strength"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:164
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "%(winning_player)s won!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:168
-#: src/bot/core/controllers/discord/tic_tac_toe.py:56
+#: src/bot/core/controllers/discord/minigames/gobblet.py
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "It's a tie!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:196
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "This is a game between two other people, sorry."
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:202
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "It's not your turn"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:282
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "This prompt is not meant for you"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:301
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid ""
 "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n"
 "\n"
 "It is now 🟦 %(first_member)s's turn"
 msgstr ""
 
-#: src/bot/core/controllers/discord/minigames/gobblet.py:316
+#: src/bot/core/controllers/discord/minigames/gobblet.py
 msgid "Challenge declined :("
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:134
-#: src/bot/core/controllers/discord/music.py:240
+#: src/bot/core/controllers/discord/music.py
+#: src/bot/core/controllers/discord/music.py
 msgid "You are not in any voice channel. Please join a voice channel to use Music bot."
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:161
+#: src/bot/core/controllers/discord/music.py
 msgid "Now Playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:171
+#: src/bot/core/controllers/discord/music.py
 msgid "End of Song Queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:172
+#: src/bot/core/controllers/discord/music.py
 msgid "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:221
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:221
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Plays the keyword searched or plays the song in queue\n"
@@ -504,50 +585,50 @@ msgid ""
 "If there is no keyword inputted and the player isn't playing anything, it starts the player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:251
+#: src/bot/core/controllers/discord/music.py
 msgid "Already Playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:252
+#: src/bot/core/controllers/discord/music.py
 msgid "The player is already playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:261
+#: src/bot/core/controllers/discord/music.py
 msgid "Player Resumed"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:262
+#: src/bot/core/controllers/discord/music.py
 msgid "Now playing: %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:269
+#: src/bot/core/controllers/discord/music.py
 msgid "No Song in Queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:270
+#: src/bot/core/controllers/discord/music.py
 msgid "The player doesn't have any song to play. Use {commandPrefix}search to add songs in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:297
+#: src/bot/core/controllers/discord/music.py
 msgid "in Queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:313
+#: src/bot/core/controllers/discord/music.py
 msgid "%s in Queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:314
+#: src/bot/core/controllers/discord/music.py
 msgid ""
 "{title}\n"
 " Length: {length}"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:326
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Pauses the song that is playing"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:326
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Pauses the song that is playing\n"
@@ -556,25 +637,25 @@ msgid ""
 "Cannot pause the player if the player is already paused"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:344
+#: src/bot/core/controllers/discord/music.py
 msgid "Player Paused"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:345
-#: src/bot/core/controllers/discord/music.py:353
+#: src/bot/core/controllers/discord/music.py
+#: src/bot/core/controllers/discord/music.py
 msgid "Paused at: %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:352
+#: src/bot/core/controllers/discord/music.py
 msgid "Player Already Paused"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:360
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:360
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Skips the song that is playing and plays the next song in queue\n"
@@ -582,44 +663,44 @@ msgid ""
 "{commandPrefix}ss"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:378
+#: src/bot/core/controllers/discord/music.py
 msgid "Not Playing Error"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:379
+#: src/bot/core/controllers/discord/music.py
 msgid "The player isn't playing anything. Add a song to skip."
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:387
+#: src/bot/core/controllers/discord/music.py
 msgid "Song Skipped"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:388
+#: src/bot/core/controllers/discord/music.py
 msgid "Skipped %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:396
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Stops Player"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:396
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Stops Player\n"
 "{commandPrefix}stop"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:402
+#: src/bot/core/controllers/discord/music.py
 msgid "Player Stopped"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:407
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Shows songs in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:407
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Shows songs in queue\n"
@@ -627,16 +708,16 @@ msgid ""
 "{commandPrefix}q"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:425
+#: src/bot/core/controllers/discord/music.py
 msgid "Song Queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:430
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Searches music in youtube"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:430
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid ""
 "Searches music in youtube\n"
@@ -645,65 +726,65 @@ msgid ""
 "Shows 5 candidates that you can choose using emotes"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:450
+#: src/bot/core/controllers/discord/music.py
 msgid "No Search Word Error"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:450
+#: src/bot/core/controllers/discord/music.py
 msgid "Please Enter a word."
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:455
+#: src/bot/core/controllers/discord/music.py
 msgid "🔍 Searching... `%s`"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:479
+#: src/bot/core/controllers/discord/music.py
 msgid "Chose %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:480
+#: src/bot/core/controllers/discord/music.py
 msgid ""
 "{title} - {length}\n"
 "added in queue"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:493
+#: src/bot/core/controllers/discord/music.py
 msgid "Timeout Error"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:494
+#: src/bot/core/controllers/discord/music.py
 msgid "No reaction was added. Please add a reaction to choose a song"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:506
+#: src/bot/core/controllers/discord/music.py
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:545
-#: src/bot/core/controllers/discord/music.py:555
+#: src/bot/core/controllers/discord/music.py
+#: src/bot/core/controllers/discord/music.py
 msgid "left {} due to inactivity"
 msgstr ""
 
-#: src/bot/core/controllers/discord/music.py:568
+#: src/bot/core/controllers/discord/music.py
 #, docstring
 msgid "Music"
 msgstr ""
 
-#: src/bot/core/controllers/discord/ping.py:15
+#: src/bot/core/controllers/discord/ping.py
 #, docstring
 msgid "Shows the bot's latency."
 msgstr ""
 
-#: src/bot/core/controllers/discord/ping.py:20
+#: src/bot/core/controllers/discord/ping.py
 msgid "Pong in %sms"
 msgstr ""
 
-#: src/bot/core/controllers/discord/poll.py:12
+#: src/bot/core/controllers/discord/poll.py
 #, docstring
 msgid "Poll command"
 msgstr ""
 
-#: src/bot/core/controllers/discord/poll.py:12
+#: src/bot/core/controllers/discord/poll.py
 #, docstring
 msgid ""
 "Poll command\n"
@@ -711,20 +792,20 @@ msgid ""
 "you can vote using reactions"
 msgstr ""
 
-#: src/bot/core/controllers/discord/poll.py:21
+#: src/bot/core/controllers/discord/poll.py
 msgid "You need more than two candidates!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/poll.py:26
+#: src/bot/core/controllers/discord/poll.py
 msgid "You cannot make more than 10 candidates!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:16
+#: src/bot/core/controllers/discord/roulette.py
 #, docstring
 msgid "Play roulette"
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:16
+#: src/bot/core/controllers/discord/roulette.py
 #, docstring
 msgid ""
 "Play roulette\n"
@@ -737,155 +818,155 @@ msgid ""
 "This bot cannot be added to items."
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:27
-#: src/bot/core/controllers/discord/roulette.py:33
+#: src/bot/core/controllers/discord/roulette.py
+#: src/bot/core/controllers/discord/roulette.py
 msgid "Roulette is running. Please wait."
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:33
+#: src/bot/core/controllers/discord/roulette.py
 msgid "%dsec left"
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:40
+#: src/bot/core/controllers/discord/roulette.py
 msgid "Roulette for %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/roulette.py:40
+#: src/bot/core/controllers/discord/roulette.py
 msgid "chose... %s!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:40
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "It is now O's turn"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:47
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "It is now X's turn"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:52
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "X won!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:54
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "O won!"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:131
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 #, docstring
 msgid "Starts a tic-tac-toe game with yourself."
 msgstr ""
 
-#: src/bot/core/controllers/discord/tic_tac_toe.py:132
+#: src/bot/core/controllers/discord/tic_tac_toe.py
 msgid "X goes first"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:20
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Shows user's local time."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:31
+#: src/bot/core/controllers/discord/timezone.py
 #, docstring
 msgid "Sets user's timezone."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:52
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Invalid timezone: %s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:63
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Successfully set timezone of %(member)s to %(timezone)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:89
+#: src/bot/core/controllers/discord/timezone.py
 #, docstring
 msgid "Shows user's timezone."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:113
-#: src/bot/core/controllers/discord/timezone.py:123
+#: src/bot/core/controllers/discord/timezone.py
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Timezone of %(member)s"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:135
+#: src/bot/core/controllers/discord/timezone.py
 #, docstring
 msgid "Shows the user's local time."
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:157
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Local time of %(member)s (%(timezone)s)"
 msgstr ""
 
-#: src/bot/core/controllers/discord/timezone.py:162
+#: src/bot/core/controllers/discord/timezone.py
 msgid "Show local time"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:24
+#: src/bot/core/controllers/discord/translate.py
 msgid "Conversational translation mode"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:75
+#: src/bot/core/controllers/discord/translate.py
 #, docstring
 msgid "Enables conversational translation mode."
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:89
-#: src/bot/core/controllers/discord/translate.py:126
+#: src/bot/core/controllers/discord/translate.py
+#: src/bot/core/controllers/discord/translate.py
 msgid "Conversation Mode"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:90
-#: src/bot/core/controllers/discord/translate.py:127
+#: src/bot/core/controllers/discord/translate.py
+#: src/bot/core/controllers/discord/translate.py
 msgid "All messages are automatically translated to {0}."
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:104
+#: src/bot/core/controllers/discord/translate.py
 #, docstring
 msgid "Disables conversational translation mode."
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:115
+#: src/bot/core/controllers/discord/translate.py
 msgid "Conversation mode was disabled"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:145
+#: src/bot/core/controllers/discord/translate.py
 #, docstring
 msgid "Command that translates sentence entered to desired language"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:158
+#: src/bot/core/controllers/discord/translate.py
 msgid "Translation Successful {srcLang} -> {result}"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:205
+#: src/bot/core/controllers/discord/translate.py
 msgid "Translation Fail: {0}"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:206
-#: src/bot/core/controllers/discord/translate.py:216
+#: src/bot/core/controllers/discord/translate.py
+#: src/bot/core/controllers/discord/translate.py
 msgid "Cannot find target language(s) inputted"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:215
+#: src/bot/core/controllers/discord/translate.py
 msgid "Translation Warning: {0}"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:244
+#: src/bot/core/controllers/discord/translate.py
 msgid "Translation Fail: Input Language Detection Failed"
 msgstr ""
 
-#: src/bot/core/controllers/discord/translate.py:245
+#: src/bot/core/controllers/discord/translate.py
 msgid ""
 "Language detected is not supported. \n"
 " ** Detected language: {srcLang} **\n"
 "use //help translate to find supported languages"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:76
+#: src/bot/core/controllers/discord/tts.py
 #, docstring
 msgid "TTS voice available"
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:76
+#: src/bot/core/controllers/discord/tts.py
 #, docstring
 msgid ""
 "TTS voice available\n"
@@ -897,65 +978,65 @@ msgid ""
 "{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:88
+#: src/bot/core/controllers/discord/tts.py
 msgid "You are not in any voice channel. Please join a voice channel to use TTS."
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:107
+#: src/bot/core/controllers/discord/tts.py
 msgid "Invalid parameter. For more information, type `{commandPrefix}help tts`."
 msgstr ""
 
-#: src/bot/core/controllers/discord/tts.py:131
+#: src/bot/core/controllers/discord/tts.py
 msgid "[MK Bot]({url}) said on behalf of {author})"
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:117
+#: src/bot/core/controllers/discord/utils/MGCert.py
 msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:126
+#: src/bot/core/controllers/discord/utils/MGCert.py
 msgid "User"
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MGCert.py:128
+#: src/bot/core/controllers/discord/utils/MGCert.py
 msgid "Command tried"
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MsgFormat.py:89
+#: src/bot/core/controllers/discord/utils/MsgFormat.py
 msgid ""
 "ABRT has detected an unknown error.\n"
 "Please [create an issue](%s) at GitHub with below logs to help fix this problem."
 msgstr ""
 
-#: src/bot/core/controllers/discord/utils/MsgFormat.py:97
+#: src/bot/core/controllers/discord/utils/MsgFormat.py
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
-#: src/bot/discord_host.py:290 src/bot/discord_host.py:341
+#: src/bot/discord_host.py src/bot/discord_host.py
 msgid "Report Issue"
 msgstr ""
 
-#: src/bot/discord_host.py:297
+#: src/bot/discord_host.py
 msgid "Command Error: %s"
 msgstr ""
 
-#: src/bot/discord_host.py:378 src/bot/views.py:32
+#: src/bot/discord_host.py src/bot/views.py
 msgid "Your display language has been changed to %s."
 msgstr ""
 
-#: src/bot/discord_host.py:379 src/bot/views.py:33
+#: src/bot/discord_host.py src/bot/views.py
 msgid "Type `/language set` or `{commandPrefix}language set` to change your display language."
 msgstr ""
 
-#: src/bot/release.py:83
+#: src/bot/release.py
 msgid "Welcome to the %s release of MK Bot."
 msgstr ""
 
-#: src/bot/release.py:85
+#: src/bot/release.py
 msgid "Release"
 msgstr ""
 
-#: src/bot/release.py:88
+#: src/bot/release.py
 msgid "Please see the [Release Note](%s) for more information."
 msgstr ""
 

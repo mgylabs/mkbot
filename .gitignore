@@ -406,3 +406,5 @@ src/bot/msu.flag
 MKBotSetup*.exe
 src/lib/mgylabs/constants/APIKey.py
 src/msu/msu.flag
+tests/data
+*.flag

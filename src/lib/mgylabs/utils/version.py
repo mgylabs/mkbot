@@ -73,7 +73,7 @@ def get_mkbot_version():
             d = json.load(f)
         return Version(d["version"], d["commit"])
     except Exception:
-        return None
+        return Version("0.0.0.0", None)
 
 
 VERSION = get_mkbot_version()

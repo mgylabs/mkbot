@@ -111,7 +111,7 @@ class Language(commands.Cog):
             return
 
         user: DiscordUser
-        if user := DiscordUser.get_one(id=member.id):
+        if user := DiscordUser.get_one_or_none(id=member.id):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,

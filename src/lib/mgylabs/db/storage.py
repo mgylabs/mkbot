@@ -9,7 +9,7 @@ class Storage:
         return HashStore.count()
 
     def __getitem__(self, key):
-        val = HashStore.get(key=key).first()
+        val = HashStore.get_one_or_none(key=key)
         if val is None:
             return None
         else:
@@ -27,7 +27,8 @@ class Storage:
         HashStore.update_or_create(key=key, defaults={"value": pickle.dumps(value)})
 
     def __delitem__(self, key):
-        HashStore.get(key=key).first().delete()
+        if item := HashStore.get_one(key=key):
+            item.delete()
 
     def dict_update(self, key, value: dict):
         obj = self.__getitem__(key)

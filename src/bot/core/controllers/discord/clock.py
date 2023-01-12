@@ -9,6 +9,7 @@ import pytz
 from discord import app_commands
 from discord.ext import commands
 
+from mgylabs.db import database
 from mgylabs.db.storage import localStorage
 from mgylabs.i18n import L_, _
 from mgylabs.utils import logger
@@ -65,6 +66,7 @@ def get_clock_content(tz, offset):
     return f"{clock_emoji[d.hour%12]} {ct} ({offset})"
 
 
+@database.using_database
 async def clock_updater(bot: commands.Bot):
     while True:
         registry: dict = localStorage["discord_clock_registry"]
