@@ -509,55 +509,58 @@ class TokenEater:
         )
         # Sort the entries.  First sort each particular entry's keys, then
         # sort all the entries by their first item.
-        reverse = {}
-        for k, v in self.__messages.items():
-            keys = sorted(v.keys())
-            reverse.setdefault(tuple(keys), []).append((k, v))
-        rkeys = sorted(reverse.keys())
-        for rkey in rkeys:
-            rentries = reverse[rkey]
-            rentries.sort()
-            for k, v in rentries:
-                # If the entry was gleaned out of a docstring, then add a
-                # comment stating so.  This is to aid translators who may wish
-                # to skip translating some unimportant docstrings.
-                isdocstring = any(v.values())
-                # k is the message string, v is a dictionary-set of (filename,
-                # lineno) tuples.  We want to sort the entries in v first by
-                # file name and then by line number.
-                v = sorted(v.keys())
-                if not options.writelocations:
-                    pass
-                # location comments are different b/w Solaris and GNU:
-                elif options.locationstyle == options.SOLARIS:
-                    for filename, lineno in v:
-                        d = {
-                            "filename": pathlib.Path(filename).as_posix(),
-                            "lineno": lineno,
-                        }
-                        print(_("# File: %(filename)s, line: %(lineno)d") % d, file=fp)
-                elif options.locationstyle == options.GNU:
-                    # fit as many locations on one line, as long as the
-                    # resulting line length doesn't exceed 'options.width'
-                    locline = "#:"
-                    for filename, lineno in v:
-                        d = {
-                            "filename": pathlib.Path(filename).as_posix(),
-                            # "lineno": lineno,
-                        }
-                        # s = _(" %(filename)s:%(lineno)d") % d
-                        s = _(" %(filename)s") % d
-                        if len(locline) + len(s) <= options.width:
-                            locline = locline + s
-                        else:
-                            print(locline, file=fp)
-                            locline = "#:" + s
-                    if len(locline) > 2:
+        # reverse = {}
+        # for k, v in self.__messages.items():
+        #     keys = sorted(v.keys())
+        #     print(">>>>>", k, "<<<<<", v)
+        # reverse.setdefault(tuple(keys), []).append((k, v))
+
+        # rkeys = sorted(reverse.keys())
+        # for rkey in rkeys:
+        #     rentries = reverse[rkey]
+        #     rentries.sort()
+
+        for k, v in sorted(self.__messages.items()):
+            # If the entry was gleaned out of a docstring, then add a
+            # comment stating so.  This is to aid translators who may wish
+            # to skip translating some unimportant docstrings.
+            isdocstring = any(v.values())
+            # k is the message string, v is a dictionary-set of (filename,
+            # lineno) tuples.  We want to sort the entries in v first by
+            # file name and then by line number.
+            v = sorted(v.keys())
+            if not options.writelocations:
+                pass
+            # location comments are different b/w Solaris and GNU:
+            elif options.locationstyle == options.SOLARIS:
+                for filename, lineno in v:
+                    d = {
+                        "filename": pathlib.Path(filename).as_posix(),
+                        "lineno": lineno,
+                    }
+                    print(_("# File: %(filename)s, line: %(lineno)d") % d, file=fp)
+            elif options.locationstyle == options.GNU:
+                # fit as many locations on one line, as long as the
+                # resulting line length doesn't exceed 'options.width'
+                locline = "#:"
+                for filename, lineno in v:
+                    d = {
+                        "filename": pathlib.Path(filename).as_posix(),
+                        # "lineno": lineno,
+                    }
+                    # s = _(" %(filename)s:%(lineno)d") % d
+                    s = _(" %(filename)s") % d
+                    if len(locline) + len(s) <= options.width:
+                        locline = locline + s
+                    else:
                         print(locline, file=fp)
-                if isdocstring:
-                    print("#, docstring", file=fp)
-                print("msgid", normalize(k, encoding), file=fp)
-                print('msgstr ""\n', file=fp)
+                        locline = "#:" + s
+                if len(locline) > 2:
+                    print(locline, file=fp)
+            if isdocstring:
+                print("#, docstring", file=fp)
+            print("msgid", normalize(k, encoding), file=fp)
+            print('msgstr ""\n', file=fp)
 
 
 def main():

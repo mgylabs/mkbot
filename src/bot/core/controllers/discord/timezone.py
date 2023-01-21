@@ -63,6 +63,7 @@ class TimeZone(commands.Cog):
                 _("Successfully set timezone of %(member)s to %(timezone)s")
                 % {"member": member.mention, "timezone": timezone},
             ),
+            ephemeral=True,
         )
 
     @set.autocomplete("timezone")
