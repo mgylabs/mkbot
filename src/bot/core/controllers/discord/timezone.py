@@ -34,7 +34,7 @@ class TimeZone(commands.Cog):
         if member is None:
             member = interaction.user
         elif member != interaction.user and not MGCertificate.isAdminUser(
-            str(interaction.user)
+            interaction.user
         ):
             await send(
                 interaction,
@@ -93,7 +93,7 @@ class TimeZone(commands.Cog):
         if member is None:
             member = interaction.user
         elif member != interaction.user and not MGCertificate.isAdminUser(
-            str(interaction.user)
+            interaction.user
         ):
             await send(
                 interaction,

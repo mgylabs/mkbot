@@ -625,6 +625,14 @@ msgid "Suggest a feature for MK Bot"
 msgstr ""
 
 #, docstring
+msgid "Syncs the commands globally"
+msgstr ""
+
+#, docstring
+msgid "Syncs the slash commands with the given guild"
+msgstr ""
+
+#, docstring
 msgid "TTS voice available"
 msgstr ""
 
