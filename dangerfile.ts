@@ -1,4 +1,7 @@
+import { spawnSync } from "child_process";
+import { createHash } from "crypto";
 import { danger, fail, message, schedule, warn } from "danger";
+import * as fs from 'fs';
 
 // const docs = danger.git.fileMatch("**/*.md")
 // const app = danger.git.fileMatch("src/**/*.ts")
@@ -6,6 +9,19 @@ import { danger, fail, message, schedule, warn } from "danger";
 const changelogs = danger.git.fileMatch("changelogs/unreleased/*")
 const requirmentsChanged = danger.git.modified_files.includes("requirements.txt")
 
+function checkSum(name:string) {
+    return createHash("sha256").update(fs.readFileSync(name, 'utf-8')).digest("hex")
+}
+
+let prevSha = checkSum("locales/mkbot.pot")
+
+spawnSync("python", ["tools/pygettext.py", "-p locales", "-d mkbot", "-v", "-D", "--no-location", "src/bot", "src/lib"])
+
+let CurSha = checkSum("locales/mkbot.pot")
+
+if (prevSha != CurSha) {
+    fail("Changes in translated strings found, please update file `locales/mkbot.pot` by running: `scripts/gettext.bat`")
+}
 
 schedule(async () => {
     let pr = await danger.github.api.issues.get({ owner: danger.github.thisPR.owner, repo: danger.github.thisPR.repo, issue_number: danger.github.thisPR.number })

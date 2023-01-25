@@ -181,6 +181,9 @@ def create_temp_changelog(build_type, version=None, commit=None):
         else:
             index_box[ch.get("type", "others")] = [string]
 
+    key_order = ["features", "changes", "bug fixes", "others"]
+    index_box = {k: index_box[k] for k in key_order if k in index_box}
+
     for k, v in index_box.items():
         templog.append(f"## {k.capitalize()}")
         templog += v
@@ -212,6 +215,9 @@ def update_changelog(version):
             index_box[ch.get("type", "others")].append(string)
         else:
             index_box[ch.get("type", "others")] = [string]
+
+    key_order = ["features", "changes", "bug fixes", "others"]
+    index_box = {k: index_box[k] for k in key_order if k in index_box}
 
     for k, v in index_box.items():
         templog.append(f"### {k.capitalize()}")
