@@ -9,4 +9,3 @@ repos:
       - id: end-of-file-fixer
         exclude: locales/
       - id: check-yaml
-      - id: requirements-txt-fixer

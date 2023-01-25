@@ -15,59 +15,50 @@ jobs:
       url: ${{ steps.update-changelog.outputs.d_url }}
     defaults:
       run:
-        shell: cmd
+        shell: pwsh
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-      - uses: webfactory/ssh-agent@v0.5.1
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache: "poetry"
+          cache-dependency-path: |
+            **/poetry.lock
+            .github/flags/release.flag
+      - uses: webfactory/ssh-agent@v0.7.0
         name: Install SSH key
         id: install-ssh
-        continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-      - name: Get pip cache dir
-        id: pip-cache
+      - name: Install dependencies
+        env:
+          SSH_OUTCOME: ${{ steps.install-ssh.outcome }}
         run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-        shell: pwsh
-      - name: pip cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-      - name: Install dependencies 1
-        run: |
-          python -m pip install -U pip wheel
-          pip install -r requirements.txt ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-        shell: pwsh
-      - name: Install dependencies 2
-        if: steps.install-ssh.outcome == 'success'
-        run: |
-          pip install --no-cache-dir git+ssh://git@github.com/MycroftKang/application-insights-python.git
-        shell: pwsh
+          if ($Env:SSH_OUTCOME -eq "success") {
+            poetry install --no-root -E release
+          } else {
+            poetry install --no-root
+          }
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python package/vc.py --stable ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          poetry run python package/vc.py --stable ; if ($LASTEXITCODE) { exit $LASTEXITCODE }
           echo "mkbot_version=$(cat version.txt)" >> $env:GITHUB_ENV
           if ($Env:API_KEY) { echo $Env:API_KEY > src\lib\mgylabs\constants\APIKey.py }
-        shell: pwsh
       - name: Build MK Bot
         run: |
-          call scripts\build.bat --stable
+          poetry run scripts\build.bat --stable
       - name: Packaging
         run: |
           & "${Env:programfiles(x86)}\Inno Setup 6\iscc.exe" "/DNameLong=Mulgyeol MK Bot" "/DNameShort=MK Bot" "/DVersion=${Env:mkbot_version}" "/DAppExeName=MKBot.exe" "/DAppMutex=MKBot" "/DExtDirName=.mkbot" "/DDName=mkbot" "package\MKBot.iss"
-        shell: pwsh
       - name: Compress Setup
         run: |
           Compress-Archive -Path MKBotSetup-${Env:mkbot_version}.exe -DestinationPath MKBotSetup.zip
-        shell: pwsh
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -85,7 +76,7 @@ jobs:
           TAG_NAME: ${{ github.ref }}
           UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         run: |
-          python package/ghtool.py -ua
+          poetry run python package/ghtool.py -ua
       - name: Update CHANGELOG
         id: update-changelog
         env:
@@ -100,5 +91,4 @@ jobs:
           git add changelogs\unreleased
           git commit -m "Update CHANGELOG.md for $(${Env:TAG_NAME}.Substring(10))"
           git push -u https://${Env:GITHUB_ACTOR}:${Env:GITHUB_TOKEN}@github.com/${Env:GITHUB_REPOSITORY}.git HEAD:refs/heads/update-changelog-for-$(${Env:TAG_NAME}.Substring(10)) --force
-          python package/ghtool.py -cp
-        shell: pwsh
+          poetry run python package/ghtool.py -cp

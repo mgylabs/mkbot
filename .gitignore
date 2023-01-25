@@ -408,3 +408,4 @@ src/lib/mgylabs/constants/APIKey.py
 src/msu/msu.flag
 tests/data
 *.flag
+!.github/flags/*.flag
