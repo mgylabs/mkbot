@@ -11,6 +11,7 @@ jobs:
   synchronize-with-crowdin-upload:
     if: github.repository == 'mgylabs/mkbot'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: Crowdin
     name: Upload
     steps:

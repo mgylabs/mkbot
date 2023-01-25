@@ -7,6 +7,7 @@ jobs:
   synchronize-with-crowdin-download:
     if: github.repository == 'mgylabs/mkbot'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: Crowdin
     name: Download
     steps:

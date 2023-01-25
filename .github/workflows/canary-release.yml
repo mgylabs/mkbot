@@ -14,13 +14,14 @@ on:
 env:
   DEFAULT_PYTHON: "3.10"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     name: Check Latest Commit
     if: github.repository == 'mgylabs/mkbot' && github.event_name != 'workflow_dispatch'
     outputs:
@@ -44,6 +45,7 @@ jobs:
     needs: check
     if: always() && (needs.check.result == 'skipped' || needs.check.outputs.is_new == 'true')
     runs-on: windows-2019
+    timeout-minutes: 30
     environment:
       name: "Canary"
       url: https://github.com/mgylabs/mkbot/releases/tag/canary
@@ -62,20 +64,14 @@ jobs:
           cache-dependency-path: |
             **/poetry.lock
             .github/flags/release.flag
-      - uses: webfactory/ssh-agent@v0.7.0
-        name: Install SSH key
-        id: install-ssh
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-      - name: Install dependencies
+      - name: Git Config
         env:
-          SSH_OUTCOME: ${{ steps.install-ssh.outcome }}
+          GITHUB_USERNAME: ${{ secrets.DEPLOY_USER }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: git config --global url.https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
+      - name: Install dependencies
         run: |
-          if ($Env:SSH_OUTCOME -eq "success") {
-            poetry install --no-root -E release
-          } else {
-            poetry install --no-root
-          }
+          poetry install --no-root -E release
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}
