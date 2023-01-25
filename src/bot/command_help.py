@@ -12,6 +12,11 @@ def render_help_text(text: str):
     return text.format(commandPrefix=CONFIG.commandPrefix)
 
 
+class Paginator(commands.Paginator):
+    def add_line(self, line: str = "_ _", *, empty: bool = False) -> None:
+        return super().add_line(line, empty=empty)
+
+
 class CommandHelp(commands.DefaultHelpCommand):
     formatter = None
 
@@ -23,6 +28,8 @@ class CommandHelp(commands.DefaultHelpCommand):
         )
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
+
+        self.paginator: Paginator = Paginator(prefix=None, suffix=None)
 
     async def prepare_help_command(self, ctx, command, /) -> None:
         self.arguments_heading = _("Arguments:")
@@ -40,6 +47,10 @@ class CommandHelp(commands.DefaultHelpCommand):
             # <description> portion
             self.paginator.add_line(bot.description, empty=True)
 
+        note = self.get_opening_note()
+        if note:
+            self.paginator.add_line(note, empty=True)
+
         no_category = f"\u200b{self.no_category}:"
 
         def get_category(command, *, no_category=no_category):
@@ -54,8 +65,12 @@ class CommandHelp(commands.DefaultHelpCommand):
         max_size = self.get_max_size(filtered)
         to_iterate = itertools.groupby(filtered, key=get_category_with_translate)
 
+        before_paginator_size = len(self.paginator)
         # Now we can add the commands to the page.
         for category, cmds in to_iterate:
+            if len(self.paginator) != before_paginator_size:
+                self.paginator.add_line()
+
             cmds = (
                 sorted(cmds, key=lambda c: c.name) if self.sort_commands else list(cmds)
             )
@@ -72,6 +87,19 @@ class CommandHelp(commands.DefaultHelpCommand):
             self.paginator.add_line(note)
 
         await self.send_pages()
+
+    def get_opening_note(self) -> str:
+        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {_('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
+        if VERSION != None:
+            version_desc = (
+                f"{_('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{_('Be warned: Canary can be unstable.')}**"
+                if VERSION.is_canary()
+                else f"{_('Version')} {VERSION}"
+            )
+        else:
+            version_desc = "Test Mode"
+
+        return f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}"
 
     def get_app_commands_help(self):
         bot = self.context.bot
@@ -122,9 +150,6 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         if not cmds:
             return
-
-        if len(self.paginator) != 0:
-            self.paginator.add_line()
 
         self.paginator.add_line(heading)
         max_size = max_size or self.get_max_size(cmds)
@@ -189,26 +214,16 @@ class CommandHelp(commands.DefaultHelpCommand):
 
     def get_ending_note(self) -> str:
         command_name = self.invoked_with
-        return _(
-            "Type {0} command for more info on a command.\n"
-            "You can also type {0} category for more info on a category."
-        ).format(f"{self.context.clean_prefix}{command_name}")
+        return (
+            _(
+                "Type {0} command for more info on a command.\n"
+                "You can also type {0} category for more info on a category."
+            ).format(f"{self.context.clean_prefix}{command_name}")
+            + "_ _\n_ _\n© Mulgyeol Labs 2023"
+        )
 
     async def send_pages(self):
         # """A helper utility to send the page output from :attr:`paginator` to the destination."""
-
-        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {_('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
-        if VERSION != None:
-            version_desc = (
-                f"{_('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{_('Be warned: Canary can be unstable.')}**"
-                if VERSION.is_canary()
-                else f"{_('Version')} {VERSION}"
-            )
-        else:
-            version_desc = "Test Mode"
-
+        destination = self.get_destination()
         for page in self.paginator.pages:
-            page = page.rstrip()
-            await self.context.send(
-                f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}\n\n{page}\n\n© Mulgyeol Labs 2023"
-            )
+            await destination.send(page)

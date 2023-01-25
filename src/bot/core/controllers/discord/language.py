@@ -39,7 +39,7 @@ class Language(commands.Cog):
         """
         if member is None:
             member = ctx.author
-        elif member != ctx.author and not MGCertificate.isAdminUser(str(ctx.author)):
+        elif member != ctx.author and not MGCertificate.isAdminUser(ctx.author):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,
@@ -100,7 +100,7 @@ class Language(commands.Cog):
         """
         if member is None:
             member = ctx.author
-        elif member != ctx.author and not MGCertificate.isAdminUser(str(ctx.author)):
+        elif member != ctx.author and not MGCertificate.isAdminUser(ctx.author):
             await ctx.send(
                 embed=MsgFormatter.get(
                     ctx,

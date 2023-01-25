@@ -1,13 +1,21 @@
 name: "Danger Review"
 on: [pull_request]
 
+env:
+  DEFAULT_PYTHON: "3.10"
+
 jobs:
   build:
     name: Danger Review
     if: github.repository == 'mgylabs/mkbot' && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        id: python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Danger
         uses: danger/danger-js@11.2.0
         env:

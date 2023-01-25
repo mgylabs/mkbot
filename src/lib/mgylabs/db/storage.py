@@ -1,6 +1,7 @@
 import pickle
 import traceback
 
+from mgylabs.db import database
 from mgylabs.db.models import HashStore
 
 
@@ -30,16 +31,26 @@ class Storage:
         if item := HashStore.get_one(key=key):
             item.delete()
 
-    def dict_update(self, key, value: dict):
+    def dict_get(self, key, dict_key):
         obj = self.__getitem__(key)
+        if obj is None:
+            return None
         assert isinstance(obj, dict)
-        obj.update(value)
-        self.__setitem__(key, obj)
+        return obj.get(dict_key)
 
-    def dict_pop(self, key, value):
+    def dict_update(self, key, value: dict):
+        with database.transaction():
+            obj = self.__getitem__(key)
+            if obj is None:
+                obj = {}
+            assert isinstance(obj, dict)
+            obj.update(value)
+            self.__setitem__(key, obj)
+
+    def dict_pop(self, key, dict_key):
         obj = self.__getitem__(key)
         assert isinstance(obj, dict)
-        r = obj.pop(value)
+        r = obj.pop(dict_key)
         self.__setitem__(key, obj)
         return r
 

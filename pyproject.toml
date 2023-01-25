@@ -4,3 +4,45 @@ src_paths = ["src/bot", "src/lib", "src/msu", "tests"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src/bot", "src/lib", "src/msu"]
+
+[tool.poetry]
+name = "mkbot"
+version = "0.1.0"
+description = "Local-Hosted Discord Bot"
+authors = ["Mycroft Kang <thkang0629@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.*"
+aiofiles = "0.8.0"
+alembic = "1.9.1"
+babel = "2.11.0"
+black = "22.3.0"
+bs4 = "0.0.1"
+debugpy = "1.6.5"
+discord-py = "2.1.0"
+flake8 = "6.0.0"
+mulgyeol-bot-framework = {git = "https://github.com/MycroftKang/mulgyeol-bot-framework.git", rev = "a63ebb1791558c04efff363b38012c290ae06bc5"}
+langdetect = "1.0.9"
+lxml = "4.9.1"
+packaging = "21.3"
+pre-commit = "2.17.0"
+pyinstaller = "5.7.0"
+pylint = "2.15.10"
+pynacl = "1.5.0"
+pytest = "7.2.0"
+pytest-asyncio = "0.20.3"
+pytest-mock = "3.10.0"
+pytz = "2022.1"
+pyyaml = "6.0"
+requests = "2.27.1"
+simpleaudio = "1.0.4"
+sqlalchemy = "1.4.46"
+yt-dlp = "2022.11.11"
+mulgyeol-telemetry = {git = "ssh://git@github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.extras]
+release = ["mulgyeol-telemetry"]

@@ -1,8 +1,6 @@
 setlocal
 cd "%~dp0.."
 
-python -m pip install -U pip wheel
-
 @ If EXIST "build" (
     rmdir /s /q build
 )
@@ -12,8 +10,6 @@ python -m pip install -U pip wheel
     echo Build Failed
     exit /b 1
 )
-
-pip install -r requirements.txt || goto :error
 
 mkdir build
 set CI_PROJECT_DIR=%cd%

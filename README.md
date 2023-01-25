@@ -40,6 +40,7 @@ Self-host discord bot on your own local Windows PC.
 
 - Visual Studio Code
 - Python 3.10
+- [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - Inno Setup 6.2
 - msbuild 16.5
 
@@ -48,7 +49,7 @@ Self-host discord bot on your own local Windows PC.
 1. Enter the following a command in terminal.
 
 ```bat
-.\scripts\venv.bat
+.\scripts\dep.bat
 ```
 
 2. Go into `vscode`, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> and select `build` to start the build task.
@@ -65,7 +66,7 @@ Self-host discord bot on your own local Windows PC.
 1. Enter the following commands in terminal.
 
 ```bat
-.\scripts\venv.bat
+.\scripts\dep.bat
 .\scripts\prepare.bat
 ```
 

@@ -154,11 +154,13 @@ async def create_bot(return_error_level=False):
         if not synced:
             bot.tree.on_error = on_app_command_error
 
-            await bot.tree.set_translator(MKBotTranslator())
+            await MGCertificate.set_owners(bot)
 
             replyformat.set_avatar_url(
                 "https://cdn.discordapp.com/avatars/698478990280753174/6b71c165ba779edc2a7c73f074a51ed5.png?size=20"
             )
+
+            await bot.tree.set_translator(MKBotTranslator())
 
             if is_development_mode():
                 for guild in CONFIG.discordAppCmdGuilds:
@@ -191,7 +193,7 @@ async def create_bot(return_error_level=False):
         if (message.channel.type.value == 1) and (CONFIG.disabledPrivateChannel):
             return
 
-        if bot.user.mentioned_in(message) and cert.isAdminUser(str(message.author)):
+        if bot.user.mentioned_in(message) and cert.isAdminUser(message.author):
             text = re.sub("<@!?\\d+> ", "", message.content)
             if text.lower() == "ping":
                 await message.channel.send(
@@ -203,7 +205,7 @@ async def create_bot(return_error_level=False):
             request_id = None
             if ctx.command is not None:
                 request_id = DiscordRequestLogEntry.add(
-                    ctx, message, MGCertificate.getUserLevel(str(message.author))
+                    ctx, message, MGCertificate.getUserLevel(message.author)
                 )
 
                 if get_user_locale_code(message.author.id) is None:
@@ -379,7 +381,7 @@ async def create_bot(return_error_level=False):
 
         if interaction.type == discord.InteractionType.application_command:
             DiscordRequestLogEntry.add_for_iaction(
-                interaction, MGCertificate.getUserLevel(str(interaction.user))
+                interaction, MGCertificate.getUserLevel(interaction.user)
             )
 
             if language := init_user_locale(interaction):

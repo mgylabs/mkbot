@@ -29,3 +29,40 @@ def test_localStorage_delete(needs_database):
 
     assert "test_key" not in localStorage
     assert localStorage["test_key"] is None
+
+
+def test_localStorage_dict_get(needs_database):
+    localStorage["test_key"] = {"dict_key": 12}
+    assert localStorage.dict_get("test_key", "dict_key") == 12
+
+    assert localStorage.dict_get("test_key2", "dict_key") == None
+    assert localStorage.dict_get("test_key", "dict_key2") == None
+
+
+def test_localStorage_dict_update(needs_database):
+    localStorage["test_key"] = {"dict_key1": 12, "dict_key2": 13, "dict_key3": 14}
+
+    localStorage.dict_update("test_key", {"dict_key1": 22})
+    assert localStorage["test_key"] == {
+        "dict_key1": 22,
+        "dict_key2": 13,
+        "dict_key3": 14,
+    }
+
+    localStorage.dict_update("test_key", {"dict_key4": 25})
+    assert localStorage["test_key"] == {
+        "dict_key1": 22,
+        "dict_key2": 13,
+        "dict_key3": 14,
+        "dict_key4": 25,
+    }
+
+
+def test_localStorage_dict_pop(needs_database):
+    localStorage["test_key"] = {"dict_key1": 12, "dict_key2": 13, "dict_key3": 14}
+
+    assert localStorage.dict_pop("test_key", "dict_key1") == 12
+    assert localStorage["test_key"] == {
+        "dict_key2": 13,
+        "dict_key3": 14,
+    }

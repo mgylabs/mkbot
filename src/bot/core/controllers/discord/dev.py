@@ -64,6 +64,7 @@ class Dev(commands.Cog):
         return env
 
     @commands.command(hidden=False, name="eval")
+    @commands.is_owner()
     async def _eval(self, ctx: commands.Context, *, body: str):
         """
         Evaluates a code.
@@ -126,6 +127,7 @@ class Dev(commands.Cog):
                 await ctx.send(f"```py\n{value}{ret}\n```")
 
     @commands.command(hidden=False)
+    @commands.is_owner()
     async def repl(self, ctx: commands.Context):
         """
         Launches an interactive REPL session.
@@ -254,6 +256,7 @@ class Dev(commands.Cog):
                 await ctx.send("Unexpected error: `{error}`".format(error=e))
 
     @commands.command(hidden=False)
+    @commands.is_owner()
     async def sudo(
         self,
         ctx: commands.Context,
@@ -270,6 +273,35 @@ class Dev(commands.Cog):
         msg.content = ctx.prefix + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
+
+    @commands.group(invoke_without_command=True)
+    @commands.is_owner()
+    @commands.guild_only()
+    async def sync(
+        self, ctx: commands.Context, guild_id: Optional[int], copy: bool = True
+    ) -> None:
+        """Syncs the slash commands with the given guild"""
+
+        if guild_id:
+            guild = discord.Object(id=guild_id)
+        else:
+            guild = ctx.guild
+
+        async with ctx.typing():
+            if copy:
+                self.bot.tree.copy_global_to(guild=guild)
+
+            commands = await self.bot.tree.sync(guild=guild)
+
+        await ctx.send(f"Successfully synced {len(commands)} commands")
+
+    @sync.command(name="global")
+    @commands.is_owner()
+    async def sync_global(self, ctx: commands.Context):
+        """Syncs the commands globally"""
+        async with ctx.typing():
+            commands = await self.bot.tree.sync(guild=None)
+        await ctx.send(f"Successfully synced {len(commands)} commands")
 
 
 async def setup(bot: commands.Bot):

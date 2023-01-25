@@ -47,6 +47,7 @@ class Level:
 
 
 class MGCertificate:
+    owners = []
     admin_users = []
     trusted_users = []
 
@@ -56,21 +57,36 @@ class MGCertificate:
         MGCertificate.admin_users: list = data.get("adminUsers", [])
         MGCertificate.trusted_users: list = data.get("trustedUsers", [])
 
-    @staticmethod
-    def isTrustedUser(username):
-        return MGCertificate.getUserLevel(username) == Level.TRUSTED_USERS
+    @classmethod
+    async def set_owners(cls, bot: commands.Bot):
+        app = await bot.application_info()
+        if app.team:
+            owner_ids = {m.id for m in app.team.members}
+        else:
+            owner_ids = {app.owner.id}
+
+        cls.owners.extend(owner_ids)
 
     @staticmethod
-    def isAdminUser(username):
-        return MGCertificate.getUserLevel(username) == Level.ADMIN_USERS
+    def isTrustedUser(user: discord.User):
+        return MGCertificate.getUserLevel(user) == Level.TRUSTED_USERS
 
     @staticmethod
-    def isCertUser(username):
-        return MGCertificate.getUserLevel(username) < 3
+    def isAdminUser(user: discord.User):
+        return MGCertificate.getUserLevel(user) == Level.ADMIN_USERS
 
     @staticmethod
-    def getUserLevel(username):
-        if username in MGCertificate.admin_users:
+    def isCertUser(user: discord.User):
+        return MGCertificate.getUserLevel(user) < 3
+
+    @staticmethod
+    def getUserLevel(user: discord.User):
+        user_id = user.id
+        username = str(user)
+
+        if user_id in MGCertificate.owners:
+            return Level.ADMIN_USERS
+        elif username in MGCertificate.admin_users:
             return Level.ADMIN_USERS
         elif len(MGCertificate.trusted_users) == 0:
             return Level.TRUSTED_USERS
@@ -96,19 +112,14 @@ class MGCertificate:
                     ctx_or_iaction: commands.Context = args[1]
 
                 if isinstance(ctx_or_iaction, discord.Interaction):
-                    bot = ctx_or_iaction.client
                     user = ctx_or_iaction.user
                 else:
-                    bot = ctx_or_iaction.bot
                     user = ctx_or_iaction.author
 
-                req_user = str(user)
+                req_user_name = str(user)
                 req_user_id = user.id
 
-                if await bot.is_owner(user):
-                    perm = Level.ADMIN_USERS
-                else:
-                    perm = MGCertificate.getUserLevel(req_user)
+                perm = MGCertificate.getUserLevel(user)
 
                 if perm > level:
                     embed = MsgFormatter.get(
@@ -123,7 +134,7 @@ class MGCertificate:
                         },
                         show_req_user=False,
                     )
-                    embed.add_field(name=_("User"), value=req_user)
+                    embed.add_field(name=_("User"), value=req_user_name)
                     embed.add_field(
                         name=_("Command tried"),
                         value="{} ({})".format(
@@ -133,7 +144,7 @@ class MGCertificate:
                     await send(ctx_or_iaction, embed=embed)
                     logger.critical(
                         '"{}" tried to command "{}" that needs "{}" permission.'.format(
-                            req_user,
+                            req_user_name,
                             ctx_or_iaction.command.name,
                             Level.get_description(level),
                         )
