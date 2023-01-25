@@ -1,8 +1,10 @@
 # Mulgyeol MK Bot
 
-Mulgyeol MK Bot is an open source local-hosted discord Bot.  
+Mulgyeol MK Bot is an open source local-hosted discord bot.  
 Self-host discord bot on your own local Windows PC.
 
+[![python](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/downloads)
+[![Build and Test](https://github.com/mgylabs/mkbot/actions/workflows/build.yml/badge.svg)](https://github.com/mgylabs/mkbot/actions/workflows/build.yml)
 [![Crowdin](https://badges.crowdin.net/mkbot/localized.svg)](https://crowdin.com/project/mkbot)
 
 <div align="center">
@@ -27,6 +29,12 @@ Self-host discord bot on your own local Windows PC.
 ### Mulgyeol MK Bot Stable
 
 - See [Release Note for Stable](https://github.com/mgylabs/mkbot/releases/latest) for downloading stable release
+
+### Mulgyeol MK Bot Beta
+
+> Preview upcoming features before they’re released.
+
+- See [Release Note for Beta](https://github.com/mgylabs/mkbot/releases/tag/beta) for downloading beta release
 
 ### Mulgyeol MK Bot Canary
 
@@ -61,6 +69,22 @@ Self-host discord bot on your own local Windows PC.
 > **Note**  
 > If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
+---
+
+## Contributing
+
+There are many ways in which you can participate in this project, for example:
+
+- [Submit bugs and feature requests](https://github.com/mgylabs/mkbot/issues), and help us verify as they are checked in
+- Review [source code changes](https://github.com/mgylabs/mkbot/pulls)
+
+If you are interested in fixing issues and contributing directly to the code base,
+please see the document [How to Contribute](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute), which covers the following:
+
+- [How to build and run from source](https://github.com/microsoft/vscode/wiki/How-to-Contribute)
+- [The development workflow, including debugging and running tests](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#debugging)
+- [Contributing to translations](https://crowdin.com/project/mkbot)
+
 ## Development Guide
 
 1. Enter the following commands in terminal.
@@ -77,7 +101,6 @@ Self-host discord bot on your own local Windows PC.
 ```jsonc
 {
   "discordToken": "Your Discord Bot Token",
-  "discordAppCmdGuilds": [123456789123456789],  //Your Discord Guild ID
   "kakaoToken": "Your KakaoTalk REST API Token"
 }
 ```
@@ -90,7 +113,5 @@ Self-host discord bot on your own local Windows PC.
   "trustedUsers": ["trusted_username#0000"]
 }
 ```
-
----
 
 For more infomation, See [Project Wiki](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute).
