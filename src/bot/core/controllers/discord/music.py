@@ -123,6 +123,7 @@ async def ytsearch(text, count):
 
 async def nextSong():
     # fetch next song from yt, then return as Song
+    # testtest
     song_url = guild_sl[gid].slist[-1].url
     async with aiohttp.ClientSession(raise_for_status=True) as session:
         async with session.get(song_url) as r:
