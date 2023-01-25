@@ -57,6 +57,7 @@ class SongList:
         self.queue = 0
         self.guildID = guildID
         self.slist = list()
+        self.autoplay = False
 
     # if song exists in songList (initialized)
     def songExists(self):
@@ -153,7 +154,7 @@ class Music(commands.Cog):
                 "You are not in any voice channel. Please join a voice channel to use Music bot."
             )
 
-    async def playMusic(self, ctx: commands.Context, skip=False, autoplay=False):
+    async def playMusic(self, ctx: commands.Context, skip=False):
         gid = ctx.message.guild.id
         try:
             guild_sl[gid]
@@ -171,22 +172,34 @@ class Music(commands.Cog):
                 fut.result()
 
         # if autoplay and end of queue
-        if autoplay and len(guild_sl[gid].slist) == guild_sl[gid].queue:
+        if guild_sl[gid].autoplay and len(guild_sl[gid].slist) == guild_sl[gid].queue:
             nextSong = await nextSong()
             guild_sl[gid].queue += 1
             await guild_sl[gid].slist.append(nextSong)
 
         if not skip:
             try:
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        "Now Playing",
-                        guild_sl[gid].songPlaying().title
-                        + "  "
-                        + guild_sl[gid].songPlaying().length,
+                if guild_sl[gid].autoplay:
+                    await ctx.send(
+                        embed=MsgFormatter.get(
+                            ctx,
+                            "Now Playing",
+                            guild_sl[gid].songPlaying().title
+                            + "  "
+                            + guild_sl[gid].songPlaying().length
+                            + "\nAutoplay on",
+                        )
                     )
-                )
+                else:
+                    await ctx.send(
+                        embed=MsgFormatter.get(
+                            ctx,
+                            "Now Playing",
+                            guild_sl[gid].songPlaying().title
+                            + "  "
+                            + guild_sl[gid].songPlaying().length,
+                        )
+                    )
             except IndexError:
                 await ctx.send(
                     embed=MsgFormatter.get(
@@ -256,15 +269,15 @@ class Music(commands.Cog):
             sl = SongList(gid)
             guild_sl[gid] = sl
 
-        autoplay = False
-
         if not await validate_voice_client(ctx):
             raise UsageError(
                 "You are not in any voice channel. Please join a voice channel to use Music bot."
             )
+
+        is_auto = ""
         if "-auto" in song:
-            autoplay = True
-            song = song[:-1]
+            guild_sl[gid].autoplay = True
+
         if len(song) == 0:
             if ctx.voice_client.is_playing():
                 await self.playMusic(ctx)
@@ -552,9 +565,9 @@ class Music(commands.Cog):
         """
         Plays the keyword searched.
         Then next song is automatically recommended and played
-        {commandPrefix}autoplay "keyword" -auto
-        {commandPrefix}autoplay -on
-        {commandPrefix}au -off
+        {commandPrefix}autoplay "keyword"
+        {commandPrefix}autoplay
+        {commandPrefix}autoplay -off
         {commandPrefix}au "keyword"
         {commandPrefix}au -on
         {commandPrefix}au -off
@@ -587,7 +600,26 @@ class Music(commands.Cog):
             else:
                 song = song[0]
 
-            if "youtube.com" in song:
+            if "-on" in song:
+                # turn on autoplay
+                await ctx.message.delete()
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Autoplay is on",
+                    )
+                )
+                pass
+            elif "-off" in song:
+                # turn off autoplay
+                await ctx.message.delete()
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        "Autoplay is off",
+                    )
+                )
+            elif "youtube.com" in song:
                 if song[:11] != "https://www.":
                     song = "https://www." + song[song.index("y") :]
                 async with aiohttp.ClientSession(raise_for_status=True) as session:
@@ -602,8 +634,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=MsgFormatter.get(
                         ctx,
-                        guild_sl[gid].lastSong().title,
-                        " in Queue \nAutoplay is on",
+                        guild_sl[gid].lastSong().title + " in Queue \nAutoplay is on",
                     )
                 )
                 if not ctx.voice_client.is_playing():
@@ -622,8 +653,8 @@ class Music(commands.Cog):
                         song + " in Queue",
                         guild_sl[gid].lastSong().title
                         + "\n Length: "
-                        + guild_sl[gid].lastSong().length,
-                        +"\n Autoplay is on",
+                        + guild_sl[gid].lastSong().length
+                        + "\n Autoplay is on",
                     )
                 )
                 if not ctx.voice_client.is_playing():
