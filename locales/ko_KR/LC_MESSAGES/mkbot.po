@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"PO-Revision-Date: 2023-01-21 15:50\n"
+"PO-Revision-Date: 2023-01-25 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgid "%(player)s's Button"
 msgstr "%(player)s의 버튼"
 
 msgid "%(winning_player)s won!"
-msgstr "%(winning_player)s 이겼다!"
+msgstr "%(winning_player)s 승리!"
 
 msgid "%d Messages Deleted"
 msgstr "%d개 메세지 삭제 완료"
@@ -88,11 +88,11 @@ msgstr "입력한 대상 언어를 찾을 수 없습니다."
 
 msgid "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n\n"
 "It is now 🟦 %(first_member)s's turn"
-msgstr "도전 수락! %(first_member)s 먼저 가고 %(second_member)s 두 번째입니다.\n\n"
-"이제 🟦 %(first_member)s차례입니다"
+msgstr "도전 수락! %(first_member)s은(는) 첫 번째, %(second_member)s은(는) 두 번째입니다.\n\n"
+"지금은 🟦 %(first_member)s의 차례입니다."
 
 msgid "Challenge declined :("
-msgstr "챌린지가 거부되었습니다:("
+msgstr "챌린지가 거부되었습니다 :("
 
 msgid "Chose %s"
 msgstr "%s을(를) 선택"
@@ -239,7 +239,7 @@ msgid "It is not your turn yet."
 msgstr "아직 당신의 턴이 아닙니다"
 
 msgid "It is now %(kind)s %(member)s's turn."
-msgstr "이제 %(kind)s %(member)s차례입니다."
+msgstr "이제 %(kind)s %(member)s 차례입니다."
 
 msgid "It is now O's turn"
 msgstr "이제 O의 차례입니다"
@@ -269,7 +269,7 @@ msgid "Language detected is not supported. \n"
 "use //help translate to find supported languages"
 msgstr "감지된 언어는 지원되지 않습니다. \n"
 " ** 감지된 언어: {srcLang} **\n"
-"//help 번역을 사용하여 지원되는 언어 찾기"
+"지원되는 언어를 탐색하려면 //help translate 을(를) 입력하세요."
 
 #, docstring
 msgid "Launches an interactive REPL session."
@@ -353,7 +353,7 @@ msgid "Pauses the song that is playing\n"
 "{commandPrefix}pause\n"
 "{commandPrefix}pp\n"
 "Cannot pause the player if the player is already paused"
-msgstr "재생 중인 노래를 일시 중지\n"
+msgstr "재생 중인 노래를 일시 정지합니다.\n"
 "{commandPrefix}pause\n"
 "{commandPrefix}pp\n"
 "플레이어가 이미 일시 중지된 경우 플레이어를 일시 중지할 수 없습니다."
@@ -413,7 +413,7 @@ msgstr ""
 
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
-msgstr "검색된 키워드를 재생하거나 대기열에 있는 노래를 재생합니다."
+msgstr "검색된 키워드를 재생하거나 대기열에 있는 곡을 재생합니다."
 
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue\n"
@@ -469,10 +469,10 @@ msgid "Report broken or incorrect behaviour"
 msgstr "고장또는 틀린 동작 신고"
 
 msgid "Roulette for %s"
-msgstr "%s용 룰렛"
+msgstr "룰렛 %s"
 
 msgid "Roulette is running. Please wait."
-msgstr "룰렛이 실행 중입니다. 기다리세요."
+msgstr "룰렛이 돌고 있습니다. 잠시만 기다려주세요."
 
 #, docstring
 msgid "Run a command as another user optionally in another channel."
@@ -480,7 +480,7 @@ msgstr ""
 
 #, docstring
 msgid "Searches music in youtube"
-msgstr "유튜브에서 음악 검색"
+msgstr "YouTube에서 음악을 검색합니다."
 
 #, docstring
 msgid "Searches music in youtube\n"
@@ -508,8 +508,8 @@ msgid "Set up your board below. In order to set up your board, just press 2 poin
 "⛵ → 3\n"
 "🛶 → 2\n\n"
 "You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
-msgstr "아래에서 보드를 설정합니다. 보드를 설정하려면 2 포인트를 누르면 우주선이 자동으로 생성됩니다. 대각선 보트는 가질 수 없습니다.\n\n"
-"3척의 배 🚢, , , ⛵ 가 있습니다 🛶. 각각 하나만 가질 수 있습니다. 길이는 다음과 같습니다.\n"
+msgstr "아래에서 보드를 설정합니다. 보드에서 2 포인트를 누르면 보트가 자동으로 생성됩니다. 대각선 보트는 가질 수 없습니다.\n\n"
+"3척의 보트 🚢, ⛵, 🛶 가 있습니다. 각각 하나만 가질 수 있습니다. 길이는 다음과 같습니다.\n"
 "🚢 → 4\n"
 "⛵ → 3\n"
 "🛶 → 2\n\n"
@@ -545,7 +545,7 @@ msgstr "실시간 세계 시각을 표시합니다."
 
 #, docstring
 msgid "Shows songs in queue"
-msgstr "대기열에 있는 노래 표시"
+msgstr "대기열에 있는 곡을 보여줍니다."
 
 #, docstring
 msgid "Shows songs in queue\n"
@@ -612,7 +612,7 @@ msgid "Sorry, couldn't figure out what you wanted to do here"
 msgstr "여기서 무엇을 하려는지 알 수 없습니다."
 
 msgid "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
-msgstr "죄송합니다,이 배는 너무 큽니다. 배송 크기 4, 3 또는 2만 지원됩니다."
+msgstr "죄송합니다, 이 보트는 너무 큽니다. 보트 크기 4, 3 또는 2만 지원됩니다."
 
 msgid "Sorry, you can't have diagonal pieces"
 msgstr "대각선 조각은 사용할 수 없습니다."
@@ -623,7 +623,7 @@ msgstr "자신과 틱택토 게임을 시작합니다."
 
 #, docstring
 msgid "Stops Player"
-msgstr "플레이어를 중지합니다."
+msgstr "플레이어를 정지합니다."
 
 #, docstring
 msgid "Stops Player\n"
@@ -642,6 +642,14 @@ msgstr "사용자 %(member)s의 시간대를 %(timezone)s로 설정했습니다"
 
 msgid "Suggest a feature for MK Bot"
 msgstr "MK Bot을(를) 위한 기능을 제안하세요"
+
+#, docstring
+msgid "Syncs the commands globally"
+msgstr ""
+
+#, docstring
+msgid "Syncs the slash commands with the given guild"
+msgstr ""
 
 #, docstring
 msgid "TTS voice available"
@@ -687,25 +695,25 @@ msgid "This is a game between two other people, sorry."
 msgstr "이것은 다른 두 사람 사이의 게임입니다."
 
 msgid "This is not meant for you"
-msgstr "이것은 당신을위한 것이 아닙니다"
+msgstr "이것은 귀하를 위한 것이 아닙니다"
 
 msgid "This is your board!"
-msgstr "이것은 당신의 보드입니다!"
+msgstr "이것은 귀하의 보드입니다!"
 
 msgid "This prompt has timed out..."
-msgstr "이 프롬프트가 시간 초과되었습니다..."
+msgstr "이 프롬프트는 시간 초과되었습니다..."
 
 msgid "This prompt is not for you"
-msgstr "이 프롬프트는 귀하를위한 것이 아닙니다."
+msgstr "이 프롬프트는 귀하를 위한 것이 아닙니다."
 
 msgid "This prompt is not meant for you"
-msgstr "이 프롬프트는 귀하를위한 것이 아닙니다."
+msgstr "이 프롬프트는 귀하를 위한 것이 아닙니다."
 
 msgid "This ready button is not for you, sorry"
-msgstr "이 준비 버튼은 당신을위한 것이 아닙니다, 죄송합니다"
+msgstr "이 준비 버튼은 귀하를 위한 것이 아닙니다, 죄송합니다"
 
 msgid "This ship would be blocked off"
-msgstr "이 배는 차단될 것입니다."
+msgstr "이 보트는 차단될 것입니다."
 
 msgid "Timeout Error"
 msgstr "시간 초과 오류"
@@ -752,7 +760,7 @@ msgid "You already have a boat that is %d units long."
 msgstr "이미 %d 단위 길이의 보트가 있습니다."
 
 msgid "You already have this piece"
-msgstr "당신은 이미이 조각을 가지고 있습니다"
+msgstr "당신은 이미 이 조각을 가지고 있습니다"
 
 msgid "You are not in any voice channel. Please join a voice channel to use Music bot."
 msgstr ""
@@ -761,7 +769,7 @@ msgid "You are not in any voice channel. Please join a voice channel to use TTS.
 msgstr ""
 
 msgid "You cannot make more than 10 candidates!"
-msgstr "10개 이상의 후보를 만들 수 없습니다!"
+msgstr "10개 이상의 선택지를 만들 수 없습니다!"
 
 msgid "You cannot play against a bot"
 msgstr "봇을 상대로는 게임할 수 없습니다"
