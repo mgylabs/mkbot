@@ -22,6 +22,7 @@ jobs:
   build:
     name: build and test
     runs-on: windows-2019
+    timeout-minutes: 30
     defaults:
       run:
         shell: pwsh
@@ -34,23 +35,11 @@ jobs:
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
           cache: "poetry"
-      - uses: webfactory/ssh-agent@v0.7.0
-        name: Install SSH key
-        id: install-ssh
-        continue-on-error: true
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
       - name: Check lock file
         run: poetry lock --check
       - name: Install dependencies
-        env:
-          SSH_OUTCOME: ${{ steps.install-ssh.outcome }}
         run: |
-          if ($Env:SSH_OUTCOME -eq "success") {
-            poetry install --no-root -E release
-          } else {
-            poetry install --no-root
-          }
+          poetry install --no-root
       - name: Unit Test
         run: |
           poetry run pytest

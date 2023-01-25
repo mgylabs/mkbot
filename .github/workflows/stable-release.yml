@@ -10,6 +10,7 @@ jobs:
     name: Stable Release
     if: github.repository == 'mgylabs/mkbot'
     runs-on: windows-2019
+    timeout-minutes: 30
     environment:
       name: "Stable"
       url: ${{ steps.update-changelog.outputs.d_url }}
@@ -28,20 +29,14 @@ jobs:
           cache-dependency-path: |
             **/poetry.lock
             .github/flags/release.flag
-      - uses: webfactory/ssh-agent@v0.7.0
-        name: Install SSH key
-        id: install-ssh
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-      - name: Install dependencies
+      - name: Git Config
         env:
-          SSH_OUTCOME: ${{ steps.install-ssh.outcome }}
+          GITHUB_USERNAME: ${{ secrets.DEPLOY_USER }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: git config --global url.https://${Env:GITHUB_USERNAME}:${Env:GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
+      - name: Install dependencies
         run: |
-          if ($Env:SSH_OUTCOME -eq "success") {
-            poetry install --no-root -E release
-          } else {
-            poetry install --no-root
-          }
+          poetry install --no-root -E release
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}
