@@ -41,6 +41,7 @@ def human_duration(duration):
 
 
 class Song:
+    # __init__ 로 변경하기
     def addSong(self, title, url, user=None):
         self.url = url
         self.title = title
@@ -61,6 +62,7 @@ class SongList:
         self.queue = 0
         self.guildID = guildID
         self.slist = list()
+        self.auto = False
 
     # if song exists in songList (initialized)
     def songExists(self):
@@ -121,9 +123,8 @@ async def ytsearch(text, count):
     return ls
 
 
-async def nextSong():
+async def nextSong(gid):
     # fetch next song from yt, then return as Song
-    # testtest
     song_url = guild_sl[gid].slist[-1].url
     async with aiohttp.ClientSession(raise_for_status=True) as session:
         async with session.get(song_url) as r:
@@ -133,11 +134,10 @@ async def nextSong():
     b = soup.find_all("script")[-5]
     J1 = str(b).split("var ytInitialData = ")
     u = J1[1].find("url")
-    next_url = J1[1][u + 5 : u + 26]
+    next_url = J1[1][u + 6 : u + 26]
 
     title = str(soup.find("title"))[7:-8]
-
-    next_url = "youtube.com" + next_url
+    next_url = "https://www.youtube.com" + next_url
     song_ = Song()
     song_.addSong(title, next_url)
 
@@ -160,7 +160,7 @@ class Music(commands.Cog):
                 )
             )
 
-    async def playMusic(self, ctx: commands.Context, skip=False, autoplay=False):
+    async def playMusic(self, ctx: commands.Context, skip=False):
         gid = ctx.message.guild.id
         try:
             guild_sl[gid]
@@ -180,10 +180,12 @@ class Music(commands.Cog):
                 fut.result()
 
         # if autoplay and end of queue
-        if autoplay and len(guild_sl[gid].slist) == guild_sl[gid].queue:
-            nextSong = await nextSong()
-            guild_sl[gid].queue += 1
-            await guild_sl[gid].slist.append(nextSong)
+        if guild_sl[gid].auto and len(guild_sl[gid].slist) == guild_sl[gid].queue:
+            nexSong = await nextSong(gid)
+            print(nexSong.title)
+            print(nexSong.url)
+            guild_sl[gid].addSong(nexSong)
+        # autoplay가 온일때 append하면 slist-1에 append 하게 만들기...
 
         if not skip:
             try:
@@ -268,8 +270,6 @@ class Music(commands.Cog):
             sl = SongList(gid)
             guild_sl[gid] = sl
 
-        autoplay = False
-
         if not await validate_voice_client(ctx):
             raise UsageError(
                 _(
@@ -277,7 +277,7 @@ class Music(commands.Cog):
                 )
             )
         if "-auto" in song:
-            autoplay = True
+            guild_sl[gid].auto = True
             song = song[:-1]
         if len(song) == 0:
             if ctx.voice_client.is_playing():
@@ -628,6 +628,7 @@ class Music(commands.Cog):
                     )
                 )
                 if not ctx.voice_client.is_playing():
+                    guild_sl[gid].auto = True
                     await self.player(ctx)
 
             else:
@@ -643,11 +644,12 @@ class Music(commands.Cog):
                         song + " in Queue",
                         guild_sl[gid].lastSong().title
                         + "\n Length: "
-                        + guild_sl[gid].lastSong().length,
-                        +"\n Autoplay is on",
+                        + guild_sl[gid].lastSong().length
+                        + "\n Autoplay is on",
                     )
                 )
                 if not ctx.voice_client.is_playing():
+                    guild_sl[gid].auto = True
                     await self.player(ctx)
 
     @commands.Cog.listener()
