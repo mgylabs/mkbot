@@ -36,6 +36,7 @@ WizardSmallImageFile={#RepoDir}\resources\package\mkbot_sq.bmp
 UninstallDisplayIcon={app}\{#AppExeName}
 Compression=lzma
 SolidCompression=yes
+AppMutex={code:GetAppMutex}
 SetupMutex={#AppMutex}setup
 WizardStyle=modern
 

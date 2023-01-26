@@ -128,12 +128,13 @@ async def tts(ctx: commands.Context, *args):
     embed = MsgFormatter.get(
         ctx,
         string,
-        _("[MK Bot]({url}) said on behalf of {author})").format(
+        _("[MK Bot]({url}) said on behalf of {author}").format(
             url="https://github.com/mgylabs/mkbot", author=ctx.author.mention
         ),
     )
+
     embed.set_author(
-        name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url
+        name=ctx.message.author.name, icon_url=ctx.message.author.avatar.url
     )
     await ctx.send(embed=embed)
 
