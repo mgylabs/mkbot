@@ -105,7 +105,7 @@ class Clock(commands.Cog):
     clock_group = app_commands.Group(
         name="clock",
         description=L_("Shows live world clock."),
-        default_permissions=discord.Permissions.administrator,
+        default_permissions=discord.Permissions(administrator=True),
     )
     clock_updater_running = False
 
