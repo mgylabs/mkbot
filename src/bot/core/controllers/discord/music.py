@@ -535,6 +535,9 @@ class Music(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
+        if not before.channel or before.channel.guild.id not in self.tmp_id:
+            return
+
         channel = before.channel.guild.get_channel(self.tmp_id[before.channel.guild.id])
         if not member.id == self.bot.user.id:
             if after.channel is None:

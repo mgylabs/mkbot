@@ -59,12 +59,15 @@ class MsgFormatter:
             embed.add_field(**fd)
 
         if show_req_user:
+            user_id = None
             if isinstance(ctx_or_iaction, commands.Context):
                 user_id = ctx_or_iaction.author.id
             elif isinstance(ctx_or_iaction, discord.Interaction):
                 user_id = ctx_or_iaction.user.id
 
-            embed.add_field(name="Requested by", value="<@{}>".format(user_id))
+            if user_id:
+                embed.add_field(name="Requested by", value="<@{}>".format(user_id))
+
         embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
         return embed
 
