@@ -1,4 +1,4 @@
-name: Static Analysis
+name: Lint
 
 on:
   push:
@@ -14,12 +14,12 @@ env:
   DEFAULT_PYTHON: "3.10"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  lint:
-    name: lint
+  sa1:
+    name: static-analysis 1/2
     runs-on: windows-2019
     timeout-minutes: 30
     defaults:
@@ -50,8 +50,8 @@ jobs:
         run: |
           poetry run flake8 --count --show-source --statistics
 
-  pre-commit:
-    name: pre-commit
+  sa2:
+    name: static-analysis 2/2
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -67,3 +67,8 @@ jobs:
       - name: pre-commit
         run: |
           pre-commit run --all-files
+      - name: gettext
+        if: ${{ always() }}
+        run: |
+          python "tools/pygettext.py" -p locales -d mkbot -D --no-location src/bot src/lib
+          git diff --exit-code ./locales/mkbot.pot

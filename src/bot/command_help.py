@@ -7,6 +7,8 @@ from mgylabs.i18n import L_, _
 from mgylabs.utils.config import CONFIG
 from mgylabs.utils.version import VERSION
 
+translate = _
+
 
 def render_help_text(text: str):
     return text.format(commandPrefix=CONFIG.commandPrefix)
@@ -59,7 +61,9 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         def get_category_with_translate(command, *, no_category=no_category):
             cog = command.cog
-            return _(cog.qualified_name) + ":" if cog is not None else no_category
+            return (
+                translate(cog.qualified_name) + ":" if cog is not None else no_category
+            )
 
         filtered = await self.filter_commands(bot.commands, sort=True, key=get_category)
         max_size = self.get_max_size(filtered)
@@ -109,10 +113,10 @@ class CommandHelp(commands.DefaultHelpCommand):
         cmds = bot.tree._get_all_commands()
         for command in cmds:
             if isinstance(command, discord.app_commands.ContextMenu):
-                menu_builder.append(f"{self.indent * ' '}- {_(command.name)}")
+                menu_builder.append(f"{self.indent * ' '}- {translate(command.name)}")
             else:
                 cmd_builder.append(
-                    f"{self.indent * ' '}`/{command.name}` - {render_help_text(_(command.description))}"
+                    f"{self.indent * ' '}`/{command.name}` - {render_help_text(translate(command.description))}"
                 )
 
         if len(cmd_builder) == 1:
@@ -159,7 +163,7 @@ class CommandHelp(commands.DefaultHelpCommand):
             entry = "{0}`{1}` - {2}".format(
                 self.indent * " ",
                 f"{self.context.clean_prefix}{name}" if prefix else name,
-                render_help_text(_(command.short_doc)),
+                render_help_text(translate(command.short_doc)),
             )
             self.paginator.add_line(self.shorten_text(entry))
 
@@ -187,9 +191,11 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         if command.help:
             try:
-                self.paginator.add_line(render_help_text(_(command.help)), empty=True)
+                self.paginator.add_line(
+                    render_help_text(translate(command.help)), empty=True
+                )
             except RuntimeError:
-                for line in render_help_text(_(command.help)).splitlines():
+                for line in render_help_text(translate(command.help)).splitlines():
                     self.paginator.add_line(line)
                 self.paginator.add_line()
 
