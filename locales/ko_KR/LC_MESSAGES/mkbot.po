@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"PO-Revision-Date: 2023-01-25 12:49\n"
+"PO-Revision-Date: 2023-01-31 05:43\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -466,7 +466,7 @@ msgid "Report Issue"
 msgstr "문제 보고"
 
 msgid "Report broken or incorrect behaviour"
-msgstr "고장또는 틀린 동작 신고"
+msgstr "고장 또는 틀린 동작 신고"
 
 msgid "Roulette for %s"
 msgstr "룰렛 %s"
@@ -804,8 +804,8 @@ msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
 msgid "Your enemy is not ready yet, please wait until they are"
 msgstr "적이 아직 준비되지 않았습니다, 잠시 기다려주세요"
 
-msgid "[MK Bot]({url}) said on behalf of {author})"
-msgstr "[MK Bot] ({url}) {author}을(를) 대신하여 말했습니다"
+msgid "[MK Bot]({url}) said on behalf of {author}"
+msgstr "[MK Bot]({url}) {author}을(를) 대신하여 말했습니다"
 
 msgid "chose... %s!"
 msgstr "선택... %s!"
