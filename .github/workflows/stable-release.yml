@@ -5,6 +5,9 @@ on:
     tags:
       - "v*"
 
+env:
+  DEFAULT_PYTHON: "3.10"
+
 jobs:
   stable-release:
     name: Stable Release
