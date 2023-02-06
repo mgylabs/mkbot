@@ -81,7 +81,7 @@ There are many ways in which you can participate in this project, for example:
 If you are interested in fixing issues and contributing directly to the code base,
 please see the document [How to Contribute](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute), which covers the following:
 
-- [How to build and run from source](https://github.com/microsoft/vscode/wiki/How-to-Contribute)
+- [How to build and run from source](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute)
 - [The development workflow, including debugging and running tests](https://github.com/mgylabs/mkbot/wiki/How-to-Contribute#debugging)
 - [Contributing to translations](https://crowdin.com/project/mkbot)
 
