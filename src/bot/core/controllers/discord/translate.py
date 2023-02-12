@@ -137,24 +137,23 @@ class Translate(commands.Cog):
                     ),
                 )
 
-    @app_commands.command()
+    @commands.hybrid_command(aliases=["trans"], hidden=True)
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
     async def translate(
-        self, interaction: discord.Interaction, query: str, target: Optional[str] = "en"
+        self, ctx: commands.Context, query: str, target: Optional[str] = "en"
     ):
         """
         Command that translates sentence entered to desired language
         """
 
         srcLang, result, success = await self._trans(
-            interaction, query, await self._convert_langs(interaction, {target})
+            ctx, query, await self._convert_langs(ctx, {target})
         )
         if success:
             for t, r in result.items():
-                await send(
-                    interaction,
+                await ctx.send(
                     embed=MsgFormatter.get(
-                        interaction,
+                        ctx,
                         _("Translation Successful {srcLang} -> {result}").format(
                             srcLang=srcLang, result=t
                         ),

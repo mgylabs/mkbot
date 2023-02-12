@@ -12,13 +12,13 @@ from .utils.MsgFormat import MsgFormatter
 
 @commands.command(aliases=["rou"])
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
-async def roulette(ctx: commands.Context, title, *items):
+async def roulette(ctx: commands.Context, *items):
     """
     Play roulette
 
     Examples:
-    {commandPrefix}roulette "Player" @user1 @user2 @user3
-    {commandPrefix}rou "title" "item 1" "item 2"
+    {commandPrefix}roulette @user1 @user2 @user3
+    {commandPrefix}rou "item 1" "item 2"
 
     Note:
     This bot cannot be added to items.
@@ -37,7 +37,7 @@ async def roulette(ctx: commands.Context, title, *items):
 
     await msg.edit(
         embed=MsgFormatter.get(
-            ctx, _("Roulette for %s") % title, _("chose... %s!") % random.choice(items)
+            ctx, _("Roulette"), _("chose... %s!") % random.choice(items)
         )
     )
 
