@@ -6,6 +6,10 @@ from discord.ext import commands
 from mgylabs.db.models import DiscordBotCommandEventLog, DiscordBotRequestLog
 
 
+def json2str(js: dict):
+    return json.dumps(js, ensure_ascii=False)
+
+
 class DiscordRequestLogEntry:
     @classmethod
     def add(cls, ctx, message, user_perm):
@@ -33,8 +37,23 @@ class DiscordRequestLogEntry:
             user_perm=user_perm,
             command=interaction.data["name"],
             command_type="slash",
-            raw=json.dumps(interaction.data),
+            raw=json2str(interaction.data),
             created_at=interaction.created_at,
+        ).id
+
+    @classmethod
+    def add_for_chat(cls, ctx, message, user_perm, command_name, detail):
+        return DiscordBotRequestLog.create(
+            bot_id=ctx.bot.user.id,
+            user_id=message.author.id,
+            msg_id=message.id,
+            guild_id=None if message.guild is None else message.guild.id,
+            channel_id=message.channel.id,
+            user_perm=user_perm,
+            command=command_name,
+            command_type="chat",
+            raw=json2str(detail),
+            created_at=ctx.message.created_at,
         ).id
 
 
@@ -51,15 +70,15 @@ class DiscordEventLogEntry:
     @classmethod
     def _add(cls, ctx, event, properties={}):
         DiscordBotCommandEventLog.create(
-            request_id=DiscordBotRequestLog.get_one(ctx.message.id),
+            request_id=DiscordBotRequestLog.get_one(msg_id=ctx.message.id).id,
             event=event,
-            properties=json.dumps(properties),
+            properties=json2str(properties),
         )
 
     @classmethod
     def _add_for_iaction(cls, interaction: discord.Interaction, event, properties={}):
         DiscordBotCommandEventLog.create(
-            request_id=DiscordBotRequestLog.get_one(interaction.id),
+            request_id=DiscordBotRequestLog.get_one(msg_id=interaction.id).id,
             event=event,
-            properties=json.dumps(properties),
+            properties=json2str(properties),
         )

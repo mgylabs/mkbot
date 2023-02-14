@@ -1,4 +1,5 @@
 from discord.ext import commands
+from mkbot_nlu.utils import Intent, register_intent
 
 from mgylabs.i18n import _
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
@@ -37,6 +38,14 @@ async def delete(ctx: commands.Context, amount):
         )
 
     DiscordEventLogEntry.Add(ctx, "MessageDeleted", {"count": int(amount)})
+
+
+@register_intent("command::delete", "delete")
+def cmd_delete(intent: Intent):
+    if amount := intent.get_an_entity("amount"):
+        return f"delete {amount}"
+    else:
+        return "delete 2"
 
 
 async def setup(bot: commands.Bot):

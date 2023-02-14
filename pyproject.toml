@@ -18,31 +18,36 @@ python = "3.10.*"
 aiofiles = "0.8.0"
 alembic = "1.9.1"
 babel = "2.11.0"
-black = "22.3.0"
 bs4 = "0.0.1"
-debugpy = "1.6.5"
 discord-py = "2.1.0"
-flake8 = "6.0.0"
 mulgyeol-bot-framework = {git = "https://github.com/MycroftKang/mulgyeol-bot-framework.git", rev = "a63ebb1791558c04efff363b38012c290ae06bc5"}
 langdetect = "1.0.9"
 lxml = "4.9.1"
-packaging = "21.3"
-pre-commit = "2.17.0"
-pyinstaller = "5.7.0"
-pylint = "2.15.10"
+packaging = ">=20.0,<21.0"
+pyinstaller = "5.8.0"
 pynacl = "1.5.0"
-pytest = "7.2.0"
-pytest-asyncio = "0.20.3"
-pytest-mock = "3.10.0"
 pytz = "2022.1"
 pyyaml = "6.0"
-requests = "2.27.1"
+requests = "2.28.2"
 simpleaudio = "1.0.4"
 sqlalchemy = "1.4.46"
 yt-dlp = "2022.11.11"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
+mkbot-nlu = [
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "217f9fe7f62abfb955b2fa26e1b63389681667bd"},
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "217f9fe7f62abfb955b2fa26e1b63389681667bd", extras = ["full"], optional = true},
+]
 
 [tool.poetry.dev-dependencies]
+black = "22.3.0"
+debugpy = "1.6.5"
+flake8 = "6.0.0"
+pre-commit = "2.17.0"
+pylint = "2.15.10"
+pytest = "7.2.0"
+pytest-asyncio = "0.20.3"
+pytest-mock = "3.10.0"
 
 [tool.poetry.extras]
 release = ["mulgyeol-telemetry"]
+full = ["mkbot-nlu"]

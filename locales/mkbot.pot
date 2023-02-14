@@ -91,6 +91,12 @@ msgstr ""
 msgid "Challenge declined :("
 msgstr ""
 
+msgid "Chat mode is not activated."
+msgstr ""
+
+msgid "Chat mode is only available when you have access to the **MK Bot Support Server**."
+msgstr ""
+
 msgid "Chose %s"
 msgstr ""
 
@@ -217,6 +223,14 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+msgid ""
+"I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\n"
+"Please try rephrasing your instruction to me."
+msgstr ""
+
+msgid "Installing... `%s`"
+msgstr ""
+
 msgid "Invalid Argument"
 msgstr ""
 
@@ -292,6 +306,9 @@ msgstr ""
 
 #, docstring
 msgid "Leaves voice channel where the user who typed the command is in."
+msgstr ""
+
+msgid "Loading... `%s`"
 msgstr ""
 
 msgid "Local time of %(member)s (%(timezone)s)"
@@ -466,6 +483,10 @@ msgid "Run a command as another user optionally in another channel."
 msgstr ""
 
 #, docstring
+msgid "Search on Google."
+msgstr ""
+
+#, docstring
 msgid "Searches music in youtube"
 msgstr ""
 
@@ -475,6 +496,9 @@ msgid ""
 "{commandPrefix}search \"keyword\"\n"
 "{commandPrefix}s \"keyword\"\n"
 "Shows 5 candidates that you can choose using emotes"
+msgstr ""
+
+msgid "Searching... `%s`"
 msgstr ""
 
 msgid "Select a piece strength"
@@ -813,9 +837,15 @@ msgid ""
 "added in queue"
 msgstr ""
 
+msgid "🔍 Google search results for `{query}`"
+msgstr ""
+
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr ""
 
-msgid "🔍 Searching... `%s`"
+msgid "🟢 Successfully installed `%s`"
+msgstr ""
+
+msgid "🟢 Successfully loaded `%s`"
 msgstr ""
 

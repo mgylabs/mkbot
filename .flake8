@@ -30,5 +30,6 @@ exclude =
     dist,
     extensions,
     tools,
-    temp_*
+    temp_*,
+    src/bot/ko_news_md,
 max-line-length = 88

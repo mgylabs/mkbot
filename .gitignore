@@ -409,3 +409,4 @@ src/msu/msu.flag
 tests/data
 *.flag
 !.github/flags/*.flag
+src/bot/ko_news_md*

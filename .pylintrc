@@ -2,6 +2,7 @@
 
 init-hook="import sys, os; sys.path.extend(['./src/lib', './src/bot', './src/msu'])"
 ignored-modules=alembic,sqlalchemy
+ignore=ko_news_md
 
 [REPORTS]
 

@@ -20,8 +20,8 @@ concurrency:
 jobs:
   sa1:
     name: static-analysis 1/2
-    runs-on: windows-2019
-    timeout-minutes: 30
+    runs-on: windows-2022
+    timeout-minutes: 60
     defaults:
       run:
         shell: pwsh

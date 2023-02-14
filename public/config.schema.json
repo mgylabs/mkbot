@@ -50,6 +50,14 @@
                 true
             ]
         },
+        "enabledChatMode": {
+            "type": "boolean",
+            "description": "Enables chat mode.",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
         "connectOnStart": {
             "type": "boolean",
             "description": "When set to true, this enables the auto connect at startup.",

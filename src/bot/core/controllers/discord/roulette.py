@@ -3,6 +3,7 @@ import random
 
 import discord
 from discord.ext import commands
+from mkbot_nlu.utils import Intent, register_intent
 
 from mgylabs.i18n import _
 
@@ -33,13 +34,23 @@ async def roulette(ctx: commands.Context, *items):
                 ctx, _("Roulette is running. Please wait."), _("%dsec left") % i
             )
         )
-        asyncio.sleep(1)
+        await asyncio.sleep(1)
 
     await msg.edit(
         embed=MsgFormatter.get(
             ctx, _("Roulette"), _("chose... %s!") % random.choice(items)
         )
     )
+
+
+@register_intent("command::roulette", "roulette")
+def cmd_roulette(intent: Intent):
+    if items := intent.get_an_entity("items"):
+        items: str
+        items = [i.strip() for i in items.split(",")]
+        return "roulette " + " ".join(f'"{i}"' for i in items)
+    else:
+        return None
 
 
 async def setup(bot: commands.Bot):
