@@ -34,8 +34,8 @@ sqlalchemy = "1.4.46"
 yt-dlp = "2022.11.11"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
 mkbot-nlu = [
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "217f9fe7f62abfb955b2fa26e1b63389681667bd"},
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "217f9fe7f62abfb955b2fa26e1b63389681667bd", extras = ["full"], optional = true},
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "ae9c127f147c7195c39a3de5d426f7b5cdb459b6"},
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "ae9c127f147c7195c39a3de5d426f7b5cdb459b6", extras = ["full"], optional = true},
 ]
 
 [tool.poetry.dev-dependencies]
