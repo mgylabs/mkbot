@@ -10,6 +10,7 @@ import threading
 import time
 import traceback
 import urllib.parse
+from contextlib import contextmanager
 
 import discord
 from discord import ButtonStyle, Locale
@@ -21,6 +22,7 @@ from discord.app_commands import (
 )
 from discord.ext import commands, tasks
 from discord.ui import Button, View
+from mkbot_nlu.utils import Intent, register_intent
 
 import views
 from command_help import CommandHelp
@@ -40,6 +42,7 @@ from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from mgylabs.utils.helper import usage_helper
 from mgylabs.utils.LogEntry import DiscordRequestLogEntry
+from mgylabs.utils.nlu import NluModel
 from release import ReleaseNotify
 
 log = logger.get_logger(__name__)
@@ -56,6 +59,22 @@ discord.ui.View._scheduled_task = database.using_database(
     discord.ui.View._scheduled_task
 )
 discord.ui.View.interaction_check = interaction_check
+
+
+@contextmanager
+def using_nlu():
+    if CONFIG.enabledChatMode:
+        NluModel.load()
+
+    try:
+        yield
+    finally:
+        NluModel.unload()
+
+
+@register_intent("nlu_fallback", "fallback")
+def cmd_fallback(intent: Intent):
+    return f"google {intent.text}"
 
 
 class BotStateFlags:
@@ -108,8 +127,72 @@ class MKBot(commands.Bot):
         ctx.mkbot_request_id = request_id
         await self.invoke(ctx)
 
+    async def process_chats(self, ctx: commands.Context, message: discord.Message):
+        if message.author.bot:
+            return
+
+        if not user_has_nlu_access(self, message.author.id):
+            await ctx.reply(
+                _(
+                    "Chat mode is only available when you have access to the **MK Bot Support Server**."
+                )
+                + "\nhttps://discord.gg/3RpDwjJCeZ"
+            )
+            return
+
+        if NluModel.nlu:
+            text = re.sub("<@!?\\d+> ", "", message.content)
+            chat_intent: Intent = await NluModel.parse(text)
+
+            if chat_intent.response:
+                message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
+                new_ctx = await self.get_context(message)
+
+                if new_ctx.command is None:
+                    raise Exception(f"Invalid Response: {chat_intent.response}")
+
+                request_id = DiscordRequestLogEntry.add_for_chat(
+                    new_ctx,
+                    message,
+                    MGCertificate.getUserLevel(message.author),
+                    new_ctx.command.name,
+                    chat_intent.detail,
+                )
+                new_ctx.mkbot_request_id = request_id
+
+                await self.invoke(new_ctx)
+
+            else:
+                DiscordRequestLogEntry.add_for_chat(
+                    ctx,
+                    message,
+                    MGCertificate.getUserLevel(message.author),
+                    chat_intent.name,
+                    chat_intent.detail,
+                )
+                await ctx.reply(
+                    _(
+                        "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\nPlease try rephrasing your instruction to me."
+                    ).format(command=chat_intent.description)
+                )
+
+        else:
+            await ctx.reply(_("Chat mode is not activated."))
+
     async def get_context(self, message, *, cls=MKBotContext):
         return await super().get_context(message, cls=cls)
+
+
+def user_has_nlu_access(bot: MKBot, user_id: int):
+    if is_development_mode():
+        return True
+
+    guild = bot.get_guild(VERSION.MBSS_ID)
+
+    if guild and guild.get_member(user_id):
+        return True
+    else:
+        return False
 
 
 async def create_bot(return_error_level=False):
@@ -193,15 +276,19 @@ async def create_bot(return_error_level=False):
         if (message.channel.type.value == 1) and (CONFIG.disabledPrivateChannel):
             return
 
-        if bot.user.mentioned_in(message) and cert.isAdminUser(message.author):
-            text = re.sub("<@!?\\d+> ", "", message.content)
-            if text.lower() == "ping":
-                await message.channel.send(
-                    f"{message.author.mention}  Pong: {round(bot.latency*1000)}ms"
-                )
-        else:
-            ctx: commands.Context = await bot.get_context(message)
+        ctx: commands.Context = await bot.get_context(message)
 
+        valid_request = False
+
+        if message.content.startswith(bot.user.mention) and cert.isCertUser(
+            message.author
+        ):
+            i18n.set_current_locale(get_user_locale_code(message.author.id))
+
+            await bot.process_chats(ctx, message)
+
+            valid_request = True
+        else:
             request_id = None
             if ctx.command is not None:
                 request_id = DiscordRequestLogEntry.add(
@@ -225,19 +312,21 @@ async def create_bot(return_error_level=False):
 
             await bot.process_commands(request_id, message)
 
-            nonlocal pending
-            if ctx.command is not None:
-                if pending:
-                    pending = False
-                    name = f"MK Bot {VERSION}"
-                    activity = discord.Activity(
-                        name=name, type=discord.ActivityType.listening
-                    )
-                    await bot.change_presence(
-                        status=discord.Status.online, activity=activity
-                    )
+            valid_request = True
 
-                await ReleaseNotify.run(message.author.id, message.channel.send)
+        nonlocal pending
+        if valid_request:
+            if pending:
+                pending = False
+                name = f"MK Bot {VERSION}"
+                activity = discord.Activity(
+                    name=name, type=discord.ActivityType.listening
+                )
+                await bot.change_presence(
+                    status=discord.Status.online, activity=activity
+                )
+
+            await ReleaseNotify.run(message.author.id, message.channel.send)
 
     @bot.event
     async def on_command_error(ctx: commands.Context, error: commands.CommandError):
@@ -479,14 +568,16 @@ class DiscordBotManger(threading.Thread):
         try:
             CONFIG.load()
             get_event_loop()
-            asyncio.run(start_bot())
-            usage_helper()
+            with using_nlu():
+                asyncio.run(start_bot())
         except discord.errors.LoginFailure as e:
             log.critical(e)
             exit_code = 1
         except Exception as e:
             traceback.print_exc()
             log.critical(e)
+        finally:
+            usage_helper()
 
         BotStateFlags.online = False
         self.callback(exit_code)
@@ -494,4 +585,5 @@ class DiscordBotManger(threading.Thread):
 
 if __name__ == "__main__":
     run_migrations(SCRIPT_DIR, DB_URL)
-    asyncio.run(start_bot())
+    with using_nlu():
+        asyncio.run(start_bot())

@@ -1,5 +1,6 @@
 discord_extensions = (
     "core.controllers.discord.dev",
+    "core.controllers.discord.admin",
     "core.controllers.discord.delete",
     "core.controllers.discord.join",
     "core.controllers.discord.leave",
@@ -17,4 +18,5 @@ discord_extensions = (
     "core.controllers.discord.lotto",
     "core.controllers.discord.minigames",
     "core.controllers.discord.language",
+    "core.controllers.discord.google",
 )

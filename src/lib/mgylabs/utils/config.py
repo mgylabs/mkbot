@@ -45,6 +45,7 @@ class Settings:
     connectOnStart = SettingItem(False)
     gitlabToken = SettingItem("")
     mgylabsToken = SettingItem("")
+    enabledChatMode = SettingItem(False)
     betaUpdate = SettingItem(False)
 
     def __init__(self, data):

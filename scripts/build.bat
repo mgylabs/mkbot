@@ -32,12 +32,11 @@ xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
 @ If /i "%1" == "--clean" (
-    pyinstaller main.spec -y --log-level WARN --clean || goto :error
+    pyinstaller main.spec -y --clean || goto :error
 ) Else (
-    pyinstaller main.spec -y --log-level WARN || goto :error
+    pyinstaller main.spec -y || goto :error
 )
 
-move dist\MKBotCore dist\bin
 move dist\bin ..\..\build
 
 @ If /i "%1" == "--test-bot" (
@@ -50,32 +49,24 @@ move dist\bin ..\..\build
     exit /b 0
 )
 
-cd ..\console
+cd %CI_PROJECT_DIR%\src\console
 @ If DEFINED GITHUB_ACTIONS (
     nuget restore console.sln
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None /p:Oss=false /p:Canary=%CANARY_BUILD% || goto :error
+    "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None /p:Oss=false /p:Canary=%CANARY_BUILD% || goto :error
 ) Else (
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None /p:Oss=true || goto :error
+    "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" console.sln /clp:Summary /v:m /p:Configuration=Release /p:AllowedReferenceRelatedFileExtensions=none /p:DebugType=None /p:Oss=true || goto :error
 )
 move bin\Release\* ..\..\build
 
-cd ..\msu
-@ If /i "%1" == "--clean" (
-    pyinstaller msu.spec -y --log-level WARN --clean || goto :error
-) Else (
-    pyinstaller msu.spec -y --log-level WARN || goto :error
-)
-move "dist\msu" ..\..\build\Update
-
 cd %CI_PROJECT_DIR%\build
-xcopy /q /I /Y /E Update\* bin
 del *.pdb
-rmdir /q /s Update
 
 cd %CI_PROJECT_DIR%
 pybabel compile -d locales -D mkbot
 
-exit /b 0
+@echo.
+@echo Build Succeeded
+@exit /b 0
 
 :error
     @echo.

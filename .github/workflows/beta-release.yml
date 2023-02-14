@@ -20,8 +20,8 @@ jobs:
   beta-release:
     name: Beta Release
     if: github.repository == 'mgylabs/mkbot'
-    runs-on: windows-2019
-    timeout-minutes: 30
+    runs-on: windows-2022
+    timeout-minutes: 60
     environment:
       name: "Beta"
       url: https://github.com/mgylabs/mkbot/releases/tag/beta
@@ -47,7 +47,7 @@ jobs:
         run: git config --global url.https://${Env:GITHUB_USERNAME}:${Env:GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
       - name: Install dependencies
         run: |
-          poetry install --no-root -E release
+          poetry install --no-root --without dev -E release -E full
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}

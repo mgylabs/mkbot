@@ -44,8 +44,8 @@ jobs:
     name: Nightly Build
     needs: check
     if: always() && (needs.check.result == 'skipped' || needs.check.outputs.is_new == 'true')
-    runs-on: windows-2019
-    timeout-minutes: 30
+    runs-on: windows-2022
+    timeout-minutes: 60
     environment:
       name: "Canary"
       url: https://github.com/mgylabs/mkbot/releases/tag/canary
@@ -71,7 +71,7 @@ jobs:
         run: git config --global url.https://${Env:GITHUB_USERNAME}:${Env:GITHUB_TOKEN}@github.com/.insteadOf https://github.com/
       - name: Install dependencies
         run: |
-          poetry install --no-root -E release
+          poetry install --no-root --without dev -E release -E full
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}

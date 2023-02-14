@@ -6,6 +6,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from langdetect import detect
+from mkbot_nlu.utils import Intent, register_intent
 
 from core.controllers.discord.utils.command_helper import send
 from mgylabs.i18n import L_, _
@@ -269,6 +270,40 @@ class Translate(commands.Cog):
             ) as r:
                 js = await r.json()
                 return params["target_lang"], js["translated_text"][0][0]
+
+
+ko2langcode = {
+    "한국어": "kr",
+    "영어": "en",
+    "일본어": "jp",
+    "중국어": "cn",
+    "베트남어": "vi",
+    "인도네시아어": "id",
+    "아랍어": "ar",
+    "벵골어": "bn",
+    "독일어": "de",
+    "스페인어": "es",
+    "프랑스어": "fr",
+    "힌디어": "hi",
+    "이탈이아어": "it",
+    "말레이어": "ms",
+    "네덜란드어": "nl",
+    "포르투갈어": "pt",
+    "러시아어": "ru",
+    "태국어": "th",
+    "터키어": "tr",
+}
+
+
+@register_intent("command::translate::translate", "translate")
+def cmd_translate(intent: Intent):
+    query = intent.get_an_entity("trans_query")
+    lang = intent.get_an_entity("language")
+
+    if query:
+        return f'translate "{intent.get_an_entity("trans_query")}" {ko2langcode.get(lang, "en")}'
+    else:
+        return None
 
 
 async def setup(bot: commands.Bot):

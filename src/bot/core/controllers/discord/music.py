@@ -5,6 +5,7 @@ import aiohttp
 import discord
 from bs4 import BeautifulSoup
 from discord.ext import commands
+from mkbot_nlu.utils import Intent, register_intent
 from yt_dlp import YoutubeDL
 
 from mgylabs.db import database
@@ -455,7 +456,7 @@ class Music(commands.Cog):
             )
         else:
             search_msg: discord.Message = await ctx.send(
-                _("🔍 Searching... `%s`") % song
+                "<a:typing:1073250215974420490> " + _("Searching... `%s`") % song
             )
 
             search_song_list = await ytsearch(song, 5)
@@ -543,7 +544,6 @@ class Music(commands.Cog):
             if after.channel is None:
                 voice = before.channel.guild.voice_client
                 if voice.is_playing() and not voice.is_paused():
-                    await asyncio.sleep(180)
                     await voice.disconnect()
                     await channel.send(
                         embed=MsgFormatter.get(
@@ -553,7 +553,6 @@ class Music(commands.Cog):
                         )
                     )
                 else:
-                    await asyncio.sleep(3)
                     await voice.disconnect()
                     await channel.send(
                         embed=MsgFormatter.get(
@@ -565,9 +564,30 @@ class Music(commands.Cog):
         else:
             # bot forcefully disconnected
             await channel.send(
-                embed=MsgFormatter.get(self, _("left {}").format(before.channel.name)),
-                show_req_user=False,
+                embed=MsgFormatter.get(
+                    self,
+                    _("left {}").format(before.channel.name),
+                    show_req_user=False,
+                ),
             )
+
+
+@register_intent("command::music::play", "play")
+def cmd_play(intent: Intent):
+    if query := intent.get_an_entity("music_query"):
+        return f"play {query}"
+    else:
+        return "play"
+
+
+@register_intent("command::music::skip", "skip")
+def cmd_skip(intent: Intent):
+    return "skip"
+
+
+@register_intent("command::music::stop", "stop")
+def cmd_stop(intent: Intent):
+    return "stop"
 
 
 async def setup(bot: commands.Bot):

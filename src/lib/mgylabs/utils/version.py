@@ -7,6 +7,9 @@ def is_development_mode():
 
 
 class Version:
+    MBDS_ID = 925412173507887104
+    MBSS_ID = 1066518300114301078
+
     def __init__(self, version_str, commit):
         version_str = version_str.split("-")
         self.commit = commit
@@ -65,6 +68,15 @@ class Version:
             return f"{self.base_version} Beta"
         else:
             return f"{self.base_version} Stable"
+
+    def is_MBDS(self, guild_id: int):
+        return guild_id == self.MBDS_ID
+
+    def is_MBSS(self, guild_id: int):
+        return guild_id == self.MBSS_ID
+
+    def is_MBOS(self, guild_id: int):
+        return self.is_MBDS(guild_id) or self.is_MBSS(guild_id)
 
 
 def get_mkbot_version():

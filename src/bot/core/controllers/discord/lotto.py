@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+from mkbot_nlu.utils import Intent, register_intent
 
 from mgylabs.i18n import _
 
@@ -41,6 +42,11 @@ async def lotto(ctx: commands.Context):
             lotto,
         )
     )
+
+
+@register_intent("command::lotto", "lotto")
+def cmd_lotto(intent: Intent):
+    return "lotto"
 
 
 async def setup(bot: commands.Bot):
