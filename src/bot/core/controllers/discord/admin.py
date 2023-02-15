@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+from core.controllers.discord.utils import api
 from mgylabs.i18n import _
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
@@ -33,15 +34,24 @@ class Admin(commands.Cog):
             from mkbot_nlu.nlu import MKBotNLU
 
             log.info(f"Downloading {query}...")
-            await MKBotNLU.download_ko_wiki_model()
-
-            log.info(f"Loading {query}...")
-            NluModel.load()
+            await MKBotNLU.download_ko_model(f"{api.extensions_path}/{query}")
 
             CONFIG.enabledChatMode = True
+            api.set_enabled(query)
 
-            log.info(f"Successfully installed {query}...")
-            await msg.edit(content=_("🟢 Successfully installed `%s`") % query)
+            log.info(f"Loading {query}...")
+
+            try:
+                NluModel.load()
+            except Exception as error:
+                await msg.edit(
+                    content=_("🟡 Successfully installed `%s`, but failed to load.")
+                    % query
+                    + f"\n{error}"
+                )
+            else:
+                log.info(f"Successfully installed {query}...")
+                await msg.edit(content=_("🟢 Successfully installed `%s`.") % query)
         else:
             await ctx.send("Invalid!")
 
@@ -60,13 +70,17 @@ class Admin(commands.Cog):
                 "<a:typing:1073250215974420490> " + _("Loading... `%s`") % query
             )
 
-            log.info(f"Loading {query}...")
-            NluModel.load()
-
             CONFIG.enabledChatMode = True
+            api.set_enabled(query)
 
-            log.info(f"Successfully loaded {query}...")
-            await msg.edit(content=_("🟢 Successfully loaded `%s`") % query)
+            log.info(f"Loading {query}...")
+            try:
+                NluModel.load()
+            except Exception:
+                await msg.edit(content=_("🔴 Failed to load `%s`") % query)
+            else:
+                log.info(f"Successfully loaded {query}...")
+                await msg.edit(content=_("🟢 Successfully loaded `%s`") % query)
         else:
             await ctx.send("Invalid!")
 

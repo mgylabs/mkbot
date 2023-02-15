@@ -1,5 +1,4 @@
 import asyncio
-import os
 import re
 import sys
 
@@ -64,7 +63,10 @@ discord.ui.View.interaction_check = interaction_check
 @contextmanager
 def using_nlu():
     if CONFIG.enabledChatMode:
-        NluModel.load()
+        try:
+            NluModel.load()
+        except Exception:
+            pass
 
     try:
         yield
@@ -120,16 +122,48 @@ class MKBot(commands.Bot):
         with database.db_session():
             return await super()._run_event(coro, event_name, *args, **kwargs)
 
+    async def check_init_user_locale(
+        self, ctx: commands.Context, message: discord.Message
+    ):
+        if get_user_locale_code(message.author.id) is not None:
+            return True
+
+        dv = views.LanguageSettingView(message.author.id)
+
+        dv.message = await ctx.reply(
+            embed=MsgFormatter.get(
+                ctx,
+                "Mulgyeol MK Bot Display Language",
+                "To continue, set your language that Mulgyeol MK Bot features appear in.",
+            ),
+            view=dv,
+        )
+
+        if await dv.wait():
+            return False
+        else:
+            return True
+
     async def process_commands(self, request_id, message):
         if message.author.bot:
-            return
+            return False
+
         ctx = await self.get_context(message)
+
+        if not await self.check_init_user_locale(ctx, message):
+            return False
+
         ctx.mkbot_request_id = request_id
         await self.invoke(ctx)
 
+        return True
+
     async def process_chats(self, ctx: commands.Context, message: discord.Message):
         if message.author.bot:
-            return
+            return False
+
+        if not await self.check_init_user_locale(ctx, message):
+            return False
 
         if not user_has_nlu_access(self, message.author.id):
             await ctx.reply(
@@ -138,46 +172,48 @@ class MKBot(commands.Bot):
                 )
                 + "\nhttps://discord.gg/3RpDwjJCeZ"
             )
-            return
+            return True
 
-        if NluModel.nlu:
-            text = re.sub("<@!?\\d+> ", "", message.content)
-            chat_intent: Intent = await NluModel.parse(text)
+        if not NluModel.nlu:
+            await ctx.reply(_("Chat mode is not activated."))
+            return True
 
-            if chat_intent.response:
-                message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
-                new_ctx = await self.get_context(message)
+        text = re.sub("<@!?\\d+> ", "", message.content)
+        chat_intent: Intent = await NluModel.parse(text)
 
-                if new_ctx.command is None:
-                    raise Exception(f"Invalid Response: {chat_intent.response}")
+        if chat_intent.response:
+            message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
+            new_ctx = await self.get_context(message)
 
-                request_id = DiscordRequestLogEntry.add_for_chat(
-                    new_ctx,
-                    message,
-                    MGCertificate.getUserLevel(message.author),
-                    new_ctx.command.name,
-                    chat_intent.detail,
-                )
-                new_ctx.mkbot_request_id = request_id
+            if new_ctx.command is None:
+                raise Exception(f"Invalid Response: {chat_intent.response}")
 
-                await self.invoke(new_ctx)
+            request_id = DiscordRequestLogEntry.add_for_chat(
+                new_ctx,
+                message,
+                MGCertificate.getUserLevel(message.author),
+                new_ctx.command.name,
+                chat_intent.detail,
+            )
+            new_ctx.mkbot_request_id = request_id
 
-            else:
-                DiscordRequestLogEntry.add_for_chat(
-                    ctx,
-                    message,
-                    MGCertificate.getUserLevel(message.author),
-                    chat_intent.name,
-                    chat_intent.detail,
-                )
-                await ctx.reply(
-                    _(
-                        "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\nPlease try rephrasing your instruction to me."
-                    ).format(command=chat_intent.description)
-                )
+            await self.invoke(new_ctx)
 
         else:
-            await ctx.reply(_("Chat mode is not activated."))
+            DiscordRequestLogEntry.add_for_chat(
+                ctx,
+                message,
+                MGCertificate.getUserLevel(message.author),
+                chat_intent.name,
+                chat_intent.detail,
+            )
+            await ctx.reply(
+                _(
+                    "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\nPlease try rephrasing your instruction to me."
+                ).format(command=chat_intent.description)
+            )
+
+        return True
 
     async def get_context(self, message, *, cls=MKBotContext):
         return await super().get_context(message, cls=cls)
@@ -285,9 +321,7 @@ async def create_bot(return_error_level=False):
         ):
             i18n.set_current_locale(get_user_locale_code(message.author.id))
 
-            await bot.process_chats(ctx, message)
-
-            valid_request = True
+            valid_request = await bot.process_chats(ctx, message)
         else:
             request_id = None
             if ctx.command is not None:
@@ -295,24 +329,7 @@ async def create_bot(return_error_level=False):
                     ctx, message, MGCertificate.getUserLevel(message.author)
                 )
 
-                if get_user_locale_code(message.author.id) is None:
-                    dv = views.LanguageSettingView(message.author.id)
-
-                    dv.message = await ctx.send(
-                        embed=MsgFormatter.get(
-                            ctx,
-                            "Mulgyeol MK Bot Display Language",
-                            "To continue, set your language that Mulgyeol MK Bot features appear in.",
-                        ),
-                        view=dv,
-                    )
-
-                    if await dv.wait():
-                        return
-
-            await bot.process_commands(request_id, message)
-
-            valid_request = True
+            valid_request = await bot.process_commands(request_id, message)
 
         nonlocal pending
         if valid_request:
@@ -513,13 +530,9 @@ async def create_bot(return_error_level=False):
     try:
         exts = api.get_enabled_extensions()
         for i in exts:
-            if is_development_mode():
-                sys.path.append(f"..\\..\\extensions\\{i[0]}")
-            else:
-                sys.path.append(
-                    os.getenv("USERPROFILE") + f"\\.mkbot\\extensions\\{i[0]}"
-                )
-            await bot.load_extension(i[1])
+            sys.path.append(f"{api.extensions_path}/{i[0]}")
+            if i[1]:
+                await bot.load_extension(i[1])
     except Exception:
         traceback.print_exc()
 

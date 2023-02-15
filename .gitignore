@@ -399,7 +399,6 @@ src/msu/dist
 package/MKBotSetup.exe
 src/info
 src/bot/extensions
-extensions/twitch_highlights
 package/MKBotSetup.zip
 temp_changelog.md
 src/bot/msu.flag
@@ -410,3 +409,5 @@ tests/data
 *.flag
 !.github/flags/*.flag
 src/bot/ko_news_md*
+extensions/*
+!extensions/extensions.json

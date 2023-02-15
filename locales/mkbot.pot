@@ -843,7 +843,13 @@ msgstr ""
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr ""
 
-msgid "🟢 Successfully installed `%s`"
+msgid "🔴 Failed to load `%s`"
+msgstr ""
+
+msgid "🟡 Successfully installed `%s`, but failed to load."
+msgstr ""
+
+msgid "🟢 Successfully installed `%s`."
 msgstr ""
 
 msgid "🟢 Successfully loaded `%s`"

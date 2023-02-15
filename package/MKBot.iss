@@ -34,15 +34,16 @@ SetupIconFile={#RepoDir}\resources\package\mkbot.ico
 WizardImageFile={#RepoDir}\resources\package\welcome.bmp
 WizardSmallImageFile={#RepoDir}\resources\package\mkbot_sq.bmp
 UninstallDisplayIcon={app}\{#AppExeName}
-Compression=lzma
+Compression=lzma/ultra
 SolidCompression=yes
 AppMutex={code:GetAppMutex}
 SetupMutex={#AppMutex}setup
+ShowLanguageDialog=auto
 WizardStyle=modern
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
-; Name: "korean"; MessagesFile: "{#RepoDir}\package\i18n\Korean.isl"
+Name: "korean"; MessagesFile: "{#RepoDir}\package\i18n\Korean.isl"
 
 ; [InstallDelete]
 ; Type: filesandordirs; Name: "{autoprograms}\{#NameLong}";
@@ -63,7 +64,7 @@ Source: "{#RepoDir}\resources\*"; DestDir: "{code:GetDestDir}"; Flags: ignorever
 Source: "{#RepoDir}\locales\*.mo"; DestDir: "{code:GetDestDir}\bin\locales"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\package\tools\Update.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}\package\data\*"; DestDir: "{localappdata}\Mulgyeol\{#NameLong}\data"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
-Source: "{#RepoDir}\extensions\*"; DestDir: "{%USERPROFILE}\{#ExtDirName}\extensions"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
+Source: "{#RepoDir}\extensions\*"; DestDir: "{%USERPROFILE}\{#ExtDirName}\extensions"; Flags: ignoreversion recursesubdirs createallsubdirs uninsneveruninstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

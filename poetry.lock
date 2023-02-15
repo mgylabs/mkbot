@@ -1943,8 +1943,8 @@ full = ["python-mecab-ko (==1.3.3)", "rasa @ git+https://github.com/MycroftKang/
 [package.source]
 type = "git"
 url = "https://github.com/mgylabs/mkbot-nlu.git"
-reference = "ae9c127f147c7195c39a3de5d426f7b5cdb459b6"
-resolved_reference = "ae9c127f147c7195c39a3de5d426f7b5cdb459b6"
+reference = "6ca7469e0c843fccbc5a67ede5c8c7a7b5df7ba6"
+resolved_reference = "6ca7469e0c843fccbc5a67ede5c8c7a7b5df7ba6"
 
 [[package]]
 name = "msgpack"
@@ -4805,4 +4805,4 @@ release = ["mulgyeol-telemetry"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.*"
-content-hash = "cd30a8cc0fa6c05da7fa2896aa09bc8159582146859f5a8a0a4e3c2f45d3dab0"
+content-hash = "28bd594ea6a48eb0a63b4d058c6eaaa0146b81d26bd1a4babf5e4017493697ed"

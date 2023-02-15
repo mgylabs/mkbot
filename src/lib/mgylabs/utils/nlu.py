@@ -18,11 +18,14 @@ class NluModel:
             cls.nlu = MKBotNLU()
         except ModuleNotFoundError:
             log.warning("mkbot-nlu is not available.")
+            raise
         except Exception as error:
             log.exception(error)
+            raise
 
     @classmethod
     def unload(cls):
+        del cls.nlu
         cls.nlu = None
 
     @classmethod

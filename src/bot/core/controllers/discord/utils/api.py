@@ -41,7 +41,7 @@ def get_enabled_extensions():
     return [
         (
             f"{x['id']}/{default_exts[x['id']]['cwd']}",
-            "{}".format(default_exts[x["id"]]["main"]),
+            default_exts[x["id"]].get("main", None),
         )
         for x in exts
         if x.get("enabled", False) and ("id" in x)
@@ -61,11 +61,17 @@ def set_enabled(ext_id: str):
     for i in exts_list["extensions"]:
         if i["id"] == ext_id:
             find = True
-            i["enabled"] = True
+            if not i["enabled"]:
+                i["enabled"] = True
             break
 
     if not find:
         exts_list["extensions"].append({"id": ext_id, "enabled": True})
+
+    if ext_id in default_exts:
+        p = f"{extensions_path}/{ext_id}/{default_exts[ext_id]['cwd']}"
+        if p not in sys.path:
+            sys.path.append(p)
 
     with open(EXT_CONFIG_PATH, "wt") as f:
         json.dump(exts_list, f, indent=4, ensure_ascii=False)

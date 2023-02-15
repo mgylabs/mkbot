@@ -5,6 +5,9 @@
             "main": "extension",
             "auth": true,
             "project_id": "19626926"
+        },
+        "nlu_ko": {
+            "cwd": "."
         }
     }
 }
