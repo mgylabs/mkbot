@@ -3,13 +3,13 @@ from unittest.mock import mock_open, patch
 
 import requests
 
-from src.msu import msu
+import msu
 
 
 class MSUTest(TestCase):
     mock_get = None
     # def setUp(self) -> None:
-    #     patcher_get = patch('src.msu.msu.requests.get',
+    #     patcher_get = patch('msu.requests.get',
     #                         side_effect=self.mock_requests_get)
     #     self.mock_get = patcher_get.start()
     #     self.addCleanup(patcher_get.stop())
@@ -29,7 +29,7 @@ class MSUTest(TestCase):
     def tearDownClass(cls) -> None:
         cls.patcher_get.stop()
 
-    @patch("src.msu.msu.sys")
+    @patch("msu.sys")
     def test_is_development_mode(self, mock_sys):
         mock_sys.frozen = True
         self.assertFalse(msu.is_development_mode())
@@ -280,16 +280,16 @@ class MSUTest(TestCase):
         new_callable=mock_open,
         read_data='{"name": "MK Bot", "version": "1.3.2.1", "commit": "5be84dc9dfaa24003dfe4c7c88db1f6d212c226f"}',
     )
-    @patch("src.msu.msu.sys.argv", ["msu.py"])
+    @patch("msu.sys.argv", ["msu.py"])
     def test_main(self, mock_file):
         with patch(
-            "src.msu.msu.instance_already_running", return_value=True
+            "msu.instance_already_running", return_value=True
         ), self.assertRaises(SystemExit) as se:
             msu.main()
             self.assertEqual(se.exception.code, 1)
 
         with patch(
-            "src.msu.msu.instance_already_running", return_value=False
+            "msu.instance_already_running", return_value=False
         ), self.assertRaises(SystemExit) as se:
             msu.main()
             mock_file.assert_called_with("../info/version.json", "rt")

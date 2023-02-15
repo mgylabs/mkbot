@@ -3,7 +3,7 @@ setlocal
 cd "%~dp0.."
 
 echo pylint ---------------------
-pylint src/bot src/msu src/lib tests
+pylint src/bot src/update src/lib tests
 echo.
 echo black ----------------------
 black .

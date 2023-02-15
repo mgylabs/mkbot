@@ -405,10 +405,16 @@ async def create_bot(return_error_level=False):
 
             issue_link = f"https://github.com/mgylabs/mkbot/issues/new?{query_str}"
 
-            view = View()
-            view.add_item(
-                Button(label=_("Report Issue"), style=ButtonStyle.url, url=issue_link)
-            )
+            if len(issue_link) <= 512:
+                view = View()
+                view.add_item(
+                    Button(
+                        label=_("Report Issue"), style=ButtonStyle.url, url=issue_link
+                    )
+                )
+            else:
+                view = None
+
             await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb), view=view)
             raise error
 
@@ -563,8 +569,9 @@ def get_event_loop():
 async def start_bot():
     bot = await create_bot()
 
-    async with bot:
-        await bot.start(CONFIG.discordToken)
+    with using_nlu():
+        async with bot:
+            await bot.start(CONFIG.discordToken)
 
     loop = asyncio.get_event_loop()
     loop.stop()
@@ -581,8 +588,7 @@ class DiscordBotManger(threading.Thread):
         try:
             CONFIG.load()
             get_event_loop()
-            with using_nlu():
-                asyncio.run(start_bot())
+            asyncio.run(start_bot())
         except discord.errors.LoginFailure as e:
             log.critical(e)
             exit_code = 1
@@ -598,5 +604,4 @@ class DiscordBotManger(threading.Thread):
 
 if __name__ == "__main__":
     run_migrations(SCRIPT_DIR, DB_URL)
-    with using_nlu():
-        asyncio.run(start_bot())
+    asyncio.run(start_bot())

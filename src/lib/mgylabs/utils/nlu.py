@@ -16,8 +16,8 @@ class NluModel:
 
         try:
             cls.nlu = MKBotNLU()
-        except ModuleNotFoundError:
-            log.warning("mkbot-nlu is not available.")
+        except ModuleNotFoundError as error:
+            log.warning(f"mkbot-nlu is not available: {error}")
             raise
         except Exception as error:
             log.exception(error)

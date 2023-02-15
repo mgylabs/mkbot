@@ -3,9 +3,9 @@
   "python.terminal.activateEnvironment": true,
   "python.terminal.launchArgs": [],
   "python.autoComplete.extraPaths": [
-    "src\\lib",
-    "src\\bot",
-    "src\\msu"
+    "src/lib",
+    "src/bot",
+    "src/update"
   ],
   "python.formatting.autopep8Args": [
     "--ignore",
@@ -18,9 +18,9 @@
     "source.fixAll": true
   },
   "python.analysis.extraPaths": [
-    "src\\lib",
-    "src\\bot",
-    "src\\msu"
+    "src/lib",
+    "src/bot",
+    "src/update"
   ],
   "python.testing.unittestEnabled": true,
   "terminal.integrated.env.windows": {

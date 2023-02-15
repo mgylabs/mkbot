@@ -48,9 +48,6 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install --no-root --without dev -E release -E full
-      - name: Install Visual C++ Redistributable
-        run: |
-          choco install vcredist140
       - name: Version
         env:
           API_KEY: ${{ secrets.API_KEY }}

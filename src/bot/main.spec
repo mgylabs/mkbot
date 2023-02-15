@@ -37,8 +37,8 @@ core_exe = EXE(
 )
 
 msu_a = Analysis(
-    ["../msu/msu.py"],
-    pathex=["../msu", "..\\lib"],
+    ["../update/msu.py"],
+    pathex=["../update", "..\\lib"],
     binaries=[],
     datas=[],
     hiddenimports=[],

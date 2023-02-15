@@ -3,10 +3,10 @@ import discord
 from bs4 import BeautifulSoup
 from discord.ext import commands
 
+from core.controllers.discord.utils import Emoji
+from core.controllers.discord.utils.MGCert import Level, MGCertificate
+from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.i18n import _
-
-from .utils.MGCert import Level, MGCertificate
-from .utils.MsgFormat import MsgFormatter
 
 
 def get_useragent():
@@ -84,7 +84,7 @@ async def google(ctx: commands.Context, *, query):
     Search on Google.
     """
     search_msg: discord.Message = await ctx.send(
-        "<a:typing:1073250215974420490> " + _("Searching... `%s`") % query
+        f"{Emoji.typing} " + _("Searching... `%s`") % query
     )
 
     result: SearchResult = await search(query, advanced=True)

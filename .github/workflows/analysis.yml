@@ -40,7 +40,7 @@ jobs:
       - name: pylint
         if: ${{ always() }}
         run: |
-          poetry run pylint src/bot src/msu src/lib
+          poetry run pylint src/bot src/update src/lib
       - name: black
         if: ${{ always() }}
         run: |

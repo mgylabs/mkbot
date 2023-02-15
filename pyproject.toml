@@ -1,9 +1,9 @@
 [tool.isort]
 profile = "black"
-src_paths = ["src/bot", "src/lib", "src/msu", "tests"]
+src_paths = ["src/bot", "src/lib", "src/update", "tests"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src/bot", "src/lib", "src/msu"]
+pythonpath = ["./src/bot", "./src/lib", "./src/update"]
 
 [tool.poetry]
 name = "mkbot"
@@ -34,8 +34,8 @@ sqlalchemy = "1.4.46"
 yt-dlp = "2022.11.11"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
 mkbot-nlu = [
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "6ca7469e0c843fccbc5a67ede5c8c7a7b5df7ba6"},
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "6ca7469e0c843fccbc5a67ede5c8c7a7b5df7ba6", extras = ["full"], optional = true},
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "fa4557c36274ae694ebc9f235a94e149af0917b5"},
+    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "fa4557c36274ae694ebc9f235a94e149af0917b5", extras = ["full"], optional = true},
 ]
 
 [tool.poetry.dev-dependencies]

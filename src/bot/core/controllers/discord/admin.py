@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from core.controllers.discord.utils import api
+from core.controllers.discord.utils import Emoji, api
 from mgylabs.i18n import _
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
@@ -28,7 +28,7 @@ class Admin(commands.Cog):
 
         if query == "nlu_ko":
             msg: discord.Message = await ctx.send(
-                "<a:typing:1073250215974420490> " + _("Installing... `%s`") % query
+                f"{Emoji.typing} " + _("Installing... `%s`") % query
             )
 
             from mkbot_nlu.nlu import MKBotNLU
@@ -67,7 +67,7 @@ class Admin(commands.Cog):
 
         if query == "nlu_ko":
             msg: discord.Message = await ctx.send(
-                "<a:typing:1073250215974420490> " + _("Loading... `%s`") % query
+                f"{Emoji.typing} " + _("Loading... `%s`") % query
             )
 
             CONFIG.enabledChatMode = True
@@ -85,6 +85,14 @@ class Admin(commands.Cog):
             await ctx.send("Invalid!")
 
         self.load_working.remove(query)
+
+    @commands.command(hidden=True)
+    @MGCertificate.verify(level=Level.ADMIN_USERS)
+    async def unload(self, ctx: commands.Context):
+        query = "nlu_news"
+        msg = await ctx.send(f"{Emoji.typing} " + _("Loading... `%s`") % query)
+        NluModel.unload()
+        await msg.edit(content=_("🟢 Successfully loaded `%s`") % query)
 
 
 async def setup(bot: commands.Bot):

@@ -8,6 +8,7 @@ from discord.ext import commands
 from mkbot_nlu.utils import Intent, register_intent
 from yt_dlp import YoutubeDL
 
+from core.controllers.discord.utils import Emoji
 from mgylabs.db import database
 from mgylabs.i18n import I18nExtension, _
 from mgylabs.utils import logger
@@ -456,7 +457,7 @@ class Music(commands.Cog):
             )
         else:
             search_msg: discord.Message = await ctx.send(
-                "<a:typing:1073250215974420490> " + _("Searching... `%s`") % song
+                f"{Emoji.typing} " + _("Searching... `%s`") % song
             )
 
             search_song_list = await ytsearch(song, 5)

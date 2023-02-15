@@ -394,8 +394,8 @@ package/vc.py
 
 .env/
 .venv*/
-src/msu/build
-src/msu/dist
+src/update/build
+src/update/dist
 package/MKBotSetup.exe
 src/info
 src/bot/extensions
@@ -404,7 +404,7 @@ temp_changelog.md
 src/bot/msu.flag
 MKBotSetup*.exe
 src/lib/mgylabs/constants/APIKey.py
-src/msu/msu.flag
+src/update/msu.flag
 tests/data
 *.flag
 !.github/flags/*.flag
