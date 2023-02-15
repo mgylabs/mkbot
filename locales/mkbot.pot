@@ -846,6 +846,9 @@ msgstr ""
 msgid "🔴 Failed to load `%s`"
 msgstr ""
 
+msgid "🚫 No results were found for `{query}`"
+msgstr ""
+
 msgid "🟡 Successfully installed `%s`, but failed to load."
 msgstr ""
 

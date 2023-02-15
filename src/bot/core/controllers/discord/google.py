@@ -43,7 +43,7 @@ class SearchResult:
 async def search(
     term, num_results=1, lang="en", proxy=None, advanced=False, sleep_interval=0
 ):
-    escaped_term = term.replace(" ", "+")
+    escaped_term = term
 
     # Proxy
     proxies = None
@@ -54,27 +54,24 @@ async def search(
             proxies = {"http": proxy}
 
     # Fetch
-    start = 0
-    while start < num_results:
-        # Send request
-        text = await _req(escaped_term, num_results - start, lang, start, proxies)
+    # Send request
+    text = await _req(escaped_term, 1, lang, 0, proxies)
 
-        # Parse
-        soup = BeautifulSoup(text, "html.parser")
-        result_block = soup.find_all("div", attrs={"class": "g"})
-        for result in result_block:
-            # Find link, title, description
-            link = result.find("a", href=True)
-            title = result.find("h3")
-            description_box = result.find("div", {"style": "-webkit-line-clamp:2"})
-            if description_box:
-                description = description_box.find("span")
-                if link and title and description:
-                    start += 1
-                    if advanced:
-                        return SearchResult(link["href"], title.text, description.text)
-                    else:
-                        return link["href"]
+    # Parse
+    soup = BeautifulSoup(text, "html.parser")
+    result_block = soup.find_all("div", attrs={"class": "g"})
+    for result in result_block:
+        # Find link, title, description
+        link = result.find("a", href=True)
+        title = result.find("h3")
+        description_box = result.find("div", {"style": "-webkit-line-clamp:2"})
+        if description_box:
+            description = description_box.find("span")
+            if link and title and description:
+                if advanced:
+                    return SearchResult(link["href"], title.text, description.text)
+                else:
+                    return link["href"]
 
 
 @commands.hybrid_command()
@@ -89,14 +86,19 @@ async def google(ctx: commands.Context, *, query):
 
     result: SearchResult = await search(query, advanced=True)
 
-    await search_msg.edit(
-        content=_("🔍 Google search results for `{query}`").format(query=query),
-        embed=MsgFormatter.get(
-            ctx,
-            None,
-            f"[{result.title}]({result.url})\n{result.description}",
-        ),
-    )
+    if result:
+        await search_msg.edit(
+            content=_("🔍 Google search results for `{query}`").format(query=query),
+            embed=MsgFormatter.get(
+                ctx,
+                None,
+                f"[{result.title}]({result.url})\n{result.description}",
+            ),
+        )
+    else:
+        await search_msg.edit(
+            content=_("🚫 No results were found for `{query}`").format(query=query)
+        )
 
 
 async def setup(bot: commands.Bot):
