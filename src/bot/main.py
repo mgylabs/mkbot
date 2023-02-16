@@ -1,13 +1,20 @@
-import asyncio
+from multiprocessing import freeze_support
+
+freeze_support()
+
 import sys
 
-from discord_host import create_bot, start_bot
-
 sys.path.append("..\\lib")
+from mgylabs.utils import logger
+
+logger.configure_logger()
+
+import asyncio
 import msvcrt
 import os
 
 from core.controllers.ipc_controller import IPCController
+from discord_host import create_bot, start_bot
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
 from mgylabs.services.telemetry_service import TelemetryReporter

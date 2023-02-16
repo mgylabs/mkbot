@@ -308,6 +308,9 @@ msgstr ""
 msgid "Leaves voice channel where the user who typed the command is in."
 msgstr ""
 
+msgid "Loading chat mode... Please try again later."
+msgstr ""
+
 msgid "Loading... `%s`"
 msgstr ""
 
@@ -743,6 +746,9 @@ msgid ""
 "You can also type {0} category for more info on a category."
 msgstr ""
 
+msgid "Unloading... `%s`"
+msgstr ""
+
 msgid "User"
 msgstr ""
 
@@ -856,5 +862,8 @@ msgid "🟢 Successfully installed `%s`."
 msgstr ""
 
 msgid "🟢 Successfully loaded `%s`"
+msgstr ""
+
+msgid "🟢 Successfully unloaded `%s`"
 msgstr ""
 

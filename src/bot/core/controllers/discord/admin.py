@@ -1,3 +1,5 @@
+import asyncio
+
 import discord
 from discord.ext import commands
 
@@ -17,6 +19,11 @@ class Admin(commands.Cog):
         self.bot: commands.Bot = bot
         self.install_working = set()
         self.load_working = set()
+        self.unload_working = set()
+
+    async def load_nlu_model(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, NluModel.load, True)
 
     @commands.command(hidden=True)
     @MGCertificate.verify(level=Level.ADMIN_USERS)
@@ -42,7 +49,7 @@ class Admin(commands.Cog):
             log.info(f"Loading {query}...")
 
             try:
-                NluModel.load()
+                await self.load_nlu_model()
             except Exception as error:
                 await msg.edit(
                     content=_("🟡 Successfully installed `%s`, but failed to load.")
@@ -75,8 +82,9 @@ class Admin(commands.Cog):
 
             log.info(f"Loading {query}...")
             try:
-                NluModel.load()
-            except Exception:
+                await self.load_nlu_model()
+            except Exception as error:
+                log.exception(error)
                 await msg.edit(content=_("🔴 Failed to load `%s`") % query)
             else:
                 log.info(f"Successfully loaded {query}...")
@@ -88,11 +96,24 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @MGCertificate.verify(level=Level.ADMIN_USERS)
-    async def unload(self, ctx: commands.Context):
-        query = "nlu_news"
-        msg = await ctx.send(f"{Emoji.typing} " + _("Loading... `%s`") % query)
-        NluModel.unload()
-        await msg.edit(content=_("🟢 Successfully loaded `%s`") % query)
+    async def unload(self, ctx: commands.Context, *, query):
+        if query in self.load_working:
+            return
+
+        self.unload_working.add(query)
+
+        if query == "nlu_ko":
+            msg = await ctx.send(f"{Emoji.typing} " + _("Unloading... `%s`") % query)
+
+            log.info(f"Unloading {query}...")
+            NluModel.unload()
+            log.info(f"Successfully unloaded {query}...")
+
+            await msg.edit(content=_("🟢 Successfully unloaded `%s`") % query)
+        else:
+            await ctx.send("Invalid!")
+
+        self.unload_working.remove(query)
 
 
 async def setup(bot: commands.Bot):

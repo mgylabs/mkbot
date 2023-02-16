@@ -27,7 +27,7 @@ class IPCService:
                 data = self.client_socket.recv(1024)
 
                 if not data:
-                    print("Disconnected")
+                    log.warning("Disconnected")
                     break
 
                 print("Received from the server", data.decode())
@@ -42,7 +42,7 @@ class IPCService:
                 ).start()
 
             except ConnectionResetError:
-                print("Disconnected")
+                log.warning("Disconnected")
                 break
 
         self.client_socket.close()

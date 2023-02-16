@@ -2,7 +2,11 @@ import asyncio
 import re
 import sys
 
-sys.path.append("..\\lib")
+if __name__ == "__main__":
+    sys.path.append("..\\lib")
+    from mgylabs.utils import logger
+
+    logger.configure_logger()
 
 import platform
 import threading
@@ -180,6 +184,10 @@ class MKBot(commands.Bot):
 
         text = re.sub("<@!?\\d+> ", "", message.content)
         chat_intent: Intent = await NluModel.parse(text)
+
+        if not chat_intent:
+            await ctx.reply(_("Loading chat mode... Please try again later."))
+            return True
 
         if chat_intent.response:
             message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
