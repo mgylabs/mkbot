@@ -21,6 +21,7 @@ AppPublisher=Mulgyeol Labs
 AppPublisherURL=https://github.com/mgylabs/mkbot
 AppSupportURL=https://github.com/mgylabs/mkbot
 AppUpdatesURL=https://github.com/mgylabs/mkbot
+DefaultGroupName={#NameShort}
 DefaultDirName={userpf}\{#NameLong}
 DisableDirPage=yes
 DisableProgramGroupPage=yes
@@ -34,6 +35,7 @@ SetupIconFile={#RepoDir}\resources\package\mkbot.ico
 WizardImageFile={#RepoDir}\resources\package\welcome.bmp
 WizardSmallImageFile={#RepoDir}\resources\package\mkbot_sq.bmp
 UninstallDisplayIcon={app}\{#AppExeName}
+ChangesAssociations=true
 Compression=lzma/ultra
 SolidCompression=yes
 AppMutex={code:GetAppMutex}
@@ -68,7 +70,7 @@ Source: "{#RepoDir}\extensions\*"; DestDir: "{%USERPROFILE}\{#ExtDirName}\extens
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#NameShort}\{#NameShort}"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{app}"; AppUserModelToastActivatorCLSID: "3f7eb835-ef29-45f5-acb5-a078d127dc94"; AppUserModelID: "com.mgylabs.{#DName}";
+Name: "{group}\{#NameShort}"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{app}"; AppUserModelToastActivatorCLSID: "3f7eb835-ef29-45f5-acb5-a078d127dc94"; AppUserModelID: "com.mgylabs.{#DName}";
 Name: "{autodesktop}\{#NameShort}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon; WorkingDir: "{app}"
 
 [Run]
