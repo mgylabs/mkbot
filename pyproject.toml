@@ -31,7 +31,7 @@ pyyaml = "6.0"
 requests = "2.28.2"
 simpleaudio = "1.0.4"
 sqlalchemy = "1.4.46"
-yt-dlp = "2022.11.11"
+yt-dlp = "2023.1.6"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
 mkbot-nlu = [
     {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "7bbb76125a827581020fc1618192382ecaff9d62"},
