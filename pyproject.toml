@@ -5,6 +5,10 @@ src_paths = ["src/bot", "src/lib", "src/update", "tests"]
 [tool.pytest.ini_options]
 pythonpath = ["./src/bot", "./src/lib", "./src/update"]
 
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "mkbot"
 version = "0.1.0"
