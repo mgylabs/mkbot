@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkbot\n"
-"PO-Revision-Date: 2023-01-31 05:43\n"
+"PO-Revision-Date: 2023-03-06 05:12\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -93,6 +93,12 @@ msgstr "도전 수락! %(first_member)s은(는) 첫 번째, %(second_member)s은
 
 msgid "Challenge declined :("
 msgstr "챌린지가 거부되었습니다 :("
+
+msgid "Chat mode is not activated."
+msgstr "채팅 모드가 활성화되지 않았습니다."
+
+msgid "Chat mode is only available when you have access to the **MK Bot Support Server**."
+msgstr "채팅 모드는 **MK Bot 서포트 서버**에 액세스할 수 있는 경우에만 사용할 수 있습니다."
 
 msgid "Chose %s"
 msgstr "%s을(를) 선택"
@@ -223,6 +229,13 @@ msgstr "행맨"
 msgid "Help"
 msgstr "도움말"
 
+msgid "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\n"
+"Please try rephrasing your instruction to me."
+msgstr ""
+
+msgid "Installing... `%s`"
+msgstr ""
+
 msgid "Invalid Argument"
 msgstr "잘못된 매개변수"
 
@@ -297,6 +310,12 @@ msgstr ""
 msgid "Leaves voice channel where the user who typed the command is in."
 msgstr "명령어를 입력한 유저가 있는 음성채널에서 퇴장합니다."
 
+msgid "Loading chat mode... Please try again later."
+msgstr "채팅 모드 로드 중... 잠시 후 다시 시도하십시오."
+
+msgid "Loading... `%s`"
+msgstr ""
+
 msgid "Local time of %(member)s (%(timezone)s)"
 msgstr "사용자 %(member)s의 로컬 시간 (%(timezone)s)"
 
@@ -342,7 +361,7 @@ msgid "Oops! Something went wrong."
 msgstr "어라! 뭔가 잘못됐네요."
 
 msgid "Paused at: %s"
-msgstr ""
+msgstr "일시 중지됨: %s"
 
 #, docstring
 msgid "Pauses the song that is playing"
@@ -388,28 +407,28 @@ msgstr "룰렛 플레이"
 #, docstring
 msgid "Play roulette\n\n"
 "Examples:\n"
-"{commandPrefix}roulette \"Player\" @user1 @user2 @user3\n"
-"{commandPrefix}rou \"title\" \"item 1\" \"item 2\"\n\n"
+"{commandPrefix}roulette @user1 @user2 @user3\n"
+"{commandPrefix}rou \"item 1\" \"item 2\"\n\n"
 "Note:\n"
 "This bot cannot be added to items."
 msgstr "룰렛 플레이\n\n"
 "예:\n"
-"{commandPrefix}roulette \"플레이어\" @user1 @user2 @user3\n"
-"{commandPrefix}rou \"제목\" \"항목 1\" \"항목 2\"\n\n"
+"{commandPrefix}roulette @user1 @user2 @user3\n"
+"{commandPrefix}rou \"항목 1\" \"항목 2\"\n\n"
 "참고:\n"
 "이 봇은 항목에 추가할 수 없습니다."
 
 msgid "Player Already Paused"
-msgstr ""
+msgstr "플레이어가 이미 일시 중지됨"
 
 msgid "Player Paused"
-msgstr ""
+msgstr "플레이어가 일시 중지됨"
 
 msgid "Player Resumed"
-msgstr ""
+msgstr "플레이어가 재개됨"
 
 msgid "Player Stopped"
-msgstr ""
+msgstr "플레이어가 중지됨"
 
 #, docstring
 msgid "Plays the keyword searched or plays the song in queue"
@@ -454,7 +473,7 @@ msgstr "핑 %sms"
 
 #, docstring
 msgid "Recommends Korean lotto lucky numbers"
-msgstr ""
+msgstr "한국의 로또 숫자를 추천해줍니다."
 
 msgid "Release"
 msgstr "릴리스"
@@ -468,8 +487,8 @@ msgstr "문제 보고"
 msgid "Report broken or incorrect behaviour"
 msgstr "고장 또는 틀린 동작 신고"
 
-msgid "Roulette for %s"
-msgstr "룰렛 %s"
+msgid "Roulette"
+msgstr "룰렛"
 
 msgid "Roulette is running. Please wait."
 msgstr "룰렛이 돌고 있습니다. 잠시만 기다려주세요."
@@ -477,6 +496,10 @@ msgstr "룰렛이 돌고 있습니다. 잠시만 기다려주세요."
 #, docstring
 msgid "Run a command as another user optionally in another channel."
 msgstr ""
+
+#, docstring
+msgid "Search on Google."
+msgstr "구글에서 검색"
 
 #, docstring
 msgid "Searches music in youtube"
@@ -491,6 +514,9 @@ msgstr "YouTube에서 음악을 검색합니다.\n"
 "{commandPrefix}search \"keyword\"\n"
 "{commandPrefix}s \"keyword\"\n"
 "이모티콘을 사용하여 선택할 수 있는 5 가지 선택지를 보여줍니다."
+
+msgid "Searching... `%s`"
+msgstr "검색 중... '%s`"
 
 msgid "Select a piece strength"
 msgstr "조각 강도 선택"
@@ -741,6 +767,9 @@ msgid "Type {0} command for more info on a command.\n"
 msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어 을(를) 입력하세요.\n"
 "카테고리에 대한 자세한 내용을 보려면 {0} 카테고리 을(를) 입력할 수도 있습니다."
 
+msgid "Unloading... `%s`"
+msgstr ""
+
 msgid "User"
 msgstr "사용자"
 
@@ -763,10 +792,10 @@ msgid "You already have this piece"
 msgstr "당신은 이미 이 조각을 가지고 있습니다"
 
 msgid "You are not in any voice channel. Please join a voice channel to use Music bot."
-msgstr ""
+msgstr "음성 채널에 속해 있지 않습니다. 음악 봇을 사용하려면 음성 채널에 참여하세요."
 
 msgid "You are not in any voice channel. Please join a voice channel to use TTS."
-msgstr ""
+msgstr "음성 채널에 속해 있지 않습니다. TTS을(를) 사용하려면 음성 채널에 참여하세요."
 
 msgid "You cannot make more than 10 candidates!"
 msgstr "10개 이상의 선택지를 만들 수 없습니다!"
@@ -835,9 +864,27 @@ msgid "{title} - {length}\n"
 msgstr "{title} - {length}\n"
 "대기열에 추가됨"
 
+msgid "🔍 Google search results for `{query}`"
+msgstr "🔍 `{query}`에 대한 구글 검색 결과"
+
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr "🔍 `%s`에 대한 검색 결과, 30초 안에 선택하세요."
 
-msgid "🔍 Searching... `%s`"
-msgstr "🔍 검색 중... `%s`"
+msgid "🔴 Failed to load `%s`"
+msgstr ""
+
+msgid "🚫 No results were found for `{query}`"
+msgstr "🚫 `{query}`에 대한 검색 결과를 찾을 수 없습니다."
+
+msgid "🟡 Successfully installed `%s`, but failed to load."
+msgstr ""
+
+msgid "🟢 Successfully installed `%s`."
+msgstr ""
+
+msgid "🟢 Successfully loaded `%s`"
+msgstr ""
+
+msgid "🟢 Successfully unloaded `%s`"
+msgstr ""
 
