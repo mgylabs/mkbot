@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from mgylabs.i18n import L_, _
+from mgylabs.i18n.utils import get_user_locale_code
 from mgylabs.utils.config import CONFIG
 from mgylabs.utils.version import VERSION
 
@@ -219,14 +220,27 @@ class CommandHelp(commands.DefaultHelpCommand):
         await self.send_pages()
 
     def get_ending_note(self) -> str:
+        ctx = self.context
+        bot = ctx.bot
+
         command_name = self.invoked_with
-        return (
+        note = (
             _(
                 "Type {0} command for more info on a command.\n"
                 "You can also type {0} category for more info on a category."
             ).format(f"{self.context.clean_prefix}{command_name}")
             + "_ _\n_ _\n© Mulgyeol Labs 2023"
         )
+
+        if get_user_locale_code(ctx.author.id) == "ko":
+            chat_note = (
+                f'> **`BETA`** *"{bot.user.mention} 신나는 음악 틀어줘"* 와 같이 채팅을 통해 명령어를 사용할 수 있어요!'
+                f"\n> 봇을 @멘션({bot.user.mention}) 하고 말을 걸어보세요.\n\n"
+            )
+
+            note = chat_note + note
+
+        return note
 
     async def send_pages(self):
         # """A helper utility to send the page output from :attr:`paginator` to the destination."""

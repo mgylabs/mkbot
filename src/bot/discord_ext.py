@@ -19,4 +19,5 @@ discord_extensions = (
     "core.controllers.discord.minigames",
     "core.controllers.discord.language",
     "core.controllers.discord.google",
+    "core.controllers.discord.url",
 )

@@ -51,17 +51,19 @@ from release import ReleaseNotify
 log = logger.get_logger(__name__)
 i18n = I18nExtension()
 
+super_ui_scheduled_task = discord.ui.View._scheduled_task
 
-async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
+
+@database.using_database
+async def ui_scheduled_task(
+    self, item: discord.ui.Item, interaction: discord.Interaction
+):
     i18n.set_current_locale(get_user_locale_code(interaction.user.id))
 
-    return True
+    await super_ui_scheduled_task(self, item, interaction)
 
 
-discord.ui.View._scheduled_task = database.using_database(
-    discord.ui.View._scheduled_task
-)
-discord.ui.View.interaction_check = interaction_check
+discord.ui.View._scheduled_task = ui_scheduled_task
 
 
 @contextmanager

@@ -234,6 +234,9 @@ msgstr ""
 msgid "Invalid Argument"
 msgstr ""
 
+msgid "Invalid URL"
+msgstr ""
+
 msgid "Invalid language"
 msgstr ""
 
@@ -467,6 +470,10 @@ msgid "Release"
 msgstr ""
 
 msgid "Reopen Your Board"
+msgstr ""
+
+#, docstring
+msgid "Replace URL with its title."
 msgstr ""
 
 msgid "Report Issue"

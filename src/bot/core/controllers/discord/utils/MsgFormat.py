@@ -36,24 +36,37 @@ class MsgFormatter:
     def get(
         ctx_or_iaction,
         title,
-        description="",
+        description=None,
         fields: list = [],
         show_req_user=True,
         *,
+        thumbnail_url: str = None,
+        image_url: str = None,
         color: str = None,
+        url: str = None,
     ):
         if color is None:
             color = get_color()
         else:
             color = color_to_int(color)
 
+        if not description:
+            description = ""
+
         embed = discord.Embed(
             title=title,
             description=description.format(commandPrefix=CONFIG.commandPrefix)
             + "\n\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
             color=color,
+            url=url,
             timestamp=datetime.datetime.utcnow(),
         )
+
+        if thumbnail_url:
+            embed.set_thumbnail(url=thumbnail_url)
+
+        if image_url:
+            embed.set_image(url=image_url)
 
         for fd in fields:
             embed.add_field(**fd)
@@ -69,6 +82,48 @@ class MsgFormatter:
                 embed.add_field(name="Requested by", value="<@{}>".format(user_id))
 
         embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
+        return embed
+
+    @staticmethod
+    def simple(
+        title,
+        description=None,
+        fields: list = [],
+        *,
+        thumbnail_url: str = None,
+        image_url: str = None,
+        color: str = None,
+        url: str = None,
+    ):
+
+        if color is None:
+            color = get_color()
+        else:
+            color = color_to_int(color)
+
+        if not description:
+            description = ""
+
+        embed = discord.Embed(
+            title=title,
+            description=description.format(commandPrefix=CONFIG.commandPrefix),
+            color=color,
+            url=url,
+        )
+
+        if thumbnail_url:
+            embed.set_thumbnail(url=thumbnail_url)
+
+        if image_url:
+            embed.set_image(url=image_url)
+
+        for fd in fields:
+            embed.add_field(**fd)
+
+        embed.set_footer(
+            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+        )
+
         return embed
 
     @staticmethod
