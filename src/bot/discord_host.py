@@ -172,6 +172,14 @@ class MKBot(commands.Bot):
             return False
 
         if not user_has_nlu_access(self, message.author.id):
+            DiscordRequestLogEntry.add_for_chat(
+                ctx,
+                message,
+                MGCertificate.getUserLevel(message.author),
+                None,
+                {"text": message.content, "detail": "NO_NLU_ACCESS"},
+            )
+
             await ctx.reply(
                 _(
                     "Chat mode is only available when you have access to the **MK Bot Support Server**."
@@ -181,6 +189,14 @@ class MKBot(commands.Bot):
             return True
 
         if not NluModel.nlu:
+            DiscordRequestLogEntry.add_for_chat(
+                ctx,
+                message,
+                MGCertificate.getUserLevel(message.author),
+                None,
+                {"text": message.content, "detail": "NLU_NOT_ACTIVATED"},
+            )
+
             await ctx.reply(_("Chat mode is not activated."))
             return True
 
@@ -188,6 +204,14 @@ class MKBot(commands.Bot):
         chat_intent: Intent = await NluModel.parse(text)
 
         if not chat_intent:
+            DiscordRequestLogEntry.add_for_chat(
+                ctx,
+                message,
+                MGCertificate.getUserLevel(message.author),
+                None,
+                {"text": message.content, "detail": "NLU_IS_LOADING"},
+            )
+
             await ctx.reply(_("Loading chat mode... Please try again later."))
             return True
 

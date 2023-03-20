@@ -1,3 +1,4 @@
+from typing import Optional
 from urllib.parse import urljoin
 
 import aiohttp
@@ -25,8 +26,14 @@ def get_meta_content(soup: BeautifulSoup, *args, **kwargs):
 
 async def extract_url(url: str):
     async with aiohttp.ClientSession(
-        headers={"User-Agent": get_useragent()}, raise_for_status=True
+        headers={"User-Agent": get_useragent()},
+        raise_for_status=True,
+        timeout=aiohttp.ClientTimeout(2),
     ) as session:
+        async with session.head(url) as r:
+            if not r.content_type.startswith("text"):
+                raise Exception("Invalid content type")
+
         async with session.get(url) as r:
             request_url = r.url
             text = await r.text()
@@ -47,22 +54,40 @@ async def extract_url(url: str):
 @app_commands.command(name="url")
 @app_commands.describe()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
-async def link(interaction: discord.Interaction, url: str):
+async def link(
+    interaction: discord.Interaction,
+    url: str,
+    title: Optional[str] = None,
+    description: Optional[bool] = False,
+):
     """
     Replace URL with its title.
+
     """
     try:
-        name, title, description, image_url, color = await extract_url(url)
-    except Exception as e:
-        log.exception(e)
+        name, stitle, sdescription, image_url, color = await extract_url(url)
+    except aiohttp.InvalidURL:
         await interaction.response.send_message(
             embed=MsgFormatter.get(interaction, _("Invalid URL"), show_req_user=False),
             ephemeral=True,
         )
+    except Exception as e:
+        log.exception(e)
+
+        embed = MsgFormatter.simple(title or url, url=url)
+
+        await interaction.response.send_message(embed=embed)
     else:
         embed = MsgFormatter.simple(
-            title, description, url=url, color=color, thumbnail_url=image_url
+            title or stitle or url,
+            sdescription if description else None,
+            url=url,
+            color=color,
+            thumbnail_url=image_url,
         )
+
+        if title and name:
+            embed.set_author(name=name)
 
         await interaction.response.send_message(embed=embed)
 
