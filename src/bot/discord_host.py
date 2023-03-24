@@ -162,7 +162,7 @@ class MKBot(commands.Bot):
         ctx.mkbot_request_id = request_id
         await self.invoke(ctx)
 
-        return True
+        return ctx.command is not None
 
     async def process_chats(self, ctx: commands.Context, message: discord.Message):
         if message.author.bot:
