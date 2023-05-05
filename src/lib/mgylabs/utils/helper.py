@@ -30,9 +30,13 @@ def group_by(d, k):
 @database.using_database
 def usage_helper():
     last_log_id = localStorage["telemetry_last_log_id"]
+    last_event_log_id = localStorage["telemetry_last_event_log_id"]
 
     if last_log_id is None:
         last_log_id = 0
+
+    if last_event_log_id is None:
+        last_event_log_id = 0
 
     out = (
         DiscordBotRequestLog.query.filter(DiscordBotRequestLog.id > last_log_id)
@@ -48,15 +52,7 @@ def usage_helper():
             == DiscordBotCommandEventLog.query.with_entities(
                 DiscordBotCommandEventLog.request_id
             )
-            .filter(
-                DiscordBotCommandEventLog.created_at
-                >= DiscordBotRequestLog.query.with_entities(
-                    DiscordBotRequestLog.created_at
-                )
-                .filter_by(id=last_log_id)
-                .subquery()
-                .c.created_at
-            )
+            .filter(DiscordBotCommandEventLog.id > last_event_log_id)
             .subquery()
             .c.request_id
         )
@@ -72,6 +68,7 @@ def usage_helper():
         @database.using_database
         def callback():
             localStorage["telemetry_last_log_id"] = len(out) + last_log_id
+            localStorage["telemetry_last_event_log_id"] = len(up) + last_event_log_id
 
         TelemetryReporter.Event(
             "Usage",

@@ -234,7 +234,7 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         if get_user_locale_code(ctx.author.id) == "ko":
             chat_note = (
-                f'> **`BETA`** *"{bot.user.mention} 신나는 음악 틀어줘"* 와 같이 채팅을 통해 명령어를 사용할 수 있어요!'
+                f'> **`BETA`** ***"{bot.user.mention} 신나는 음악 틀어줘"*** 와 같이 채팅을 통해 명령어를 사용할 수 있어요!'
                 f"\n> 봇을 @멘션({bot.user.mention}) 하고 말을 걸어보세요.\n\n"
             )
 

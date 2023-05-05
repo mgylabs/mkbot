@@ -450,6 +450,8 @@ async def create_bot(return_error_level=False):
                 view = None
 
             await ctx.send(embed=MsgFormatter.abrt(ctx, issue_link, tb), view=view)
+
+            TelemetryReporter.Exception(error, {"origin": "abrt"})
             raise error
 
         await ctx.send(
@@ -504,6 +506,8 @@ async def create_bot(return_error_level=False):
                 await interaction.response.send_message(
                     embed=MsgFormatter.abrt(interaction, issue_link, tb), view=view
                 )
+
+                TelemetryReporter.Exception(error, {"origin": "abrt"})
                 raise error
 
             await interaction.response.send_message(

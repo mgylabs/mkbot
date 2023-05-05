@@ -6,6 +6,7 @@ from discord.ext import commands
 from mkbot_nlu.utils import Intent, register_intent
 
 from mgylabs.i18n import _
+from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -36,10 +37,12 @@ async def roulette(ctx: commands.Context, *items):
         )
         await asyncio.sleep(1)
 
+    result = random.choice(items)
+
+    DiscordEventLogEntry.Add(ctx, "RouletteResult", {"result": result, "items": items})
+
     await msg.edit(
-        embed=MsgFormatter.get(
-            ctx, _("Roulette"), _("chose... %s!") % random.choice(items)
-        )
+        embed=MsgFormatter.get(ctx, _("Roulette"), _("chose... %s!") % result)
     )
 
 

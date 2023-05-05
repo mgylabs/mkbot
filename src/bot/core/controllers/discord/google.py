@@ -7,6 +7,7 @@ from core.controllers.discord.utils import Emoji
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.i18n import _
+from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 
 def get_useragent():
@@ -95,10 +96,23 @@ async def google(ctx: commands.Context, *, query):
                 f"[{result.title}]({result.url})\n{result.description}",
             ),
         )
+
+        DiscordEventLogEntry.Add(
+            ctx,
+            "GoogleSearchSucceeded",
+            {
+                "query": query,
+                "title": result.title,
+                "url": result.url,
+                "description": result.description,
+            },
+        )
     else:
         await search_msg.edit(
             content=_("🚫 No results were found for `{query}`").format(query=query)
         )
+
+        DiscordEventLogEntry.Add(ctx, "GoogleSearchFailed", {"query": query})
 
 
 async def setup(bot: commands.Bot):
