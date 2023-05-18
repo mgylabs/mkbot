@@ -20,7 +20,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.10.*"
 aiofiles = "0.8.0"
-alembic = "1.9.1"
+alembic = "1.11.1"
 babel = "2.11.0"
 bs4 = "0.0.1"
 discord-py = "2.2.2"
