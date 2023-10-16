@@ -123,6 +123,28 @@ async def ytsearch(text, count):
     return ls
 
 
+async def nextSong():
+    # fetch next song from yt, then return as Song
+    song_url = guild_sl[gid].slist[-1].url
+    async with aiohttp.ClientSession(raise_for_status=True) as session:
+        async with session.get(song_url) as r:
+            text = await r.text()
+    soup = BeautifulSoup(text, "lxml")
+
+    b = soup.find_all("script")[-5]
+    J1 = str(b).split("var ytInitialData = ")
+    u = J1[1].find("url")
+    next_url = J1[1][u + 5 : u + 26]
+
+    title = str(soup.find("title"))[7:-8]
+
+    next_url = "youtube.com" + next_url
+    song_ = Song()
+    song_.addSong(title, next_url)
+
+    return song_
+
+
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
