@@ -1,5 +1,6 @@
 import asyncio
 from typing import Union
+from urllib.request import urlopen
 
 import aiohttp
 import discord
@@ -21,6 +22,7 @@ from .utils.voice import validate_voice_client
 log = logger.get_logger(__name__)
 
 guild_sl = dict()
+auto = False
 
 
 def human_duration(duration):
@@ -123,22 +125,24 @@ async def ytsearch(text, count):
     return ls
 
 
-async def nextSong():
+def nextSong(gid):
     # fetch next song from yt, then return as Song
     song_url = guild_sl[gid].slist[-1].url
-    async with aiohttp.ClientSession(raise_for_status=True) as session:
-        async with session.get(song_url) as r:
-            text = await r.text()
-    soup = BeautifulSoup(text, "lxml")
+    a = urlopen(song_url)
+    soup = BeautifulSoup(a.read(), "lxml")
 
     b = soup.find_all("script")[-5]
     J1 = str(b).split("var ytInitialData = ")
     u = J1[1].find("url")
-    next_url = J1[1][u + 5 : u + 26]
+    next_url = J1[1][u + 6 : u + 26]
 
     title = str(soup.find("title"))[7:-8]
 
     next_url = "youtube.com" + next_url
+
+    print(title)
+    print(next_url)
+
     song_ = Song()
     song_.addSong(title, next_url)
 
@@ -172,6 +176,10 @@ class Music(commands.Cog):
         @database.using_database
         def next():
             I18nExtension.set_current_locale_by_user(ctx.author.id)
+            # when autoplay is on & number of songs == queue num
+            if auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
+                guild_sl[gid].addSong(nextSong(gid))
+
             # if number of songs > queue num
             if len(guild_sl[gid].slist) > guild_sl[gid].queue:
                 guild_sl[gid].queue += 1
@@ -253,7 +261,12 @@ class Music(commands.Cog):
         {commandPrefix}p
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
+
+        {commandPrefix}play -auto "keyword"
+        {commandPrefix}play -a "keyword"
+        Turns autoplay on and automatically plays next song
         """
+        global auto
         gid = ctx.message.guild.id
         self.tmp_id[gid] = ctx.message.channel.id
         try:
@@ -266,6 +279,28 @@ class Music(commands.Cog):
             raise UsageError(
                 _(
                     "You are not in any voice channel. Please join a voice channel to use Music bot."
+                )
+            )
+
+        if "-auto" in song or "-a" in song:
+            auto = True
+            song = song[1:]
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("Autoplay turned on"),
+                    _("Next song will be automatically recommended"),
+                )
+            )
+
+        elif "-off" in song or "-o" in song:
+            auto = False
+            song = song[1:]
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("Autoplay turned off"),
+                    _("Next song will not be automatically recommended"),
                 )
             )
 
