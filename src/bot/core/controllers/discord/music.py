@@ -125,7 +125,7 @@ async def ytsearch(text, count):
     return ls
 
 
-def nextSong(gid):
+def nextSong(gid, bot):
     # fetch next song from yt, then return as Song
     song_url = guild_sl[gid].slist[-1].url
     a = urlopen(song_url)
@@ -138,13 +138,10 @@ def nextSong(gid):
 
     title = str(soup.find("title"))[7:-8]
 
-    next_url = "youtube.com" + next_url
-
-    print(title)
-    print(next_url)
+    next_url = "https://youtube.com" + next_url
 
     song_ = Song()
-    song_.addSong(title, next_url)
+    song_.addSong(title, next_url, bot)
 
     return song_
 
@@ -178,7 +175,9 @@ class Music(commands.Cog):
             I18nExtension.set_current_locale_by_user(ctx.author.id)
             # when autoplay is on & number of songs == queue num
             if auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
-                guild_sl[gid].addSong(nextSong(gid))
+                guild_sl[gid].addSong(
+                    nextSong(gid, self.bot.get_user(self.bot.user.id))
+                )
 
             # if number of songs > queue num
             if len(guild_sl[gid].slist) > guild_sl[gid].queue:
@@ -342,45 +341,24 @@ class Music(commands.Cog):
             else:
                 song = song[0]
 
-            if "youtube.com" in song:
-                if song[:11] != "https://www.":
-                    song = "https://www." + song[song.index("y") :]
-                async with aiohttp.ClientSession(raise_for_status=True) as session:
-                    async with session.get(song) as r:
-                        text = await r.text()
-                soup = BeautifulSoup(text, "lxml")
-                title = str(soup.find("title"))[7:-8]
-                song_ = Song()
-                song_.addSong(title, song)
-                guild_sl[gid].addSong(song_)
-                await ctx.message.delete()
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx, guild_sl[gid].lastSong().title, _("in Queue")
-                    )
+            ls = await ytsearch(song, 1)
+            t = ls[0]
+            t.user = ctx.author
+
+            guild_sl[gid].addSong(t)
+
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("%s in Queue") % song,
+                    _("{title}\n Length: {length}").format(
+                        title=guild_sl[gid].lastSong().title,
+                        length=guild_sl[gid].lastSong().length,
+                    ),
                 )
-                if not ctx.voice_client.is_playing():
-                    await self.player(ctx)
-
-            else:
-                ls = await ytsearch(song, 1)
-                t = ls[0]
-                t.user = ctx.author
-
-                guild_sl[gid].addSong(t)
-
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        _("%s in Queue") % song,
-                        _("{title}\n Length: {length}").format(
-                            title=guild_sl[gid].lastSong().title,
-                            length=guild_sl[gid].lastSong().length,
-                        ),
-                    )
-                )
-                if not ctx.voice_client.is_playing():
-                    await self.player(ctx)
+            )
+            if not ctx.voice_client.is_playing():
+                await self.player(ctx)
 
     @commands.command(aliases=["pp"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
