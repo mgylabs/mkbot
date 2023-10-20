@@ -76,6 +76,12 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
+msgid "Autoplay turned off"
+msgstr ""
+
+msgid "Autoplay turned on"
+msgstr ""
+
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
@@ -334,6 +340,12 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+msgid "Next song will be automatically recommended"
+msgstr ""
+
+msgid "Next song will not be automatically recommended"
+msgstr ""
+
 msgid "No Search Word Error"
 msgstr ""
 
@@ -439,7 +451,11 @@ msgid ""
 "{commandPrefix}p \"keyword\"\n"
 "{commandPrefix}p\n"
 "Searches the keyword in Youtube and puts it in queue\n"
-"If there is no keyword inputted and the player isn't playing anything, it starts the player"
+"If there is no keyword inputted and the player isn't playing anything, it starts the player\n"
+"\n"
+"{commandPrefix}play -auto \"keyword\"\n"
+"{commandPrefix}play -a \"keyword\"\n"
+"Turns autoplay on and automatically plays next song"
 msgstr ""
 
 msgid "Please Enter a word."
@@ -490,6 +506,35 @@ msgstr ""
 
 #, docstring
 msgid "Run a command as another user optionally in another channel."
+msgstr ""
+
+#, docstring
+msgid "Run migrations in 'offline' mode."
+msgstr ""
+
+#, docstring
+msgid ""
+"Run migrations in 'offline' mode.\n"
+"\n"
+"This configures the context with just a URL\n"
+"and not an Engine, though an Engine is acceptable\n"
+"here as well.  By skipping the Engine creation\n"
+"we don't even need a DBAPI to be available.\n"
+"\n"
+"Calls to context.execute() here emit the given string to the\n"
+"script output."
+msgstr ""
+
+#, docstring
+msgid "Run migrations in 'online' mode."
+msgstr ""
+
+#, docstring
+msgid ""
+"Run migrations in 'online' mode.\n"
+"\n"
+"In this scenario we need to create an Engine\n"
+"and associate a connection with the context."
 msgstr ""
 
 #, docstring
@@ -820,9 +865,6 @@ msgid "chose... %s!"
 msgstr ""
 
 msgid "first"
-msgstr ""
-
-msgid "in Queue"
 msgstr ""
 
 msgid "left {}"
