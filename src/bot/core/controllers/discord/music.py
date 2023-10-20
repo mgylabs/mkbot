@@ -2,7 +2,6 @@ import asyncio
 from typing import Union
 from urllib.request import urlopen
 
-import aiohttp
 import discord
 from bs4 import BeautifulSoup
 from discord.ext import commands
