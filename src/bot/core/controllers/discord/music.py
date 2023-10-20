@@ -134,13 +134,7 @@ async def nextSong(gid, bot):
     J1 = str(b).split("var ytInitialData = ")
     u = J1[1].find("url")
     next_url = J1[1][u + 6 : u + 26]
-
-    title = str(soup.find("title"))[7:-8]
-
     next_url = "https://youtube.com" + next_url
-
-    # song_ = Song()
-    # song_.addSong(title, next_url, bot)
 
     song_ = (await ytsearch(next_url, 1))[0]
     song_.user = bot
