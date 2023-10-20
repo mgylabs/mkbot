@@ -21,7 +21,6 @@ from .utils.voice import validate_voice_client
 log = logger.get_logger(__name__)
 
 guild_sl = dict()
-auto = False
 
 
 def human_duration(duration):
@@ -64,6 +63,7 @@ class SongList:
         self.queue = 0
         self.guildID = guildID
         self.slist = list()
+        self.auto = False
 
     # if song exists in songList (initialized)
     def songExists(self):
@@ -167,7 +167,7 @@ class Music(commands.Cog):
             guild_sl[gid] = sl
 
         # when autoplay is on & number of songs == queue num
-        if auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
+        if guild_sl[gid].auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
             guild_sl[gid].addSong(
                 await nextSong(gid, self.bot.get_user(self.bot.user.id))
             )
@@ -261,7 +261,6 @@ class Music(commands.Cog):
         {commandPrefix}play -a "keyword"
         Turns autoplay on and automatically plays next song
         """
-        global auto
         gid = ctx.message.guild.id
         self.tmp_id[gid] = ctx.message.channel.id
         try:
@@ -278,7 +277,7 @@ class Music(commands.Cog):
             )
 
         if "-auto" in song or "-a" in song:
-            auto = True
+            guild_sl[gid].auto = True
             song = song[1:]
             await ctx.send(
                 embed=MsgFormatter.get(
@@ -289,7 +288,7 @@ class Music(commands.Cog):
             )
 
         elif "-off" in song or "-o" in song:
-            auto = False
+            guild_sl[gid].auto = False
             song = song[1:]
             await ctx.send(
                 embed=MsgFormatter.get(
