@@ -138,7 +138,7 @@ async def nextSong(gid, bot):
 
     song_ = (await ytsearch(next_url, 1))[0]
     song_.user = bot
-
+    guild_sl[gid].addSong(song_)
     return song_
 
 
@@ -167,19 +167,28 @@ class Music(commands.Cog):
             guild_sl[gid] = sl
 
         # when autoplay is on & number of songs == queue num
-        if guild_sl[gid].auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
-            guild_sl[gid].addSong(
-                await nextSong(gid, self.bot.get_user(self.bot.user.id))
-            )
+        # if guild_sl[gid].auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
+        #    guild_sl[gid].addSong(
+        #        await nextSong(gid, self.bot.get_user(self.bot.user.id))
+        #    )
 
         @database.using_database
         def next():
             I18nExtension.set_current_locale_by_user(ctx.author.id)
+            if (
+                guild_sl[gid].auto
+                and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1
+            ):
+                fut2 = asyncio.run_coroutine_threadsafe(
+                    nextSong(gid, self.bot.get_user(self.bot.user.id)), self.bot.loop
+                )
+                fut2.result()
             # if number of songs > queue num
             if len(guild_sl[gid].slist) > guild_sl[gid].queue:
                 guild_sl[gid].queue += 1
                 fut = asyncio.run_coroutine_threadsafe(
-                    self.playMusic(ctx), self.bot.loop
+                    self.playMusic(ctx),
+                    self.bot.loop,
                 )
                 fut.result()
 
