@@ -125,9 +125,9 @@ async def ytsearch(text, count):
     return ls
 
 
-def nextSong(gid, bot):
+async def nextSong(gid, bot):
     # fetch next song from yt, then return as Song
-    song_url = guild_sl[gid].slist[-1].url
+    song_url = guild_sl[gid].songPlaying().url
     a = urlopen(song_url)
     soup = BeautifulSoup(a.read(), "lxml")
 
@@ -140,8 +140,11 @@ def nextSong(gid, bot):
 
     next_url = "https://youtube.com" + next_url
 
-    song_ = Song()
-    song_.addSong(title, next_url, bot)
+    # song_ = Song()
+    # song_.addSong(title, next_url, bot)
+
+    song_ = (await ytsearch(next_url, 1))[0]
+    song_.user = bot
 
     return song_
 
@@ -170,15 +173,15 @@ class Music(commands.Cog):
             sl = SongList(gid)
             guild_sl[gid] = sl
 
+        # when autoplay is on & number of songs == queue num
+        if auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
+            guild_sl[gid].addSong(
+                await nextSong(gid, self.bot.get_user(self.bot.user.id))
+            )
+
         @database.using_database
         def next():
             I18nExtension.set_current_locale_by_user(ctx.author.id)
-            # when autoplay is on & number of songs == queue num
-            if auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
-                guild_sl[gid].addSong(
-                    nextSong(gid, self.bot.get_user(self.bot.user.id))
-                )
-
             # if number of songs > queue num
             if len(guild_sl[gid].slist) > guild_sl[gid].queue:
                 guild_sl[gid].queue += 1
@@ -421,13 +424,6 @@ class Music(commands.Cog):
             )
         else:
             ctx.voice_client.stop()
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    _("Song Skipped"),
-                    _("Skipped %s") % guild_sl[gid].songPlaying().title,
-                )
-            )
             await self.playMusic(ctx, skip=True)
 
     @commands.command()
