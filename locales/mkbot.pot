@@ -597,9 +597,6 @@ msgstr ""
 msgid "Simple minigames to play with others"
 msgstr ""
 
-msgid "Skipped %s"
-msgstr ""
-
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr ""
@@ -618,9 +615,6 @@ msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
 msgid "Song Queue"
-msgstr ""
-
-msgid "Song Skipped"
 msgstr ""
 
 msgid "Sorry, couldn't figure out what you wanted to do here"

@@ -607,9 +607,6 @@ msgstr "사용자의 시간대를 확인합니다."
 msgid "Simple minigames to play with others"
 msgstr "친구들과 놀 수 있는 간단한 미니게임들"
 
-msgid "Skipped %s"
-msgstr ""
-
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr "재생 중인 곡을 건너뛰고 대기열에 있는 다음 곡을 재생합니다."
@@ -630,9 +627,6 @@ msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설
 
 msgid "Song Queue"
 msgstr "음악 대기열"
-
-msgid "Song Skipped"
-msgstr "음악 건너뜀"
 
 msgid "Sorry, couldn't figure out what you wanted to do here"
 msgstr "여기서 무엇을 하려는지 알 수 없습니다."
