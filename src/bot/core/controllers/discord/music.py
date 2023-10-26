@@ -63,6 +63,7 @@ class SongList:
         self.queue = 0
         self.guildID = guildID
         self.slist = list()
+        self.auto = False
 
     # if song exists in songList (initialized)
     def songExists(self):
@@ -123,6 +124,28 @@ async def ytsearch(text, count):
     return ls
 
 
+async def nextSong(gid, bot):
+    # fetch next song from yt, then return as Song
+
+    song_url = guild_sl[gid].songPlaying().url
+
+    async def open_song():
+        async with aiohttp.ClientSession() as session:
+            async with session.get(song_url) as resp:
+                soup = BeautifulSoup(await resp.read(), "lxml")
+                b = soup.find_all("script")[-5]
+                J1 = str(b).split("var ytInitialData = ")
+                u = J1[1].find("url")
+                next_url = "https://youtube.com" + J1[1][u + 6 : u + 26]
+        return next_url
+
+    next_url = await open_song()
+    song_ = (await ytsearch(next_url, 1))[0]
+    song_.user = bot
+    guild_sl[gid].addSong(song_)
+    return song_
+
+
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -150,12 +173,21 @@ class Music(commands.Cog):
         @database.using_database
         def next():
             I18nExtension.set_current_locale_by_user(ctx.author.id)
-            # if number of songs > queue num
-            if len(guild_sl[gid].slist) > guild_sl[gid].queue:
+
+            async def next_task():
+                # no more songs left to play
+                if (
+                    len(guild_sl[gid].slist) <= guild_sl[gid].queue + 1
+                    and guild_sl[gid].auto
+                ):
+                    await nextSong(gid, self.bot.user)
+
                 guild_sl[gid].queue += 1
-                fut = asyncio.run_coroutine_threadsafe(
-                    self.playMusic(ctx), self.bot.loop
-                )
+                await self.playMusic(ctx)
+
+            # enough songs to play
+            if len(guild_sl[gid].slist) > guild_sl[gid].queue or guild_sl[gid].auto:
+                fut = asyncio.run_coroutine_threadsafe(next_task(), self.bot.loop)
                 fut.result()
 
         if not skip:
@@ -231,6 +263,10 @@ class Music(commands.Cog):
         {commandPrefix}p
         Searches the keyword in Youtube and puts it in queue
         If there is no keyword inputted and the player isn't playing anything, it starts the player
+
+        {commandPrefix}play -auto "keyword"
+        {commandPrefix}play -a "keyword"
+        Turns autoplay on and automatically plays next song
         """
         gid = ctx.message.guild.id
         self.tmp_id[gid] = ctx.message.channel.id
@@ -244,6 +280,28 @@ class Music(commands.Cog):
             raise UsageError(
                 _(
                     "You are not in any voice channel. Please join a voice channel to use Music bot."
+                )
+            )
+
+        if "-auto" in song or "-a" in song:
+            guild_sl[gid].auto = True
+            song = song[1:]
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("Autoplay turned on"),
+                    _("Next song will be automatically recommended"),
+                )
+            )
+
+        elif "-off" in song or "-o" in song:
+            guild_sl[gid].auto = False
+            song = song[1:]
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("Autoplay turned off"),
+                    _("Next song will not be automatically recommended"),
                 )
             )
 
@@ -285,45 +343,24 @@ class Music(commands.Cog):
             else:
                 song = song[0]
 
-            if "youtube.com" in song:
-                if song[:11] != "https://www.":
-                    song = "https://www." + song[song.index("y") :]
-                async with aiohttp.ClientSession(raise_for_status=True) as session:
-                    async with session.get(song) as r:
-                        text = await r.text()
-                soup = BeautifulSoup(text, "lxml")
-                title = str(soup.find("title"))[7:-8]
-                song_ = Song()
-                song_.addSong(title, song)
-                guild_sl[gid].addSong(song_)
-                await ctx.message.delete()
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx, guild_sl[gid].lastSong().title, _("in Queue")
-                    )
+            ls = await ytsearch(song, 1)
+            t = ls[0]
+            t.user = ctx.author
+
+            guild_sl[gid].addSong(t)
+
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    _("%s in Queue") % song,
+                    _("{title}\n Length: {length}").format(
+                        title=guild_sl[gid].lastSong().title,
+                        length=guild_sl[gid].lastSong().length,
+                    ),
                 )
-                if not ctx.voice_client.is_playing():
-                    await self.player(ctx)
-
-            else:
-                ls = await ytsearch(song, 1)
-                t = ls[0]
-                t.user = ctx.author
-
-                guild_sl[gid].addSong(t)
-
-                await ctx.send(
-                    embed=MsgFormatter.get(
-                        ctx,
-                        _("%s in Queue") % song,
-                        _("{title}\n Length: {length}").format(
-                            title=guild_sl[gid].lastSong().title,
-                            length=guild_sl[gid].lastSong().length,
-                        ),
-                    )
-                )
-                if not ctx.voice_client.is_playing():
-                    await self.player(ctx)
+            )
+            if not ctx.voice_client.is_playing():
+                await self.player(ctx)
 
     @commands.command(aliases=["pp"])
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
@@ -386,14 +423,6 @@ class Music(commands.Cog):
             )
         else:
             ctx.voice_client.stop()
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    _("Song Skipped"),
-                    _("Skipped %s") % guild_sl[gid].songPlaying().title,
-                )
-            )
-            await self.playMusic(ctx, skip=True)
 
     @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)

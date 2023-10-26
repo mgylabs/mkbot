@@ -76,6 +76,12 @@ msgstr ""
 msgid "Automatic Bug Reporting Tool"
 msgstr ""
 
+msgid "Autoplay turned off"
+msgstr ""
+
+msgid "Autoplay turned on"
+msgstr ""
+
 msgid "Be warned: Canary can be unstable."
 msgstr ""
 
@@ -334,6 +340,12 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+msgid "Next song will be automatically recommended"
+msgstr ""
+
+msgid "Next song will not be automatically recommended"
+msgstr ""
+
 msgid "No Search Word Error"
 msgstr ""
 
@@ -439,7 +451,11 @@ msgid ""
 "{commandPrefix}p \"keyword\"\n"
 "{commandPrefix}p\n"
 "Searches the keyword in Youtube and puts it in queue\n"
-"If there is no keyword inputted and the player isn't playing anything, it starts the player"
+"If there is no keyword inputted and the player isn't playing anything, it starts the player\n"
+"\n"
+"{commandPrefix}play -auto \"keyword\"\n"
+"{commandPrefix}play -a \"keyword\"\n"
+"Turns autoplay on and automatically plays next song"
 msgstr ""
 
 msgid "Please Enter a word."
@@ -597,9 +613,6 @@ msgstr ""
 msgid "Simple minigames to play with others"
 msgstr ""
 
-msgid "Skipped %s"
-msgstr ""
-
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr ""
@@ -618,9 +631,6 @@ msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr ""
 
 msgid "Song Queue"
-msgstr ""
-
-msgid "Song Skipped"
 msgstr ""
 
 msgid "Sorry, couldn't figure out what you wanted to do here"
@@ -826,9 +836,6 @@ msgid "chose... %s!"
 msgstr ""
 
 msgid "first"
-msgstr ""
-
-msgid "in Queue"
 msgstr ""
 
 msgid "left {}"
