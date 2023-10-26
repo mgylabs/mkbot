@@ -1,7 +1,7 @@
 import asyncio
 from typing import Union
-from urllib.request import urlopen
 
+import aiohttp
 import discord
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -126,16 +126,20 @@ async def ytsearch(text, count):
 
 async def nextSong(gid, bot):
     # fetch next song from yt, then return as Song
+
     song_url = guild_sl[gid].songPlaying().url
-    a = urlopen(song_url)
-    soup = BeautifulSoup(a.read(), "lxml")
 
-    b = soup.find_all("script")[-5]
-    J1 = str(b).split("var ytInitialData = ")
-    u = J1[1].find("url")
-    next_url = J1[1][u + 6 : u + 26]
-    next_url = "https://youtube.com" + next_url
+    async def open_song():
+        async with aiohttp.ClientSession() as session:
+            async with session.get(song_url) as resp:
+                soup = BeautifulSoup(await resp.read(), "lxml")
+                b = soup.find_all("script")[-5]
+                J1 = str(b).split("var ytInitialData = ")
+                u = J1[1].find("url")
+                next_url = "https://youtube.com" + J1[1][u + 6 : u + 26]
+        return next_url
 
+    next_url = await open_song()
     song_ = (await ytsearch(next_url, 1))[0]
     song_.user = bot
     guild_sl[gid].addSong(song_)
@@ -166,30 +170,24 @@ class Music(commands.Cog):
             sl = SongList(gid)
             guild_sl[gid] = sl
 
-        # when autoplay is on & number of songs == queue num
-        # if guild_sl[gid].auto and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1:
-        #    guild_sl[gid].addSong(
-        #        await nextSong(gid, self.bot.get_user(self.bot.user.id))
-        #    )
-
         @database.using_database
         def next():
             I18nExtension.set_current_locale_by_user(ctx.author.id)
-            if (
-                guild_sl[gid].auto
-                and len(guild_sl[gid].slist) == guild_sl[gid].queue + 1
-            ):
-                fut2 = asyncio.run_coroutine_threadsafe(
-                    nextSong(gid, self.bot.get_user(self.bot.user.id)), self.bot.loop
-                )
-                fut2.result()
-            # if number of songs > queue num
-            if len(guild_sl[gid].slist) > guild_sl[gid].queue:
+
+            async def next_task():
+                # no more songs left to play
+                if (
+                    len(guild_sl[gid].slist) <= guild_sl[gid].queue + 1
+                    and guild_sl[gid].auto
+                ):
+                    await nextSong(gid, self.bot.user)
+
                 guild_sl[gid].queue += 1
-                fut = asyncio.run_coroutine_threadsafe(
-                    self.playMusic(ctx),
-                    self.bot.loop,
-                )
+                await self.playMusic(ctx)
+
+            # enough songs to play
+            if len(guild_sl[gid].slist) > guild_sl[gid].queue or guild_sl[gid].auto:
+                fut = asyncio.run_coroutine_threadsafe(next_task(), self.bot.loop)
                 fut.result()
 
         if not skip:
@@ -425,7 +423,6 @@ class Music(commands.Cog):
             )
         else:
             ctx.voice_client.stop()
-            await self.playMusic(ctx, skip=True)
 
     @commands.command()
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
