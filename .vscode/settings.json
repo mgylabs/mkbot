@@ -41,4 +41,5 @@
   "editor.formatOnSaveMode": "file",
   "prettier.tabWidth": 2,
   "omnisharp.useModernNet": false,
+  "dotnet.preferCSharpExtension": true,
 }

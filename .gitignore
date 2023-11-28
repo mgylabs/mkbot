@@ -411,3 +411,6 @@ tests/data
 src/bot/ko_news_md*
 extensions/*
 !extensions/extensions.json
+src/bot/ffmpeg.exe
+src/bot/ffplay.exe
+src/bot/ffprobe.exe
