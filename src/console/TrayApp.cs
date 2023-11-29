@@ -36,7 +36,7 @@ namespace MKBot
         private string[] args;
 
         private bool trayicon_middle_click_enabled = true;
-        private bool serverMode = false;
+        private bool CachedServerModeEnabled;
         private bool isTaskSchProcess = false;
 
         public TrayApp()
@@ -96,28 +96,24 @@ namespace MKBot
                 new ToolStripMenuItem("Exit", null, Click_Exit)
             });
 
+            RenewServerModeEnabled();
+
+            if (CachedServerModeEnabled && args.Contains("--post-update"))
+            {
+                isTaskSchProcess = true;
+                Register_Task();
+                Environment.Exit(0);
+            }
+
             if (args.Contains("--switch-to-server"))
             {
                 Register_Task();
-
                 ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
             }
             else if (args.Contains("--switch-to-desktop"))
             {
                 Remove_Task();
-
                 ShowToast("Changed to Desktop Mode.", "The Discord bot has been terminated.");
-            }
-            else
-            {
-                Update_Switch_Mode_Menu();
-            }
-
-            if (serverMode && args.Contains("--post-update"))
-            {
-                isTaskSchProcess = true;
-                Register_Task();
-                Environment.Exit(0);
             }
 
             msu_process.Exited += new EventHandler(ProcessExited_msu);
@@ -128,13 +124,15 @@ namespace MKBot
             bool auto_connect = false;
             if (configjson["connectOnStart"] != null)
             {
-                auto_connect = (bool)configjson["connectOnStart"] || serverMode;
+                auto_connect = (bool)configjson["connectOnStart"] || CachedServerModeEnabled;
             }
 
             Infowin = new InfoForm();
-            Shellwin = new ShellForm(MKBotCore, auto_connect, !serverMode || isTaskSchProcess);
+            Shellwin = new ShellForm(MKBotCore, auto_connect, !CachedServerModeEnabled || isTaskSchProcess);
 
-            if (!serverMode || isTaskSchProcess)
+            Update_Switch_Mode_Menu();
+
+            if (!CachedServerModeEnabled || isTaskSchProcess)
             {
                 checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
                 checkForTime.Enabled = true;
@@ -184,7 +182,7 @@ namespace MKBot
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                if (trayicon_middle_click_enabled && (!serverMode || isTaskSchProcess))
+                if (trayicon_middle_click_enabled && (!CachedServerModeEnabled || isTaskSchProcess))
                 {
                     trayicon_middle_click_enabled = false;
                     notifyIcon1.Icon = Properties.Resources.mkbot_intermediate;
@@ -208,23 +206,33 @@ namespace MKBot
             Process.Start(UserDataPath + "\\extensions.json");
         }
 
-        private void Update_Switch_Mode_Menu()
+        private bool RenewServerModeEnabled()
         {
             var task = SchtasksUtils.GetTask(Version.schtask_name);
-            if (task != null && task.Enabled)
+            CachedServerModeEnabled = task != null && task.Enabled;
+            return CachedServerModeEnabled;
+        }
+
+        private void Update_Switch_Mode_Menu()
+        {
+            if (RenewServerModeEnabled())
             {
-                serverMode = true;
                 SwitchModeMenu.Text = "Switch to Desktop Mode";
                 UpdateMenu.Enabled = false;
-                ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(false);
+                if (Shellwin != null)
+                {
+                    ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(false);
+                }
                 Trace.TraceInformation("ServerMode: On");
             }
             else
             {
-                serverMode = false;
                 SwitchModeMenu.Text = "Switch to Server Mode";
                 UpdateMenu.Enabled = true;
-                ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(true);
+                if (Shellwin != null)
+                {
+                    ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(true);
+                }
                 Trace.TraceInformation("ServerMode: Off");
             }
 
@@ -246,7 +254,7 @@ namespace MKBot
             {
                 var rt = SchtasksUtils.RegisterTask(Version.schtask_name, xml_string);
                 rt.Enabled = true;
-                serverMode = true;
+                CachedServerModeEnabled = true;
 
                 if (run)
                 {
@@ -255,11 +263,9 @@ namespace MKBot
             }
             catch (Exception ex)
             {
-                serverMode = false;
+                CachedServerModeEnabled = false;
                 Trace.TraceError(ex.ToString());
             }
-
-            Update_Switch_Mode_Menu();
         }
 
         private void Remove_Task()
@@ -268,25 +274,24 @@ namespace MKBot
 
             if (SchtasksUtils.RemoveTask(Version.schtask_name))
             {
-                serverMode = false;
+                CachedServerModeEnabled = false;
             }
             else
             {
-                serverMode = true;
+                RenewServerModeEnabled();
             }
-
-            Update_Switch_Mode_Menu();
         }
 
         private void Click_Switch_Mode(object sender, EventArgs e)
         {
             SwitchModeMenu.Enabled = false;
 
-            if (serverMode)
+            if (CachedServerModeEnabled)
             {
                 if (Utils.IsAdministrator)
                 {
                     Remove_Task();
+                    Update_Switch_Mode_Menu();
 
                     ShowToast("Changed to Desktop Mode.", "The Discord bot has been terminated.");
                 }
@@ -308,6 +313,7 @@ namespace MKBot
                 if (Utils.IsAdministrator)
                 {
                     Register_Task();
+                    Update_Switch_Mode_Menu();
 
                     ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
                 }
