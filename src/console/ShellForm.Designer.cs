@@ -48,7 +48,7 @@ namespace MKBot
             this.discordCheckBox.TabIndex = 0;
             this.discordCheckBox.Text = "Enable Discord Bot";
             this.discordCheckBox.UseVisualStyleBackColor = true;
-            this.discordCheckBox.Click += new System.EventHandler(this.discordCheckBox_Click);
+            this.discordCheckBox.Click += new System.EventHandler(this.DiscordCheckBox_Click);
             //
             // outputBox
             //
@@ -62,7 +62,7 @@ namespace MKBot
             this.outputBox.Size = new System.Drawing.Size(453, 184);
             this.outputBox.TabIndex = 1;
             this.outputBox.Text = "";
-            this.outputBox.TextChanged += new System.EventHandler(this.outputBox_TextChanged);
+            this.outputBox.TextChanged += new System.EventHandler(this.OutputBox_TextChanged);
             //
             // userInputBox
             //
@@ -82,7 +82,7 @@ namespace MKBot
             this.sendButton.TabIndex = 3;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
-            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+            this.sendButton.Click += new System.EventHandler(this.SendButton_Click);
             //
             // toggleButton
             //

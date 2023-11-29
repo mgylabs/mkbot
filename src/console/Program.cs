@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -25,6 +26,13 @@ namespace MKBot
             Utils.init_log_file();
 
             Trace.TraceInformation($"CurrentDir: {Environment.CurrentDirectory}");
+
+            var args = Environment.GetCommandLineArgs();
+
+            if (args.Contains("--schtasks"))
+            {
+                Utils.PollUntil("Mutex is not active", () => { return !Utils.MutexIsActive(Version.mutex_name); });
+            }
 
             bool createnew;
 

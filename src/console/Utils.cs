@@ -4,18 +4,20 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MKBot
 {
     public delegate void FunctionPointer(int attempt);
+    public delegate bool FunctionPointer2();
 
     class Utils
     {
         public static string log_file_path;
         public static bool IsAdministrator => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
-        public static void retry(string task, FunctionPointer f, int max_attempts = 10)
+        public static void Retry(string task, FunctionPointer f, int max_attempts = 10)
         {
             int attempt = 0;
 
@@ -39,6 +41,29 @@ namespace MKBot
                 }
 
                 Task.Delay(500).Wait();
+            }
+        }
+
+        public static void PollUntil(string task, FunctionPointer2 f)
+        {
+            while (!f())
+            {
+                Trace.TraceInformation($"Polling until {task}");
+                Task.Delay(1000).Wait();
+            }
+        }
+
+        public static bool MutexIsActive(string name)
+        {
+            try
+            {
+                Mutex foundMutex = Mutex.OpenExisting(name);
+
+                return true;
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                return false;
             }
         }
 

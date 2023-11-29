@@ -20,7 +20,7 @@ namespace MKBot
             outputBox.Hide();
             this.Size = new Size(510, 100);
 
-            update_location();
+            Update_location();
 
             this.MKBotCore = MKBotCore;
 
@@ -49,7 +49,7 @@ namespace MKBot
         public void Toggle_Discord_Bot_Button()
         {
             discordCheckBox.Checked = !discordCheckBox.Checked;
-            discordCheckBox_Click(new object(), new EventArgs());
+            DiscordCheckBox_Click(new object(), new EventArgs());
         }
 
         private void MKBotCore_Shell_Response(object sender, MKBotCoreShellResponseEventArgs e)
@@ -78,29 +78,34 @@ namespace MKBot
 
         private void DiscordBot_Exit(object sender, MKBotCoreExitEventArgs e)
         {
-            setDiscordBotCheckedSafe(false);
+            SetDiscordBotCheckedSafe(false);
         }
 
         private void DiscordBot_Started(object sender, EventArgs e)
         {
-            setDiscordBotCheckedSafe(true);
+            SetDiscordBotCheckedSafe(true);
         }
 
-        private void setDiscordBotCheckedSafe(bool status, bool enabled = true)
+        private void SetDiscordBotCheckedSafe(bool status, bool enabled = true)
         {
             if (discordCheckBox.InvokeRequired)
             {
-                discordCheckBox.Invoke(new SafeCallDelegate(setDiscordBotChecked), status, enabled);
+                discordCheckBox.Invoke(new SafeCallDelegate(SetDiscordBotChecked), status, enabled);
             }
             else
             {
-                setDiscordBotChecked(status, enabled);
+                SetDiscordBotChecked(status, enabled);
             }
         }
 
-        private void setDiscordBotChecked(bool status, bool enabled = true)
+        private void SetDiscordBotChecked(bool status, bool enabled = true)
         {
             discordCheckBox.Checked = status;
+            discordCheckBox.Enabled = enabled;
+        }
+
+        public void SetDiscordBotCheckBoxEnabled(bool enabled)
+        {
             discordCheckBox.Enabled = enabled;
         }
 
@@ -119,10 +124,10 @@ namespace MKBot
                 this.toggleButton.Text = "Expand Shell";
             }
 
-            update_location();
+            Update_location();
         }
 
-        private void update_location()
+        private void Update_location()
         {
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - this.Width, Screen.PrimaryScreen.WorkingArea.Height - this.Height);
         }
@@ -133,7 +138,7 @@ namespace MKBot
             e.Cancel = true;
         }
 
-        private void discordCheckBox_Click(object sender, EventArgs e)
+        private void DiscordCheckBox_Click(object sender, EventArgs e)
         {
             discordCheckBox.Enabled = false;
             if (discordCheckBox.Checked)
@@ -146,7 +151,7 @@ namespace MKBot
             }
         }
 
-        private void sendButton_Click(object sender, EventArgs e)
+        private void SendButton_Click(object sender, EventArgs e)
         {
             var text = userInputBox.Text;
             if (text.Length > 0)
@@ -158,7 +163,7 @@ namespace MKBot
             }
         }
 
-        private void outputBox_TextChanged(object sender, EventArgs e)
+        private void OutputBox_TextChanged(object sender, EventArgs e)
         {
             outputBox.SelectionStart = outputBox.Text.Length;
             outputBox.ScrollToCaret();

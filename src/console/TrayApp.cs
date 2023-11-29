@@ -5,8 +5,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Windows.UI.Notifications;
 
@@ -100,7 +98,7 @@ namespace MKBot
 
             if (args.Contains("--switch-to-server"))
             {
-                Regitster_Task();
+                Register_Task();
 
                 ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
             }
@@ -118,7 +116,8 @@ namespace MKBot
             if (serverMode && args.Contains("--post-update"))
             {
                 isTaskSchProcess = true;
-                Regitster_Task(false);
+                Register_Task();
+                Environment.Exit(0);
             }
 
             msu_process.Exited += new EventHandler(ProcessExited_msu);
@@ -216,19 +215,23 @@ namespace MKBot
             {
                 serverMode = true;
                 SwitchModeMenu.Text = "Switch to Desktop Mode";
+                UpdateMenu.Enabled = false;
+                ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(false);
                 Trace.TraceInformation("ServerMode: On");
             }
             else
             {
                 serverMode = false;
                 SwitchModeMenu.Text = "Switch to Server Mode";
+                UpdateMenu.Enabled = true;
+                ((ShellForm)this.Shellwin).SetDiscordBotCheckBoxEnabled(true);
                 Trace.TraceInformation("ServerMode: Off");
             }
 
             SwitchModeMenu.Enabled = true;
         }
 
-        private void Regitster_Task(bool run = true)
+        private void Register_Task(bool run = true)
         {
             SwitchModeMenu.Enabled = false;
 
@@ -304,7 +307,7 @@ namespace MKBot
             {
                 if (Utils.IsAdministrator)
                 {
-                    Regitster_Task();
+                    Register_Task();
 
                     ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
                 }
@@ -575,28 +578,6 @@ namespace MKBot
             Environment.Exit(0);
         }
 
-        private void poll_until()
-        {
-            while (!mutex_is_active($"{Version.mutex_name}-ready"))
-            {
-                Task.Delay(1000).Wait();
-            }
-        }
-
-        private bool mutex_is_active(string name)
-        {
-            try
-            {
-                Mutex foundMutex = Mutex.OpenExisting(name);
-
-                return true;
-            }
-            catch (WaitHandleCannotBeOpenedException)
-            {
-                return false;
-            }
-        }
-
         private void ProcessExited_msu(object sender, EventArgs e)
         {
             if (msu_process.ExitCode == 0)
@@ -605,7 +586,7 @@ namespace MKBot
 
                 UpdateMenu.Text = "Installing Update...";
 
-                poll_until();
+                Utils.PollUntil("Update ready mutex is active", () => { return Utils.MutexIsActive($"{Version.mutex_name}-ready"); });
 
                 can_update = true;
                 UpdateMenu.Enabled = true;

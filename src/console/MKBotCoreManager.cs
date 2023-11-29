@@ -265,7 +265,7 @@ namespace MKBot
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
 
-            Utils.retry("Start Listener", (attempt) =>
+            Utils.Retry("Start Listener", (attempt) =>
             {
 #if !DEBUG
                 make_app_process_args();
