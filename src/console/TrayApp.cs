@@ -595,7 +595,10 @@ namespace MKBot
                 Utils.PollUntil("Update ready mutex is active", () => { return Utils.MutexIsActive($"{Version.mutex_name}-ready"); });
 
                 can_update = true;
-                UpdateMenu.Enabled = true;
+                if (!CachedServerModeEnabled)
+                {
+                    UpdateMenu.Enabled = true;
+                }
                 UpdateMenu.Text = "Restart to Update";
 
                 if (!(manual_checking_update))
@@ -612,7 +615,10 @@ namespace MKBot
             else if (msu_process.ExitCode == 1)
             {
                 Trace.TraceInformation("> msu exit: 1");
-                UpdateMenu.Enabled = true;
+                if (!CachedServerModeEnabled)
+                {
+                    UpdateMenu.Enabled = true;
+                }
                 UpdateMenu.Text = "Check for Updates...";
 
                 if (manual_checking_update)
