@@ -28,9 +28,15 @@ log = logger.get_logger(__name__)
 
 def instance_already_running():
     if VERSION.is_canary():
-        lock_name = "mkbot_can.lock"
+        if "--schtasks" in sys.argv:
+            lock_name = "mkbot_can_sch.lock"
+        else:
+            lock_name = "mkbot_can.lock"
     else:
-        lock_name = "mkbot.lock"
+        if "--schtasks" in sys.argv:
+            lock_name = "mkbot_sch.lock"
+        else:
+            lock_name = "mkbot.lock"
 
     fd = os.open(f"{os.getenv('TEMP')}\\{lock_name}", os.O_WRONLY | os.O_CREAT)
 

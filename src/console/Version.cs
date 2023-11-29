@@ -12,6 +12,8 @@ namespace MKBot
         public static string commit;
         public static string mutex_name;
         public static string product_name;
+        public static string schtask_name;
+        public static string exe_name;
 
         public static string dname;
 
@@ -29,6 +31,8 @@ namespace MKBot
                 mutex_name = "MKBotOSS";
                 product_name = "Mulgyeol MK Bot OSS";
                 dname = "com.mgylabs.mkbot-oss";
+                exe_name = "MKBot-OSS.exe";
+                schtask_name = "MulgyeolMKBotHostTask(OSS)";
             }
             else if (version_array.Length > 1 && version_array[1] == "beta")
             {
@@ -37,6 +41,8 @@ namespace MKBot
                 mutex_name = "MKBotCanary";
                 product_name = "Mulgyeol MK Bot Canary";
                 dname = "com.mgylabs.mkbot-canary";
+                exe_name = "MKBot-Canary.exe";
+                schtask_name = "MulgyeolMKBotHostTask(Canary)";
             }
             else
             {
@@ -45,6 +51,8 @@ namespace MKBot
                 mutex_name = "MKBot";
                 product_name = "Mulgyeol MK Bot";
                 dname = "com.mgylabs.mkbot";
+                exe_name = "MKBot.exe";
+                schtask_name = "MulgyeolMKBotHostTask";
             }
         }
     }

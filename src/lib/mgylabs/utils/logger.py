@@ -12,7 +12,6 @@ else:
 
 
 class ColorFormatter(logging.Formatter):
-
     # ANSI codes are a bit weird to decipher if you're unfamiliar with them, so here's a refresher
     # It starts off with a format like \x1b[XXXm where XXX is a semicolon separated list of commands
     # The important ones here relate to colour.
@@ -56,7 +55,7 @@ class ColorFormatter(logging.Formatter):
 
 
 class LogPath:
-    LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\mkbot-{int(time.time())}.log"
+    LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-{int(time.time())}.log"
 
     @classmethod
     def get(cls):
@@ -64,11 +63,11 @@ class LogPath:
 
     @classmethod
     def update(cls):
-        cls.LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\mkbot-{int(time.time())}.log"
+        cls.LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-{int(time.time())}.log"
 
 
 def delete_old_logs(log, max_count=20):
-    p = f"{USER_DATA_PATH}\\logs\\mkbot-*.log"
+    p = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-*.log"
     files = list(filter(os.path.isfile, glob.glob(p)))
     files.sort(key=lambda x: os.path.getmtime(x))
 

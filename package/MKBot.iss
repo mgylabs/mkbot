@@ -74,7 +74,7 @@ Name: "{group}\{#NameShort}"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{app
 Name: "{autodesktop}\{#NameShort}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#NameLong}}"; Tasks: runapp; Flags: nowait postinstall; Check: ShouldRunAfterUpdate
+Filename: "{app}\{#AppExeName}"; Parameters: "--post-update"; Description: "{cm:LaunchProgram,{#NameLong}}"; Tasks: runapp; Flags: nowait postinstall; Check: ShouldRunAfterUpdate
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(NameLong, '&', '&&')}}"; Flags: nowait postinstall skipifsilent; WorkingDir: "{app}"
 
 [Registry]

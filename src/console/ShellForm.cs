@@ -11,7 +11,7 @@ namespace MKBot
         private delegate void SafeAppendDelegate(string data, bool enabled);
 
 
-        public ShellForm(MKBotCoreManager MKBotCore, bool auto_connect)
+        public ShellForm(MKBotCoreManager MKBotCore, bool auto_connect, bool canToggleBot)
         {
             InitializeComponent();
 
@@ -30,12 +30,19 @@ namespace MKBot
             MKBotCore.DiscordBotExit += DiscordBot_Exit;
             MKBotCore.MKBotCoreShellResponse += MKBotCore_Shell_Response;
 
-            if (auto_connect)
+            if (canToggleBot)
+            {
+                if (auto_connect)
+                {
+                    discordCheckBox.Enabled = false;
+                    discordCheckBox.Checked = true;
+
+                    MKBotCore.EnableDiscordBot();
+                }
+            }
+            else
             {
                 discordCheckBox.Enabled = false;
-                discordCheckBox.Checked = true;
-
-                MKBotCore.EnableDiscordBot();
             }
         }
 

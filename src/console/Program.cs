@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -17,28 +18,41 @@ namespace MKBot
 #if DEBUG
             Environment.CurrentDirectory = Path.GetFullPath(Environment.CurrentDirectory + "\\..") + "\\build";
 #else
-            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);;
+            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
 #endif
-
             Version.load_version_info();
+            Paths.load_paths_info();
+            Utils.init_log_file();
+
+            Trace.TraceInformation($"CurrentDir: {Environment.CurrentDirectory}");
 
             bool createnew;
 
-            using (Mutex mutex = new Mutex(true, Version.mutex_name, out createnew))
+            try
             {
-                if (!createnew)
+                using (Mutex mutex = new Mutex(true, Version.mutex_name, out createnew))
                 {
-                    MessageBox.Show("Mulgyeol MK Bot is already running.");
-                    return;
-                }
 
-                DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>(Version.dname);
-                DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                TrayApp app = new TrayApp();
-                Application.ApplicationExit += new EventHandler(app.Application_Exit);
-                Application.Run(app);
+                    if (!createnew)
+                    {
+                        MessageBox.Show("Mulgyeol MK Bot is already running.");
+
+                        Trace.TraceInformation("Mulgyeol MK Bot is already running.");
+                        return;
+                    }
+
+                    DesktopNotificationManagerCompat.RegisterAumidAndComServer<MyNotificationActivator>(Version.dname);
+                    DesktopNotificationManagerCompat.RegisterActivator<MyNotificationActivator>();
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    TrayApp app = new TrayApp();
+                    Application.ApplicationExit += new EventHandler(app.Application_Exit);
+                    Application.Run(app);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
             }
         }
     }

@@ -27,6 +27,7 @@ namespace MKBot
         private System.Timers.Timer checkForTime = new System.Timers.Timer(30 * 1000);
 
         private ToolStripMenuItem UpdateMenu;
+        private ToolStripMenuItem SwitchModeMenu;
         private Form Infowin;
         private Form Shellwin;
 
@@ -37,6 +38,8 @@ namespace MKBot
         private string[] args;
 
         private bool trayicon_middle_click_enabled = true;
+        private bool serverMode = false;
+        private bool isTaskSchProcess = false;
 
         public TrayApp()
         {
@@ -54,6 +57,11 @@ namespace MKBot
             else
             {
                 UserDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA") + $"\\Mulgyeol\\{Version.product_name}\\data";
+            }
+
+            if (args.Contains("--schtasks"))
+            {
+                isTaskSchProcess = true;
             }
 
             MKBotCore = new MKBotCoreManager(args.Contains("--debug"));
@@ -77,16 +85,41 @@ namespace MKBot
             notifyIcon1.Text = Version.product_name;
 
             UpdateMenu = new ToolStripMenuItem("Check for Updates...", null, Click_Update);
+            SwitchModeMenu = new ToolStripMenuItem("Switch to Server Mode", null, Click_Switch_Mode);
 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
                 new ToolStripMenuItem("Settings", null, Click_Setting),
                 new ToolStripMenuItem("MGCert", null, Click_MGCert),
                 new ToolStripMenuItem("Extensions", null, Click_Extensions),
+                SwitchModeMenu,
                 new ToolStripSeparator(), UpdateMenu,
                 new ToolStripMenuItem("About", null, Click_info),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("Exit", null, Click_Exit)
             });
+
+            if (args.Contains("--switch-to-server"))
+            {
+                Regitster_Task();
+
+                ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
+            }
+            else if (args.Contains("--switch-to-desktop"))
+            {
+                Remove_Task();
+
+                ShowToast("Changed to Desktop Mode.", "The Discord bot has been terminated.");
+            }
+            else
+            {
+                Update_Switch_Mode_Menu();
+            }
+
+            if (serverMode && args.Contains("--post-update"))
+            {
+                isTaskSchProcess = true;
+                Regitster_Task(false);
+            }
 
             msu_process.Exited += new EventHandler(ProcessExited_msu);
             msu_process.EnableRaisingEvents = true;
@@ -96,14 +129,21 @@ namespace MKBot
             bool auto_connect = false;
             if (configjson["connectOnStart"] != null)
             {
-                auto_connect = (bool)configjson["connectOnStart"];
+                auto_connect = (bool)configjson["connectOnStart"] || serverMode;
             }
 
             Infowin = new InfoForm();
-            Shellwin = new ShellForm(MKBotCore, auto_connect);
+            Shellwin = new ShellForm(MKBotCore, auto_connect, !serverMode || isTaskSchProcess);
 
-            checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
-            checkForTime.Enabled = true;
+            if (!serverMode || isTaskSchProcess)
+            {
+                checkForTime.Elapsed += new System.Timers.ElapsedEventHandler(checkForTime_Elapsed_At_Startup);
+                checkForTime.Enabled = true;
+            }
+            else
+            {
+                UpdateMenu.Enabled = false;
+            }
         }
 
         private void DiscordBot_Exit(object sender, MKBotCoreExitEventArgs e)
@@ -145,7 +185,7 @@ namespace MKBot
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                if (trayicon_middle_click_enabled)
+                if (trayicon_middle_click_enabled && (!serverMode || isTaskSchProcess))
                 {
                     trayicon_middle_click_enabled = false;
                     notifyIcon1.Icon = Properties.Resources.mkbot_intermediate;
@@ -167,6 +207,120 @@ namespace MKBot
         private void Click_Extensions(object sender, EventArgs e)
         {
             Process.Start(UserDataPath + "\\extensions.json");
+        }
+
+        private void Update_Switch_Mode_Menu()
+        {
+            var task = SchtasksUtils.GetTask(Version.schtask_name);
+            if (task != null && task.Enabled)
+            {
+                serverMode = true;
+                SwitchModeMenu.Text = "Switch to Desktop Mode";
+                Trace.TraceInformation("ServerMode: On");
+            }
+            else
+            {
+                serverMode = false;
+                SwitchModeMenu.Text = "Switch to Server Mode";
+                Trace.TraceInformation("ServerMode: Off");
+            }
+
+            SwitchModeMenu.Enabled = true;
+        }
+
+        private void Regitster_Task(bool run = true)
+        {
+            SwitchModeMenu.Enabled = false;
+
+            if (MKBotCore.discord_online)
+            {
+                MKBotCore.DisableDiscordBot();
+            }
+
+            var xml_string = SchtasksUtils.CreateScheduledTaskXml("Mulgyeol MK Bot Host Task", System.Security.Principal.WindowsIdentity.GetCurrent().Name, $"{Paths.ExePath}\\{Version.exe_name}", "--schtasks", Paths.ExePath);
+
+            try
+            {
+                var rt = SchtasksUtils.RegisterTask(Version.schtask_name, xml_string);
+                rt.Enabled = true;
+                serverMode = true;
+
+                if (run)
+                {
+                    rt.Run(null);
+                }
+            }
+            catch (Exception ex)
+            {
+                serverMode = false;
+                Trace.TraceError(ex.ToString());
+            }
+
+            Update_Switch_Mode_Menu();
+        }
+
+        private void Remove_Task()
+        {
+            SwitchModeMenu.Enabled = false;
+
+            if (SchtasksUtils.RemoveTask(Version.schtask_name))
+            {
+                serverMode = false;
+            }
+            else
+            {
+                serverMode = true;
+            }
+
+            Update_Switch_Mode_Menu();
+        }
+
+        private void Click_Switch_Mode(object sender, EventArgs e)
+        {
+            SwitchModeMenu.Enabled = false;
+
+            if (serverMode)
+            {
+                if (Utils.IsAdministrator)
+                {
+                    Remove_Task();
+
+                    ShowToast("Changed to Desktop Mode.", "The Discord bot has been terminated.");
+                }
+                else
+                {
+                    Process app_process = new Process();
+                    app_process.StartInfo.FileName = Application.ExecutablePath;
+                    app_process.StartInfo.WorkingDirectory = DirectoryPath;
+                    app_process.StartInfo.Arguments = "--switch-to-desktop";
+                    app_process.StartInfo.Verb = "runas";
+
+                    app_process.Start();
+
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                if (Utils.IsAdministrator)
+                {
+                    Regitster_Task();
+
+                    ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
+                }
+                else
+                {
+                    Process app_process = new Process();
+                    app_process.StartInfo.FileName = Application.ExecutablePath;
+                    app_process.StartInfo.WorkingDirectory = DirectoryPath;
+                    app_process.StartInfo.Arguments = "--switch-to-server";
+                    app_process.StartInfo.Verb = "runas";
+
+                    app_process.Start();
+
+                    Environment.Exit(0);
+                }
+            }
         }
 
         private void Click_Update(object sender, EventArgs e)
@@ -447,7 +601,7 @@ namespace MKBot
         {
             if (msu_process.ExitCode == 0)
             {
-                Console.WriteLine("> msu exit: 0");
+                Trace.TraceInformation("> msu exit: 0");
 
                 UpdateMenu.Text = "Installing Update...";
 
@@ -470,7 +624,7 @@ namespace MKBot
             }
             else if (msu_process.ExitCode == 1)
             {
-                Console.WriteLine("> msu exit: 1");
+                Trace.TraceInformation("> msu exit: 1");
                 UpdateMenu.Enabled = true;
                 UpdateMenu.Text = "Check for Updates...";
 

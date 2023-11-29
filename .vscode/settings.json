@@ -7,11 +7,9 @@
     "src/bot",
     "src/update"
   ],
-  "python.formatting.autopep8Args": [
-    "--ignore",
-    "E402"
-  ],
-  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+  },
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
@@ -38,7 +36,6 @@
   "files.insertFinalNewline": true,
   "editor.formatOnType": true,
   "editor.formatOnPaste": false,
-  "editor.formatOnSaveMode": "file",
   "prettier.tabWidth": 2,
   "omnisharp.useModernNet": false,
   "dotnet.preferCSharpExtension": true,

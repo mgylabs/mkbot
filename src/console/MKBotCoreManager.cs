@@ -72,7 +72,7 @@ namespace MKBot
                 .Where(i => !udpListenerPorts.Contains(i))
                 .FirstOrDefault();
 
-            Console.WriteLine("Assigned port: {0}", port);
+            Trace.TraceInformation("Assigned port: {0}", port);
 
             return port;
         }
@@ -92,11 +92,11 @@ namespace MKBot
             BeginAccept(callback);
         }
 
-        private static void BeginAccept(ListenerReceiveCallback callback, bool wait=false)
+        private static void BeginAccept(ListenerReceiveCallback callback, bool wait = false)
         {
             connectDone.Reset();
 
-            Console.WriteLine("Waiting for a connection...");
+            Trace.TraceInformation("Waiting for a connection...");
 
             StateObject state = new StateObject();
             state.callback = callback;
@@ -136,7 +136,7 @@ namespace MKBot
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Trace.TraceError(e.ToString());
                 return new StateObject().receiveDone;
             }
         }
@@ -144,6 +144,8 @@ namespace MKBot
         private static void AcceptCallback(IAsyncResult ar)
         {
             connectDone.Set();
+
+            Trace.TraceInformation("Connected with MKBotCore");
 
             StateObject state = (StateObject)ar.AsyncState;
             handler = listener.EndAccept(ar);
@@ -160,7 +162,7 @@ namespace MKBot
             {
                 // Read data from the remote device.
                 int bytesRead = handler.EndReceive(ar);
-                Console.WriteLine("> Read: {0}", bytesRead);
+                Trace.TraceInformation("> Read: {0}", bytesRead);
 
                 // There might be more data, so store the data received so far.
                 state.sb.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
@@ -186,7 +188,7 @@ namespace MKBot
             }
             catch (Exception e)
             {
-                Console.WriteLine("Recv Callback Error: " + e.ToString());
+                Trace.TraceError("Recv Callback Error: " + e.ToString());
                 if (!handler.Connected)
                 {
                     BeginAccept(state.callback, true);
@@ -203,13 +205,15 @@ namespace MKBot
                 // Convert the string data to byte data using ASCII encoding.
                 byte[] byteData = Encoding.ASCII.GetBytes(data);
 
+                Trace.TraceInformation($"Send {data}");
+
                 // Begin sending the data to the remote device.
                 handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), state);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Trace.TraceError(e.ToString());
 
                 if (!handler.Connected)
                 {
@@ -229,14 +233,14 @@ namespace MKBot
 
                 // Complete sending the data to the remote device.
                 int bytesSent = handler.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                Trace.TraceInformation("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.
                 state.sendDone.Set();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Trace.TraceError(e.ToString());
             }
         }
     }
@@ -261,7 +265,8 @@ namespace MKBot
             app_process.EnableRaisingEvents = true;
             app_process.Exited += new EventHandler(ProcessExited_app);
 
-            Utils.retry("Start Listener", (attempt) => {
+            Utils.retry("Start Listener", (attempt) =>
+            {
 #if !DEBUG
                 make_app_process_args();
 #endif
@@ -289,7 +294,7 @@ namespace MKBot
 
         private void recv_callback(string data)
         {
-            Console.WriteLine("Recv Data: {0}", data);
+            Trace.TraceInformation("Recv Data: {0}", data);
             QueryString args = QueryString.Parse(data);
 
             if (!args.Contains("action"))
@@ -328,9 +333,9 @@ namespace MKBot
                     app_process.Kill();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Kill MKBotCore");
+                Trace.TraceError(ex.ToString());
             }
         }
 
@@ -360,7 +365,7 @@ namespace MKBot
 
         private void ProcessExited_app(object sender, EventArgs e)
         {
-            Console.WriteLine("MKBotCore was exited.");
+            Trace.TraceInformation("MKBotCore was exited.");
 
             MKBotCoreExitEventArgs eargs = new MKBotCoreExitEventArgs();
             eargs.ExitCode = 1234;
@@ -375,12 +380,12 @@ namespace MKBot
                     make_app_process_args();
                     app_process.Start();
 
-                    Console.WriteLine("MKBotCore was started.");
+                    Trace.TraceInformation("MKBotCore was started.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Trace.TraceError(ex.ToString());
             }
         }
 
