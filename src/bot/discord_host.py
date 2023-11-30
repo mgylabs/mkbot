@@ -1,5 +1,4 @@
 import asyncio
-import re
 import sys
 
 if __name__ == "__main__":
@@ -13,7 +12,6 @@ import threading
 import time
 import traceback
 import urllib.parse
-from contextlib import contextmanager
 
 import discord
 from discord import ButtonStyle, Locale
@@ -25,7 +23,6 @@ from discord.app_commands import (
 )
 from discord.ext import commands, tasks
 from discord.ui import Button, View
-from mkbot_nlu.utils import Intent, register_intent
 
 import views
 from command_help import CommandHelp
@@ -45,7 +42,6 @@ from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
 from mgylabs.utils.helper import usage_helper
 from mgylabs.utils.LogEntry import DiscordRequestLogEntry
-from mgylabs.utils.nlu import NluModel
 from release import ReleaseNotify
 
 log = logger.get_logger(__name__)
@@ -66,23 +62,23 @@ async def ui_scheduled_task(
 discord.ui.View._scheduled_task = ui_scheduled_task
 
 
-@contextmanager
-def using_nlu():
-    if CONFIG.enabledChatMode:
-        try:
-            NluModel.load()
-        except Exception:
-            pass
+# @contextmanager
+# def using_nlu():
+#     if CONFIG.enabledChatMode:
+#         try:
+#             NluModel.load()
+#         except Exception:
+#             pass
 
-    try:
-        yield
-    finally:
-        NluModel.unload()
+#     try:
+#         yield
+#     finally:
+#         NluModel.unload()
 
 
-@register_intent("nlu_fallback", "fallback")
-def cmd_fallback(intent: Intent):
-    return f"google {intent.text}"
+# @register_intent("nlu_fallback", "fallback")
+# def cmd_fallback(intent: Intent):
+#     return f"google {intent.text}"
 
 
 class BotStateFlags:
@@ -165,89 +161,90 @@ class MKBot(commands.Bot):
         return ctx.command is not None
 
     async def process_chats(self, ctx: commands.Context, message: discord.Message):
-        if message.author.bot:
-            return False
+        return False
+        # if message.author.bot:
+        #     return False
 
-        if not await self.check_init_user_locale(ctx, message):
-            return False
+        # if not await self.check_init_user_locale(ctx, message):
+        #     return False
 
-        if not user_has_nlu_access(self, message.author.id):
-            DiscordRequestLogEntry.add_for_chat(
-                ctx,
-                message,
-                MGCertificate.getUserLevel(message.author),
-                None,
-                {"text": message.content, "detail": "NO_NLU_ACCESS"},
-            )
+        # if not user_has_nlu_access(self, message.author.id):
+        #     DiscordRequestLogEntry.add_for_chat(
+        #         ctx,
+        #         message,
+        #         MGCertificate.getUserLevel(message.author),
+        #         None,
+        #         {"text": message.content, "detail": "NO_NLU_ACCESS"},
+        #     )
 
-            await ctx.reply(
-                _(
-                    "Chat mode is only available when you have access to the **MK Bot Support Server**."
-                )
-                + "\nhttps://discord.gg/3RpDwjJCeZ"
-            )
-            return True
+        #     await ctx.reply(
+        #         _(
+        #             "Chat mode is only available when you have access to the **MK Bot Support Server**."
+        #         )
+        #         + "\nhttps://discord.gg/3RpDwjJCeZ"
+        #     )
+        #     return True
 
-        if not NluModel.nlu:
-            DiscordRequestLogEntry.add_for_chat(
-                ctx,
-                message,
-                MGCertificate.getUserLevel(message.author),
-                None,
-                {"text": message.content, "detail": "NLU_NOT_ACTIVATED"},
-            )
+        # if not NluModel.nlu:
+        #     DiscordRequestLogEntry.add_for_chat(
+        #         ctx,
+        #         message,
+        #         MGCertificate.getUserLevel(message.author),
+        #         None,
+        #         {"text": message.content, "detail": "NLU_NOT_ACTIVATED"},
+        #     )
 
-            await ctx.reply(_("Chat mode is not activated."))
-            return True
+        #     await ctx.reply(_("Chat mode is not activated."))
+        #     return True
 
-        text = re.sub("<@!?\\d+> ", "", message.content)
-        chat_intent: Intent = await NluModel.parse(text)
+        # text = re.sub("<@!?\\d+> ", "", message.content)
+        # chat_intent: Intent = await NluModel.parse(text)
 
-        if not chat_intent:
-            DiscordRequestLogEntry.add_for_chat(
-                ctx,
-                message,
-                MGCertificate.getUserLevel(message.author),
-                None,
-                {"text": message.content, "detail": "NLU_IS_LOADING"},
-            )
+        # if not chat_intent:
+        #     DiscordRequestLogEntry.add_for_chat(
+        #         ctx,
+        #         message,
+        #         MGCertificate.getUserLevel(message.author),
+        #         None,
+        #         {"text": message.content, "detail": "NLU_IS_LOADING"},
+        #     )
 
-            await ctx.reply(_("Loading chat mode... Please try again later."))
-            return True
+        #     await ctx.reply(_("Loading chat mode... Please try again later."))
+        #     return True
 
-        if chat_intent.response:
-            message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
-            new_ctx = await self.get_context(message)
+        # if chat_intent.response:
+        #     message.content = f"{CONFIG.commandPrefix}{chat_intent.response}"
+        #     new_ctx = await self.get_context(message)
 
-            if new_ctx.command is None:
-                raise Exception(f"Invalid Response: {chat_intent.response}")
+        #     if new_ctx.command is None:
+        #         raise Exception(f"Invalid Response: {chat_intent.response}")
 
-            request_id = DiscordRequestLogEntry.add_for_chat(
-                new_ctx,
-                message,
-                MGCertificate.getUserLevel(message.author),
-                new_ctx.command.name,
-                chat_intent.detail,
-            )
-            new_ctx.mkbot_request_id = request_id
+        #     request_id = DiscordRequestLogEntry.add_for_chat(
+        #         new_ctx,
+        #         message,
+        #         MGCertificate.getUserLevel(message.author),
+        #         new_ctx.command.name,
+        #         chat_intent.detail,
+        #     )
+        #     new_ctx.mkbot_request_id = request_id
 
-            await self.invoke(new_ctx)
+        #     await self.invoke(new_ctx)
 
-        else:
-            DiscordRequestLogEntry.add_for_chat(
-                ctx,
-                message,
-                MGCertificate.getUserLevel(message.author),
-                chat_intent.name,
-                chat_intent.detail,
-            )
-            await ctx.reply(
-                _(
-                    "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\nPlease try rephrasing your instruction to me."
-                ).format(command=chat_intent.description)
-            )
+        # else:
+        #     DiscordRequestLogEntry.add_for_chat(
+        #         ctx,
+        #         message,
+        #         MGCertificate.getUserLevel(message.author),
+        #         chat_intent.name,
+        #         chat_intent.detail,
+        #     )
+        #     await ctx.reply(
+        #         _(
+        #             "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\nPlease try rephrasing your instruction to me."
+        #         ).format(command=chat_intent.description)
+        #     )
 
-        return True
+        # return True
 
     async def get_context(self, message, *, cls=MKBotContext):
         return await super().get_context(message, cls=cls)
@@ -607,9 +604,8 @@ def get_event_loop():
 async def start_bot():
     bot = await create_bot()
 
-    with using_nlu():
-        async with bot:
-            await bot.start(CONFIG.discordToken)
+    async with bot:
+        await bot.start(CONFIG.discordToken)
 
     loop = asyncio.get_event_loop()
     loop.stop()

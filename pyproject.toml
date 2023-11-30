@@ -37,10 +37,6 @@ simpleaudio = "1.0.4"
 sqlalchemy = "1.4.46"
 yt-dlp = "2023.09.24"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce", optional = true}
-mkbot-nlu = [
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "7bbb76125a827581020fc1618192382ecaff9d62"},
-    {git = "https://github.com/mgylabs/mkbot-nlu.git", rev = "7bbb76125a827581020fc1618192382ecaff9d62", extras = ["full"], optional = true},
-]
 
 [tool.poetry.group.dev.dependencies]
 black = "22.3.0"
@@ -54,4 +50,3 @@ pytest-mock = "3.10.0"
 
 [tool.poetry.extras]
 release = ["mulgyeol-telemetry"]
-full = ["mkbot-nlu"]

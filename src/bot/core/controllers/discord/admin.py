@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 
 import discord
 from discord.ext import commands
@@ -7,9 +7,11 @@ from core.controllers.discord.utils import Emoji, api
 from mgylabs.i18n import _
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
-from mgylabs.utils.nlu import NluModel
 
 from .utils.MGCert import Level, MGCertificate
+
+# from mgylabs.utils.nlu import NluModel
+
 
 log = logger.get_logger(__name__)
 
@@ -22,8 +24,9 @@ class Admin(commands.Cog):
         self.unload_working = set()
 
     async def load_nlu_model(self):
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, NluModel.load, True)
+        pass
+        # loop = asyncio.get_event_loop()
+        # await loop.run_in_executor(None, NluModel.load, True)
 
     @commands.command(hidden=True)
     @MGCertificate.verify(level=Level.ADMIN_USERS)
@@ -38,10 +41,10 @@ class Admin(commands.Cog):
                 f"{Emoji.typing} " + _("Installing... `%s`") % query
             )
 
-            from mkbot_nlu.nlu import MKBotNLU
+            # from mkbot_nlu.nlu import MKBotNLU
 
             log.info(f"Downloading {query}...")
-            await MKBotNLU.download_ko_model(f"{api.extensions_path}/{query}")
+            # await MKBotNLU.download_ko_model(f"{api.extensions_path}/{query}")
 
             CONFIG.enabledChatMode = True
             api.set_enabled(query)
@@ -106,7 +109,7 @@ class Admin(commands.Cog):
             msg = await ctx.send(f"{Emoji.typing} " + _("Unloading... `%s`") % query)
 
             log.info(f"Unloading {query}...")
-            NluModel.unload()
+            # NluModel.unload()
             log.info(f"Successfully unloaded {query}...")
 
             await msg.edit(content=_("🟢 Successfully unloaded `%s`") % query)

@@ -6,7 +6,6 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from langdetect import detect
-from mkbot_nlu.utils import Intent, register_intent
 
 from core.controllers.discord.utils.command_helper import send
 from mgylabs.i18n import L_, _
@@ -295,15 +294,15 @@ ko2langcode = {
 }
 
 
-@register_intent("command::translate::translate", "translate")
-def cmd_translate(intent: Intent):
-    query = intent.get_an_entity("trans_query")
-    lang = intent.get_an_entity("language")
+# @register_intent("command::translate::translate", "translate")
+# def cmd_translate(intent: Intent):
+#     query = intent.get_an_entity("trans_query")
+#     lang = intent.get_an_entity("language")
 
-    if query:
-        return f'translate "{intent.get_an_entity("trans_query")}" {ko2langcode.get(lang, "en")}'
-    else:
-        return None
+#     if query:
+#         return f'translate "{intent.get_an_entity("trans_query")}" {ko2langcode.get(lang, "en")}'
+#     else:
+#         return None
 
 
 async def setup(bot: commands.Bot):

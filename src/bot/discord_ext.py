@@ -1,6 +1,6 @@
 discord_extensions = (
     "core.controllers.discord.dev",
-    "core.controllers.discord.admin",
+    # "core.controllers.discord.admin",
     "core.controllers.discord.delete",
     "core.controllers.discord.join",
     "core.controllers.discord.leave",

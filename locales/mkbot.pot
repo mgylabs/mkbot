@@ -97,12 +97,6 @@ msgstr ""
 msgid "Challenge declined :("
 msgstr ""
 
-msgid "Chat mode is not activated."
-msgstr ""
-
-msgid "Chat mode is only available when you have access to the **MK Bot Support Server**."
-msgstr ""
-
 msgid "Chose %s"
 msgstr ""
 
@@ -229,11 +223,6 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-msgid ""
-"I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\n"
-"Please try rephrasing your instruction to me."
-msgstr ""
-
 msgid "Installing... `%s`"
 msgstr ""
 
@@ -315,9 +304,6 @@ msgstr ""
 
 #, docstring
 msgid "Leaves voice channel where the user who typed the command is in."
-msgstr ""
-
-msgid "Loading chat mode... Please try again later."
 msgstr ""
 
 msgid "Loading... `%s`"

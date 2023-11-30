@@ -5,7 +5,6 @@ import aiohttp
 import discord
 from bs4 import BeautifulSoup
 from discord.ext import commands
-from mkbot_nlu.utils import Intent, register_intent
 from yt_dlp import YoutubeDL
 
 from core.controllers.discord.utils import Emoji
@@ -602,22 +601,22 @@ class Music(commands.Cog):
             )
 
 
-@register_intent("command::music::play", "play")
-def cmd_play(intent: Intent):
-    if query := intent.get_an_entity("music_query"):
-        return f"play {query}"
-    else:
-        return "play"
+# @register_intent("command::music::play", "play")
+# def cmd_play(intent: Intent):
+#     if query := intent.get_an_entity("music_query"):
+#         return f"play {query}"
+#     else:
+#         return "play"
 
 
-@register_intent("command::music::skip", "skip")
-def cmd_skip(intent: Intent):
-    return "skip"
+# @register_intent("command::music::skip", "skip")
+# def cmd_skip(intent: Intent):
+#     return "skip"
 
 
-@register_intent("command::music::stop", "stop")
-def cmd_stop(intent: Intent):
-    return "stop"
+# @register_intent("command::music::stop", "stop")
+# def cmd_stop(intent: Intent):
+#     return "stop"
 
 
 async def setup(bot: commands.Bot):
