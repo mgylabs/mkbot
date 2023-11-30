@@ -34,7 +34,7 @@ from discord_ext import discord_extensions
 from mgylabs.db import database
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.i18n.extension import I18nExtension
 from mgylabs.i18n.utils import get_user_locale_code, init_user_locale
 from mgylabs.services.telemetry_service import TelemetryReporter
@@ -440,7 +440,7 @@ async def create_bot(return_error_level=False):
                 view = View()
                 view.add_item(
                     Button(
-                        label=_("Report Issue"), style=ButtonStyle.url, url=issue_link
+                        label=__("Report Issue"), style=ButtonStyle.url, url=issue_link
                     )
                 )
             else:
@@ -453,7 +453,7 @@ async def create_bot(return_error_level=False):
 
         await ctx.send(
             embed=MsgFormatter.get(
-                ctx, _("Command Error: %s") % ctx.command.name, str(error)
+                ctx, __("Command Error: %s") % ctx.command.name, str(error)
             )
         )
 
@@ -497,7 +497,7 @@ async def create_bot(return_error_level=False):
                 view = View()
                 view.add_item(
                     Button(
-                        label=_("Report Issue"), style=ButtonStyle.url, url=issue_link
+                        label=__("Report Issue"), style=ButtonStyle.url, url=issue_link
                     )
                 )
                 await interaction.response.send_message(
@@ -536,8 +536,8 @@ async def create_bot(return_error_level=False):
                 await interaction.client.get_channel(interaction.channel_id).send(
                     embed=MsgFormatter.get(
                         interaction,
-                        _("Your display language has been changed to %s.") % language,
-                        _(
+                        __("Your display language has been changed to %s.") % language,
+                        __(
                             "Type `/language set` or `{commandPrefix}language set` to change your display language."
                         ),
                     )

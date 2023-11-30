@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -13,7 +13,9 @@ async def logout(ctx: commands.Context):
     Terminates bot. (Requires Admin Permission)
     """
     await ctx.send(
-        embed=MsgFormatter.get(ctx, _("Logs out of Discord and closes all connections"))
+        embed=MsgFormatter.get(
+            ctx, __("Logs out of Discord and closes all connections")
+        )
     )
     print("Logged out")
     await ctx.bot.close()

@@ -3,12 +3,12 @@ import itertools
 import discord
 from discord.ext import commands
 
-from mgylabs.i18n import L_, _
+from mgylabs.i18n import _L, __
 from mgylabs.i18n.utils import get_user_locale_code
 from mgylabs.utils.config import CONFIG
 from mgylabs.utils.version import VERSION
 
-translate = _
+translate = __
 
 
 def render_help_text(text: str):
@@ -27,7 +27,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         super().__init__(
             show_parameter_descriptions=False,
             paginator=commands.Paginator(None, None),
-            command_attrs={"help": L_("Shows this message")},  # Lazy Translate
+            command_attrs={"help": _L("Shows this message")},  # Lazy Translate
         )
         if CommandHelp.formatter == None:
             CommandHelp.formatter = formatter
@@ -35,10 +35,10 @@ class CommandHelp(commands.DefaultHelpCommand):
         self.paginator: Paginator = Paginator(prefix=None, suffix=None)
 
     async def prepare_help_command(self, ctx, command, /) -> None:
-        self.arguments_heading = _("Arguments:")
-        self.commands_heading = _("Commands:")
-        self.default_argument_description = _("No description given")
-        self.no_category = _("General")
+        self.arguments_heading = __("Arguments:")
+        self.commands_heading = __("Commands:")
+        self.default_argument_description = __("No description given")
+        self.no_category = __("General")
 
         return await super().prepare_help_command(ctx, command)
 
@@ -94,23 +94,23 @@ class CommandHelp(commands.DefaultHelpCommand):
         await self.send_pages()
 
     def get_opening_note(self) -> str:
-        description = f"> {_('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {_('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
+        description = f"> {__('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {__('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
         if VERSION != None:
             version_desc = (
-                f"{_('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{_('Be warned: Canary can be unstable.')}**"
+                f"{__('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{__('Be warned: Canary can be unstable.')}**"
                 if VERSION.is_canary()
-                else f"{_('Version')} {VERSION}"
+                else f"{__('Version')} {VERSION}"
             )
         else:
             version_desc = "Test Mode"
 
-        return f"Mulgyeol MK Bot {_('Help')}\n{version_desc}\n\n{description}"
+        return f"Mulgyeol MK Bot {__('Help')}\n{version_desc}\n\n{description}"
 
     def get_app_commands_help(self):
         bot = self.context.bot
 
-        cmd_builder = [_("Slash Command:")]
-        menu_builder = [_("Context Menu:")]
+        cmd_builder = [__("Slash Command:")]
+        menu_builder = [__("Context Menu:")]
         cmds = bot.tree._get_all_commands()
         for command in cmds:
             if isinstance(command, discord.app_commands.ContextMenu):
@@ -123,7 +123,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         if len(cmd_builder) == 1:
             if self.context.guild is not None:
                 cmd_builder.append(
-                    f"{self.indent * ' '}⚠️ {_('Slash commands are not set up for use in this guild(ID: %s).') % self.context.guild.id}\n{self.indent * ' '}{_('For more information, See %s') % '<https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands>'}"
+                    f"{self.indent * ' '}⚠️ {__('Slash commands are not set up for use in this guild(ID: %s).') % self.context.guild.id}\n{self.indent * ' '}{__('For more information, See %s') % '<https://github.com/mgylabs/mkbot/wiki/Discord-Bot-User-Guide#activate-slash-commands>'}"
                 )
                 builder = cmd_builder
             else:
@@ -225,7 +225,7 @@ class CommandHelp(commands.DefaultHelpCommand):
 
         command_name = self.invoked_with
         note = (
-            _(
+            __(
                 "Type {0} command for more info on a command.\n"
                 "You can also type {0} category for more info on a category."
             ).format(f"{self.context.clean_prefix}{command_name}")

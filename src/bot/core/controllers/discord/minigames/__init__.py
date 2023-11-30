@@ -11,7 +11,7 @@ from core.controllers.discord.minigames.hangman import Hangman
 from core.controllers.discord.utils import listener
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils import logger
 
 log = logger.get_logger(__name__)
@@ -76,11 +76,11 @@ class Minigame(commands.GroupCog):
     async def gobblet(self, ctx: commands.Context, *, other: discord.Member):
         """Play a game of Gobblet Gobblers with someone else"""
         if other.bot:
-            return await ctx.send(_("You cannot play against a bot"), ephemeral=True)
+            return await ctx.send(__("You cannot play against a bot"), ephemeral=True)
 
         prompt = gobblet.Prompt(ctx.author, other)
         msg = await ctx.send(
-            _(
+            __(
                 "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
                 "This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. "
                 "A higher strength value eats a piece even if it's already on the board. "
@@ -112,7 +112,7 @@ class Minigame(commands.GroupCog):
             view=prompt,
         )
         prompt.message = await ctx.send(
-            _(
+            __(
                 "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
                 "In order to accept, please press your button below to ready up."
             )
@@ -153,12 +153,12 @@ class Minigame(commands.GroupCog):
                 self.channels.pop(channel_id)
 
             await ctx.send(
-                embed=MsgFormatter.get(ctx, _("Hangman"), _("Exit Hangman Game"))
+                embed=MsgFormatter.get(ctx, __("Hangman"), __("Exit Hangman Game"))
             )
             return
         else:
             await ctx.send(
-                embed=MsgFormatter.get(ctx, _("Hangman"), _("Invalid Argument"))
+                embed=MsgFormatter.get(ctx, __("Hangman"), __("Invalid Argument"))
             )
             return
 
@@ -168,10 +168,10 @@ class Minigame(commands.GroupCog):
         ds = hangman.displayScreen()
         log.debug(ds)
         message = await ctx.send(
-            embed=MsgFormatter.get(ctx, _("Hangman"), f"```{ds}```")
+            embed=MsgFormatter.get(ctx, __("Hangman"), f"```{ds}```")
         )
 
-        locale_hangman = _("Hangman")
+        locale_hangman = __("Hangman")
 
         async def display(text):
             await message.edit(

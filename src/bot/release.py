@@ -5,7 +5,7 @@ import aiohttp
 
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.db.storage import localStorage
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils import logger
 from mgylabs.utils.version import VERSION
 
@@ -80,12 +80,12 @@ class ReleaseNotify:
                 js = await res.json()
                 note = ReleaseNote(js["body"])
         if note.description == "":
-            note.description = _("Welcome to the %s release of MK Bot.") % VERSION.tag
+            note.description = __("Welcome to the %s release of MK Bot.") % VERSION.tag
         embed = MsgFormatter.push(
-            f"Mulgyeol MK Bot {VERSION.tag} {_('Release')} 🎉",
+            f"Mulgyeol MK Bot {VERSION.tag} {__('Release')} 🎉",
             note.description
             + "\n"
-            + _("Please see the [Release Note](%s) for more information.") % note_url,
+            + __("Please see the [Release Note](%s) for more information.") % note_url,
             note.fields,
         )
         await send(embed=embed)

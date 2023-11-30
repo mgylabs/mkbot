@@ -7,7 +7,7 @@ from typing import Optional
 
 import discord
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 
 class BoardKind(enum.Enum):
@@ -54,7 +54,7 @@ class Player:
 
     @property
     def content(self) -> str:
-        return _("It is now %(kind)s %(member)s's turn.") % {
+        return __("It is now %(kind)s %(member)s's turn.") % {
             "kind": self.kind,
             "member": self.member.mention,
         }
@@ -93,7 +93,7 @@ class PlayerPrompt(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user != self.player.member:
             await interaction.response.send_message(
-                _("This is not meant for you"), ephemeral=True
+                __("This is not meant for you"), ephemeral=True
             )
             return False
         return True
@@ -119,20 +119,22 @@ class Button(discord.ui.Button["Gobblers"]):
         state = self.view.get_board_state(self.x, self.y)
         if state.kind == player.kind:
             await interaction.response.send_message(
-                _("You already have this piece"), ephemeral=True
+                __("You already have this piece"), ephemeral=True
             )
             return
 
         if player.available_strength <= state.strength:
             await interaction.response.send_message(
-                _("You do not have the strength necessary to take down this piece"),
+                __("You do not have the strength necessary to take down this piece"),
                 ephemeral=True,
             )
             return
 
         if player.current_selection is not None:
             await interaction.response.send_message(
-                _("You've already selected a piece, you can't select multiple pieces."),
+                __(
+                    "You've already selected a piece, you can't select multiple pieces."
+                ),
                 ephemeral=True,
             )
             return
@@ -141,7 +143,7 @@ class Button(discord.ui.Button["Gobblers"]):
 
         prompt = PlayerPrompt(player, state)
         await interaction.response.send_message(
-            _("Select a piece strength"), view=prompt
+            __("Select a piece strength"), view=prompt
         )
         await prompt.wait()
 
@@ -161,11 +163,11 @@ class Button(discord.ui.Button["Gobblers"]):
         if winner is not None:
             if winner is not BoardKind.Empty:
                 winning_player = next_player if next_player.kind is winner else player
-                content = _("%(winning_player)s won!") % {
+                content = __("%(winning_player)s won!") % {
                     "winning_player": f"{winner} {winning_player.member.mention}"
                 }
             else:
-                content = _("It's a tie!")
+                content = __("It's a tie!")
 
             self.view.disable_all()
             self.view.stop()
@@ -193,13 +195,13 @@ class Gobblers(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user not in (self.players[0].member, self.players[1].member):
             await interaction.response.send_message(
-                _("This is a game between two other people, sorry."), ephemeral=True
+                __("This is a game between two other people, sorry."), ephemeral=True
             )
             return False
 
         if interaction.user != self.current_player.member:
             await interaction.response.send_message(
-                _("It's not your turn"), ephemeral=True
+                __("It's not your turn"), ephemeral=True
             )
             return False
 
@@ -279,7 +281,7 @@ class Prompt(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user != self.second:
             await interaction.response.send_message(
-                _("This prompt is not meant for you"), ephemeral=True
+                __("This prompt is not meant for you"), ephemeral=True
             )
             return False
         return True
@@ -298,7 +300,7 @@ class Prompt(discord.ui.View):
         )
 
         await interaction.response.send_message(
-            _(
+            __(
                 "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n\n"
                 "It is now \N{LARGE BLUE SQUARE} %(first_member)s's turn"
             )
@@ -313,5 +315,5 @@ class Prompt(discord.ui.View):
     async def decline(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
-        await interaction.response.send_message(_("Challenge declined :("))
+        await interaction.response.send_message(__("Challenge declined :("))
         self.stop()

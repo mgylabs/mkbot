@@ -1,7 +1,7 @@
 import discord
 
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
-from mgylabs.i18n import I18nExtension, _
+from mgylabs.i18n import I18nExtension, __
 from mgylabs.i18n.utils import set_user_locale_by_iaction
 
 
@@ -29,8 +29,8 @@ class LanguageDropdown(discord.ui.Select):
         await interaction.response.send_message(
             embed=MsgFormatter.get(
                 interaction,
-                _("Your display language has been changed to %s.") % language,
-                _(
+                __("Your display language has been changed to %s.") % language,
+                __(
                     "Type `/language set` or `{commandPrefix}language set` to change your display language."
                 ),
             ),

@@ -5,7 +5,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 
 class Dropdown(discord.ui.Select):
@@ -13,18 +13,18 @@ class Dropdown(discord.ui.Select):
         options = [
             discord.SelectOption(
                 label="Bug Report",
-                description=_("Report broken or incorrect behaviour"),
+                description=__("Report broken or incorrect behaviour"),
                 emoji="🪲",
             ),
             discord.SelectOption(
                 label="Feature Request",
-                description=_("Suggest a feature for MK Bot"),
+                description=__("Suggest a feature for MK Bot"),
                 emoji="💡",
             ),
         ]
 
         super().__init__(
-            placeholder=_("Select feedback type..."),
+            placeholder=__("Select feedback type..."),
             min_values=1,
             max_values=1,
             options=options,
@@ -59,12 +59,12 @@ class Feedback(discord.ui.Modal):
     )
 
     def __init__(self, feedback_type, **kwargs) -> None:
-        super().__init__(title=f"{_('Feedback')} ({feedback_type})", **kwargs)
+        super().__init__(title=f"{__('Feedback')} ({feedback_type})", **kwargs)
         self.feedback_type = feedback_type
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.send_message(
-            _("Thanks for your feedback, %s!") % interaction.user.name, ephemeral=True
+            __("Thanks for your feedback, %s!") % interaction.user.name, ephemeral=True
         )
 
         if self.feedback_type == "Bug Report":
@@ -85,7 +85,7 @@ class Feedback(discord.ui.Modal):
         self, error: Exception, interaction: discord.Interaction
     ) -> None:
         await interaction.response.send_message(
-            _("Oops! Something went wrong."), ephemeral=True
+            __("Oops! Something went wrong."), ephemeral=True
         )
 
         traceback.print_tb(error.__traceback__)
@@ -104,7 +104,7 @@ async def feedback(interaction: discord.Interaction):
     view.clear_items()
 
     await interaction.edit_original_response(
-        content=_("Thanks for your feedback, %s!") % interaction.user.name, view=view
+        content=__("Thanks for your feedback, %s!") % interaction.user.name, view=view
     )
 
 

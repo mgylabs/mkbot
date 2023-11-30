@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -19,7 +19,7 @@ async def leave(ctx: commands.Context):
         if x.guild == ctx.message.guild:
             await x.disconnect()
             await channel.send(
-                embed=MsgFormatter.get(ctx, _("left {}").format(voice_channel.name))
+                embed=MsgFormatter.get(ctx, __("left {}").format(voice_channel.name))
             )
 
 

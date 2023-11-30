@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -17,7 +17,7 @@ async def ping(interaction: discord.Interaction):
     """
     await interaction.response.send_message(
         embed=MsgFormatter.get(
-            interaction, _("Pong in %sms") % round(interaction.client.latency * 1000)
+            interaction, __("Pong in %sms") % round(interaction.client.latency * 1000)
         )
     )
 

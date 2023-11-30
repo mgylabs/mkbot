@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from core.controllers.discord.utils.command_helper import send
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils.config import USER_DATA_PATH
 
 from .MsgFormat import MsgFormatter
@@ -124,8 +124,8 @@ class MGCertificate:
                 if perm > level:
                     embed = MsgFormatter.get(
                         ctx_or_iaction,
-                        _("Permission denied"),
-                        _(
+                        __("Permission denied"),
+                        __(
                             "%(member)s is not in the %(userlist)s. This incident will be reported."
                         )
                         % {
@@ -134,9 +134,9 @@ class MGCertificate:
                         },
                         show_req_user=False,
                     )
-                    embed.add_field(name=_("User"), value=req_user_name)
+                    embed.add_field(name=__("User"), value=req_user_name)
                     embed.add_field(
-                        name=_("Command tried"),
+                        name=__("Command tried"),
                         value="{} ({})".format(
                             ctx_or_iaction.command.name, Level.get_description(level)
                         ),

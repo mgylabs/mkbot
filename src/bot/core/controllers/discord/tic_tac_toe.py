@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 
 # Defines a custom button that contains the logic of the game.
@@ -37,23 +37,23 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
             self.disabled = True
             view.board[self.y][self.x] = view.X
             view.current_player = view.O
-            content = _("It is now O's turn")
+            content = __("It is now O's turn")
         else:
             self.style = discord.ButtonStyle.success
             self.label = "O"
             self.disabled = True
             view.board[self.y][self.x] = view.O
             view.current_player = view.X
-            content = _("It is now X's turn")
+            content = __("It is now X's turn")
 
         winner = view.check_board_winner()
         if winner is not None:
             if winner == view.X:
-                content = _("X won!")
+                content = __("X won!")
             elif winner == view.O:
-                content = _("O won!")
+                content = __("O won!")
             else:
-                content = _("It's a tie!")
+                content = __("It's a tie!")
 
             for child in view.children:
                 child.disabled = True
@@ -129,7 +129,7 @@ class TicTacToe(discord.ui.View):
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def tic(ctx: commands.Context):
     """Starts a tic-tac-toe game with yourself."""
-    await ctx.send(f"Tic Tac Toe: {_('X goes first')}", view=TicTacToe())
+    await ctx.send(f"Tic Tac Toe: {__('X goes first')}", view=TicTacToe())
 
 
 async def setup(bot: commands.Bot):

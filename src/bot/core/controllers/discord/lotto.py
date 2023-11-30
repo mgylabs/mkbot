@@ -2,7 +2,7 @@ import random
 
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -37,7 +37,7 @@ async def lotto(ctx: commands.Context):
     await ctx.send(
         embed=MsgFormatter.get(
             ctx,
-            _("The lucky numbers are... :sunglasses:"),
+            __("The lucky numbers are... :sunglasses:"),
             lotto,
         )
     )

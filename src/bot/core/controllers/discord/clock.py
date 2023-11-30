@@ -11,7 +11,7 @@ from discord.ext import commands
 
 from mgylabs.db import database
 from mgylabs.db.storage import localStorage
-from mgylabs.i18n import L_, _
+from mgylabs.i18n import _L, __
 from mgylabs.utils import logger
 
 from .utils.command_helper import send
@@ -104,7 +104,7 @@ async def clock_updater(bot: commands.Bot):
 class Clock(commands.Cog):
     clock_group = app_commands.Group(
         name="clock",
-        description=L_("Shows live world clock."),
+        description=_L("Shows live world clock."),
         default_permissions=discord.Permissions(administrator=True),
     )
     clock_updater_running = False
@@ -159,7 +159,7 @@ class Clock(commands.Cog):
             embed=MsgFormatter.get(
                 interaction,
                 "Clock",
-                _("Successfully set live clock."),
+                __("Successfully set live clock."),
             ),
         )
 

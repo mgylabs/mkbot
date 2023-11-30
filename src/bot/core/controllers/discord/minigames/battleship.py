@@ -6,7 +6,7 @@ from typing import Optional
 
 import discord
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 
 @dataclass()
@@ -54,18 +54,18 @@ class PlayerState:
         # self.generate_board()
 
     def generate_board(self) -> None:
-        for (size, emoji) in ((4, "\N{SHIP}"), (3, "\N{SAILBOAT}"), (2, "\N{CANOE}")):
+        for size, emoji in ((4, "\N{SHIP}"), (3, "\N{SAILBOAT}"), (2, "\N{CANOE}")):
             dx, dy = (1, 0) if random.randint(0, 1) else (0, 1)
             positions = self.get_available_positions(dx, dy, size)
             x, y = random.choice(positions)
-            for __ in range(0, size):
+            for _ in range(0, size):
                 self.board[y][x].emoji = emoji
                 x += dx
                 y += dy
 
     def can_place_ship(self, x: int, y: int, dx: int, dy: int, size: int) -> bool:
         bounds = range(0, 5)
-        for __ in range(0, size):
+        for _ in range(0, size):
             if x not in bounds or y not in bounds:
                 return False
 
@@ -158,25 +158,25 @@ class Button(discord.ui.Button["BoardView"]):
         if enemy.is_dead():
             self.view.disable()
             await interaction.response.edit_message(
-                content=_("You win!"), view=self.view
+                content=__("You win!"), view=self.view
             )
             # Update the enemy state as well
             if enemy_cell.button and enemy_cell.button.view:
                 enemy_cell.button.update()
                 view = enemy_cell.button.view
-                await view.message.edit(content=_("You lose :("), view=view)
+                await view.message.edit(content=__("You lose :("), view=view)
 
             await self.view.parent_message.edit(
-                content=_("%(player)s wins this game of Battleship! Congratulations.")
+                content=__("%(player)s wins this game of Battleship! Congratulations.")
                 % {"player": player.member.mention}
             )
             return
 
-        content = _("%(enemy)s's turn.") % {"enemy": enemy.member.mention}
-        enemy_content = _("Your (%(enemy)s) turn!") % {"enemy": enemy.member.mention}
+        content = __("%(enemy)s's turn.") % {"enemy": enemy.member.mention}
+        enemy_content = __("Your (%(enemy)s) turn!") % {"enemy": enemy.member.mention}
         if enemy_cell.emoji is not None and enemy.is_ship_sunk(enemy_cell.emoji):
-            content = f"{content}\n\n{_('You sunk their %(emoji)s!') % {'emoji': enemy_cell.emoji}}"
-            enemy_content = f"{enemy_content}\n\n{_('Your %(emoji)s was sunk :(') % {'emoji': enemy_cell.emoji}}"
+            content = f"{content}\n\n{__('You sunk their %(emoji)s!') % {'emoji': enemy_cell.emoji}}"
+            enemy_content = f"{enemy_content}\n\n{__('Your %(emoji)s was sunk :(') % {'emoji': enemy_cell.emoji}}"
 
         await interaction.response.edit_message(content=content, view=self.view)
         self.view.message = await interaction.original_response()
@@ -207,14 +207,14 @@ class BoardView(discord.ui.View):
 
         if not self.enemy.ready:
             await interaction.response.send_message(
-                _("Your enemy is not ready yet, please wait until they are"),
+                __("Your enemy is not ready yet, please wait until they are"),
                 ephemeral=True,
             )
             return False
 
         if not self.player.current_player:
             await interaction.response.send_message(
-                _("It is not your turn yet."), ephemeral=True
+                __("It is not your turn yet."), ephemeral=True
             )
             return False
         return True
@@ -269,7 +269,7 @@ class BoardSetupView(discord.ui.View):
 
     def can_place_ship(self, x: int, y: int, dx: int, dy: int, size: int) -> bool:
         bounds = range(0, 5)
-        for __ in range(0, size):
+        for _ in range(0, size):
             if x not in bounds or y not in bounds:
                 return False
 
@@ -288,8 +288,8 @@ class BoardSetupView(discord.ui.View):
         self.player.ready = True
 
         board = BoardView(self.player, self.enemy)
-        place = _("first") if self.player.current_player else _("second")
-        content = _(
+        place = __("first") if self.player.current_player else __("second")
+        content = __(
             "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
         ) % {"ordinal": place}
         await interaction.response.edit_message(content=content, view=board)
@@ -298,7 +298,7 @@ class BoardSetupView(discord.ui.View):
 
         self.player.view = board
         self.parent_button.disabled = True
-        self.parent_button.label = _("%(player)s is ready!") % {
+        self.parent_button.label = __("%(player)s is ready!") % {
             "player": self.player.member
         }
 
@@ -308,7 +308,7 @@ class BoardSetupView(discord.ui.View):
             self.parent_view.timeout = None
             self.parent_view.add_item(ReopenBoardButton())
 
-            content = _(
+            content = __(
                 "Game currently in progress between %(player)s and %(enemy)s...\n\n"
                 "**Guide**\n"
                 "Red button → You hit the enemy ship successfully.\n"
@@ -336,7 +336,7 @@ class BoardSetupView(discord.ui.View):
             # If both x and y inputs are different then we're trying a diagonal boat
             # This is forbidden
             if old_x != x and old_y != y:
-                raise RuntimeError(_("Sorry, you can't have diagonal pieces"))
+                raise RuntimeError(__("Sorry, you can't have diagonal pieces"))
 
             if old_x != x:
                 size = abs(old_x - x) + 1
@@ -348,7 +348,7 @@ class BoardSetupView(discord.ui.View):
                 start_x, start_y = x, min(old_y, y)
             else:
                 raise RuntimeError(
-                    _("Sorry, couldn't figure out what you wanted to do here")
+                    __("Sorry, couldn't figure out what you wanted to do here")
                 )
 
             boats = {
@@ -359,21 +359,21 @@ class BoardSetupView(discord.ui.View):
 
             if size not in boats:
                 raise RuntimeError(
-                    _(
+                    __(
                         "Sorry, this ship is too big. Only ships sizes 4, 3, or 2 are supported"
                     )
                 )
 
             if size in self.taken_lengths:
                 raise RuntimeError(
-                    _("You already have a boat that is %d units long.") % size
+                    __("You already have a boat that is %d units long.") % size
                 )
 
             if not self.can_place_ship(start_x, start_y, dx, dy, size):
-                raise RuntimeError(_("This ship would be blocked off"))
+                raise RuntimeError(__("This ship would be blocked off"))
 
             emoji = boats[size]
-            for __ in range(size):
+            for _ in range(size):
                 self.placements.append((start_x, start_y, emoji))
                 button = self.children[start_x + start_y * 5]
                 button.emoji = emoji
@@ -392,7 +392,7 @@ class BoardSetupView(discord.ui.View):
 class ReopenBoardButton(discord.ui.Button["Prompt"]):
     def __init__(self) -> None:
         super().__init__(
-            label=_("Reopen Your Board"), style=discord.ButtonStyle.blurple
+            label=__("Reopen Your Board"), style=discord.ButtonStyle.blurple
         )
 
     async def callback(self, interaction: discord.Interaction) -> None:
@@ -410,7 +410,7 @@ class ReopenBoardButton(discord.ui.Button["Prompt"]):
 
         board = BoardView(player, enemy)
         await interaction.response.send_message(
-            _("This is your board!"), view=board, ephemeral=True
+            __("This is your board!"), view=board, ephemeral=True
         )
         player.view = board
         board.message = await interaction.original_response()
@@ -420,7 +420,7 @@ class ReopenBoardButton(discord.ui.Button["Prompt"]):
 class ReadyButton(discord.ui.Button["Prompt"]):
     def __init__(self, player: PlayerState, enemy: PlayerState) -> None:
         super().__init__(
-            label=_("%(player)s's Button") % {"player": player.member.display_name},
+            label=__("%(player)s's Button") % {"player": player.member.display_name},
             style=discord.ButtonStyle.blurple,
         )
         self.player: PlayerState = player
@@ -432,12 +432,12 @@ class ReadyButton(discord.ui.Button["Prompt"]):
 
         if interaction.user.id != self.player.member.id:
             await interaction.response.send_message(
-                _("This ready button is not for you, sorry"), ephemeral=True
+                __("This ready button is not for you, sorry"), ephemeral=True
             )
             return
 
         setup = BoardSetupView(self.player, self.enemy, self)
-        content = _(
+        content = __(
             "Set up your board below. In order to set up your board, "
             "just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n\n"
             "There are 3 boats, \N{SHIP}, \N{SAILBOAT}, and \N{CANOE}. You can only have one of each. "
@@ -474,12 +474,12 @@ class Prompt(discord.ui.View):
 
     async def on_timeout(self) -> None:
         self.disable()
-        await self.message.edit(content=_("This prompt has timed out..."), view=self)
+        await self.message.edit(content=__("This prompt has timed out..."), view=self)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id not in (self.first.member.id, self.second.member.id):
             await interaction.response.send_message(
-                _("This prompt is not for you"), ephemeral=True
+                __("This prompt is not for you"), ephemeral=True
             )
             return False
         return True

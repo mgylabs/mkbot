@@ -6,7 +6,7 @@ from discord.ext import commands
 from core.controllers.discord.utils import Emoji
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 
@@ -82,14 +82,14 @@ async def google(ctx: commands.Context, *, query):
     Search on Google.
     """
     search_msg: discord.Message = await ctx.send(
-        f"{Emoji.typing} " + _("Searching... `%s`") % query
+        f"{Emoji.typing} " + __("Searching... `%s`") % query
     )
 
     result: SearchResult = await search(query, advanced=True)
 
     if result:
         await search_msg.edit(
-            content=_("🔍 Google search results for `{query}`").format(query=query),
+            content=__("🔍 Google search results for `{query}`").format(query=query),
             embed=MsgFormatter.get(
                 ctx,
                 None,
@@ -109,7 +109,7 @@ async def google(ctx: commands.Context, *, query):
         )
     else:
         await search_msg.edit(
-            content=_("🚫 No results were found for `{query}`").format(query=query)
+            content=__("🚫 No results were found for `{query}`").format(query=query)
         )
 
         DiscordEventLogEntry.Add(ctx, "GoogleSearchFailed", {"query": query})

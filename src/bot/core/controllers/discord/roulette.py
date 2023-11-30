@@ -4,7 +4,7 @@ import random
 import discord
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
@@ -25,13 +25,13 @@ async def roulette(ctx: commands.Context, *items):
     This bot cannot be added to items.
     """
     msg: discord.Message = await ctx.send(
-        embed=MsgFormatter.get(ctx, _("Roulette is running. Please wait."), "...")
+        embed=MsgFormatter.get(ctx, __("Roulette is running. Please wait."), "...")
     )
 
     for i in range(5, 0, -1):
         await msg.edit(
             embed=MsgFormatter.get(
-                ctx, _("Roulette is running. Please wait."), _("%dsec left") % i
+                ctx, __("Roulette is running. Please wait."), __("%dsec left") % i
             )
         )
         await asyncio.sleep(1)
@@ -41,7 +41,7 @@ async def roulette(ctx: commands.Context, *items):
     DiscordEventLogEntry.Add(ctx, "RouletteResult", {"result": result, "items": items})
 
     await msg.edit(
-        embed=MsgFormatter.get(ctx, _("Roulette"), _("chose... %s!") % result)
+        embed=MsgFormatter.get(ctx, __("Roulette"), __("chose... %s!") % result)
     )
 
 

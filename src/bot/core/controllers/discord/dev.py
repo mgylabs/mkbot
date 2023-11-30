@@ -13,7 +13,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils.config import is_development_mode
 
 START_CODE_BLOCK_RE = re.compile(r"^((```py(thon)?)(?=\s)|(```))")
@@ -154,7 +154,7 @@ class Dev(commands.Cog):
 
         if ctx.channel.id in self.sessions:
             await ctx.send(
-                _(
+                __(
                     "Already running a REPL session in this channel. Exit it with `quit`."
                 )
             )
@@ -162,7 +162,7 @@ class Dev(commands.Cog):
 
         self.sessions.add(ctx.channel.id)
         await ctx.send(
-            _("Enter code to execute or evaluate. `exit()` or `quit` to exit.")
+            __("Enter code to execute or evaluate. `exit()` or `quit` to exit.")
         )
 
         def check(m):
@@ -178,14 +178,14 @@ class Dev(commands.Cog):
                     "message", check=check, timeout=10.0 * 60.0
                 )
             except asyncio.TimeoutError:
-                await ctx.send(_("Exiting REPL session."))
+                await ctx.send(__("Exiting REPL session."))
                 self.sessions.remove(ctx.channel.id)
                 break
 
             cleaned = self.cleanup_code(response.content)
 
             if cleaned in ("quit", "exit", "exit()"):
-                await ctx.send(_("Exiting."))
+                await ctx.send(__("Exiting."))
                 self.sessions.remove(ctx.channel.id)
                 return
 
@@ -247,7 +247,7 @@ class Dev(commands.Cog):
             try:
                 if fmt is not None:
                     if len(fmt) > 2000:
-                        await ctx.send(_("Content too big to be printed."))
+                        await ctx.send(__("Content too big to be printed."))
                     else:
                         await ctx.send(fmt)
             except discord.Forbidden:

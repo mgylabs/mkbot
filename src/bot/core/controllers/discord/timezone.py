@@ -10,14 +10,14 @@ from discord.ext import commands
 from core.controllers.discord.utils.command_helper import send
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from mgylabs.db.models import DiscordUser
-from mgylabs.i18n import L_, _
+from mgylabs.i18n import _L, __
 
 from .utils.MsgFormat import MsgFormatter
 
 
 class TimeZone(commands.Cog):
     timezone_group = app_commands.Group(
-        name="timezone", description=L_("Shows user's local time.")
+        name="timezone", description=_L("Shows user's local time.")
     )
 
     @timezone_group.command()
@@ -41,7 +41,7 @@ class TimeZone(commands.Cog):
                 embed=MsgFormatter.get(
                     interaction,
                     "Timezone",
-                    _("Permission denied"),
+                    __("Permission denied"),
                 ),
             )
             return
@@ -49,9 +49,9 @@ class TimeZone(commands.Cog):
         try:
             pytz.timezone(timezone)
         except Exception as error:
-            raise app_commands.AppCommandError(_("Invalid timezone: %s") % error)
+            raise app_commands.AppCommandError(__("Invalid timezone: %s") % error)
 
-        user, __ = DiscordUser.get_or_create(id=member.id)
+        user, _ = DiscordUser.get_or_create(id=member.id)
         user.timezone = timezone
         user.save()
 
@@ -60,7 +60,7 @@ class TimeZone(commands.Cog):
             embed=MsgFormatter.get(
                 interaction,
                 "Timezone",
-                _("Successfully set timezone of %(member)s to %(timezone)s")
+                __("Successfully set timezone of %(member)s to %(timezone)s")
                 % {"member": member.mention, "timezone": timezone},
             ),
             ephemeral=True,
@@ -100,7 +100,7 @@ class TimeZone(commands.Cog):
                 embed=MsgFormatter.get(
                     interaction,
                     "Timezone",
-                    _("Permission denied"),
+                    __("Permission denied"),
                 ),
             )
             return
@@ -111,7 +111,7 @@ class TimeZone(commands.Cog):
                 embed=MsgFormatter.get(
                     interaction,
                     user.timezone,
-                    _("Timezone of %(member)s") % {"member": member.mention},
+                    __("Timezone of %(member)s") % {"member": member.mention},
                 ),
                 ephemeral=True,
             )
@@ -121,7 +121,7 @@ class TimeZone(commands.Cog):
                 embed=MsgFormatter.get(
                     interaction,
                     "Timezone",
-                    f"{_('Timezone of %(member)s') % {'member': member.mention}}: UTC",
+                    f"{__('Timezone of %(member)s') % {'member': member.mention}}: UTC",
                 ),
                 ephemeral=True,
             )
@@ -155,12 +155,12 @@ def _make_local_time_embed_(interaction, member):
     return MsgFormatter.get(
         interaction,
         lt,
-        _("Local time of %(member)s (%(timezone)s)")
+        __("Local time of %(member)s (%(timezone)s)")
         % {"member": member.mention, "timezone": d.strftime("GMT%z")},
     )
 
 
-@app_commands.context_menu(name=locale_str(L_("Show local time")))
+@app_commands.context_menu(name=locale_str(_L("Show local time")))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def local_time(interaction: discord.Interaction, member: discord.Member):
     embed = _make_local_time_embed_(interaction, member)

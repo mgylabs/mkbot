@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -18,12 +18,12 @@ async def poll(ctx: commands.Context, question, *candidates):
 
     if len(candidates) <= 1:
         await channel.send(
-            embed=MsgFormatter.get(ctx, _("You need more than two candidates!"))
+            embed=MsgFormatter.get(ctx, __("You need more than two candidates!"))
         )
         return
     elif len(candidates) > 10:
         await channel.send(
-            embed=MsgFormatter.get(ctx, _("You cannot make more than 10 candidates!"))
+            embed=MsgFormatter.get(ctx, __("You cannot make more than 10 candidates!"))
         )
         return
     else:

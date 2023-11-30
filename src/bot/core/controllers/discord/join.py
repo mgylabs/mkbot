@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -16,7 +16,9 @@ async def join(ctx: commands.Context):
     voice_channel = ctx.author.voice.channel
     await voice_channel.connect()
     await ctx.message.delete()
-    await channel.send(embed=MsgFormatter.get(ctx, _("Joined %s") % voice_channel.name))
+    await channel.send(
+        embed=MsgFormatter.get(ctx, __("Joined %s") % voice_channel.name)
+    )
 
 
 async def setup(bot: commands.Bot):

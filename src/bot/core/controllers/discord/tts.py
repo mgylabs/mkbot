@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 from discord.opus import Encoder
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
 
@@ -85,7 +85,7 @@ async def tts(ctx: commands.Context, *args):
 
     if not await validate_voice_client(ctx):
         raise UsageError(
-            _(
+            __(
                 "You are not in any voice channel. Please join a voice channel to use TTS."
             )
         )
@@ -104,7 +104,7 @@ async def tts(ctx: commands.Context, *args):
             vs = "WOMAN_DIALOG_BRIGHT"
         else:
             raise UsageError(
-                _(
+                __(
                     "Invalid parameter. For more information, type `{commandPrefix}help tts`."
                 ).format(commandPrefix=CONFIG.commandPrefix)
             )
@@ -128,7 +128,7 @@ async def tts(ctx: commands.Context, *args):
     embed = MsgFormatter.get(
         ctx,
         string,
-        _("[MK Bot]({url}) said on behalf of {author}").format(
+        __("[MK Bot]({url}) said on behalf of {author}").format(
             url="https://github.com/mgylabs/mkbot", author=ctx.author.mention
         ),
     )

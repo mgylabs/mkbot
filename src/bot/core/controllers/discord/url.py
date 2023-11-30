@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from discord import app_commands
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils import logger
 
 from .utils.MGCert import Level, MGCertificate
@@ -68,7 +68,7 @@ async def link(
         name, stitle, sdescription, image_url, color = await extract_url(url)
     except aiohttp.InvalidURL:
         await interaction.response.send_message(
-            embed=MsgFormatter.get(interaction, _("Invalid URL"), show_req_user=False),
+            embed=MsgFormatter.get(interaction, __("Invalid URL"), show_req_user=False),
             ephemeral=True,
         )
     except Exception as e:

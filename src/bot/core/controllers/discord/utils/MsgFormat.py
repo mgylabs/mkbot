@@ -4,7 +4,7 @@ import platform
 import discord
 from discord.ext import commands
 
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils.config import CONFIG, VERSION
 
 Msg_Color = None
@@ -95,7 +95,6 @@ class MsgFormatter:
         color: str = None,
         url: str = None,
     ):
-
         if color is None:
             color = get_color()
         else:
@@ -144,7 +143,7 @@ class MsgFormatter:
     @staticmethod
     def abrt(ctx_or_iaction, issue_link, tb, show_req_user=True):
         description = (
-            _(
+            __(
                 "ABRT has detected an unknown error.\nPlease [create an issue](%s) at GitHub with below logs to help fix this problem."
             )
             % issue_link
@@ -152,7 +151,7 @@ class MsgFormatter:
         env = f"Version: {VERSION}\nCommit: {VERSION.commit}\nOS: {platform.platform().replace('-', ' ')}"
 
         embed = discord.Embed(
-            title=f":rotating_light:  {_('Automatic Bug Reporting Tool')}",
+            title=f":rotating_light:  {__('Automatic Bug Reporting Tool')}",
             description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
             color=color_to_int("#FF0000"),
             timestamp=datetime.datetime.utcnow(),

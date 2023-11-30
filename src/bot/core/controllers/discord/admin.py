@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 from core.controllers.discord.utils import Emoji, api
-from mgylabs.i18n import _
+from mgylabs.i18n import __
 from mgylabs.utils import logger
 from mgylabs.utils.config import CONFIG
 
@@ -38,7 +38,7 @@ class Admin(commands.Cog):
 
         if query == "nlu_ko":
             msg: discord.Message = await ctx.send(
-                f"{Emoji.typing} " + _("Installing... `%s`") % query
+                f"{Emoji.typing} " + __("Installing... `%s`") % query
             )
 
             # from mkbot_nlu.nlu import MKBotNLU
@@ -55,13 +55,13 @@ class Admin(commands.Cog):
                 await self.load_nlu_model()
             except Exception as error:
                 await msg.edit(
-                    content=_("🟡 Successfully installed `%s`, but failed to load.")
+                    content=__("🟡 Successfully installed `%s`, but failed to load.")
                     % query
                     + f"\n{error}"
                 )
             else:
                 log.info(f"Successfully installed {query}...")
-                await msg.edit(content=_("🟢 Successfully installed `%s`.") % query)
+                await msg.edit(content=__("🟢 Successfully installed `%s`.") % query)
         else:
             await ctx.send("Invalid!")
 
@@ -77,7 +77,7 @@ class Admin(commands.Cog):
 
         if query == "nlu_ko":
             msg: discord.Message = await ctx.send(
-                f"{Emoji.typing} " + _("Loading... `%s`") % query
+                f"{Emoji.typing} " + __("Loading... `%s`") % query
             )
 
             CONFIG.enabledChatMode = True
@@ -88,10 +88,10 @@ class Admin(commands.Cog):
                 await self.load_nlu_model()
             except Exception as error:
                 log.exception(error)
-                await msg.edit(content=_("🔴 Failed to load `%s`") % query)
+                await msg.edit(content=__("🔴 Failed to load `%s`") % query)
             else:
                 log.info(f"Successfully loaded {query}...")
-                await msg.edit(content=_("🟢 Successfully loaded `%s`") % query)
+                await msg.edit(content=__("🟢 Successfully loaded `%s`") % query)
         else:
             await ctx.send("Invalid!")
 
@@ -106,13 +106,13 @@ class Admin(commands.Cog):
         self.unload_working.add(query)
 
         if query == "nlu_ko":
-            msg = await ctx.send(f"{Emoji.typing} " + _("Unloading... `%s`") % query)
+            msg = await ctx.send(f"{Emoji.typing} " + __("Unloading... `%s`") % query)
 
             log.info(f"Unloading {query}...")
             # NluModel.unload()
             log.info(f"Successfully unloaded {query}...")
 
-            await msg.edit(content=_("🟢 Successfully unloaded `%s`") % query)
+            await msg.edit(content=__("🟢 Successfully unloaded `%s`") % query)
         else:
             await ctx.send("Invalid!")
 
