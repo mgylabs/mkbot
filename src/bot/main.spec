@@ -34,6 +34,12 @@ core_exe = EXE(
     icon=os.getenv("CI_PROJECT_DIR") + "\\resources\\package\\mkbot.ico",
     upx=True,
     console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    contents_directory=".",
 )
 
 msu_a = Analysis(
@@ -63,6 +69,12 @@ msu_exe = EXE(
     upx=True,
     console=True,
     icon=os.getenv("CI_PROJECT_DIR") + "\\resources\\package\\mkbot.ico",
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    contents_directory=".",
 )
 
 coll = COLLECT(

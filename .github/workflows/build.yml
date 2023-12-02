@@ -36,7 +36,7 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
           cache: "poetry"
       - name: Check lock file
-        run: poetry lock --check
+        run: poetry check --lock
       - name: Install dependencies
         run: |
           pipx runpip poetry show virtualenv

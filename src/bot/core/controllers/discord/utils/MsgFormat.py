@@ -1,4 +1,3 @@
-import datetime
 import platform
 
 import discord
@@ -55,11 +54,10 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=title,
-            description=description.format(commandPrefix=CONFIG.commandPrefix)
-            + "\n\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
+            description=description.format(commandPrefix=CONFIG.commandPrefix),
             color=color,
             url=url,
-            timestamp=datetime.datetime.utcnow(),
+            # timestamp=datetime.datetime.utcnow(),
         )
 
         if thumbnail_url:
@@ -79,9 +77,14 @@ class MsgFormatter:
                 user_id = ctx_or_iaction.user.id
 
             if user_id:
-                embed.add_field(name="Requested by", value="<@{}>".format(user_id))
+                embed.add_field(
+                    name="Requested by", value="<@{}>".format(user_id), inline=False
+                )
 
-        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(
+            text="Powered by Mulgyeol MK Bot",
+            icon_url=MsgFormatter.avatar_url,
+        )
         return embed
 
     @staticmethod
@@ -131,7 +134,7 @@ class MsgFormatter:
             title=title,
             description=description,
             color=get_color(),
-            timestamp=datetime.datetime.utcnow(),
+            # timestamp=datetime.datetime.utcnow(),
         )
 
         for fd in fields:
@@ -152,9 +155,9 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=f":rotating_light:  {__('Automatic Bug Reporting Tool')}",
-            description=f"{description}\n\n```{tb}\n\n{env}```\nPowered by [Mulgyeol MK Bot](https://github.com/mgylabs/mkbot)",
+            description=f"{description}\n\n```{tb}\n\n{env}```",
             color=color_to_int("#FF0000"),
-            timestamp=datetime.datetime.utcnow(),
+            # timestamp=datetime.datetime.utcnow(),
         )
 
         if show_req_user:
@@ -164,5 +167,7 @@ class MsgFormatter:
                 user_id = ctx_or_iaction.user.id
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
-        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(
+            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+        )
         return embed

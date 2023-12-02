@@ -151,6 +151,10 @@ msgid "Display language of %(member)s"
 msgstr ""
 
 #, docstring
+msgid "Enables D-Day widget."
+msgstr ""
+
+#, docstring
 msgid "Enables conversational translation mode."
 msgstr ""
 
@@ -232,10 +236,16 @@ msgstr ""
 msgid "Invalid URL"
 msgstr ""
 
+msgid "Invalid date format. The required format is `<year/month/day>`"
+msgstr ""
+
 msgid "Invalid language"
 msgstr ""
 
 msgid "Invalid parameter. For more information, type `{commandPrefix}help tts`."
+msgstr ""
+
+msgid "Invalid time format. The required format is `<hour>:<minute>`."
 msgstr ""
 
 msgid "Invalid timezone: %s"
@@ -559,6 +569,9 @@ msgstr ""
 msgid "Show local time"
 msgstr ""
 
+msgid "Shows D-Day widget."
+msgstr ""
+
 msgid "Shows live world clock."
 msgstr ""
 
@@ -640,6 +653,9 @@ msgstr ""
 msgid ""
 "Stops Player\n"
 "{commandPrefix}stop"
+msgstr ""
+
+msgid "Successfully set D-Day widget."
 msgstr ""
 
 msgid "Successfully set display language of %(member)s to %(language)s"
@@ -727,6 +743,9 @@ msgid "Timeout Error"
 msgstr ""
 
 msgid "Timezone of %(member)s"
+msgstr ""
+
+msgid "Today is D-Day. 🎉"
 msgstr ""
 
 msgid "Translation Fail: Input Language Detection Failed"

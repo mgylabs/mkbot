@@ -15,6 +15,7 @@ discord_extensions = (
     "core.controllers.discord.feedback",
     "core.controllers.discord.timezone",
     "core.controllers.discord.clock",
+    "core.controllers.discord.dday",
     "core.controllers.discord.lotto",
     "core.controllers.discord.minigames",
     "core.controllers.discord.language",

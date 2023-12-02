@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+import sys
 import time
 
 from mgylabs.utils.config import USER_DATA_PATH, is_development_mode
@@ -8,7 +9,7 @@ from mgylabs.utils.config import USER_DATA_PATH, is_development_mode
 if is_development_mode():
     LOG_LEVEL = logging.INFO
 else:
-    LOG_LEVEL = logging.WARNING
+    LOG_LEVEL = logging.INFO
 
 
 class ColorFormatter(logging.Formatter):
@@ -38,7 +39,14 @@ class ColorFormatter(logging.Formatter):
     }
 
     def format(self, record):
-        formatter = self.FORMATS.get(record.levelno)
+        if record.name in ["STDOUT", "STDERR"]:
+            formatter = logging.Formatter(
+                "\x1b[30;1m[%(asctime)s]\x1b[0m \x1b[34;1m%(levelname)s\x1b[0m \x1b[35m%(name)s:\x1b[0m \x1b[0m%(message)s",
+                "%Y-%m-%d %H:%M:%S %z",
+            )
+        else:
+            formatter = self.FORMATS.get(record.levelno)
+
         if formatter is None:
             formatter = self.FORMATS[logging.DEBUG]
 
@@ -52,6 +60,20 @@ class ColorFormatter(logging.Formatter):
         # Remove the cache layer
         record.exc_text = None
         return output
+
+
+class StreamToLogger(object):
+    def __init__(self, logger, level):
+        self.logger = logger
+        self.level = level
+        self.linebuf = ""
+
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.level, line.rstrip())
+
+    def flush(self):
+        pass
 
 
 class LogPath:
@@ -106,6 +128,9 @@ def configure_logger(file_path=LogPath.get(), cleanup=True):
 
     discord_log = logging.getLogger("discord")
     discord_log.setLevel(logging.WARNING)
+
+    sys.stdout = StreamToLogger(logging.getLogger("STDOUT"), logging.INFO)
+    sys.stderr = StreamToLogger(logging.getLogger("STDERR"), logging.ERROR)
 
     # logger = logging.getLogger("discord")
     # logger.setLevel(logging.DEBUG)

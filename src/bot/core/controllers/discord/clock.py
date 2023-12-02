@@ -1,4 +1,3 @@
-import asyncio
 import random
 import time
 import traceback
@@ -13,46 +12,13 @@ from mgylabs.db import database
 from mgylabs.db.storage import localStorage
 from mgylabs.i18n import _L, __
 from mgylabs.utils import logger
+from mgylabs.utils.event import Sleeper
 
 from .utils.command_helper import send
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 log = logger.get_logger(__name__)
-
-
-class Sleeper:
-    # "Group sleep calls allowing instant cancellation of all"
-
-    def __init__(self):
-        self.tasks = set()
-
-    async def sleep(self, delay, result=None):
-        coro = asyncio.sleep(delay, result=result)
-        task = asyncio.ensure_future(coro)
-        self.tasks.add(task)
-        try:
-            return await task
-        except asyncio.CancelledError:
-            return result
-        finally:
-            self.tasks.remove(task)
-
-    def cancel_all_helper(self):
-        # "Cancel all pending sleep tasks"
-        cancelled = set()
-        for task in self.tasks:
-            if task.cancel():
-                cancelled.add(task)
-        return cancelled
-
-    async def cancel_all(self):
-        # "Coroutine cancelling tasks"
-        cancelled = self.cancel_all_helper()
-        if self.tasks:
-            await asyncio.wait(self.tasks)
-            self.tasks -= cancelled
-        return len(cancelled)
 
 
 sleeper = Sleeper()
@@ -118,8 +84,8 @@ class Clock(commands.Cog):
             self.bot.loop.create_task(clock_updater(self.bot))
 
     async def update_clock_now(self):
-        await self.ensure_clock_updater_running()
         await sleeper.cancel_all()
+        await self.ensure_clock_updater_running()
 
     @commands.Cog.listener()
     async def on_ready(self):

@@ -32,6 +32,8 @@ xcopy /q /I /Y resources\app build\resources\app
 
 cd src\bot
 @ If /i "%1" == "--clean" (
+    rmdir /s /q build
+    rmdir /s /q dist
     pyinstaller main.spec -y --clean || goto :error
 ) Else (
     pyinstaller main.spec -y || goto :error
