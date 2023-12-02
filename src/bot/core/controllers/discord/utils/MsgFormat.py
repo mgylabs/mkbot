@@ -140,7 +140,9 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
-        embed.set_footer(text="© Mulgyeol Labs 2023", icon_url=MsgFormatter.avatar_url)
+        embed.set_footer(
+            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+        )
         return embed
 
     @staticmethod

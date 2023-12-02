@@ -1,7 +1,6 @@
 import glob
 import logging
 import os
-import sys
 import time
 
 from mgylabs.utils.config import USER_DATA_PATH, is_development_mode
@@ -129,8 +128,8 @@ def configure_logger(file_path=LogPath.get(), cleanup=True):
     discord_log = logging.getLogger("discord")
     discord_log.setLevel(logging.WARNING)
 
-    sys.stdout = StreamToLogger(logging.getLogger("STDOUT"), logging.INFO)
-    sys.stderr = StreamToLogger(logging.getLogger("STDERR"), logging.ERROR)
+    # sys.stdout = StreamToLogger(logging.getLogger("STDOUT"), logging.INFO)
+    # sys.stderr = StreamToLogger(logging.getLogger("STDERR"), logging.ERROR)
 
     # logger = logging.getLogger("discord")
     # logger.setLevel(logging.DEBUG)
