@@ -12,6 +12,7 @@ import threading
 import time
 import traceback
 import urllib.parse
+from typing import Union
 
 import discord
 from discord import ButtonStyle, Locale
@@ -335,6 +336,11 @@ async def create_bot(return_error_level=False):
 
             synced = True
 
+        if not pending:
+            name = f"MK Bot {VERSION}"
+            activity = discord.Activity(name=name, type=discord.ActivityType.listening)
+            await bot.change_presence(status=discord.Status.online, activity=activity)
+
     @bot.event
     async def on_message(message: discord.Message):
         if message.author == bot.user:
@@ -373,6 +379,10 @@ async def create_bot(return_error_level=False):
                 await bot.change_presence(
                     status=discord.Status.online, activity=activity
                 )
+
+            await ctx.send(
+                "[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▶"))
+            )
 
             await ReleaseNotify.run(message.author.id, message.channel.send)
 
@@ -455,6 +465,15 @@ async def create_bot(return_error_level=False):
             embed=MsgFormatter.get(
                 ctx, __("Command Error: %s") % ctx.command.name, str(error)
             )
+        )
+
+    @bot.event
+    async def on_app_command_completion(
+        interaction: discord.Interaction,
+        command: Union[discord.app_commands.Command, discord.app_commands.ContextMenu],
+    ):
+        await interaction.channel.send(
+            "[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▶"))
         )
 
     async def on_app_command_error(

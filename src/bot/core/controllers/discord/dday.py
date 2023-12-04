@@ -16,6 +16,7 @@ from mgylabs.utils import logger
 from mgylabs.utils.event import AsyncScheduler, SchTask, Sleeper
 
 from .utils.command_helper import send
+from .utils.feature import Feature
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
@@ -142,7 +143,7 @@ class DDay(commands.Cog):
     group = app_commands.Group(
         name="dday",
         description=_L("Shows D-Day widget."),
-        default_permissions=discord.Permissions(administrator=True),
+        # default_permissions=discord.Permissions(administrator=True),
     )
 
     def __init__(self, bot):
@@ -156,6 +157,7 @@ class DDay(commands.Cog):
     @app_commands.rename(time_str="time")
     @app_commands.describe(date="<year/month/day>", time_str="<hour>:<minute>")
     @MGCertificate.verify(level=Level.TRUSTED_USERS)
+    @Feature.Experiment()
     async def set(
         self,
         interaction: discord.Interaction,

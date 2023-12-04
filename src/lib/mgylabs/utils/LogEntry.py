@@ -7,7 +7,7 @@ from mgylabs.db.models import DiscordBotCommandEventLog, DiscordBotRequestLog
 
 
 def json2str(js: dict):
-    return json.dumps(js, ensure_ascii=False)
+    return json.dumps(js, ensure_ascii=False, default=str)
 
 
 class DiscordRequestLogEntry:

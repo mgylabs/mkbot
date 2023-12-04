@@ -1,19 +1,22 @@
 import asyncio
 import random
+import shlex
 
 import discord
+from discord import app_commands
 from discord.ext import commands
 
-from mgylabs.i18n import __
+from mgylabs.i18n import _L, __
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 
-@commands.command(aliases=["rou"])
+@commands.hybrid_command(aliases=["rou"])
+@app_commands.describe(items=_L('item1 "item 2" "item3" ...'))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
-async def roulette(ctx: commands.Context, *items):
+async def roulette(ctx: commands.Context, *, items: str):
     """
     Play roulette
 
@@ -24,6 +27,8 @@ async def roulette(ctx: commands.Context, *items):
     Note:
     This bot cannot be added to items.
     """
+    item_ls = shlex.split(items)
+
     msg: discord.Message = await ctx.send(
         embed=MsgFormatter.get(ctx, __("Roulette is running. Please wait."), "...")
     )
@@ -36,9 +41,11 @@ async def roulette(ctx: commands.Context, *items):
         )
         await asyncio.sleep(1)
 
-    result = random.choice(items)
+    result = random.choice(item_ls)
 
-    DiscordEventLogEntry.Add(ctx, "RouletteResult", {"result": result, "items": items})
+    DiscordEventLogEntry.Add(
+        ctx, "RouletteResult", {"result": result, "items": item_ls}
+    )
 
     await msg.edit(
         embed=MsgFormatter.get(ctx, __("Roulette"), __("chose... %s!") % result)

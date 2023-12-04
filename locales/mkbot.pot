@@ -221,6 +221,9 @@ msgstr ""
 msgid "General"
 msgstr ""
 
+msgid "Give Feedback ▶"
+msgstr ""
+
 msgid "Hangman"
 msgstr ""
 
@@ -715,6 +718,9 @@ msgstr ""
 msgid "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more"
 msgstr ""
 
+msgid "This command is an experimental feature and only available when you have access to the **MK Bot Support Server**."
+msgstr ""
+
 msgid "This is a game between two other people, sorry."
 msgstr ""
 
@@ -841,6 +847,9 @@ msgid "chose... %s!"
 msgstr ""
 
 msgid "first"
+msgstr ""
+
+msgid "item1 \"item 2\" \"item3\" ..."
 msgstr ""
 
 msgid "left {}"
