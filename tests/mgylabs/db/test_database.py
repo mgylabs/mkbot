@@ -63,7 +63,7 @@ def test_transaction(needs_database):
     assert user2.locale is None
 
 
-def test_transaction_in_coroutine(needs_database_without_session, event_loop):
+def test_transaction_in_coroutine(needs_database_without_session, new_event_loop):
     async def foo1():
         with pytest.raises(IntegrityError):
             with database.db_session():
@@ -82,7 +82,7 @@ def test_transaction_in_coroutine(needs_database_without_session, event_loop):
         tasks = [asyncio.create_task(f) for f in [foo1(), foo2()]]
         await asyncio.gather(*tasks)
 
-    event_loop.run_until_complete(main())
+    new_event_loop.run_until_complete(main())
 
     with database.db_session():
         user1 = DiscordUser.get_one(id=1)

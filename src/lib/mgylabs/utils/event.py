@@ -62,6 +62,7 @@ class AsyncScheduler:
     worker_running = False
     counter = itertools.count()
     pending = asyncio.Event()
+    worker: asyncio.Task = None
 
     @classmethod
     async def add_task(cls, task: SchTask, priority=0):
@@ -122,7 +123,8 @@ class AsyncScheduler:
     async def update_woker(cls):
         if not cls.worker_running:
             cls.worker_running = True
-            asyncio.create_task(cls.run())
+            cls.pending = asyncio.Event()
+            cls.worker = asyncio.create_task(cls.run())
         else:
             cls.pending.set()
             await cls.sleeper.cancel_all()
@@ -141,6 +143,18 @@ class AsyncScheduler:
                 continue
 
             asyncio.create_task(sch_task.task)
+
+    @classmethod
+    async def terminate(cls):
+        if cls.worker_running:
+            cls.worker.cancel()
+
+            try:
+                await cls.worker
+            except asyncio.CancelledError:
+                log.info("worker cancelled")
+            finally:
+                cls.worker_running = False
 
     @classmethod
     def calc_remaining_time(cls, date: datetime, now: datetime = None) -> float:

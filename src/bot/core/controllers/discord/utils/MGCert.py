@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from functools import wraps
 
 import discord
@@ -19,6 +20,7 @@ formatter = logging.Formatter(
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
+os.makedirs(USER_DATA_PATH, exist_ok=True)
 file_handler = logging.FileHandler(
     USER_DATA_PATH + "/MK Bot.log", mode="a", encoding="utf-8"
 )

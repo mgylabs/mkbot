@@ -127,6 +127,27 @@ namespace MKBot
                 auto_connect = (bool)configjson["connectOnStart"] || CachedServerModeEnabled;
             }
 
+            if (auto_connect && !CachedServerModeEnabled && args.Contains("--post-update"))
+            {
+                if (Utils.IsAdministrator)
+                {
+                    Register_Task();
+                    ShowToast("Changed to Server Mode.", "The Discord bot was started automatically.");
+                }
+                else
+                {
+                    Process app_process = new Process();
+                    app_process.StartInfo.FileName = Application.ExecutablePath;
+                    app_process.StartInfo.WorkingDirectory = DirectoryPath;
+                    app_process.StartInfo.Arguments = "--switch-to-server";
+                    app_process.StartInfo.Verb = "runas";
+
+                    app_process.Start();
+
+                    Environment.Exit(0);
+                }
+            }
+
             Infowin = new InfoForm();
             Shellwin = new ShellForm(MKBotCore, auto_connect, !CachedServerModeEnabled || isTaskSchProcess);
 

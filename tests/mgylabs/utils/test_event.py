@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from mgylabs.utils.event import AsyncScheduler, SchTask
 
 
-async def test_AsyncScheduler_single_task():
+async def test_AsyncScheduler_single_task(needs_async_scheduler):
     for _ in range(2):
         task_result: datetime = None
         pending = asyncio.Event()
@@ -30,7 +30,7 @@ async def test_AsyncScheduler_single_task():
         assert AsyncScheduler.pending.is_set() is False
 
 
-async def test_AsyncScheduler_multiple_task():
+async def test_AsyncScheduler_multiple_task(needs_async_scheduler):
     task_result: dict[int, datetime] = {}
     pending = [asyncio.Event(), asyncio.Event()]
 

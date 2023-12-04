@@ -7,10 +7,11 @@ import pytest
 
 from mgylabs.db.database import db_session, run_downgrade_base, run_migrations
 from mgylabs.db.paths import DB_FILE, DB_URL, SCRIPT_DIR
+from mgylabs.utils.event import AsyncScheduler
 
 
 @pytest.fixture
-def event_loop():
+def new_event_loop():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     yield loop
@@ -77,3 +78,9 @@ def needs_database_without_session(cleanup_database):
     run_migrations(SCRIPT_DIR, DB_URL)
     yield
     run_downgrade_base(SCRIPT_DIR, DB_URL)
+
+
+@pytest.fixture()
+async def needs_async_scheduler():
+    yield
+    await AsyncScheduler.terminate()
