@@ -1454,7 +1454,7 @@ resolved_reference = "a63ebb1791558c04efff363b38012c290ae06bc5"
 
 [[package]]
 name = "mulgyeol-telemetry"
-version = "0.0.1a20+gc123c9b"
+version = "0.0.1a21+ge86d721"
 description = "Mulgyeol Telemetry SDK"
 optional = true
 python-versions = ">=3.8"
@@ -1467,8 +1467,8 @@ aiohttp = ">=3.7.4"
 [package.source]
 type = "git"
 url = "https://github.com/MycroftKang/application-insights-python.git"
-reference = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce"
-resolved_reference = "c123c9b165faa8afe1fe3bf9a6b76a7b9afae0ce"
+reference = "e86d721657e861773d256ab517ae075a4d1438d5"
+resolved_reference = "e86d721657e861773d256ab517ae075a4d1438d5"
 
 [[package]]
 name = "multidict"
@@ -2803,4 +2803,4 @@ release = ["mulgyeol-telemetry"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.*"
-content-hash = "6efcf16f09e0f7d7c8c9102992d5dcb58f61f31584c1e6c19e20e18924e20768"
+content-hash = "9fb5ed2d00a1ca461ba8bc37a1bc5a99889dc1fb91c623cdc7329ddbeb9d30a1"

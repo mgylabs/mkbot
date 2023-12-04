@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+import sys
 import time
 
 from mgylabs.utils.config import USER_DATA_PATH, is_development_mode
@@ -9,6 +10,29 @@ if is_development_mode():
     LOG_LEVEL = logging.INFO
 else:
     LOG_LEVEL = logging.INFO
+
+
+def is_docker() -> bool:
+    path = "/proc/self/cgroup"
+    return os.path.exists("/.dockerenv") or (
+        os.path.isfile(path) and any("docker" in line for line in open(path))
+    )
+
+
+def stream_supports_colour(stream) -> bool:
+    is_a_tty = hasattr(stream, "isatty") and stream.isatty()
+
+    # Pycharm and Vscode support colour in their inbuilt editors
+    if "PYCHARM_HOSTED" in os.environ or os.environ.get("TERM_PROGRAM") == "vscode":
+        return is_a_tty
+
+    if sys.platform != "win32":
+        # Docker does not consistently have a tty attached to it
+        return is_a_tty or is_docker()
+
+    # ANSICON checks for things like ConEmu
+    # WT_SESSION checks if this is Windows Terminal
+    return is_a_tty and ("ANSICON" in os.environ or "WT_SESSION" in os.environ)
 
 
 class ColorFormatter(logging.Formatter):
@@ -117,10 +141,13 @@ def configure_logger(file_path=LogPath.get(), cleanup=True):
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(LOG_LEVEL)
-    stream_handler.setFormatter(ColorFormatter())
+    stream_handler.setFormatter(
+        ColorFormatter() if stream_supports_colour(stream_handler.stream) else formatter
+    )
     file_handler = logging.FileHandler(file_path, mode="w", encoding="utf-8")
     file_handler.setLevel(LOG_LEVEL)
     file_handler.setFormatter(formatter)
+
     log.addHandler(stream_handler)
     log.addHandler(file_handler)
     log.setLevel(LOG_LEVEL)

@@ -83,7 +83,7 @@ class MsgFormatter:
 
         embed.set_footer(
             text="Powered by Mulgyeol MK Bot",
-            icon_url=MsgFormatter.avatar_url,
+            # icon_url=MsgFormatter.avatar_url,
         )
         return embed
 
@@ -123,7 +123,8 @@ class MsgFormatter:
             embed.add_field(**fd)
 
         embed.set_footer(
-            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+            text="Powered by Mulgyeol MK Bot",
+            # icon_url=MsgFormatter.avatar_url,
         )
 
         return embed
@@ -141,7 +142,8 @@ class MsgFormatter:
             embed.add_field(**fd)
 
         embed.set_footer(
-            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+            text="Powered by Mulgyeol MK Bot",
+            # icon_url=MsgFormatter.avatar_url,
         )
         return embed
 
@@ -170,6 +172,7 @@ class MsgFormatter:
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
         embed.set_footer(
-            text="Powered by Mulgyeol MK Bot", icon_url=MsgFormatter.avatar_url
+            text="Powered by Mulgyeol MK Bot",
+            # icon_url=MsgFormatter.avatar_url,
         )
         return embed

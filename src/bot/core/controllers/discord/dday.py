@@ -47,7 +47,8 @@ def get_dday_content(dday: int, name: str):
         return f"{'📅' if dday < 0 else '✅'} D{'{:+d}'.format(dday)} ({name})"
 
 
-def get_midnight_datetime(timezone, now: datetime = datetime.now(pytz.UTC)):
+def get_midnight_datetime(timezone, now: datetime = None):
+    now = now or datetime.now(pytz.UTC)
     now = now.astimezone(timezone)
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(
         days=1

@@ -130,10 +130,10 @@ class AsyncScheduler:
     @classmethod
     async def run(cls):
         while True:
-            if cls.pq:
-                cls.pending.clear()
-            else:
+            if not cls.pq:
                 await cls.pending.wait()
+
+            cls.pending.clear()
 
             try:
                 sch_task = await cls.get_target_task()
