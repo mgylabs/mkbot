@@ -69,14 +69,18 @@ def remaining_time_in_timezone(timezone, now: datetime = datetime.now(pytz.UTC))
     return remaining_time.seconds
 
 
-async def add_to_scheduler(bot: commands.Bot, cid: int, data: DDayData):
-    await AsyncScheduler.add_task(
-        SchTask(
-            get_midnight_datetime(data.date.tzinfo), do_update_ch_name(bot, cid, data)
-        )
-    )
+async def add_to_scheduler(
+    bot: commands.Bot, cid: int, data: DDayData, retry_soon=False
+):
+    if retry_soon:
+        date = datetime.now(pytz.UTC) + timedelta(minutes=5)
+    else:
+        date = get_midnight_datetime(data.date.tzinfo)
+
+    await AsyncScheduler.add_task(SchTask(date, do_update_ch_name(bot, cid, data)))
 
 
+@database.using_database
 async def do_update_ch_name(bot: commands.Bot, cid: int, data: DDayData):
     ch = bot.get_channel(cid)
     if not ch:
@@ -85,7 +89,7 @@ async def do_update_ch_name(bot: commands.Bot, cid: int, data: DDayData):
         return
 
     if time.time() - data.last_updated_at < 300:
-        await add_to_scheduler(bot, cid, data)
+        await add_to_scheduler(bot, cid, data, True)
         return
 
     day = calc_dday(data.date)
@@ -114,16 +118,21 @@ async def do_update_ch_name(bot: commands.Bot, cid: int, data: DDayData):
 
         await AsyncScheduler.add_task(SchTask(data.date, notify()))
 
-    try:
-        await ch.edit(name=get_dday_content(day, data.title))
-    except Exception:
-        traceback.print_exc()
+    content = get_dday_content(day, data.title)
+
+    if ch.name != content:
+        try:
+            await ch.edit(name=content)
+        except Exception:
+            traceback.print_exc()
+        else:
+            data.last_updated_at = time.time()
+            localStorage.dict_update("discord_dday_registry", {cid: data})
+            log.info(f"Update D-Day: {data.title}")
     else:
-        data.last_updated_at = time.time()
-        localStorage.dict_update("discord_dday_registry", {cid: data})
+        log.info(f"Skip Update D-Day: {data.title}")
 
     await add_to_scheduler(bot, cid, data)
-    log.info(f"Update D-Day: {data.title}")
 
 
 @database.using_database
@@ -148,10 +157,13 @@ class DDay(commands.Cog):
 
     def __init__(self, bot):
         self.bot: commands.Bot = bot
+        self.init_load = False
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await dday_loader(self.bot)
+        if not self.init_load:
+            self.init_load = True
+            await dday_loader(self.bot)
 
     @group.command()
     @app_commands.rename(time_str="time")

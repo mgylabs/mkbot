@@ -4,9 +4,10 @@ import shlex
 
 import discord
 from discord import app_commands
+from discord.app_commands import locale_str
 from discord.ext import commands
 
-from mgylabs.i18n import _L, __
+from mgylabs.i18n import __
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.MGCert import Level, MGCertificate
@@ -14,7 +15,7 @@ from .utils.MsgFormat import MsgFormatter
 
 
 @commands.hybrid_command(aliases=["rou"])
-@app_commands.describe(items=_L('item1 "item 2" "item3" ...'))
+@app_commands.describe(items=locale_str('item1 "item 2" "item3" ...'))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def roulette(ctx: commands.Context, *, items: str):
     """

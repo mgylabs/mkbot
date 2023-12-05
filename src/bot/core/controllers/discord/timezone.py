@@ -160,7 +160,7 @@ def _make_local_time_embed_(interaction, member):
     )
 
 
-@app_commands.context_menu(name=locale_str(_L("Show local time")))
+@app_commands.context_menu(name=locale_str("Show local time"))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 async def local_time(interaction: discord.Interaction, member: discord.Member):
     embed = _make_local_time_embed_(interaction, member)
