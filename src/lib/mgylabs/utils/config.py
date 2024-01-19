@@ -14,6 +14,15 @@ def is_development_mode(debug_mode=True):
     return not getattr(sys, "frozen", False) or debug_mode and ("--debug") in sys.argv
 
 
+def resource_path(relative_path):
+    if is_development_mode():
+        base_path = "../../resources"
+    else:
+        base_path = "../resources"
+
+    return os.path.join(base_path, relative_path)
+
+
 if is_development_mode():
     CONFIG_PATH = "../data/config.json"
     MGCERT_PATH = "../data/mgcert.json"

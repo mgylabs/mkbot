@@ -497,6 +497,13 @@ msgstr ""
 msgid "Report broken or incorrect behaviour"
 msgstr ""
 
+#, docstring
+msgid "Roll a dice."
+msgstr ""
+
+msgid "Rolling..."
+msgstr ""
+
 msgid "Roulette"
 msgstr ""
 

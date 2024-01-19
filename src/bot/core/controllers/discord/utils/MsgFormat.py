@@ -34,7 +34,7 @@ class MsgFormatter:
     @staticmethod
     def get(
         ctx_or_iaction,
-        title,
+        title=None,
         description=None,
         fields: list = [],
         show_req_user=True,
