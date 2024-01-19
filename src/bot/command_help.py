@@ -93,7 +93,7 @@ class CommandHelp(commands.DefaultHelpCommand):
         await self.send_pages()
 
     def get_opening_note(self) -> str:
-        description = f"> {__('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {__('Everyone can contribute to MK Bot project on %s.') % '<https://github.com/mgylabs/mkbot>'}"
+        description = f"> {__('Mulgyeol MK Bot is an Open Source Local-Hosted Discord Bot.')}\n> {__('Everyone can contribute to MK Bot project on %s.') % '[GitHub](https://github.com/mgylabs/mkbot)'}"
         if VERSION != None:
             version_desc = (
                 f"{__('Version')} {VERSION.base_version}.{VERSION.commit[:7]} Canary\n\n**{__('Be warned: Canary can be unstable.')}**"

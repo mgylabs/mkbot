@@ -214,7 +214,7 @@ class DDay(commands.Cog):
         data = DDayData(
             interaction.user.id,
             channel.id,
-            datetime(*date_ls, *time_ls, tzinfo=tz),
+            tz.localize(datetime(*date_ls, *time_ls)),
             title,
             offset,
         )
