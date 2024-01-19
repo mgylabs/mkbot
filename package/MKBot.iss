@@ -62,6 +62,7 @@ Source: "{#RepoDir}\build\*"; DestDir: "{code:GetDestDir}"; Flags: ignoreversion
 Source: "{#RepoDir}\build\bin\*"; DestDir: "{code:GetDestDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\package\info\*"; DestDir: "{code:GetDestDir}\info"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\resources\app\*"; DestDir: "{code:GetDestDir}\resources\app"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#RepoDir}\resources\common\*"; DestDir: "{code:GetDestDir}\resources\common"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\resources\*"; DestDir: "{code:GetDestDir}"; Flags: ignoreversion
 Source: "{#RepoDir}\locales\*.mo"; DestDir: "{code:GetDestDir}\bin\locales"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}\package\tools\Update.exe"; DestDir: "{app}"; Flags: ignoreversion

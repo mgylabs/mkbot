@@ -22,7 +22,9 @@ async def roll(ctx: commands.Context):
     Roll a dice.
     """
     embed = MsgFormatter.get(ctx, description=f"{Emoji.typing} {__('Rolling...')}")
-    dice_file = discord.File(resource_path("app/bot/Game Die.png"), filename="dice.png")
+    dice_file = discord.File(
+        resource_path("common/bot/Game Die.png"), filename="dice.png"
+    )
     embed.set_author(name="Dice", icon_url="attachment://dice.png")
 
     msg: discord.Message = await ctx.send(embed=embed, file=dice_file)
@@ -31,12 +33,14 @@ async def roll(ctx: commands.Context):
 
     DiscordEventLogEntry.Add(ctx, "DiceResult", {"result": result})
 
-    dice_file = discord.File(resource_path("app/bot/Game Die.png"), filename="dice.png")
+    dice_file = discord.File(
+        resource_path("common/bot/Game Die.png"), filename="dice.png"
+    )
 
     number_file_name = f"Keycap Digit {result}.png"
     discord_number_file_name = number_file_name.replace(" ", "")
     number_file = discord.File(
-        resource_path(f"app/bot/{number_file_name}"),
+        resource_path(f"common/bot/{number_file_name}"),
         filename=discord_number_file_name,
     )
 

@@ -14,21 +14,50 @@ cd "%~dp0.."
 mkdir build
 set CI_PROJECT_DIR=%cd%
 
-@ If /i "%1" == "--canary" (
+If /i "%1" == "--canary" (
     set CANARY_BUILD=true
-    rmdir /s /q resources
-    mkdir resources
+
+    cd resources
+
+    for /F "delims=" %%G in ('dir /b') do (
+        if /I NOT "%%G"=="common" (
+            REM check if it is a directory or file
+            IF EXIST "%%G\" (
+                rmdir "%%G" /s /q
+            ) else (
+                del "%%G" /q
+            )
+        )
+    )
+
+    cd ..
+
     xcopy /q /I /Y /E .resources\canary\* resources
 ) Else IF /i "%1" == "--stable" (
     set CANARY_BUILD=false
-    rmdir /s /q resources
-    mkdir resources
+
+    cd resources
+
+    for /F "delims=" %%G in ('dir /b') do (
+        if /I NOT "%%G"=="common" (
+            REM check if it is a directory or file
+            IF EXIST "%%G\" (
+                rmdir "%%G" /s /q
+            ) else (
+                del "%%G" /q
+            )
+        )
+    )
+
+    cd ..
+
     xcopy /q /I /Y /E .resources\stable\* resources
 )
 
 xcopy /q /I /Y /E package\data build\data
 xcopy /q /I /Y /E package\info build\info
 xcopy /q /I /Y resources\app build\resources\app
+xcopy /q /I /Y resources\common build\resources\common
 
 cd src\bot
 @ If /i "%1" == "--clean" (
