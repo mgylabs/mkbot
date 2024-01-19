@@ -601,7 +601,7 @@ async def create_bot(return_error_level=False):
 
     print("Mulgyeol MK Bot")
     print(f"Version {VERSION}" if VERSION != None else "Test Mode")
-    print("Copyright (c) 2023 Mulgyeol Labs. All rights reserved.\n")
+    print("Copyright (c) 2024 Mulgyeol Labs. All rights reserved.\n")
     print(f"{time.strftime('%a, %d %b %Y %H:%M:%S (GMT%z)', time.localtime())}\n")
 
     return bot if not return_error_level else errorlevel

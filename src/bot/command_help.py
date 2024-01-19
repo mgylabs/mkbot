@@ -225,7 +225,7 @@ class CommandHelp(commands.DefaultHelpCommand):
                 "Type {0} command for more info on a command.\n"
                 "You can also type {0} category for more info on a category."
             ).format(f"{self.context.clean_prefix}{command_name}")
-            + "_ _\n_ _\n© Mulgyeol Labs 2023"
+            + "_ _\n_ _\n© Mulgyeol Labs 2024"
         )
 
         return note
