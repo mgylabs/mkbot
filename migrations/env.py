@@ -2,6 +2,7 @@ import os
 import sys
 
 from alembic import context
+
 from mgylabs.db.database import Base
 from mgylabs.utils.config import USER_DATA_PATH
 
@@ -23,11 +24,11 @@ config = context.config
 
 if not config.get_main_option("sqlalchemy.url"):
     if is_development_mode():
-        config.set_main_option("sqlalchemy.url", "sqlite:///src\\data\\data.db")
+        config.set_main_option("sqlalchemy.url", "sqlite:///src/data/data.db")
     else:
         config.set_main_option(
             "sqlalchemy.url",
-            f"sqlite:///{os.getenv('LOCALAPPDATA')}\\{USER_DATA_PATH}\\data.db",
+            f"sqlite:///{os.getenv('LOCALAPPDATA')}/{USER_DATA_PATH}/data.db",
         )
 
 # Interpret the config file for Python logging.

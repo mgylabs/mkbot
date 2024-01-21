@@ -100,7 +100,7 @@ class StreamToLogger(object):
 
 
 class LogPath:
-    LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-{int(time.time())}.log"
+    LOG_FILE_PATH = f"{USER_DATA_PATH}/logs/bot/mkbot-{int(time.time())}.log"
 
     @classmethod
     def get(cls):
@@ -108,11 +108,11 @@ class LogPath:
 
     @classmethod
     def update(cls):
-        cls.LOG_FILE_PATH = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-{int(time.time())}.log"
+        cls.LOG_FILE_PATH = f"{USER_DATA_PATH}/logs/bot/mkbot-{int(time.time())}.log"
 
 
 def delete_old_logs(log, max_count=20):
-    p = f"{USER_DATA_PATH}\\logs\\bot\\mkbot-*.log"
+    p = f"{USER_DATA_PATH}/logs/bot/mkbot-*.log"
     files = list(filter(os.path.isfile, glob.glob(p)))
     files.sort(key=lambda x: os.path.getmtime(x))
 

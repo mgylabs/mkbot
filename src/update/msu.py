@@ -13,7 +13,7 @@ import requests
 from packaging import version
 from requests.sessions import HTTPAdapter
 
-sys.path.append("..\\lib")
+sys.path.append("../lib")
 
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils.version import VERSION
@@ -24,9 +24,11 @@ def is_development_mode():
 
 
 if is_development_mode():
-    CONFIG_PATH = "..\\data\\config.json"
+    CONFIG_PATH = "../data/config.json"
 else:
-    CONFIG_PATH = f"{os.getenv('LOCALAPPDATA')}\\Mulgyeol\\{VERSION.product_name}\\data\\config.json"
+    CONFIG_PATH = (
+        f"{os.getenv('LOCALAPPDATA')}/Mulgyeol/{VERSION.product_name}/data/config.json"
+    )
 
 
 def load_beta_update_config():
@@ -53,7 +55,7 @@ def instance_already_running(canary_build):
     else:
         lock_name = "mkbot_msu.lock"
 
-    fd = os.open(f"{os.getenv('TEMP')}\\{lock_name}", os.O_WRONLY | os.O_CREAT)
+    fd = os.open(f"{os.getenv('TEMP')}/{lock_name}", os.O_WRONLY | os.O_CREAT)
 
     try:
         msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
@@ -118,7 +120,7 @@ class BaseUpdater:
         self.session = requests.Session()
         self.session.mount("https://", HTTPAdapter(max_retries=3))
 
-        self.download_dir_path = os.getenv("TEMP") + f"\\{download_dir_name}"
+        self.download_dir_path = os.getenv("TEMP") + f"/{download_dir_name}"
         self.setup_base_name = setup_base_name
 
     def get_version_info(self, res):
@@ -174,7 +176,7 @@ class BaseUpdater:
 
         base = (
             self.download_dir_path
-            + f"\\{self.setup_base_name}-{self.target.version_str}"
+            + f"/{self.setup_base_name}-{self.target.version_str}"
         )
         self.setup_path = f"{base}.exe"
         self.flag_path = f"{base}.flag"
@@ -205,7 +207,7 @@ class BaseUpdater:
         if self.check_sha1_hash():
             self.run_setup()
         else:
-            download_file_name = f"{self.download_dir_path}\\{self.setup_base_name}.zip"
+            download_file_name = f"{self.download_dir_path}/{self.setup_base_name}.zip"
 
             if os.path.isdir(os.path.dirname(download_file_name)):
                 shutil.rmtree(os.path.dirname(download_file_name), ignore_errors=True)

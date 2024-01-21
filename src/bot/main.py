@@ -4,7 +4,7 @@ freeze_support()
 
 import sys
 
-sys.path.append("..\\lib")
+sys.path.append("../lib")
 from mgylabs.utils import logger
 
 logger.configure_logger()

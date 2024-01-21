@@ -2,7 +2,7 @@ import asyncio
 import sys
 
 if __name__ == "__main__":
-    sys.path.append("..\\lib")
+    sys.path.append("../lib")
     from mgylabs.utils import logger
 
     logger.configure_logger()

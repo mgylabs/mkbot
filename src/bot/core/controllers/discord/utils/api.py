@@ -14,9 +14,9 @@ def is_development_mode():
 
 
 if is_development_mode():
-    loc = "..\\..\\"
-    EXT_CONFIG_PATH = "..\\data\\extensions.json"
-    EXT_BIN_PATH = "..\\data\\ext.bin"
+    loc = "../../"
+    EXT_CONFIG_PATH = "../data/extensions.json"
+    EXT_BIN_PATH = "../data/ext.bin"
 else:
     if VERSION.is_canary():
         loc = os.getenv("USERPROFILE") + "\\.mkbot-canary\\"
@@ -27,8 +27,8 @@ else:
 
 extensions_path = loc + "extensions"
 
-if os.path.isfile(loc + "extensions\\extensions.json"):
-    with open(loc + "extensions\\extensions.json", "rt") as f:
+if os.path.isfile(loc + "extensions/extensions.json"):
+    with open(loc + "extensions/extensions.json", "rt") as f:
         default_exts = json.load(f)["extensions"]
 else:
     default_exts = {}
@@ -49,7 +49,7 @@ def get_enabled_extensions():
 
 
 def find_available_extension(name: str):
-    with open(loc + "extensions\\extensions.json", "rt") as f:
+    with open(loc + "extensions/extensions.json", "rt") as f:
         _default_exts = json.load(f)["extensions"]
     return _default_exts.get(name.lower(), None)
 
