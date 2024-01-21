@@ -1,0 +1,15 @@
+aiofiles
+aiohttp
+babel
+beautifulsoup4
+discord-py
+langdetect
+lxml
+packaging
+pyinstaller
+pynacl
+pytz
+pyyaml
+requests
+sqlalchemy
+yt-dlp
