@@ -2,13 +2,13 @@ import queue
 import re
 import subprocess
 import threading
-import traceback
 
-import simpleaudio as sa
+# import simpleaudio as sa
 import yt_dlp
 from MGBotBuilder import VirtualCommandConsole
-from mgylabs.utils.config import CONFIG
 from yt_dlp import YoutubeDL
+
+from mgylabs.utils.config import CONFIG
 
 music_controller = VirtualCommandConsole()
 
@@ -120,64 +120,64 @@ class FFPlayer:
             cls.stop_flag = False
 
 
-class Player:
-    process = None
-    player: sa.PlayObject = None
+# class Player:
+#     process = None
+#     player: sa.PlayObject = None
 
-    @classmethod
-    def is_process_running(cls):
-        return cls.process is not None and cls.process.poll() is None
+#     @classmethod
+#     def is_process_running(cls):
+#         return cls.process is not None and cls.process.poll() is None
 
-    @classmethod
-    def is_playing(cls):
-        return cls.player is not None and cls.player.is_playing()
+#     @classmethod
+#     def is_playing(cls):
+#         return cls.player is not None and cls.player.is_playing()
 
-    @classmethod
-    def stop(cls):
-        return cls.player is not None and cls.player.stop()
+#     @classmethod
+#     def stop(cls):
+#         return cls.player is not None and cls.player.stop()
 
-    @classmethod
-    def play(cls, music_url):
-        if cls.is_process_running():
-            cls.process.kill()
+#     @classmethod
+#     def play(cls, music_url):
+#         if cls.is_process_running():
+#             cls.process.kill()
 
-        if cls.is_playing():
-            cls.player.stop()
+#         if cls.is_playing():
+#             cls.player.stop()
 
-        try:
-            cls.process = subprocess.Popen(
-                [
-                    "ffmpeg",
-                    "-reconnect",
-                    "1",
-                    "-reconnect_streamed",
-                    "1",
-                    "-reconnect_delay_max",
-                    "5",
-                    "-i",
-                    music_url,
-                    "-f",
-                    "s16le",
-                    "-ar",
-                    "48000",
-                    "-ac",
-                    "2",
-                    "-loglevel",
-                    "warning",
-                    "-vn",
-                    "pipe:1",
-                ],
-                creationflags=subprocess.CREATE_NO_WINDOW,
-                stdout=subprocess.PIPE,
-            )
-        except FileNotFoundError:
-            print("FFmpeg not found")
-            raise Exception("FFmpeg not found")
-        try:
-            data = cls.process.stdout.read()
-            cls.player = sa.play_buffer(data, 2, 2, 48000)
-        except Exception:
-            traceback.print_exc()
+#         try:
+#             cls.process = subprocess.Popen(
+#                 [
+#                     "ffmpeg",
+#                     "-reconnect",
+#                     "1",
+#                     "-reconnect_streamed",
+#                     "1",
+#                     "-reconnect_delay_max",
+#                     "5",
+#                     "-i",
+#                     music_url,
+#                     "-f",
+#                     "s16le",
+#                     "-ar",
+#                     "48000",
+#                     "-ac",
+#                     "2",
+#                     "-loglevel",
+#                     "warning",
+#                     "-vn",
+#                     "pipe:1",
+#                 ],
+#                 creationflags=subprocess.CREATE_NO_WINDOW,
+#                 stdout=subprocess.PIPE,
+#             )
+#         except FileNotFoundError:
+#             print("FFmpeg not found")
+#             raise Exception("FFmpeg not found")
+#         try:
+#             data = cls.process.stdout.read()
+#             cls.player = sa.play_buffer(data, 2, 2, 48000)
+#         except Exception:
+#             traceback.print_exc()
 
 
 def add_to_song_queue(send, song: Song):

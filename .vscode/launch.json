@@ -8,9 +8,9 @@
       "name": "Python: Discord Host",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}\\src\\bot\\discord_host.py",
+      "program": "${workspaceFolder}/src/bot/discord_host.py",
       "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}\\src\\bot",
+      "cwd": "${workspaceFolder}/src/bot",
       "python": "${command:python.interpreterPath}",
       "autoReload": {
         "enable": true,
@@ -21,9 +21,9 @@
       "name": "Python: main.py",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}\\src\\bot\\main.py",
+      "program": "${workspaceFolder}/src/bot/main.py",
       "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}\\src\\bot",
+      "cwd": "${workspaceFolder}/src/bot",
       "python": "${command:python.interpreterPath}",
       "autoReload": {
         "enable": true,
