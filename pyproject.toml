@@ -21,7 +21,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
 aiofiles = "0.8.0"
-alembic = "1.9.1"
+alembic = "1.13.1"
 babel = "2.11.0"
 beautifulsoup4 = "4.12.3"
 discord-py = "2.3.2"

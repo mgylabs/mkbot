@@ -1,7 +1,11 @@
 import asyncio
+import os
+import pathlib
 import sys
 
 if __name__ == "__main__":
+    os.chdir(pathlib.Path(__file__).parent.resolve())
+
     sys.path.append("../lib")
     from mgylabs.utils import logger
 

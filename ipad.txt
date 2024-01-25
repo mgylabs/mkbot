@@ -1,5 +1,6 @@
 aiofiles
 aiohttp
+alembic
 babel
 beautifulsoup4
 discord-py
@@ -11,5 +12,5 @@ pynacl
 pytz
 pyyaml
 requests
-sqlalchemy
+sqlalchemy==1.*
 yt-dlp

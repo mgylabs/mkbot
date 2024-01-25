@@ -11,9 +11,9 @@ repos:
         exclude: locales/
       - id: check-yaml
 
-  - repo: https://github.com/python-poetry/poetry-plugin-export
-    rev: '1.6.0'
-    hooks:
-      - id: poetry-export
-        args: ["-f", "requirements.txt", "--output", "requirements.txt", "--without-hashes"]
-        verbose: true
+  # - repo: https://github.com/python-poetry/poetry-plugin-export
+  #   rev: '1.6.0'
+  #   hooks:
+  #     - id: poetry-export
+  #       args: ["-f", "requirements.txt", "--output", "requirements.txt", "--without-hashes"]
+  #       verbose: true

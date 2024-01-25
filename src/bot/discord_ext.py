@@ -1,3 +1,5 @@
+import platform
+
 discord_extensions = (
     "core.controllers.discord.dev",
     # "core.controllers.discord.admin",
@@ -11,7 +13,6 @@ discord_extensions = (
     "core.controllers.discord.roulette",
     "core.controllers.discord.roll",
     # "core.controllers.discord.translate",
-    "core.controllers.discord.music",
     "core.controllers.discord.tic_tac_toe",
     "core.controllers.discord.feedback",
     "core.controllers.discord.timezone",
@@ -23,3 +24,7 @@ discord_extensions = (
     "core.controllers.discord.google",
     "core.controllers.discord.url",
 )
+
+
+if not (platform.uname().machine.startswith("iP")):
+    discord_extensions += ("core.controllers.discord.music",)
