@@ -5,6 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: mkbot.py",
+      "type": "python",
+      "request": "attach",
+      "listen": {
+        "host": "127.0.0.1",
+        "port": 5678
+      },
+      "restart": true,
+      "preLaunchTask": "Discord Host with Debugpy",
+    },
+    {
       "name": "Python: Discord Host",
       "type": "python",
       "request": "launch",
@@ -15,7 +26,7 @@
       "autoReload": {
         "enable": true,
       },
-      "justMyCode": true
+      "justMyCode": true,
     },
     {
       "name": "Python: main.py",
@@ -26,17 +37,8 @@
       "cwd": "${workspaceFolder}/src/bot",
       "python": "${command:python.interpreterPath}",
       "autoReload": {
-        "enable": true,
+        "enable": true
       }
-    },
-    {
-      "name": "Python: nodemon",
-      "type": "python",
-      "request": "attach",
-      "connect": {
-        "host": "127.0.0.1",
-        "port": 5678
-      },
     },
     {
       "name": "Python: Attach using Process Id",
@@ -53,8 +55,8 @@
       "cwd": "${fileDirname}",
       "python": "${command:python.interpreterPath}",
       "autoReload": {
-        "enable": true,
+        "enable": true
       }
-    },
+    }
   ]
 }

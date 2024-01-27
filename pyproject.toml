@@ -40,7 +40,7 @@ mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights
 
 [tool.poetry.group.dev.dependencies]
 black = "22.3.0"
-debugpy = "1.6.5"
+debugpy = "^1.8.0"
 flake8 = "6.0.0"
 pre-commit = "2.17.0"
 pylint = "2.15.10"
@@ -48,6 +48,7 @@ pytest = "7.4.3"
 pytest-asyncio = "0.23.2"
 pytest-mock = "3.10.0"
 ipykernel = "^6.27.1"
+watchdog = "^3.0.0"
 
 [tool.poetry.extras]
 release = ["mulgyeol-telemetry"]
