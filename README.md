@@ -66,7 +66,7 @@ Self-host discord bot on your own local Windows PC.
 
 4. Run `MKBotSetup-Pre.exe` to install `MK Bot`.
 
-> **Note**  
+> [!Note]
 > If you install MK Bot manually, MK Bot will not auto-update when new builds are released so you will need to regularly build and install from source to receive all the latest fixes and improvements.
 
 ---
