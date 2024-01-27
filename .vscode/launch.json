@@ -13,7 +13,6 @@
         "port": 5678
       },
       "restart": true,
-      "preLaunchTask": "Discord Host with Debugpy",
     },
     {
       "name": "Python: Discord Host",
