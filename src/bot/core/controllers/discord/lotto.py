@@ -9,7 +9,7 @@ from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 
-@commands.command()
+@commands.hybrid_command()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 @related_commands(["roulette", "dice", "dday set"])
 async def lotto(ctx: commands.Context):
