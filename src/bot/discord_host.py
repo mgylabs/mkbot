@@ -32,6 +32,7 @@ from discord.ui import Button, View
 import views
 from command_help import CommandHelp
 from core.controllers.discord.utils import api
+from core.controllers.discord.utils.command_helper import AppCommandDict
 from core.controllers.discord.utils.exceptions import NonFatalError, UsageError
 from core.controllers.discord.utils.MGCert import MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
@@ -318,6 +319,9 @@ async def create_bot(return_error_level=False):
             await bot.tree.set_translator(MKBotTranslator())
 
             if is_development_mode():
+                cmds = await bot.tree.fetch_commands()
+                AppCommandDict.parse(cmds)
+
                 for guild in CONFIG.discordAppCmdGuilds:
                     try:
                         guild = int(guild)
@@ -332,6 +336,8 @@ async def create_bot(return_error_level=False):
                     )
             else:
                 cmds = await bot.tree.sync()
+
+                AppCommandDict.parse(cmds)
 
                 TelemetryReporter.Event(
                     "AppCommandSynced",
@@ -383,10 +389,6 @@ async def create_bot(return_error_level=False):
                 await bot.change_presence(
                     status=discord.Status.online, activity=activity
                 )
-
-            await ctx.send(
-                "[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▶"))
-            )
 
             await ReleaseNotify.run(message.author.id, message.channel.send)
 
@@ -476,9 +478,7 @@ async def create_bot(return_error_level=False):
         interaction: discord.Interaction,
         command: Union[discord.app_commands.Command, discord.app_commands.ContextMenu],
     ):
-        await interaction.channel.send(
-            "[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▶"))
-        )
+        pass
 
     async def on_app_command_error(
         interaction: discord.Interaction,

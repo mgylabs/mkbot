@@ -11,7 +11,7 @@ discord_extensions = (
     # "core.controllers.discord.tts",
     "core.controllers.discord.poll",
     "core.controllers.discord.roulette",
-    "core.controllers.discord.roll",
+    "core.controllers.discord.dice",
     # "core.controllers.discord.translate",
     "core.controllers.discord.tic_tac_toe",
     "core.controllers.discord.feedback",

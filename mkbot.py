@@ -16,7 +16,11 @@ if not sys.platform.startswith("win"):
 else:
 
     def kill_process(pid, stop_signal):
-        parent = psutil.Process(pid)
+        try:
+            parent = psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            return
+
         children = parent.children(recursive=True)
 
         os.kill(pid, stop_signal)
@@ -27,7 +31,7 @@ else:
 
 class MKBotAutoRestartTrick(AutoRestartTrick):
     def _restart_process(self):
-        print("====== Restart MK Bot Discord Host ======")
+        print("\n====== Restart MK Bot Discord Host ======\n")
         return super()._restart_process()
 
     def _start_process(self):
@@ -141,7 +145,7 @@ def auto_restart(args: AutoRestartArgs):
         args.directories = ["."]
 
     # Allow either signal name or number.
-    if type(args.signal) == str and args.signal.startswith("SIG"):
+    if isinstance(args.signal, str) and args.signal.startswith("SIG"):
         stop_signal = getattr(signal, args.signal)
     else:
         stop_signal = int(args.signal)

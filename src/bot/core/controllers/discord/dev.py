@@ -1,12 +1,12 @@
 import ast
 import asyncio
 import copy
-import inspect
 import io
 import re
 import textwrap
 import traceback
 from contextlib import redirect_stdout
+from inspect import CO_COROUTINE  # pylint: disable=no-name-in-module
 from typing import Any, Optional, Union
 
 import aiohttp
@@ -14,9 +14,24 @@ import discord
 from discord.ext import commands
 
 from mgylabs.i18n import __
-from mgylabs.utils.config import is_development_mode
+from mgylabs.utils.config import VERSION, is_development_mode
 
-START_CODE_BLOCK_RE = re.compile(r"^((```py(thon)?)(?=\s)|(```))")
+from .utils.MGCert import is_in_guild
+
+START_CODE_BLOCK_RE = re.compile(r"^((```py(thon)?\s*)|(```\s*))")
+
+
+# https://github.com/python/cpython/pull/13148#issuecomment-489899103
+def is_async(co):
+    return co.co_flags & CO_COROUTINE == CO_COROUTINE
+
+
+if is_development_mode(False):
+    hidden = False
+    enabled = True
+else:
+    hidden = True
+    enabled = False
 
 
 class Dev(commands.Cog):
@@ -36,7 +51,8 @@ class Dev(commands.Cog):
         # """Automatically removes code blocks from the code."""
         # remove ```py\n```
         if content.startswith("```") and content.endswith("```"):
-            return START_CODE_BLOCK_RE.sub("", content)[:-3]
+            content = START_CODE_BLOCK_RE.sub("", content)[:-3]
+            return content.strip(" \n")
 
         # remove `foo`
         return content.strip("` \n")
@@ -63,7 +79,8 @@ class Dev(commands.Cog):
 
         return env
 
-    @commands.command(hidden=False, name="eval")
+    @commands.command(hidden=hidden, name="eval")
+    @is_in_guild(VERSION.MBDS_ID)
     @commands.is_owner()
     async def _eval(self, ctx: commands.Context, *, body: str):
         """
@@ -126,7 +143,8 @@ class Dev(commands.Cog):
                 self._last_result = ret
                 await ctx.send(f"```py\n{value}{ret}\n```")
 
-    @commands.command(hidden=False)
+    @commands.command(hidden=hidden)
+    @is_in_guild(VERSION.MBDS_ID)
     @commands.is_owner()
     async def repl(self, ctx: commands.Context):
         """
@@ -218,9 +236,12 @@ class Dev(commands.Cog):
 
             try:
                 with redirect_stdout(stdout):
-                    result = executor(code, env)
-                    if inspect.isawaitable(result):
-                        result = await result
+                    if is_async(code):
+                        result = await eval(code, env)
+                    else:
+                        result = executor(code, env)
+                    # if inspect.isawaitable(result):
+                    #     result = await result
             except Exception:
                 value = stdout.getvalue()
 
@@ -255,7 +276,7 @@ class Dev(commands.Cog):
             except discord.HTTPException as e:
                 await ctx.send("Unexpected error: `{error}`".format(error=e))
 
-    @commands.command(hidden=False)
+    @commands.command(hidden=hidden, enabled=enabled)
     @commands.is_owner()
     async def sudo(
         self,
@@ -274,7 +295,7 @@ class Dev(commands.Cog):
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(hidden=hidden, enabled=enabled, invoke_without_command=True)
     @commands.is_owner()
     @commands.guild_only()
     async def sync(
@@ -295,7 +316,7 @@ class Dev(commands.Cog):
 
         await ctx.send(f"Successfully synced {len(commands)} commands")
 
-    @sync.command(name="global")
+    @sync.command(hidden=hidden, enabled=enabled, name="global")
     @commands.is_owner()
     async def sync_global(self, ctx: commands.Context):
         """Syncs the commands globally"""
@@ -306,6 +327,4 @@ class Dev(commands.Cog):
 
 async def setup(bot: commands.Bot):
     """Dev"""
-
-    if is_development_mode(False):
-        await bot.add_cog(Dev(bot))
+    await bot.add_cog(Dev(bot))

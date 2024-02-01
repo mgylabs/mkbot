@@ -221,7 +221,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-msgid "Give Feedback ▶"
+msgid "Give Feedback ▷"
 msgstr ""
 
 msgid "Hangman"
@@ -501,7 +501,7 @@ msgstr ""
 msgid "Roll a dice."
 msgstr ""
 
-msgid "Rolling..."
+msgid "Rolling a dice..."
 msgstr ""
 
 msgid "Roulette"

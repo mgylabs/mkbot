@@ -2,12 +2,14 @@ from discord.ext import commands
 
 from mgylabs.i18n import __
 
+from .utils.command_helper import related_commands
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
 
 @commands.command()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
+@related_commands(["dice", "lotto", "dday set"])
 async def poll(ctx: commands.Context, question, *candidates):
     """
     Poll command

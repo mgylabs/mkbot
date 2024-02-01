@@ -1,4 +1,5 @@
 import itertools
+from datetime import datetime
 
 from sqlalchemy.orm import joinedload
 
@@ -23,6 +24,14 @@ def gen(r):
     return d
 
 
+def gen2(r):
+    d = row2dict(r)
+    d.pop("request_id")
+    d["request"] = gen(r.request)
+
+    return d
+
+
 def group_by(d, k):
     return [(sk, [t[1] for t in g]) for sk, g in itertools.groupby(d, k)]
 
@@ -30,35 +39,43 @@ def group_by(d, k):
 @database.using_database
 def usage_helper():
     last_log_id = localStorage["telemetry_last_log_id"]
-    last_event_log_id = localStorage["telemetry_last_event_log_id"]
+    last_at = localStorage["telemetry_last_at"]
 
     if last_log_id is None:
         last_log_id = 0
 
-    if last_event_log_id is None:
-        last_event_log_id = 0
+    if last_at is None:
+        last_at = datetime.utcnow()
+
+    current_time = datetime.utcnow()
 
     out = (
-        DiscordBotRequestLog.query.filter(DiscordBotRequestLog.id > last_log_id)
+        DiscordBotRequestLog.query.filter(
+            DiscordBotRequestLog.id > last_log_id,
+            current_time >= DiscordBotRequestLog.created_at,
+        )
         .order_by(DiscordBotRequestLog.created_at)
-        .options(joinedload(DiscordBotRequestLog.user))
-        .options(joinedload(DiscordBotRequestLog.events))
+        .options(
+            joinedload(DiscordBotRequestLog.user),
+            joinedload(DiscordBotRequestLog.events),
+        )
         .all()
     )
 
     up = (
-        DiscordBotRequestLog.query.filter(
-            DiscordBotRequestLog.id
-            == DiscordBotCommandEventLog.query.with_entities(
-                DiscordBotCommandEventLog.request_id
-            )
-            .filter(DiscordBotCommandEventLog.id > last_event_log_id)
-            .subquery()
-            .c.request_id
+        DiscordBotCommandEventLog.query.filter(
+            last_log_id >= DiscordBotCommandEventLog.request_id,
+            current_time >= DiscordBotCommandEventLog.created_at,
+            DiscordBotCommandEventLog.created_at > last_at,
         )
+        .order_by(DiscordBotCommandEventLog.created_at)
         .options(
-            joinedload(DiscordBotRequestLog.user),
-            joinedload(DiscordBotRequestLog.events),
+            joinedload(DiscordBotCommandEventLog.request).joinedload(
+                DiscordBotRequestLog.user
+            ),
+            joinedload(DiscordBotCommandEventLog.request).joinedload(
+                DiscordBotRequestLog.events
+            ),
         )
         .all()
     )
@@ -67,11 +84,12 @@ def usage_helper():
 
         @database.using_database
         def callback():
-            localStorage["telemetry_last_log_id"] = len(out) + last_log_id
-            localStorage["telemetry_last_event_log_id"] = len(up) + last_event_log_id
+            if len(out):
+                localStorage["telemetry_last_log_id"] = out[-1].id
+            localStorage["telemetry_last_at"] = current_time
 
         TelemetryReporter.Event(
             "Usage",
-            {"data": {"request": list(map(gen, out)), "update": list(map(gen, up))}},
+            {"data": {"request": list(map(gen, out)), "update": list(map(gen2, up))}},
             callback,
         )
