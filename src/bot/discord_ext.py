@@ -8,7 +8,7 @@ discord_extensions = (
     "core.controllers.discord.leave",
     "core.controllers.discord.logout",
     "core.controllers.discord.ping",
-    # "core.controllers.discord.tts",
+    "core.controllers.discord.voice",
     "core.controllers.discord.poll",
     "core.controllers.discord.roulette",
     "core.controllers.discord.dice",

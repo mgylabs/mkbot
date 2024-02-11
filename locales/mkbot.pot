@@ -245,9 +245,6 @@ msgstr ""
 msgid "Invalid language"
 msgstr ""
 
-msgid "Invalid parameter. For more information, type `{commandPrefix}help tts`."
-msgstr ""
-
 msgid "Invalid time format. The required format is `<hour>:<minute>`."
 msgstr ""
 
@@ -695,12 +692,10 @@ msgstr ""
 #, docstring
 msgid ""
 "TTS voice available\n"
-"{commandPrefix}tts [option] \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n"
+"{commandPrefix}tts \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n"
 "\n"
 "*Example*\n"
-"{commandPrefix}tts \"Content\"\n"
-"{commandPrefix}tts -m \"Content\"\n"
-"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
+"{commandPrefix}tts \"Content\""
 msgstr ""
 
 #, docstring

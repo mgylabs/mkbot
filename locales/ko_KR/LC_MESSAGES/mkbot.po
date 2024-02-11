@@ -834,7 +834,7 @@ msgid "Your enemy is not ready yet, please wait until they are"
 msgstr "적이 아직 준비되지 않았습니다, 잠시 기다려주세요"
 
 msgid "[MK Bot]({url}) said on behalf of {author}"
-msgstr "[MK Bot]({url}) {author}을(를) 대신하여 말했습니다"
+msgstr "[MK Bot]({url})이 {author}을(를) 대신하여 말했습니다."
 
 msgid "chose... %s!"
 msgstr "선택... %s!"
