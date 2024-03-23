@@ -158,6 +158,9 @@ class MKBot(commands.Bot):
 
         ctx = await self.get_context(message)
 
+        if ctx.command is None:
+            return False
+
         if not await self.check_init_user_locale(ctx, message):
             return False
 
