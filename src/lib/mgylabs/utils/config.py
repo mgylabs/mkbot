@@ -55,6 +55,7 @@ class Settings:
     gitlabToken = SettingItem("")
     mgylabsToken = SettingItem("")
     enabledChatMode = SettingItem(False)
+    showFeedbackLink = SettingItem(True)
     betaUpdate = SettingItem(False)
 
     def __init__(self, data):

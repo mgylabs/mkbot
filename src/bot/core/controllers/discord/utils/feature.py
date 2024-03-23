@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from core.controllers.discord.utils.command_helper import send
 from mgylabs.i18n import __
-from mgylabs.utils.config import VERSION, is_development_mode
+from mgylabs.utils.config import CONFIG, VERSION, is_development_mode
 
 
 class Feature:
@@ -45,10 +45,16 @@ class Feature:
                 else:
                     await send(
                         ctx_or_iaction,
-                        __(
-                            "This command is an experimental feature and only available when you have access to the **MK Bot Support Server**."
-                        )
-                        + "\nhttps://discord.gg/3RpDwjJCeZ",
+                        (
+                            __(
+                                "This command is an experimental feature and only available when you have access to the **MK Bot Support Server**."
+                            )
+                            + (
+                                "\nhttps://discord.gg/3RpDwjJCeZ"
+                                if CONFIG.showFeedbackLink
+                                else ""
+                            )
+                        ),
                     )
                     return
 

@@ -81,11 +81,14 @@ class MsgFormatter:
                     name="Requested by", value="<@{}>".format(user_id), inline=False
                 )
 
-        embed.add_field(
-            value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▷")),
-            name="",
-            inline=False,
-        )
+        if CONFIG.showFeedbackLink:
+            embed.add_field(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                    __("Give Feedback ▷")
+                ),
+                name="",
+                inline=False,
+            )
 
         embed.set_footer(
             text="Powered by Mulgyeol MK Bot",
@@ -129,11 +132,14 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
-        embed.add_field(
-            value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▷")),
-            name="",
-            inline=False,
-        )
+        if CONFIG.showFeedbackLink:
+            embed.add_field(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                    __("Give Feedback ▷")
+                ),
+                name="",
+                inline=False,
+            )
 
         embed.set_footer(
             text="Powered by Mulgyeol MK Bot",
@@ -154,11 +160,14 @@ class MsgFormatter:
         for fd in fields:
             embed.add_field(**fd)
 
-        embed.add_field(
-            value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▷")),
-            name="",
-            inline=False,
-        )
+        if CONFIG.showFeedbackLink:
+            embed.add_field(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                    __("Give Feedback ▷")
+                ),
+                name="",
+                inline=False,
+            )
 
         embed.set_footer(
             text="Powered by Mulgyeol MK Bot",
@@ -192,11 +201,14 @@ class MsgFormatter:
 
             embed.add_field(name="Requested by", value="<@{}>".format(user_id))
 
-        embed.add_field(
-            value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(__("Give Feedback ▷")),
-            name="",
-            inline=False,
-        )
+        if CONFIG.showFeedbackLink:
+            embed.add_field(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                    __("Give Feedback ▷")
+                ),
+                name="",
+                inline=False,
+            )
 
         embed.set_footer(
             text="Powered by Mulgyeol MK Bot",
