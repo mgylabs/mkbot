@@ -430,7 +430,9 @@ async def create_bot(return_error_level=False):
             )
             return
 
-        if isinstance(error, commands.CommandInvokeError):
+        if isinstance(error, commands.CommandInvokeError) or isinstance(
+            error, commands.HybridCommandError
+        ):
             tb = "".join(traceback.format_exception(None, error, error.__traceback__))[
                 :1700
             ]

@@ -23,6 +23,7 @@ discord_extensions = (
     "core.controllers.discord.language",
     "core.controllers.discord.google",
     "core.controllers.discord.url",
+    "core.controllers.discord.news",
 )
 
 

@@ -239,6 +239,9 @@ msgstr ""
 msgid "Invalid URL"
 msgstr ""
 
+msgid "Invalid category."
+msgstr ""
+
 msgid "Invalid date format. The required format is `<year/month/day>`"
 msgstr ""
 
@@ -336,6 +339,10 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+#, docstring
+msgid "News"
+msgstr ""
+
 msgid "Next song will be automatically recommended"
 msgstr ""
 
@@ -355,6 +362,9 @@ msgid "No reaction was added. Please add a reaction to choose a song"
 msgstr ""
 
 msgid "Not Playing Error"
+msgstr ""
+
+msgid "Notification time (Your time zone is {offset})"
 msgstr ""
 
 msgid "Now Playing"
@@ -457,6 +467,9 @@ msgstr ""
 msgid "Please Enter a word."
 msgstr ""
 
+msgid "Please enter your query."
+msgstr ""
+
 msgid "Please see the [Release Note](%s) for more information."
 msgstr ""
 
@@ -509,6 +522,26 @@ msgstr ""
 
 #, docstring
 msgid "Run a command as another user optionally in another channel."
+msgstr ""
+
+#, docstring
+msgid "Search for news or set up news notifications."
+msgstr ""
+
+#, docstring
+msgid ""
+"Search for news or set up news notifications.\n"
+"\n"
+"{commandPrefix}news search microsoft\n"
+"{commandPrefix}news category IT/Science"
+msgstr ""
+
+#, docstring
+msgid "Search news by category or set up news notifications."
+msgstr ""
+
+#, docstring
+msgid "Search news by keyword or set up news notifications."
 msgstr ""
 
 #, docstring
@@ -662,6 +695,15 @@ msgid ""
 "{commandPrefix}stop"
 msgstr ""
 
+msgid "Subscribe"
+msgstr ""
+
+msgid "Subscribe to News"
+msgstr ""
+
+msgid "Subscribed"
+msgstr ""
+
 msgid "Successfully set D-Day widget."
 msgstr ""
 
@@ -723,6 +765,9 @@ msgstr ""
 msgid "This command is an experimental feature and only available when you have access to the **MK Bot Support Server**."
 msgstr ""
 
+msgid "This feature is not yet supported."
+msgstr ""
+
 msgid "This is a game between two other people, sorry."
 msgstr ""
 
@@ -777,6 +822,12 @@ msgid ""
 msgstr ""
 
 msgid "Unloading... `%s`"
+msgstr ""
+
+msgid "Unsubscribe"
+msgstr ""
+
+msgid "Unsubscribed"
 msgstr ""
 
 msgid "User"
@@ -871,6 +922,12 @@ msgstr ""
 msgid ""
 "{title} - {length}\n"
 "added in queue"
+msgstr ""
+
+msgid "📰 Here is the news related to `{query}`"
+msgstr ""
+
+msgid "📰 News search results for `{query}`"
 msgstr ""
 
 msgid "🔍 Google search results for `{query}`"

@@ -516,7 +516,7 @@ msgstr "YouTube에서 음악을 검색합니다.\n"
 "이모티콘을 사용하여 선택할 수 있는 5 가지 선택지를 보여줍니다."
 
 msgid "Searching... `%s`"
-msgstr "검색 중... '%s`"
+msgstr "검색 중... `%s`"
 
 msgid "Select a piece strength"
 msgstr "조각 강도 선택"

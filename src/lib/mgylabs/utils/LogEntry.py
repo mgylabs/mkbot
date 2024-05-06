@@ -59,11 +59,13 @@ class DiscordRequestLogEntry:
 
 class DiscordEventLogEntry:
     @classmethod
-    def Add(cls, ctx_or_iaction, event, properties={}):
-        if isinstance(ctx_or_iaction, commands.Context):
-            cls._add(ctx_or_iaction, event, properties)
-        elif isinstance(ctx_or_iaction, discord.Interaction):
-            cls._add_for_iaction(ctx_or_iaction, event, properties)
+    def Add(cls, ctx_or_msg_id, event, properties={}):
+        if isinstance(ctx_or_msg_id, commands.Context):
+            cls._add(ctx_or_msg_id, event, properties)
+        elif isinstance(ctx_or_msg_id, discord.Interaction):
+            cls._add_for_iaction(ctx_or_msg_id, event, properties)
+        elif isinstance(ctx_or_msg_id, int):
+            cls._add_by_log_id(ctx_or_msg_id, event, properties)
         else:
             raise TypeError("Inappropriate argument type: Context or Interaction only")
 
@@ -71,6 +73,14 @@ class DiscordEventLogEntry:
     def _add(cls, ctx, event, properties={}):
         DiscordBotCommandEventLog.create(
             request_id=DiscordBotRequestLog.get_one(msg_id=ctx.message.id).id,
+            event=event,
+            properties=json2str(properties),
+        )
+
+    @classmethod
+    def _add_by_log_id(cls, msg_id, event, properties={}):
+        DiscordBotCommandEventLog.create(
+            request_id=DiscordBotRequestLog.get_one(msg_id=msg_id).id,
             event=event,
             properties=json2str(properties),
         )

@@ -215,3 +215,47 @@ class MsgFormatter:
             # icon_url=MsgFormatter.avatar_url,
         )
         return embed
+
+    @staticmethod
+    def news(
+        title,
+        description=None,
+        press=None,
+        press_image_url=None,
+        fields: list = [],
+        *,
+        thumbnail_url: str = None,
+        image_url: str = None,
+        color: str = None,
+        url: str = None,
+    ):
+        if color is None:
+            color = get_color()
+        else:
+            color = color_to_int(color)
+
+        if not description:
+            description = ""
+
+        embed = discord.Embed(
+            title=title,
+            description=description.format(commandPrefix=CONFIG.commandPrefix),
+            color=color,
+            url=url,
+        )
+
+        if thumbnail_url:
+            embed.set_thumbnail(url=thumbnail_url)
+
+        if image_url:
+            embed.set_image(url=image_url)
+
+        for fd in fields:
+            embed.add_field(**fd)
+
+        embed.set_footer(
+            text=press,
+            icon_url=press_image_url,
+        )
+
+        return embed

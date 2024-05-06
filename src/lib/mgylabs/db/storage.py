@@ -38,6 +38,13 @@ class Storage:
         assert isinstance(obj, dict)
         return obj.get(dict_key)
 
+    def dict_include(self, key, dict_key):
+        obj = self.__getitem__(key)
+        if obj is None:
+            return False
+        assert isinstance(obj, dict)
+        return dict_key in obj
+
     def dict_update(self, key, value: dict):
         with database.transaction():
             obj = self.__getitem__(key)
