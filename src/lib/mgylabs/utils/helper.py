@@ -1,5 +1,5 @@
 import itertools
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy.orm import joinedload
 
@@ -45,9 +45,9 @@ def usage_helper():
         last_log_id = 0
 
     if last_at is None:
-        last_at = datetime.utcnow()
+        last_at = datetime.now(timezone.utc).replace(tzinfo=None)
 
-    current_time = datetime.utcnow()
+    current_time = datetime.now(timezone.utc).replace(tzinfo=None)
 
     out = (
         DiscordBotRequestLog.query.filter(

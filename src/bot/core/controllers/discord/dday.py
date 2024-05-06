@@ -58,17 +58,6 @@ def get_midnight_datetime(timezone, now: datetime = None):
     return midnight
 
 
-def remaining_time_in_timezone(timezone, now: datetime = datetime.now(pytz.UTC)) -> int:
-    now = now.astimezone(timezone)
-    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(
-        days=1
-    )
-    remaining_time = midnight - now
-
-    log.info(f"Remaining Time: {remaining_time}")
-    return remaining_time.seconds
-
-
 async def add_to_scheduler(
     bot: commands.Bot, cid: int, data: DDayData, retry_soon=False
 ):
