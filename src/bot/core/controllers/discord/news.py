@@ -97,6 +97,10 @@ async def search_by_query(term, num_results=1, pd=PD):
         )
         if press_image_url:
             press_image_url = press_image_url["data-lazysrc"]
+
+            if not press_image_url.startswith("http"):
+                press_image_url = "https://ssl.pstatic.net/sstatic/search/mobile/img/bg_news_press_default.png"
+
         timestamp = result.select_one(
             "div.news_wrap > div.news_info > div.info_group > span:nth-child(2)"
         ).get_text()
@@ -409,7 +413,7 @@ class NotificationButtonOn(discord.ui.Button):
 
     async def callback(self, interaction: discord.Interaction):
         self.fv = NotificationModal(
-            self.keyword, interaction.user, self.msg_id, self, self.view
+            self.keyword, self.provider, interaction.user, self.msg_id, self, self.view
         )
         await interaction.response.send_modal(self.fv)
         self.view.stop()
@@ -476,6 +480,7 @@ class NotificationModal(discord.ui.Modal):
     def __init__(
         self,
         keyword: str,
+        provider: str,
         member: discord.member,
         msg_id: int,
         button: discord.ui.Button,
@@ -483,6 +488,7 @@ class NotificationModal(discord.ui.Modal):
         **kwargs,
     ) -> None:
         self.keyword = keyword
+        self.provider = provider
         self.msg_id = msg_id
         self.button = button
         self.view = view
@@ -502,7 +508,11 @@ class NotificationModal(discord.ui.Modal):
         if registry is None:
             localStorage["discord_news_registry"] = {}
 
-        timestamp = datetime.strptime(self.summary.value, "%H:%M")
+        try:
+            timestamp = datetime.strptime(self.summary.value, "%H:%M")
+        except ValueError:
+            log.info("Invalid time format")
+            return
 
         data = NewsNotifyData(
             interaction.user.id,
@@ -512,6 +522,7 @@ class NotificationModal(discord.ui.Modal):
             timestamp.minute,
             self.keyword,
             datetime.now(pytz.UTC),
+            self.provider,
         )
 
         key = (data.channel_id, data.provider, data.keyword)
