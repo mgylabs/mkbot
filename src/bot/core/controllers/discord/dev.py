@@ -79,7 +79,7 @@ class Dev(commands.Cog):
 
         return env
 
-    @commands.command(hidden=hidden, name="eval")
+    @commands.command(hidden=hidden, enabled=enabled, name="eval")
     @is_in_guild(VERSION.MBDS_ID)
     @commands.is_owner()
     async def _eval(self, ctx: commands.Context, *, body: str):
@@ -143,7 +143,7 @@ class Dev(commands.Cog):
                 self._last_result = ret
                 await ctx.send(f"```py\n{value}{ret}\n```")
 
-    @commands.command(hidden=hidden)
+    @commands.command(hidden=hidden, enabled=enabled)
     @is_in_guild(VERSION.MBDS_ID)
     @commands.is_owner()
     async def repl(self, ctx: commands.Context):

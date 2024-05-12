@@ -15,11 +15,14 @@ def row2dict(r, excepts=[]):
     }
 
 
-def gen(r):
+def gen(r, ev=True):
     d = row2dict(r)
     d.pop("user_id")
     d["user"] = row2dict(r.user)
-    d["events"] = [row2dict(e, ["request_id"]) for e in r.events]
+    if ev:
+        d["events"] = [row2dict(e, ["request_id"]) for e in r.events]
+    else:
+        d["events_count"] = len(r.events)
 
     return d
 
@@ -27,7 +30,7 @@ def gen(r):
 def gen2(r):
     d = row2dict(r)
     d.pop("request_id")
-    d["request"] = gen(r.request)
+    d["request"] = gen(r.request, False)
 
     return d
 
