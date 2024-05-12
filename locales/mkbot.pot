@@ -924,9 +924,6 @@ msgid ""
 "added in queue"
 msgstr ""
 
-msgid "📰 Here is the news related to `{query}`"
-msgstr ""
-
 msgid "📰 News search results for `{query}`"
 msgstr ""
 
@@ -934,6 +931,12 @@ msgid "🔍 Google search results for `{query}`"
 msgstr ""
 
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
+msgstr ""
+
+msgid "🔔 Here is the news🗞️ related to `{query}`"
+msgstr ""
+
+msgid "🔔 No news was found for `{query}`"
 msgstr ""
 
 msgid "🔴 Failed to load `%s`"

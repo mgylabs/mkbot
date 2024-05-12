@@ -181,27 +181,32 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
         data.keyword, 3, {"1d": PD["1d"], "all": PD["all"]}
     )
 
-    await ch.send(
-        __("📰 Here is the news related to `{query}`").format(query=data.keyword)
-    )
-
-    for result in results:
-        await ch.send(
-            embed=MsgFormatter.news(
-                result.title,
-                result.description,
-                f"{result.press} · {result.timestamp}",
-                result.press_image_url,
-                thumbnail_url=result.image_url,
-                url=result.url,
-            ),
-        )
-
     button = NotificationButtonOff(data.keyword, data.provider, data.msg_id)
 
     view = discord.ui.View()
     view.add_item(button)
-    await ch.send(view=view)
+
+    if results:
+        await ch.send(
+            __("🔔 Here is the news🗞️ related to `{query}`").format(query=data.keyword),
+            embeds=[
+                MsgFormatter.news(
+                    result.title,
+                    result.description,
+                    f"{result.press} · {result.timestamp}",
+                    result.press_image_url,
+                    thumbnail_url=result.image_url,
+                    url=result.url,
+                )
+                for result in results
+            ],
+            view=view,
+        )
+    else:
+        await ch.send(
+            __("🔔 No news was found for `{query}`").format(query=data.keyword),
+            view=view,
+        )
 
     data.last_notified_at = time.time()
     localStorage.dict_update(
@@ -307,22 +312,6 @@ class News(commands.Cog):
         )
 
         if results:
-            await search_msg.edit(
-                content=__("📰 News search results for `{query}`").format(query=query)
-            )
-
-            for result in results:
-                await ctx.channel.send(
-                    embed=MsgFormatter.news(
-                        result.title,
-                        result.description,
-                        f"{result.press} · {result.timestamp}",
-                        result.press_image_url,
-                        thumbnail_url=result.image_url,
-                        url=result.url,
-                    ),
-                )
-
             if subscribed:
                 button = NotificationButtonOff(query, "naver", ctx.message.id)
             else:
@@ -330,7 +319,22 @@ class News(commands.Cog):
 
             view = discord.ui.View()
             view.add_item(button)
-            await ctx.channel.send(view=view)
+
+            await search_msg.edit(
+                content=__("📰 News search results for `{query}`").format(query=query),
+                embeds=[
+                    MsgFormatter.news(
+                        result.title,
+                        result.description,
+                        f"{result.press} · {result.timestamp}",
+                        result.press_image_url,
+                        thumbnail_url=result.image_url,
+                        url=result.url,
+                    )
+                    for result in results
+                ],
+                view=view,
+            )
 
             DiscordEventLogEntry.Add(
                 ctx,
@@ -416,7 +420,6 @@ class NotificationButtonOn(discord.ui.Button):
             self.keyword, self.provider, interaction.user, self.msg_id, self, self.view
         )
         await interaction.response.send_modal(self.fv)
-        self.view.stop()
 
 
 class NotificationButtonOff(discord.ui.Button):
@@ -548,6 +551,7 @@ class NotificationModal(discord.ui.Modal):
         self.button.style = discord.ButtonStyle.gray
 
         await interaction.response.edit_message(view=self.view)
+        self.view.stop()
 
     async def on_error(
         self, error: Exception, interaction: discord.Interaction
