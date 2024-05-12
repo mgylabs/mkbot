@@ -9,6 +9,7 @@ from mgylabs.utils.config import resource_path
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils import Emoji
+from .utils.command_helper import related_commands
 from .utils.feature import Feature
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
@@ -17,11 +18,14 @@ from .utils.MsgFormat import MsgFormatter
 @commands.hybrid_command()
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 @Feature.Experiment()
-async def roll(ctx: commands.Context):
+@related_commands(["dday set", "roulette", "poll"])
+async def dice(ctx: commands.Context):
     """
     Roll a dice.
     """
-    embed = MsgFormatter.get(ctx, description=f"{Emoji.typing} {__('Rolling...')}")
+    embed = MsgFormatter.get(
+        ctx, description=f"{Emoji.typing} {__('Rolling a dice...')}"
+    )
     dice_file = discord.File(
         resource_path("common/bot/Game Die.png"), filename="dice.png"
     )
@@ -53,4 +57,4 @@ async def roll(ctx: commands.Context):
 
 
 async def setup(bot: commands.Bot):
-    bot.add_command(roll)
+    bot.add_command(dice)

@@ -8,10 +8,10 @@ discord_extensions = (
     "core.controllers.discord.leave",
     "core.controllers.discord.logout",
     "core.controllers.discord.ping",
-    # "core.controllers.discord.tts",
+    "core.controllers.discord.voice",
     "core.controllers.discord.poll",
     "core.controllers.discord.roulette",
-    "core.controllers.discord.roll",
+    "core.controllers.discord.dice",
     # "core.controllers.discord.translate",
     "core.controllers.discord.tic_tac_toe",
     "core.controllers.discord.feedback",
@@ -23,6 +23,7 @@ discord_extensions = (
     "core.controllers.discord.language",
     "core.controllers.discord.google",
     "core.controllers.discord.url",
+    "core.controllers.discord.news",
 )
 
 

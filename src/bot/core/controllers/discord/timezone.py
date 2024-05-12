@@ -148,7 +148,7 @@ def _make_local_time_embed_(interaction, member):
     else:
         tz = pytz.timezone(user.timezone)
 
-    d = pytz.utc.localize(datetime.utcnow()).astimezone(tz)
+    d = datetime.now(pytz.utc).astimezone(tz)
 
     lt = d.strftime("%Y-%m-%d %I:%M %p")
 

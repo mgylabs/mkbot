@@ -10,6 +10,7 @@ from discord.ext import commands
 from mgylabs.i18n import __
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
+from .utils.command_helper import related_commands
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter
 
@@ -17,6 +18,7 @@ from .utils.MsgFormat import MsgFormatter
 @commands.hybrid_command(aliases=["rou"])
 @app_commands.describe(items=locale_str('item1 "item 2" "item3" ...'))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
+@related_commands(["dice", "lotto", "poll"])
 async def roulette(ctx: commands.Context, *, items: str):
     """
     Play roulette

@@ -7,7 +7,7 @@ def is_development_mode():
 
 
 class Version:
-    MBDS_ID = 925412173507887104
+    MBDS_ID = 698477658367066182
     MBSS_ID = 1066518300114301078
 
     def __init__(self, version_str, commit):

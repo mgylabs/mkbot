@@ -100,8 +100,7 @@ please see the document [How to Contribute](https://github.com/mgylabs/mkbot/wik
 
 ```jsonc
 {
-  "discordToken": "Your Discord Bot Token",
-  "kakaoToken": "Your KakaoTalk REST API Token"
+  "discordToken": "Your Discord Bot Token"
 }
 ```
 

@@ -27,7 +27,7 @@ clock_emoji = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "
 
 
 def get_clock_content(tz, offset):
-    d = pytz.utc.localize(datetime.utcnow()).astimezone(tz)
+    d = datetime.now(pytz.utc).astimezone(tz)
     ct = d.strftime("%I:%M %p")
     return f"{clock_emoji[d.hour%12]} {ct} ({offset})"
 

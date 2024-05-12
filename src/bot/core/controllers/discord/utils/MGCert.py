@@ -8,8 +8,9 @@ from discord.ext import commands
 
 from core.controllers.discord.utils.command_helper import send
 from mgylabs.i18n import __
-from mgylabs.utils.config import USER_DATA_PATH
+from mgylabs.utils.config import USER_DATA_PATH, is_development_mode
 
+from .exceptions import NonFatalError
 from .MsgFormat import MsgFormatter
 
 logger = logging.getLogger(__name__)
@@ -134,15 +135,19 @@ class MGCertificate:
                             "member": f"<@{req_user_id}>",
                             "userlist": Level.get_description(level),
                         },
+                        fields=[
+                            {"name": __("User"), "value": req_user_name},
+                            {
+                                "name": __("Command tried"),
+                                "value": "{} ({})".format(
+                                    ctx_or_iaction.command.name,
+                                    Level.get_description(level),
+                                ),
+                            },
+                        ],
                         show_req_user=False,
                     )
-                    embed.add_field(name=__("User"), value=req_user_name)
-                    embed.add_field(
-                        name=__("Command tried"),
-                        value="{} ({})".format(
-                            ctx_or_iaction.command.name, Level.get_description(level)
-                        ),
-                    )
+
                     await send(ctx_or_iaction, embed=embed)
                     logger.critical(
                         '"{}" tried to command "{}" that needs "{}" permission.'.format(
@@ -158,3 +163,18 @@ class MGCertificate:
             return outerfunc
 
         return deco
+
+
+def is_in_guild(guild_id, even_in_dev_mode=False):
+    async def predicate(ctx: commands.Context):
+        if not even_in_dev_mode:
+            result = is_development_mode(False)
+        else:
+            result = ctx.guild and ctx.guild.id == guild_id
+
+        if result:
+            return True
+        else:
+            raise NonFatalError
+
+    return commands.check(predicate)
