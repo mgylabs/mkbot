@@ -42,84 +42,155 @@ async def yacht(ctx: commands.Context):
         await botmsg.add_reaction(rolledDice[i])
     await botmsg.add_reaction("✅")
 
-
     class Game(user1, user2):
-        rolledDice = []
-        pickedDice = []
+        # dice pick.. let's make that later
+
         def playGame():
-            #run n times of turns, and throw dices 3 times (nested loop)
-            #initialize points and send calculated points to GUI in the loop
-            pointDict = {ones: null, twos: null, threes: null} #continued.. search net
-            #send pointDict each time to Points class, 
-            #then if user chooses the point, send to actual pointDict
-            #if stopGame is called, stop the game
-            pass 
-        totalPoints = 0
-        def stopGame():
-            #강제 게임 종료
-            pass 
-        def organizeDice():
-            #organize dice by faces
+            # run n times of turns, and throw dices 3 times (nested loop)
+            # end of dice throw, calculate Points -> shoot to GUI
+            # end of point selection, calculate bonus point -> total point -> to GUI
+            # end of point selection, renew actual point (use Point class)
+            # if stopGame is called, stop the game
             pass
-        def throwDice (numberOfDices):
-            #run dice
+
+        totalPoints = 0
+        dices = list()
+
+        def stopGame():
+            # 강제 게임 종료
+            pass
+
+        def throwDice(self, numberOfDices=5):  # for later dice picking
+            # run dice
             for i in range(numberOfDices):
                 rand = random.randint(1, 6)
-                self.rolledDice.append(dices[rand])
-            return self.rolledDice
-        #search up how to use args
-        def pickDice(args):
-            return pickedDice
+                self.dices.append(dices[rand])
+            self.dices.sort()
+
+        # for later..
+        # def pickDice(args):
+        #    return pickedDice
+
         def winner():
             pass
-        
-    class Points(originPointDict):
-        pointDict = dict()
-        def __init__():
-            run()
-        #private?
+
+    class Points:
+        def __init__(self, pickedDice):
+            self.run()
+            self.ones = 0
+            self.twos = 0
+            self.threes = 0
+            self.fours = 0
+            self.fives = 0
+            self.sixes = 0
+            self.choice = 0
+            self.fourOfAKind = 0
+            self.fullHouse = 0
+            self.sStraight = 0
+            self.lStraight = 0
+            self.yacht = 0
+
+        # private?
         def sum(pickedDice):
             sum = 0
             for dice in pickedDice:
                 sum += dice
             return sum
 
-        def run(pickedDice):
-            #run all calculations that are not finalized
-            while key in originPointDict.keys(): #is it key?
-                if key != null:
-                    pass
-                    #run.. ? 널이 아니면 특정 함수를 실행시키는 방법이 있을까? 리스트 생성?
-            return pointDict
+        def run(self, pickedDice):
+            # run all calculations
+            self.calcSingles(pickedDice)
+            self.calcChoice(pickedDice)
+            self.calcFourOfAKind(pickedDice)
+            self.calcFullHouse(pickedDice)
+            self.calcsStraight(pickedDice)
+            self.calclStraight(pickedDice)
+            self.calcYacht(pickedDice)
 
-        def calcSingles(pickedDice, singles):
-            #edit pointDict
+        def calcSingles(self, pickedDice):
+            # edit pointDict
+            face = 0
             for dice in pickedDice:
                 if dice == 1:
-                    pointDict[singles]+=1
-        
-        def calcFullHouse(pickedDice):
-            if pickedDice[0] == pickedDice[1] and pickedDice[3]==pickedDice[4]:
-                if pickedDice[2]==pickedDice[1] or pickedDice[2]==pickedDice[3]:
-                    pointDict["fullHouse"] = sum(pickedDice)
-            #if not full house, value is already 0
-        
-        def calcFourOfAKind(pickedDice):
-            if pickedDice[0]==pickedDice[1]:
-                if pickedDice[2]==pickedDice[3]:
-                    pointDict["fourOfAKind"] = self.sum(pickedDice)
-            elif pickedDice[4]==[3]:
-                if pickedDice[1]==[2]:
-                    pointDict["fourOfAKind"] = self.sum(pickedDice)
-        
-        #todo: how to differentiate null state of points and 0 
-        #need to display 0 at times to display what points can be inputted.
-        #option 1: use 0s as results in Points dictionary, and use null in playGame dict
+                    self.ones += 1
+                elif dice == 2:
+                    self.twos += 2
+                elif dice == 3:
+                    self.threes += 3
+                elif dice == 4:
+                    self.fours += 4
+                elif dice == 5:
+                    self.fives += 5
+                elif dice == 6:
+                    self.sixes += 6
 
+        def calcChoice(self, pickedDice):
+            self.choice = (
+                pickedDice[0]
+                + pickedDice[1]
+                + pickedDice[2]
+                + pickedDice[3]
+                + pickedDice[4]
+            )
 
-        
-    class GUI():
-        #use discord panels
+        def calcFourOfAKind(self, pickedDice):
+            # 3 3 3 3 1
+            if pickedDice[0] == pickedDice[1]:
+                if pickedDice[2] == pickedDice[3]:
+                    self.fourOfAKind = self.sum(pickedDice)
+            elif pickedDice[4] == [3]:
+                if pickedDice[1] == [2]:
+                    self.fourOfAKind = self.sum(pickedDice)
+
+        def calcFullHouse(self, pickedDice):
+            # 2 2 3 3 3
+            if pickedDice[0] == pickedDice[1] and pickedDice[3] == pickedDice[4]:
+                if pickedDice[2] == pickedDice[1] or pickedDice[2] == pickedDice[3]:
+                    self.fullHouse = sum(pickedDice)
+
+        # if not full house, value is already 0
+
+        def calcsStraight(self, pickedDice):
+            # 1 2 3 4 / 2 3 4 5 / 3 4 5 6
+            if (
+                pickedDice[0] + 3
+                == pickedDice[1] + 2
+                == pickedDice[2] + 1
+                == pickedDice[3]
+            ):
+                self.sStraight = 15
+            if (
+                pickedDice[1] + 3
+                == pickedDice[2] + 2
+                == pickedDice[3] + 1
+                == pickedDice[4]
+            ):
+                self.sStraight = 15
+
+        def calclStraight(self, pickedDice):
+            # 1 2 3 4 5 / 2 3 4 5 6
+            if (
+                pickedDice[0] + 4
+                == pickedDice[1] + 3
+                == pickedDice[2] + 2
+                == pickedDice[3] + 1
+                == pickedDice[4]
+            ):
+                self.lStraight = 30
+
+        def calcYacht(self, pickedDice):
+            # 6 6 6 6 6
+            if (
+                pickedDice[0]
+                == pickedDice[1]
+                == pickedDice[2]
+                == pickedDice[3]
+                == pickedDice[4]
+            ):
+                self.yacht = 50
+
+    class GUI:
+        # use discord panels
         pass
 
 
