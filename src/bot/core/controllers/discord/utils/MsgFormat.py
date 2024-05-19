@@ -54,7 +54,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=title,
-            description=description.format(commandPrefix=CONFIG.commandPrefix),
+            description=description.replace("{commandPrefix}", CONFIG.commandPrefix),
             color=color,
             url=url,
             # timestamp=datetime.datetime.utcnow(),
@@ -118,7 +118,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=title,
-            description=description.format(commandPrefix=CONFIG.commandPrefix),
+            description=description.replace("{commandPrefix}", CONFIG.commandPrefix),
             color=color,
             url=url,
         )
@@ -239,7 +239,7 @@ class MsgFormatter:
 
         embed = discord.Embed(
             title=title,
-            description=description.format(commandPrefix=CONFIG.commandPrefix),
+            description=description,
             color=color,
             url=url,
         )
