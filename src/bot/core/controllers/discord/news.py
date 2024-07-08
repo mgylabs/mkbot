@@ -213,26 +213,26 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
         "discord_news_registry", {(data.channel_id, data.provider, data.keyword): data}
     )
 
-    DiscordEventLogEntry.Add(
-        data.msg_id,
-        "NewsNotify",
-        {
-            "query": data.keyword,
-            "provider": data.provider,
-            "created_at": str(data.created_at),
-            "time": f"{data.hour:02d}:{data.minute:02d}",
-            "results": [
-                {
-                    "title": result.title,
-                    "description": result.description,
-                    "press": result.press,
-                    "timestamp": result.timestamp,
-                    "url": result.url,
-                }
-                for result in results
-            ],
-        },
-    )
+    # DiscordEventLogEntry.Add(
+    #     data.msg_id,
+    #     "NewsNotify",
+    #     {
+    #         "query": data.keyword,
+    #         "provider": data.provider,
+    #         "created_at": str(data.created_at),
+    #         "time": f"{data.hour:02d}:{data.minute:02d}",
+    #         "results": [
+    #             {
+    #                 "title": result.title,
+    #                 "description": result.description,
+    #                 "press": result.press,
+    #                 "timestamp": result.timestamp,
+    #                 "url": result.url,
+    #             }
+    #             for result in results
+    #         ],
+    #     },
+    # )
 
     await add_to_scheduler(bot, data)
 
