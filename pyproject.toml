@@ -33,7 +33,7 @@ pyinstaller = "6.2.0"
 pynacl = "1.5.0"
 pytz = "2022.1"
 pyyaml = "6.0"
-requests = "2.31.0"
+requests = "2.32.3"
 sqlalchemy = "1.4.46"
 yt-dlp = "2023.12.30"
 mulgyeol-telemetry = {git = "https://github.com/MycroftKang/application-insights-python.git", rev = "c03c4d415b15648134717bb402d895d9b7ebea57", optional = true}
