@@ -893,6 +893,9 @@ msgstr ""
 msgid "Your enemy is not ready yet, please wait until they are"
 msgstr ""
 
+msgid "[MK Bot]({url}) acted like {member}."
+msgstr ""
+
 msgid "[MK Bot]({url}) said on behalf of {author}"
 msgstr ""
 

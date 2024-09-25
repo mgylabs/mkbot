@@ -1,6 +1,7 @@
 import platform
 
 discord_extensions = (
+    "core.controllers.discord.act",
     "core.controllers.discord.dev",
     # "core.controllers.discord.admin",
     "core.controllers.discord.delete",
