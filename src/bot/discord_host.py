@@ -45,7 +45,13 @@ from mgylabs.i18n.extension import I18nExtension
 from mgylabs.i18n.utils import get_user_locale_code, init_user_locale
 from mgylabs.services.telemetry_service import TelemetryReporter
 from mgylabs.utils import logger
-from mgylabs.utils.config import CONFIG, MGCERT_PATH, VERSION, is_development_mode
+from mgylabs.utils.config import (
+    CONFIG,
+    MGCERT_PATH,
+    SERVER_MODE,
+    VERSION,
+    is_development_mode,
+)
 from mgylabs.utils.helper import usage_helper
 from mgylabs.utils.LogEntry import DiscordRequestLogEntry
 from release import ReleaseNotify
@@ -305,7 +311,7 @@ async def create_bot(return_error_level=False):
 
     @bot.event
     async def on_ready():
-        TelemetryReporter.start("Login")
+        TelemetryReporter.start("Login", {"server_mode": SERVER_MODE})
 
         print("Logged in within {:0.2f}s".format(time.time() - stime))
 
@@ -341,11 +347,6 @@ async def create_bot(return_error_level=False):
                 cmds = await bot.tree.sync()
 
                 AppCommandDict.parse(cmds)
-
-                TelemetryReporter.Event(
-                    "AppCommandSynced",
-                    {"cmds": [{"id": c.id, "name": c.name} for c in cmds]},
-                )
 
             synced = True
 

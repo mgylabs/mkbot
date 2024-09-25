@@ -9,6 +9,8 @@ config_sema = threading.BoundedSemaphore()
 
 LOCALAPPDATA = os.getenv("LOCALAPPDATA")
 
+SERVER_MODE = "--schtasks" in sys.argv
+
 
 def is_development_mode(debug_mode=True):
     return not getattr(sys, "frozen", False) or debug_mode and ("--debug") in sys.argv

@@ -65,12 +65,12 @@ class TelemetryReporter:
             cls._run_callback_(callback)
 
     @classmethod
-    def start(cls, callback_event_name=None):
+    def start(cls, callback_event_name=None, properties={}):
         if telemetry_enabled and VERSION.is_release_build() and cls.reporter is None:
             cls.reporter = TelemetryClient(INSIGHTS_APPLICATION_KEY, str(VERSION))
 
         if callback_event_name is not None:
-            cls.Event(str(callback_event_name))
+            cls.Event(str(callback_event_name), properties)
 
     @classmethod
     def terminate(cls):

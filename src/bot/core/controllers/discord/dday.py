@@ -95,7 +95,7 @@ async def do_update_ch_name(bot: commands.Bot, cid: int, data: DDayData):
                     [
                         {
                             "name": "Time",
-                            "value": f"{data.date.strftime('%I:%M %p')} ({data.offset})",
+                            "value": f"{data.date.strftime('%Y-%m-%d %I:%M %p')} ({data.offset})",
                         },
                         {
                             "name": "Author",
@@ -235,7 +235,7 @@ class DDay(commands.Cog):
                     },
                     {
                         "name": "Time",
-                        "value": f"{data.date.strftime('%I:%M %p')} ({data.offset})",
+                        "value": f"{data.date.strftime('%Y-%m-%d %I:%M %p')} ({data.offset})",
                     },
                 ],
             ),
