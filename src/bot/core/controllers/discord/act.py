@@ -17,16 +17,27 @@ else:
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
 @Feature.Experiment()
 async def act(ctx: commands.Context, member: discord.Member, *, message):
-    webhooks = await ctx.channel.webhooks()
+    if isinstance(ctx.channel, discord.Thread):
+        webhooks = await ctx.channel.parent.webhooks()
+    else:
+        webhooks = await ctx.channel.webhooks()
 
     if webhooks:
         webhook = webhooks[0]
     else:
         webhook = await ctx.channel.create_webhook(name=member.name)
 
-    await webhook.send(
-        str(message), username=member.display_name, avatar_url=member.avatar.url
-    )
+    if isinstance(ctx.channel, discord.Thread):
+        await webhook.send(
+            str(message),
+            thread=ctx.channel,
+            username=member.display_name,
+            avatar_url=member.avatar.url,
+        )
+    else:
+        await webhook.send(
+            str(message), username=member.display_name, avatar_url=member.avatar.url
+        )
 
     if ctx.interaction:
         await ctx.send(
