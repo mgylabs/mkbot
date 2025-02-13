@@ -1,8 +1,31 @@
 import pickle
 import traceback
+from dataclasses import MISSING, dataclass, fields
 
 from mgylabs.db import database
 from mgylabs.db.models import HashStore
+
+
+def dataclass_for_storage(cls, **kwargs):
+    cls = dataclass(cls, **kwargs)
+
+    original_setstate = getattr(cls, "__setstate__", lambda self, state: None)
+
+    def new_setstate(self, state):
+        original_setstate(self, state)
+        self.__dict__.update(state)
+
+        for field_obj in fields(self):
+            if field_obj.name not in self.__dict__:
+                if field_obj.default is not MISSING:
+                    setattr(self, field_obj.name, field_obj.default)
+                elif field_obj.default_factory is not MISSING:
+                    setattr(self, field_obj.name, field_obj.default_factory())
+                else:
+                    setattr(self, field_obj.name, None)
+
+    cls.__setstate__ = new_setstate
+    return cls
 
 
 class Storage:

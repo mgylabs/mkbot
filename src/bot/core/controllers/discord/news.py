@@ -1,6 +1,6 @@
+import random
 import time
 import traceback
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 import aiohttp
@@ -15,8 +15,8 @@ from core.controllers.discord.utils.MGCert import Level, MGCertificate
 from core.controllers.discord.utils.MsgFormat import MsgFormatter
 from mgylabs.db import database
 from mgylabs.db.models import DiscordUser
-from mgylabs.db.storage import localStorage
-from mgylabs.i18n import __
+from mgylabs.db.storage import dataclass_for_storage, localStorage
+from mgylabs.i18n import I18nExtension, __
 from mgylabs.utils import logger
 from mgylabs.utils.event import AsyncScheduler, SchTask
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
@@ -28,6 +28,10 @@ log = logger.get_logger(__name__)
 
 def get_useragent():
     return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+
+
+def get_random_color():
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
 
 
 class SearchResult:
@@ -114,13 +118,14 @@ async def search_by_query(term, num_results=1, pd=PD):
     return ls
 
 
-@dataclass
+@dataclass_for_storage
 class NewsNotifyData:
     user_id: int
     channel_id: int
     msg_id: int
     hour: int
     minute: int
+    color: str
     keyword: str
     created_at: datetime
     provider: str = "naver"
@@ -175,6 +180,8 @@ def remove_from_scheduler(channel_id, provider, keyword):
 
 @database.using_database
 async def news_notify(bot: commands.Bot, data: NewsNotifyData):
+    I18nExtension.set_current_locale_by_user(data.user_id)
+
     ch = bot.get_channel(data.channel_id)
 
     results: list[SearchResult] = await search_by_query(
@@ -183,10 +190,13 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
 
     button = NotificationButtonOff(data.keyword, data.provider, data.msg_id)
 
-    view = discord.ui.View()
+    view = discord.ui.View(timeout=24 * 60 * 60)
     view.add_item(button)
 
     if results:
+        if not data.color:
+            data.color = get_random_color()
+
         await ch.send(
             __("🔔 Here is the news🗞️ related to `{query}`").format(query=data.keyword),
             embeds=[
@@ -197,6 +207,7 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
                     result.press_image_url,
                     thumbnail_url=result.image_url,
                     url=result.url,
+                    color=data.color,
                 )
                 for result in results
             ],
@@ -307,17 +318,19 @@ class News(commands.Cog):
 
         results: list[SearchResult] = await search_by_query(query, 3)
 
-        subscribed = localStorage.dict_include(
+        subscribed_data: NewsNotifyData = localStorage.dict_get(
             "discord_news_registry", (ctx.channel.id, "naver", query)
         )
 
         if results:
-            if subscribed:
+            msg_color = subscribed_data.color if subscribed_data else get_random_color()
+
+            if subscribed_data:
                 button = NotificationButtonOff(query, "naver", ctx.message.id)
             else:
-                button = NotificationButtonOn(query, "naver", ctx.message.id)
+                button = NotificationButtonOn(query, "naver", ctx.message.id, msg_color)
 
-            view = discord.ui.View()
+            view = discord.ui.View(timeout=24 * 60 * 60)
             view.add_item(button)
 
             await search_msg.edit(
@@ -330,6 +343,7 @@ class News(commands.Cog):
                         result.press_image_url,
                         thumbnail_url=result.image_url,
                         url=result.url,
+                        color=msg_color,
                     )
                     for result in results
                 ],
@@ -408,16 +422,23 @@ class News(commands.Cog):
 
 
 class NotificationButtonOn(discord.ui.Button):
-    def __init__(self, keyword: str, provider: str, msg_id: int):
+    def __init__(self, keyword: str, provider: str, msg_id: int, msg_color: str):
         super().__init__(style=discord.ButtonStyle.green, label=__("Subscribe"))
 
         self.keyword = keyword
         self.provider = provider
         self.msg_id = msg_id
+        self.msg_color = msg_color
 
     async def callback(self, interaction: discord.Interaction):
         self.fv = NotificationModal(
-            self.keyword, self.provider, interaction.user, self.msg_id, self, self.view
+            self.keyword,
+            self.provider,
+            interaction.user,
+            self.msg_id,
+            self.msg_color,
+            self,
+            self.view,
         )
         await interaction.response.send_modal(self.fv)
 
@@ -472,12 +493,20 @@ def get_user_local_current_time(member: discord.member):
 
 
 class NotificationModal(discord.ui.Modal):
-    summary = discord.ui.TextInput(
+    noti_time = discord.ui.TextInput(
         label="Notification time",
         default="",
         placeholder="hour:minute",
         required=True,
         max_length=5,
+    )
+
+    msg_color = discord.ui.TextInput(
+        label="Message color",
+        default="",
+        placeholder="#RRGGBB",
+        required=True,
+        max_length=7,
     )
 
     def __init__(
@@ -486,6 +515,7 @@ class NotificationModal(discord.ui.Modal):
         provider: str,
         member: discord.member,
         msg_id: int,
+        default_msg_color: str,
         button: discord.ui.Button,
         view: discord.ui.View,
         **kwargs,
@@ -498,10 +528,13 @@ class NotificationModal(discord.ui.Modal):
 
         lt, offset = get_user_local_current_time(member)
 
-        NotificationModal.summary.label = __(
+        NotificationModal.noti_time.label = __(
             "Notification time (Your time zone is {offset})"
         ).format(offset=offset)
-        NotificationModal.summary.default = lt
+        NotificationModal.noti_time.default = lt
+
+        NotificationModal.msg_color.default = default_msg_color
+
         super().__init__(title=f"{__('Subscribe to News')} ({keyword})", **kwargs)
 
     @database.using_database
@@ -512,9 +545,15 @@ class NotificationModal(discord.ui.Modal):
             localStorage["discord_news_registry"] = {}
 
         try:
-            timestamp = datetime.strptime(self.summary.value, "%H:%M")
+            timestamp = datetime.strptime(self.noti_time.value, "%H:%M")
         except ValueError:
             log.info("Invalid time format")
+            return
+
+        try:
+            int(self.msg_color.value[1:], 16)
+        except ValueError:
+            log.info("Invalid color format")
             return
 
         data = NewsNotifyData(
@@ -523,6 +562,7 @@ class NotificationModal(discord.ui.Modal):
             self.msg_id,
             timestamp.hour,
             timestamp.minute,
+            self.msg_color.value,
             self.keyword,
             datetime.now(pytz.UTC),
             self.provider,
@@ -542,6 +582,7 @@ class NotificationModal(discord.ui.Modal):
                     "provider": data.provider,
                     "created_at": str(data.created_at),
                     "time": f"{data.hour:02d}:{data.minute:02d}",
+                    "color": data.color,
                     "requester": interaction.user.id,
                 },
             )

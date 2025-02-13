@@ -1,4 +1,6 @@
-from mgylabs.db.storage import localStorage
+from dataclasses import field
+
+from mgylabs.db.storage import dataclass_for_storage, localStorage
 
 
 def test_localStorage_set(needs_database):
@@ -66,3 +68,72 @@ def test_localStorage_dict_pop(needs_database):
         "dict_key2": 13,
         "dict_key3": 14,
     }
+
+
+def test_dataclass_for_storage(needs_database):
+    global TestClass
+
+    @dataclass_for_storage
+    class TestClass:
+        field1: int = 0
+
+    obj = TestClass()
+
+    localStorage["test_key"] = obj
+
+    @dataclass_for_storage
+    class TestClass:
+        field1: int = 0
+        field2: str = "default"
+        field3: list = field(default_factory=list)
+
+    obj = localStorage["test_key"]
+
+    assert obj.field1 == 0
+    assert obj.field2 == "default"
+    assert obj.field3 == []
+
+    localStorage["test_key"] = obj
+
+    @dataclass_for_storage
+    class TestClass:
+        field1: int = 0
+        field3: list = field(default_factory=list)
+
+    obj = localStorage["test_key"]
+
+    assert obj.field1 == 0
+    assert obj.field2 == "default"
+    assert obj.field3 == []
+
+
+def test_dataclass_for_storage_update(needs_database):
+    global TestClass
+
+    @dataclass_for_storage
+    class TestClass:
+        field1: int = 0
+
+    obj = TestClass()
+
+    localStorage["test_key"] = obj
+
+    @dataclass_for_storage
+    class TestClass:
+        field1: int = 0
+        field2: str = "default"
+        field3: list = field(default_factory=list)
+
+    obj = localStorage["test_key"]
+
+    obj.field1 = 12
+    obj.field2 = "update"
+    obj.field3.append(12)
+
+    localStorage["test_key"] = obj
+
+    obj = localStorage["test_key"]
+
+    assert obj.field1 == 12
+    assert obj.field2 == "update"
+    assert obj.field3 == [12]

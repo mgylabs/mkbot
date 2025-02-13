@@ -53,7 +53,8 @@ def cleanup_files(monkeypatch):
     yield
     for file in files:
         print("Remove", file)
-        os.remove(file)
+        if os.path.isfile(file):
+            os.remove(file)
 
 
 @pytest.fixture(scope="session")
