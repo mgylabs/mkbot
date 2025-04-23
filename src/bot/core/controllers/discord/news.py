@@ -70,10 +70,12 @@ async def search_by_query(term, num_results=1, pd=PD):
         text = await _req_query(term, v)
 
         soup = BeautifulSoup(text, "lxml")
-        news_result_list_ul = soup.select_one("#news_result_list")
+        news_result_list_ul = soup.select_one("div.fender-news-item-list-tab")
 
         if news_result_list_ul:
-            news_result_list = news_result_list_ul.find_all("li", recursive=False)
+            news_result_list = news_result_list_ul.find_all(
+                "div", {"class": "Ermefm6A3ilpd9Zvt0OZ"}, recursive=False
+            )
 
             if len(news_result_list) >= num_results:
                 break
@@ -85,28 +87,30 @@ async def search_by_query(term, num_results=1, pd=PD):
 
     result: BeautifulSoup
     for result in news_result_list[:num_results]:
-        url = result.select_one("div.news_wrap > a")["href"]
-        title = result.select_one("div.news_wrap > a > div").get_text()
+        url = result.select_one("div.KCTl6C0w4OoJ8NqzXseI > a")["href"]
+        title = result.select_one("div.KCTl6C0w4OoJ8NqzXseI > a > span").get_text()
         description = result.select_one(
-            "div.news_wrap > div.news_dsc > div > a > div"
+            "div.KCTl6C0w4OoJ8NqzXseI > div.pMazRkOPoM49VLcrhtmI > a:nth-child(1) > span"
         ).get_text()
-        image_url = result.select_one("div.news_wrap > div.news_dsc > a > img")
+        image_url = result.select_one(
+            "div.KCTl6C0w4OoJ8NqzXseI > div.pMazRkOPoM49VLcrhtmI > a:nth-child(2) > div > img"
+        )
         if image_url:
-            image_url = image_url["data-lazysrc"]
+            image_url = image_url["src"]
         press = result.select_one(
-            "div.news_wrap > div.news_info > div.info_group > a"
+            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-info > div > span > a > span"
         ).find(string=True, recursive=False)
         press_image_url = result.select_one(
-            "div.news_wrap > div.news_info > div.info_group > a > span > img"
+            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-source-thumb > a > div > div > img"
         )
         if press_image_url:
-            press_image_url = press_image_url["data-lazysrc"]
+            press_image_url = press_image_url["src"]
 
             if not press_image_url.startswith("http"):
                 press_image_url = "https://ssl.pstatic.net/sstatic/search/mobile/img/bg_news_press_default.png"
 
         timestamp = result.select_one(
-            "div.news_wrap > div.news_info > div.info_group > span:nth-child(2)"
+            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-info > span:nth-child(3) > span"
         ).get_text()
 
         ls.append(
