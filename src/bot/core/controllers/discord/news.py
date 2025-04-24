@@ -73,12 +73,17 @@ async def search_by_query(term, num_results=1, pd=PD):
         news_result_list_ul = soup.select_one("div.fender-news-item-list-tab")
 
         if news_result_list_ul:
-            news_result_list = news_result_list_ul.find_all(
-                "div", {"class": "Ermefm6A3ilpd9Zvt0OZ"}, recursive=False
-            )
+            first_div_tag = news_result_list_ul.find("div", recursive=False)
 
-            if len(news_result_list) >= num_results:
-                break
+            if first_div_tag:
+                news_class = first_div_tag["class"][2]
+
+                news_result_list = news_result_list_ul.find_all(
+                    "div", {"class": news_class}, recursive=False
+                )
+
+                if len(news_result_list) >= num_results:
+                    break
     else:
         if not news_result_list_ul:
             return []
@@ -87,21 +92,27 @@ async def search_by_query(term, num_results=1, pd=PD):
 
     result: BeautifulSoup
     for result in news_result_list[:num_results]:
-        url = result.select_one("div.KCTl6C0w4OoJ8NqzXseI > a")["href"]
-        title = result.select_one("div.KCTl6C0w4OoJ8NqzXseI > a > span").get_text()
+        parent_div = f"div.{news_class} > "
+
+        url = result.select_one(parent_div + "div:nth-of-type(2) > a")["href"]
+        title = result.select_one(
+            parent_div + "div:nth-of-type(2) > a > span"
+        ).get_text()
         description = result.select_one(
-            "div.KCTl6C0w4OoJ8NqzXseI > div.pMazRkOPoM49VLcrhtmI > a:nth-child(1) > span"
+            parent_div + "div:nth-of-type(2) > div > a:nth-of-type(1) > span"
         ).get_text()
         image_url = result.select_one(
-            "div.KCTl6C0w4OoJ8NqzXseI > div.pMazRkOPoM49VLcrhtmI > a:nth-child(2) > div > img"
+            parent_div + "div:nth-of-type(2) > div > a:nth-of-type(2) > div > img"
         )
         if image_url:
             image_url = image_url["src"]
         press = result.select_one(
-            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-info > div > span > a > span"
+            parent_div
+            + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-info > div > span > a > span"
         ).find(string=True, recursive=False)
         press_image_url = result.select_one(
-            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-source-thumb > a > div > div > img"
+            parent_div
+            + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-source-thumb > a > div > div > img"
         )
         if press_image_url:
             press_image_url = press_image_url["src"]
@@ -110,7 +121,8 @@ async def search_by_query(term, num_results=1, pd=PD):
                 press_image_url = "https://ssl.pstatic.net/sstatic/search/mobile/img/bg_news_press_default.png"
 
         timestamp = result.select_one(
-            "div.AFIg_epz83EqgqI2NN7t > div:nth-child(1) > div.sds-comps-profile-info > span:nth-child(3) > span"
+            parent_div
+            + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-info > span:nth-child(3) > span"
         ).get_text()
 
         ls.append(
