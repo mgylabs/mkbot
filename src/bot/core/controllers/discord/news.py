@@ -70,7 +70,7 @@ async def search_by_query(term, num_results=1, pd=PD):
         text = await _req_query(term, v)
 
         soup = BeautifulSoup(text, "lxml")
-        news_result_list_ul = soup.select_one("div.fender-news-item-list-tab")
+        news_result_list_ul = soup.select_one("div.fds-news-item-list-tab")
 
         if news_result_list_ul:
             first_div_tag = news_result_list_ul.find("div", recursive=False)
@@ -122,7 +122,7 @@ async def search_by_query(term, num_results=1, pd=PD):
 
         timestamp = result.select_one(
             parent_div
-            + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-info > span:nth-child(3) > span"
+            + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-info > span:nth-child(3) > div > span"
         ).get_text()
 
         ls.append(
