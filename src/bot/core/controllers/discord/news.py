@@ -1,3 +1,4 @@
+import asyncio
 import random
 import time
 import traceback
@@ -9,6 +10,7 @@ import pytz
 from bs4 import BeautifulSoup
 from discord import app_commands
 from discord.ext import commands
+from google import genai
 
 from core.controllers.discord.utils import Emoji
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
@@ -18,12 +20,33 @@ from mgylabs.db.models import DiscordUser
 from mgylabs.db.storage import dataclass_for_storage, localStorage
 from mgylabs.i18n import I18nExtension, __
 from mgylabs.utils import logger
+from mgylabs.utils.config import CONFIG
 from mgylabs.utils.event import AsyncScheduler, SchTask
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.feature import Feature
 
 log = logger.get_logger(__name__)
+
+ai_overview_enabled = True if CONFIG.geminiToken else False
+
+if ai_overview_enabled:
+    try:
+        gemini = genai.Client(api_key=CONFIG.geminiToken)
+    except Exception as e:
+        log.error("Failed to initialize Google GenAI client: %s", e)
+        ai_overview_enabled = False
+
+
+async def get_gemini_response(query: str):
+    if not ai_overview_enabled:
+        return None
+
+    response = await gemini.aio.models.generate_content(
+        model="gemini-2.5-flash", contents=query
+    )
+
+    return response.text if response else None
 
 
 def get_useragent():
@@ -41,13 +64,63 @@ class SearchResult:
         self.url = url
         self.title = title
         self.description = description
+        self.content = None
         self.image_url = image_url
         self.press = press
         self.press_image_url = press_image_url
         self.timestamp = timestamp
 
+    async def fetch_content(self):
+        headers = {"User-Agent": get_useragent()}
+
+        async with aiohttp.ClientSession(
+            headers=headers, raise_for_status=True
+        ) as session:
+            async with session.get(self.url) as response:
+                if response.status == 200:
+                    text = await response.text()
+                    soup = BeautifulSoup(text, "lxml")
+                    content_div = soup.find("div", {"class": "_article_body"})
+                    if content_div:
+                        self.content = content_div.get_text(strip=True)
+                    else:
+                        self.content = None
+                else:
+                    self.content = None
+
     def __repr__(self):
         return f"SearchResult(url={self.url}, title={self.title}, description={self.description}, press={self.press})"
+
+
+async def get_ai_news_summary(news_results: list[SearchResult]):
+    if not ai_overview_enabled:
+        return ""
+
+    if not news_results:
+        return ""
+
+    await asyncio.gather(*(result.fetch_content() for result in news_results))
+
+    contents = "\n\n".join(
+        f"Title: {result.title}\n"
+        f"Press: {result.press}\n"
+        f"Timestamp: {result.timestamp}\n"
+        f"Content: {result.content or 'No content available'}"
+        for result in news_results
+    )
+
+    if not contents:
+        return ""
+
+    response = await get_gemini_response(
+        f"Summarize the following news articles:\n\n{contents}\n\n"
+        "Please provide a concise summary of the main points in Korean."
+    )
+
+    if response:
+        return response.strip()
+    else:
+        return ""
 
 
 PD = {"6h": 12, "1d": 4, "all": 0}
@@ -110,15 +183,18 @@ async def search_by_query(term, num_results=1, pd=PD):
             parent_div
             + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-info > div > span > a > span"
         ).find(string=True, recursive=False)
-        press_image_url = result.select_one(
+        press_image_url_str = result.select_one(
             parent_div
             + "div:nth-of-type(1) > div:nth-of-type(1) > div.sds-comps-profile-source-thumb > a > div > div > img"
         )
-        if press_image_url:
-            press_image_url = press_image_url["src"]
 
-            if not press_image_url.startswith("http"):
-                press_image_url = "https://ssl.pstatic.net/sstatic/search/mobile/img/bg_news_press_default.png"
+        press_image_url = "https://ssl.pstatic.net/sstatic/search/mobile/img/bg_news_press_default.png"
+        if (
+            press_image_url_str
+            and press_image_url_str.has_attr("src")
+            and press_image_url_str["src"].startswith("http")
+        ):
+            press_image_url = press_image_url_str["src"]
 
         timestamp = result.select_one(
             parent_div
@@ -213,8 +289,20 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
         if not data.color:
             data.color = get_random_color()
 
+        if ai_overview_enabled:
+            summary = await get_ai_news_summary(results)
+            if not summary:
+                summary = __("An AI overview is not available for these articles.")
+
         await ch.send(
-            __("🔔 Here is the news🗞️ related to `{query}`").format(query=data.keyword),
+            __("🔔 Here is the news🗞️ related to `{query}`\n\n{summary}").format(
+                query=data.keyword,
+                summary=(
+                    f"{Emoji.google_gemini} AI Overview\n{summary}\n\u2800"
+                    if ai_overview_enabled
+                    else ""
+                ),
+            ),
             embeds=[
                 MsgFormatter.news(
                     result.title,
@@ -349,22 +437,47 @@ class News(commands.Cog):
             view = discord.ui.View(timeout=24 * 60 * 60)
             view.add_item(button)
 
+            embeds = [
+                MsgFormatter.news(
+                    result.title,
+                    result.description,
+                    f"{result.press} · {result.timestamp}",
+                    result.press_image_url,
+                    thumbnail_url=result.image_url,
+                    url=result.url,
+                    color=msg_color,
+                )
+                for result in results
+            ]
+
             await search_msg.edit(
-                content=__("📰 News search results for `{query}`").format(query=query),
-                embeds=[
-                    MsgFormatter.news(
-                        result.title,
-                        result.description,
-                        f"{result.press} · {result.timestamp}",
-                        result.press_image_url,
-                        thumbnail_url=result.image_url,
-                        url=result.url,
-                        color=msg_color,
-                    )
-                    for result in results
-                ],
+                content=__("📰 News search results for `{query}`\n\n{summary}").format(
+                    query=query,
+                    summary=(
+                        f"{Emoji.gemini_generating} Generating AI Overview...\n\u2800"
+                        if ai_overview_enabled
+                        else ""
+                    ),
+                ),
+                embeds=embeds,
                 view=view,
             )
+
+            if ai_overview_enabled:
+                summary = await get_ai_news_summary(results)
+                if not summary:
+                    summary = __("An AI overview is not available for these articles.")
+
+                await search_msg.edit(
+                    content=__(
+                        "📰 News search results for `{query}`\n\n{summary}"
+                    ).format(
+                        query=query,
+                        summary=f"{Emoji.google_gemini} AI Overview\n{summary}\n\u2800",
+                    ),
+                    embeds=embeds,
+                    view=view,
+                )
 
             DiscordEventLogEntry.Add(
                 ctx,

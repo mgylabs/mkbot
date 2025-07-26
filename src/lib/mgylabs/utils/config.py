@@ -59,6 +59,7 @@ class Settings:
     enabledChatMode = SettingItem(False)
     showFeedbackLink = SettingItem(True)
     betaUpdate = SettingItem(False)
+    geminiToken = SettingItem("")
 
     def __init__(self, data):
         self.update_dict(data)

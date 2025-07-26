@@ -70,6 +70,9 @@ msgstr ""
 msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
 msgstr ""
 
+msgid "An AI overview is not available for these articles."
+msgstr ""
+
 msgid "Arguments:"
 msgstr ""
 
@@ -927,7 +930,10 @@ msgid ""
 "added in queue"
 msgstr ""
 
-msgid "📰 News search results for `{query}`"
+msgid ""
+"📰 News search results for `{query}`\n"
+"\n"
+"{summary}"
 msgstr ""
 
 msgid "🔍 Google search results for `{query}`"
@@ -936,7 +942,10 @@ msgstr ""
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr ""
 
-msgid "🔔 Here is the news🗞️ related to `{query}`"
+msgid ""
+"🔔 Here is the news🗞️ related to `{query}`\n"
+"\n"
+"{summary}"
 msgstr ""
 
 msgid "🔔 No news was found for `{query}`"
