@@ -58,6 +58,12 @@ msgid ""
 "Please [create an issue](%s) at GitHub with below logs to help fix this problem."
 msgstr ""
 
+msgid "AI comment is not available for this roulette."
+msgstr ""
+
+msgid "AI response error"
+msgstr ""
+
 msgid "All messages are automatically translated to {0}."
 msgstr ""
 
@@ -74,6 +80,9 @@ msgid "An AI overview is not available for these articles."
 msgstr ""
 
 msgid "Arguments:"
+msgstr ""
+
+msgid "Ask anything"
 msgstr ""
 
 msgid "Automatic Bug Reporting Tool"
@@ -98,6 +107,9 @@ msgid ""
 msgstr ""
 
 msgid "Challenge declined :("
+msgstr ""
+
+msgid "Choices"
 msgstr ""
 
 msgid "Chose %s"
@@ -202,6 +214,9 @@ msgid "Exiting REPL session."
 msgstr ""
 
 msgid "Exiting."
+msgstr ""
+
+msgid "Failed to parse AI response. Please try again later."
 msgstr ""
 
 msgid "Feedback"
@@ -331,6 +346,12 @@ msgstr ""
 msgid "Logs out of Discord and closes all connections"
 msgstr ""
 
+msgid "Lucky Pick"
+msgstr ""
+
+msgid "MK Bot can make mistakes. Check important info."
+msgstr ""
+
 #, docstring
 msgid "Minigame"
 msgstr ""
@@ -377,6 +398,9 @@ msgid "Now playing: %s"
 msgstr ""
 
 msgid "O won!"
+msgstr ""
+
+msgid "Only one item provided. No roulette needed."
 msgstr ""
 
 msgid "Oops! Something went wrong."
@@ -515,9 +539,6 @@ msgid "Roll a dice."
 msgstr ""
 
 msgid "Rolling a dice..."
-msgstr ""
-
-msgid "Roulette"
 msgstr ""
 
 msgid "Roulette is running. Please wait."
@@ -902,13 +923,7 @@ msgstr ""
 msgid "[MK Bot]({url}) said on behalf of {author}"
 msgstr ""
 
-msgid "chose... %s!"
-msgstr ""
-
 msgid "first"
-msgstr ""
-
-msgid "item1 \"item 2\" \"item3\" ..."
 msgstr ""
 
 msgid "left {}"

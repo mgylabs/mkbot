@@ -1,4 +1,5 @@
 import asyncio
+import json
 import random
 import re
 import shlex
@@ -9,12 +10,16 @@ from discord.app_commands import locale_str
 from discord.ext import commands
 
 from mgylabs.i18n import __
+from mgylabs.utils import logger
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.emoji import Emoji
-from .utils.gemini import get_gemini_response
+from .utils.feature import Feature
+from .utils.gemini import gemini_enabled, get_gemini_response
 from .utils.MGCert import Level, MGCertificate
 from .utils.MsgFormat import MsgFormatter, related_commands
+
+log = logger.get_logger(__name__)
 
 
 def is_discord_special_string(s: str) -> bool:
@@ -30,8 +35,9 @@ def is_discord_special_string(s: str) -> bool:
 
 
 @commands.hybrid_command(aliases=["rou"])
-@app_commands.describe(items=locale_str('item1 "item 2" "item3" ...'))
+@app_commands.describe(items=locale_str("Ask anything"))
 @MGCertificate.verify(level=Level.TRUSTED_USERS)
+@Feature.Experiment()
 @related_commands(["dice", "lotto", "poll"])
 async def roulette(ctx: commands.Context, *, items: str):
     """
@@ -44,49 +50,69 @@ async def roulette(ctx: commands.Context, *, items: str):
     Note:
     This bot cannot be added to items.
     """
-    item_ls = shlex.split(items)
+    if gemini_enabled:
+        ai_generating_task = asyncio.create_task(
+            get_gemini_response(
+                """You are an assistant that creates a roulette based on a user's input.
 
-    result = random.choice(item_ls)
+                    Here is a natural-language input that the user gives:
+                    """
+                + f'"{items}"'
+                + """
+                    Based on that, follow these steps carefully:
 
-    if not item_ls:
-        await ctx.send(
-            embed=MsgFormatter.get(
-                ctx, "Roulette `BETA`", __("No items provided for roulette.")
+                    1. Analyze the user's input and generate a clear and accurate question-style title that reflects the user's intent. The title should be phrased as a yes/no or choice-based short question, depending on the input. Do not try to be witty or funny—just be clear and relevant.
+
+                    2. Extract distinct and relevant options from the input. Be creative if needed.
+
+                    3. Randomly select one of the options as the roulette result.
+
+                    4. Based on the result, write a witty, and humorous comment in Korean reacting to the selected option. Make it sound spontaneous, playful, and fun. Keep it under 2-3 sentences.
+
+                    Your final response must be a JSON object with the following structure:
+
+                    json
+                    ```
+                    {
+                        "title": "string",               // The title of the roulette
+                        "options": ["string", ...],      // The list of choices
+                        "result": "string",              // The selected choice
+                        "comment": "string"              // A witty and fun reaction to the result
+                    }
+                    ```
+
+                    Only return the JSON. Do not include any explanation or extra text outside of the JSON."""
             )
         )
-        return
 
-    if len(item_ls) == 1:
-        await ctx.send(
-            embed=MsgFormatter.get(
-                ctx,
-                "Roulette `BETA`",
-                __("Only one item provided. No roulette needed."),
+        input_field = {
+            "name": ":clipboard: " + __("Choices"),
+            "value": f"{Emoji.generating} Generating...",
+            "inline": False,
+        }
+
+    else:
+        item_ls = shlex.split(items)
+        result = random.choice(item_ls)
+
+        if len(item_ls) == 1:
+            await ctx.send(
+                embed=MsgFormatter.get(
+                    ctx,
+                    "Roulette `✨BETA`",
+                    __("Only one item provided. No roulette needed."),
+                )
             )
-        )
-        return
+            return
 
-    ai_comment_task = asyncio.create_task(
-        get_gemini_response(
-            "\n".join(
-                [
-                    "You are a witty commentator. Here is a list of roulette items: ",
-                    ", ".join(item_ls),
-                    f" And the roulette result is: {result}",
-                    "Based on this, write a short, clever, and humorous comment in Korean as if you are reacting live to the spin result. ",
-                    "Make it sound spontaneous, playful, and fun. Keep it under 2-3 sentences.",
-                ]
-            )
-        )
-    )
-
-    input_field = {
-        "name": ":clipboard: " + __("Choices"),
-        "value": "```mathematica\n"
-        + "\n".join(f"{i+1}. {item}" for i, item in enumerate(item_ls))
-        + "\n```",
-        "inline": False,
-    }
+        input_field = {
+            "name": ":clipboard: " + __("Choices"),
+            "value": ", ".join(
+                item if is_discord_special_string(item) else f"`{item}`"
+                for item in item_ls
+            ),
+            "inline": False,
+        }
 
     output_field = {
         "name": ":dart: " + __("Lucky Pick"),
@@ -96,41 +122,106 @@ async def roulette(ctx: commands.Context, *, items: str):
 
     embed = MsgFormatter.get(
         ctx,
-        "Roulette `BETA`",
-        __("Roulette is running. Please wait."),
+        "Roulette `✨BETA`",
+        description=__("Roulette is running. Please wait."),
         fields=[output_field, input_field],
     )
 
     msg: discord.Message = await ctx.send(embed=embed)
 
-    for i in range(5, 0, -1):
-        output_field["value"] = f"\n{Emoji.typing} " + __("%dsec left") % i + "\n\u2800"
+    async def countdown():
+        for i in range(5, 0, -1):
+            output_field["value"] = f"\n{Emoji.typing} " + __("%dsec left") % i
 
-        embed.set_field_at(0, **output_field)
+            embed.set_field_at(0, **output_field)
 
-        if i == 1:
-            embed.description = f"{Emoji.gemini_generating} Generating..."
+            await msg.edit(embed=embed)
+            await asyncio.sleep(1)
 
-        await msg.edit(embed=embed)
-        await asyncio.sleep(1)
+    ai_response = None
 
-    ai_comment = await ai_comment_task
+    if gemini_enabled:
+        ai_response = await ai_generating_task
+
+        if ai_response:
+            ai_response = re.sub(r"^```json\n|\n```$", "", ai_response.strip())
+            try:
+                data = json.loads(ai_response)
+            except json.JSONDecodeError:
+                log.error("Failed to parse AI response:\n%s", ai_response)
+                data = None
+                await ctx.send(
+                    embed=MsgFormatter.get(
+                        ctx,
+                        __("AI response error"),
+                        __("Failed to parse AI response. Please try again later."),
+                    )
+                )
+                return
+
+            title = data["title"]
+            item_ls = data["options"]
+            result = data["result"]
+            ai_comment = data["comment"]
+
+            embed.description = title
+            input_field["value"] = ", ".join(
+                item if is_discord_special_string(item) else f"`{item}`"
+                for item in item_ls
+            )
+
+            output_field["name"] = ":dart: " + __("Lucky Pick")
+            output_field["value"] = (
+                result if is_discord_special_string(result) else f"```{result}```"
+            ) + f"\n{Emoji.generating} Generating..."
+
+            embed.set_field_at(0, **output_field)
+            embed.set_field_at(1, **input_field)
+
+            embed.set_footer(
+                text=__("MK Bot can make mistakes. Check important info."),
+            )
+
+            await msg.edit(embed=embed)
+        else:
+            embed.description = f"{Emoji.GenAI} " + __(
+                "AI comment is not available for this roulette."
+            )
+
+            item_ls = shlex.split(items)
+            result = random.choice(item_ls)
+
+            input_field["value"] = ", ".join(
+                item if is_discord_special_string(item) else f"`{item}`"
+                for item in item_ls
+            )
+
+    else:
+        countdown_task = asyncio.create_task(countdown())
+        await countdown_task
 
     DiscordEventLogEntry.Add(
         ctx,
         "RouletteResult",
-        {"result": result, "items": item_ls, "ai_comment": ai_comment},
+        {"result": result, "items": item_ls, "ai_response": ai_response},
     )
 
-    if ai_comment:
-        embed.description = f"{Emoji.google_gemini} " + ai_comment
-    else:
-        embed.description = f"{Emoji.google_gemini} " + __(
-            "AI comment is not available for this roulette."
+    if ai_response:
+        output_field["value"] = (
+            result
+            if is_discord_special_string(result)
+            else f"```{result}```" + f"\n{Emoji.GenAI} {ai_comment}"
         )
 
-    output_field["value"] = f"* {result}"
-    input_field["value"] = "|| " + input_field["value"] + " ||"
+        await asyncio.sleep(1)
+    else:
+        embed.description = f"{Emoji.GenAI} " + __(
+            "AI comment is not available for this roulette."
+        )
+        output_field["name"] = ":dart: " + __("Lucky Pick")
+        output_field["value"] = (
+            result if is_discord_special_string(result) else f"```{result}```"
+        )
 
     embed.set_field_at(0, **output_field)
     embed.set_field_at(1, **input_field)

@@ -275,7 +275,7 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
             __("🔔 Here is the news🗞️ related to `{query}`\n\n{summary}").format(
                 query=data.keyword,
                 summary=(
-                    f"{Emoji.google_gemini} AI Overview\n{summary}\n\u2800"
+                    f"{Emoji.GenAI} AI Overview\n{summary}\n\u2800"
                     if gemini_enabled
                     else ""
                 ),
@@ -435,7 +435,7 @@ class News(commands.Cog):
                 content=__("📰 News search results for `{query}`\n\n{summary}").format(
                     query=query,
                     summary=(
-                        f"{Emoji.gemini_generating} Generating AI Overview...\n\u2800"
+                        f"{Emoji.generating} Generating AI Overview...\n\u2800"
                         if ai_overview_enabled_for_search
                         else ""
                     ),
@@ -454,7 +454,7 @@ class News(commands.Cog):
                         "📰 News search results for `{query}`\n\n{summary}"
                     ).format(
                         query=query,
-                        summary=f"{Emoji.google_gemini} AI Overview\n{summary}\n\u2800",
+                        summary=f"{Emoji.GenAI} AI Overview\n{summary}\n\u2800",
                     ),
                     embeds=embeds,
                     view=view,
