@@ -1,9 +1,5 @@
-from functools import wraps
-
 import discord
 from discord.ext import commands
-
-from .emoji import Emoji
 
 cmd_dict = None
 
@@ -59,34 +55,3 @@ def send(ctx_or_iaction, *args, push=False, **kwagrs):
             return ctx_or_iaction.channel.send(*args, **kwagrs)
         else:
             return ctx_or_iaction.response.send_message(*args, **kwagrs)
-
-
-def related_commands(cmds: list[str]):
-    def deco(func):
-        @wraps(func)
-        async def outerfunc(*args, **kwargs):
-            if isinstance(args[0], commands.Context) or isinstance(
-                args[0], discord.Interaction
-            ):
-                ctx_or_iaction: commands.Context = args[0]
-            else:
-                ctx_or_iaction: commands.Context = args[1]
-
-            if isinstance(ctx_or_iaction, discord.Interaction):
-                bot: commands.Bot = ctx_or_iaction.client
-                # user = ctx_or_iaction.user
-            else:
-                bot: commands.Bot = ctx_or_iaction.bot
-                # user = ctx_or_iaction.author
-
-            await func(*args, **kwargs)
-
-            await send(
-                ctx_or_iaction,
-                f"{Emoji.command} " + " ".join(get_command_mention_or_name(bot, cmds)),
-                push=True,
-            )
-
-        return outerfunc
-
-    return deco

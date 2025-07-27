@@ -10,7 +10,6 @@ import pytz
 from bs4 import BeautifulSoup
 from discord import app_commands
 from discord.ext import commands
-from google import genai
 
 from core.controllers.discord.utils import Emoji
 from core.controllers.discord.utils.MGCert import Level, MGCertificate
@@ -20,33 +19,14 @@ from mgylabs.db.models import DiscordUser
 from mgylabs.db.storage import dataclass_for_storage, localStorage
 from mgylabs.i18n import I18nExtension, __
 from mgylabs.utils import logger
-from mgylabs.utils.config import CONFIG
 from mgylabs.utils.event import AsyncScheduler, SchTask
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
+from mgylabs.utils.version import VERSION, is_development_mode
 
 from .utils.feature import Feature
+from .utils.gemini import gemini_enabled, get_gemini_response
 
 log = logger.get_logger(__name__)
-
-ai_overview_enabled = True if CONFIG.geminiToken else False
-
-if ai_overview_enabled:
-    try:
-        gemini = genai.Client(api_key=CONFIG.geminiToken)
-    except Exception as e:
-        log.error("Failed to initialize Google GenAI client: %s", e)
-        ai_overview_enabled = False
-
-
-async def get_gemini_response(query: str):
-    if not ai_overview_enabled:
-        return None
-
-    response = await gemini.aio.models.generate_content(
-        model="gemini-2.5-flash", contents=query
-    )
-
-    return response.text if response else None
 
 
 def get_useragent():
@@ -93,9 +73,6 @@ class SearchResult:
 
 
 async def get_ai_news_summary(news_results: list[SearchResult]):
-    if not ai_overview_enabled:
-        return ""
-
     if not news_results:
         return ""
 
@@ -289,7 +266,7 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
         if not data.color:
             data.color = get_random_color()
 
-        if ai_overview_enabled:
+        if gemini_enabled:
             summary = await get_ai_news_summary(results)
             if not summary:
                 summary = __("An AI overview is not available for these articles.")
@@ -299,7 +276,7 @@ async def news_notify(bot: commands.Bot, data: NewsNotifyData):
                 query=data.keyword,
                 summary=(
                     f"{Emoji.google_gemini} AI Overview\n{summary}\n\u2800"
-                    if ai_overview_enabled
+                    if gemini_enabled
                     else ""
                 ),
             ),
@@ -450,12 +427,16 @@ class News(commands.Cog):
                 for result in results
             ]
 
+            ai_overview_enabled_for_search = gemini_enabled and (
+                VERSION.is_canary() or is_development_mode()
+            )
+
             await search_msg.edit(
                 content=__("📰 News search results for `{query}`\n\n{summary}").format(
                     query=query,
                     summary=(
                         f"{Emoji.gemini_generating} Generating AI Overview...\n\u2800"
-                        if ai_overview_enabled
+                        if ai_overview_enabled_for_search
                         else ""
                     ),
                 ),
@@ -463,7 +444,7 @@ class News(commands.Cog):
                 view=view,
             )
 
-            if ai_overview_enabled:
+            if ai_overview_enabled_for_search:
                 summary = await get_ai_news_summary(results)
                 if not summary:
                     summary = __("An AI overview is not available for these articles.")

@@ -1,4 +1,6 @@
+import contextvars
 import platform
+from functools import wraps
 
 import discord
 from discord.ext import commands
@@ -6,7 +8,12 @@ from discord.ext import commands
 from mgylabs.i18n import __
 from mgylabs.utils.config import CONFIG, VERSION
 
+from .command_helper import get_command_mention_or_name
+from .emoji import Emoji
+
 Msg_Color = None
+
+related_commands_str = contextvars.ContextVar("related_commands_str", default=None)
 
 
 def get_color():
@@ -22,6 +29,39 @@ def get_color():
 
 def color_to_int(code):
     return int(code.replace("#", ""), 16)
+
+
+def related_commands(cmds: list[str]):
+    def deco(func):
+        @wraps(func)
+        async def outerfunc(*args, **kwargs):
+            if isinstance(args[0], commands.Context) or isinstance(
+                args[0], discord.Interaction
+            ):
+                ctx_or_iaction: commands.Context = args[0]
+            else:
+                ctx_or_iaction: commands.Context = args[1]
+
+            if isinstance(ctx_or_iaction, discord.Interaction):
+                bot: commands.Bot = ctx_or_iaction.client
+                # user = ctx_or_iaction.user
+            else:
+                bot: commands.Bot = ctx_or_iaction.bot
+                # user = ctx_or_iaction.author
+
+            related_commands_str.set(
+                f"{Emoji.command} " + " ".join(get_command_mention_or_name(bot, cmds))
+            )
+            # related_commands_str.set(
+            #     f"<:command:1060071089759338546> "
+            #     + " ".join(get_command_mention_or_name(bot, cmds))
+            # )
+
+            return await func(*args, **kwargs)
+
+        return outerfunc
+
+    return deco
 
 
 class MsgFormatter:
@@ -81,19 +121,21 @@ class MsgFormatter:
                     name="Requested by", value="<@{}>".format(user_id), inline=False
                 )
 
+        if related_commands_str.get() is not None:
+            embed.add_field(
+                name="",
+                value=f"{related_commands_str.get()}\n",
+                inline=False,
+            )
+
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
                 inline=False,
             )
-
-        embed.set_footer(
-            text="Powered by Mulgyeol MK Bot",
-            # icon_url=MsgFormatter.avatar_url,
-        )
 
         return embed
 
@@ -134,7 +176,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
@@ -162,7 +204,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
@@ -203,7 +245,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
+                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",

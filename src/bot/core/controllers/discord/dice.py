@@ -9,10 +9,9 @@ from mgylabs.utils.config import resource_path
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils import Emoji
-from .utils.command_helper import related_commands
 from .utils.feature import Feature
 from .utils.MGCert import Level, MGCertificate
-from .utils.MsgFormat import MsgFormatter
+from .utils.MsgFormat import MsgFormatter, related_commands
 
 
 @commands.hybrid_command()
@@ -24,22 +23,14 @@ async def dice(ctx: commands.Context):
     Roll a dice.
     """
     embed = MsgFormatter.get(
-        ctx, description=f"{Emoji.typing} {__('Rolling a dice...')}"
+        ctx, title="Dice", description=f"{Emoji.typing} {__('Rolling a dice...')}"
     )
-    dice_file = discord.File(
-        resource_path("common/bot/Game Die.png"), filename="dice.png"
-    )
-    embed.set_author(name="Dice", icon_url="attachment://dice.png")
 
-    msg: discord.Message = await ctx.send(embed=embed, file=dice_file)
+    msg: discord.Message = await ctx.send(embed=embed)
 
     result = random.randint(1, 6)
 
     DiscordEventLogEntry.Add(ctx, "DiceResult", {"result": result})
-
-    dice_file = discord.File(
-        resource_path("common/bot/Game Die.png"), filename="dice.png"
-    )
 
     number_file_name = f"Keycap Digit {result}.png"
     discord_number_file_name = number_file_name.replace(" ", "")
@@ -53,7 +44,7 @@ async def dice(ctx: commands.Context):
 
     await asyncio.sleep(1)
 
-    await msg.edit(embed=embed, attachments=[dice_file, number_file])
+    await msg.edit(embed=embed, attachments=[number_file])
 
 
 async def setup(bot: commands.Bot):

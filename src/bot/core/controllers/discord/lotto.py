@@ -4,9 +4,8 @@ from discord.ext import commands
 
 from mgylabs.i18n import __
 
-from .utils.command_helper import related_commands
 from .utils.MGCert import Level, MGCertificate
-from .utils.MsgFormat import MsgFormatter
+from .utils.MsgFormat import MsgFormatter, related_commands
 
 
 @commands.hybrid_command()
