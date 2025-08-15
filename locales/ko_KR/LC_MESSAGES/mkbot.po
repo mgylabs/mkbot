@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mkbot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-15 17:11+0900\n"
+"POT-Creation-Date: 2025-08-15 17:18+0900\n"
 "PO-Revision-Date: 2023-03-06 05:12+0000\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
@@ -607,6 +607,9 @@ msgstr ""
 msgid "Pong in %sms"
 msgstr "핑 %sms"
 
+msgid "Preparing the roulette..."
+msgstr "룰렛을 준비하는 중..."
+
 #, docstring
 msgid "Recommends Korean lotto lucky numbers"
 msgstr "한국의 로또 숫자를 추천해줍니다."
@@ -634,8 +637,8 @@ msgstr ""
 msgid "Rolling a dice..."
 msgstr ""
 
-msgid "Roulette is running. Please wait."
-msgstr "룰렛이 돌고 있습니다. 잠시만 기다려주세요."
+msgid "Roulette is running."
+msgstr "룰렛이 돌고 있습니다."
 
 #, docstring
 msgid "Run a command as another user optionally in another channel."

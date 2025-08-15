@@ -60,6 +60,7 @@ class Settings:
     showFeedbackLink = SettingItem(True)
     betaUpdate = SettingItem(False)
     geminiToken = SettingItem("")
+    emoji = SettingItem({})
 
     def __init__(self, data):
         self.update_dict(data)

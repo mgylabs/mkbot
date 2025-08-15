@@ -91,6 +91,14 @@ async def roulette(ctx: commands.Context, *, items: str):
             "inline": False,
         }
 
+        description = ""
+
+        output_field = {
+            "name": Emoji.typing + " " + __("Lucky Pick"),
+            "value": __("Preparing the roulette..."),
+            "inline": False,
+        }
+
     else:
         item_ls = shlex.split(items)
         result = random.choice(item_ls)
@@ -114,16 +122,20 @@ async def roulette(ctx: commands.Context, *, items: str):
             "inline": False,
         }
 
-    output_field = {
-        "name": ":dart: " + __("Lucky Pick"),
-        "value": Emoji.typing,
-        "inline": False,
-    }
+        description = f"{Emoji.GenAI} " + __(
+            "AI comment is not available for this roulette."
+        )
+
+        output_field = {
+            "name": Emoji.typing + " " + __("Lucky Pick"),
+            "value": __("Roulette is running."),
+            "inline": False,
+        }
 
     embed = MsgFormatter.get(
         ctx,
         "Roulette `✨BETA`",
-        description=__("Roulette is running. Please wait."),
+        description=description,
         fields=[output_field, input_field],
     )
 
@@ -131,7 +143,9 @@ async def roulette(ctx: commands.Context, *, items: str):
 
     async def countdown():
         for i in range(5, 0, -1):
-            output_field["value"] = f"\n{Emoji.typing} " + __("%dsec left") % i
+            output_field["value"] = (
+                __("Roulette is running.") + " " + __("%dsec left") % i
+            )
 
             embed.set_field_at(0, **output_field)
 
@@ -170,12 +184,6 @@ async def roulette(ctx: commands.Context, *, items: str):
                 for item in item_ls
             )
 
-            output_field["name"] = ":dart: " + __("Lucky Pick")
-            output_field["value"] = (
-                result if is_discord_special_string(result) else f"```{result}```"
-            ) + f"\n{Emoji.generating} Generating..."
-
-            embed.set_field_at(0, **output_field)
             embed.set_field_at(1, **input_field)
 
             embed.set_footer(
@@ -196,9 +204,8 @@ async def roulette(ctx: commands.Context, *, items: str):
                 for item in item_ls
             )
 
-    else:
-        countdown_task = asyncio.create_task(countdown())
-        await countdown_task
+    countdown_task = asyncio.create_task(countdown())
+    await countdown_task
 
     DiscordEventLogEntry.Add(
         ctx,
@@ -207,6 +214,15 @@ async def roulette(ctx: commands.Context, *, items: str):
     )
 
     if ai_response:
+        output_field["name"] = ":dart: " + __("Lucky Pick")
+        output_field["value"] = (
+            result if is_discord_special_string(result) else f"```{result}```"
+        ) + f"\n{Emoji.generating} Generating..."
+
+        embed.set_field_at(0, **output_field)
+
+        await msg.edit(embed=embed)
+
         output_field["value"] = (
             result
             if is_discord_special_string(result)
@@ -215,9 +231,6 @@ async def roulette(ctx: commands.Context, *, items: str):
 
         await asyncio.sleep(1)
     else:
-        embed.description = f"{Emoji.GenAI} " + __(
-            "AI comment is not available for this roulette."
-        )
         output_field["name"] = ":dart: " + __("Lucky Pick")
         output_field["value"] = (
             result if is_discord_special_string(result) else f"```{result}```"

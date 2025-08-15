@@ -54,7 +54,7 @@ class SearchResult:
         headers = {"User-Agent": get_useragent()}
 
         async with aiohttp.ClientSession(
-            headers=headers, raise_for_status=True
+            headers=headers, raise_for_status=False
         ) as session:
             async with session.get(self.url) as response:
                 if response.status == 200:

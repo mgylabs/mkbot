@@ -514,6 +514,9 @@ msgstr ""
 msgid "Pong in %sms"
 msgstr ""
 
+msgid "Preparing the roulette..."
+msgstr ""
+
 #, docstring
 msgid "Recommends Korean lotto lucky numbers"
 msgstr ""
@@ -541,7 +544,7 @@ msgstr ""
 msgid "Rolling a dice..."
 msgstr ""
 
-msgid "Roulette is running. Please wait."
+msgid "Roulette is running."
 msgstr ""
 
 #, docstring
