@@ -511,9 +511,6 @@ msgid ""
 "you can vote using reactions"
 msgstr ""
 
-msgid "Pong in %sms"
-msgstr ""
-
 msgid "Preparing the roulette..."
 msgstr ""
 
