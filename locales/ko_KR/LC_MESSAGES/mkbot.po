@@ -1,66 +1,95 @@
+
 msgid ""
 msgstr ""
-"Project-Id-Version: mkbot\n"
-"PO-Revision-Date: 2023-03-06 05:12\n"
+"Project-Id-Version:  mkbot\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-08-15 17:11+0900\n"
+"PO-Revision-Date: 2023-03-06 05:12+0000\n"
 "Last-Translator: \n"
-"Language-Team: Korean\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mkbot\n"
-"X-Crowdin-Project-ID: 556659\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /locales/mkbot.pot\n"
-"X-Crowdin-File-ID: 15\n"
 "Language: ko_KR\n"
+"Language-Team: Korean\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
 
+#, python-format
 msgid "%(enemy)s's turn."
 msgstr "%(enemy)s의 턴!"
 
+#, python-format
 msgid "%(member)s is not in the %(userlist)s. This incident will be reported."
 msgstr "사용자 %(member)s은(는) %(userlist)s 목록에 등록되어 있지 않습니다. 이 시도를 보고합니다."
 
-msgid "%(other)s has been challenged to a game of Battleship by %(author)s.\n"
+#, python-format
+msgid ""
+"%(other)s has been challenged to a game of Battleship by %(author)s.\n"
 "In order to accept, please press your button below to ready up."
-msgstr "%(author)s가 %(other)s 에게 배틀쉽으로 도전합니다!\n"
+msgstr ""
+"%(author)s가 %(other)s 에게 배틀쉽으로 도전합니다!\n"
 "승낙하시려면, 버튼을 눌러 준비하십시오"
 
-msgid "%(other)s has been challenged to a game of Gobblet Gobblers by %(author)s.\n"
-"This is a game similar to Tic-Tac-Toe except each piece has an associated strength with it. A higher strength value eats a piece even if it's already on the board. Careful, you only have 1 piece of each strength value!\n\n"
+#, python-format
+msgid ""
+"%(other)s has been challenged to a game of Gobblet Gobblers by "
+"%(author)s.\n"
+"This is a game similar to Tic-Tac-Toe except each piece has an associated"
+" strength with it. A higher strength value eats a piece even if it's "
+"already on the board. Careful, you only have 1 piece of each strength "
+"value!\n"
+"\n"
 "Do you accept this challenge, %(other)s?"
-msgstr "%(author)s가 %(other)s에게 가블레트 가블레스 게임으로 도전합니다!\n"
+msgstr ""
+"%(author)s가 %(other)s에게 가블레트 가블레스 게임으로 도전합니다!\n"
 "이 게임은 틱택토와 유사하지만 각 피스가 레벨을 가지고 있습니다. \n"
 "더 높은 레벨을 가진 피스는 이미 다른 피스가 보드에 있더라도 먹어치울 수 있습니다.\n"
-"하지만 조심하세요, 각 피스는 서로 다른 레벨을 하나씩만 가질 수 있습니다.\n\n"
+"하지만 조심하세요, 각 피스는 서로 다른 레벨을 하나씩만 가질 수 있습니다.\n"
+"\n"
 "%(other)s, 도전을 받아들이시나요?"
 
+#, python-format
 msgid "%(player)s is ready!"
 msgstr "%(player)s 준비완료!"
 
+#, python-format
 msgid "%(player)s wins this game of Battleship! Congratulations."
 msgstr "%(player)s가 배틀쉽에서 승리했습니다! 영광스러운 승리자에게 박수를"
 
+#, python-format
 msgid "%(player)s's Button"
 msgstr "%(player)s의 버튼"
 
+#, python-format
 msgid "%(winning_player)s won!"
 msgstr "%(winning_player)s 승리!"
 
+#, python-format
 msgid "%d Messages Deleted"
 msgstr "%d개 메세지 삭제 완료"
 
+#, python-format
 msgid "%dsec left"
 msgstr "%d초 남음"
 
+#, python-format
 msgid "%s in Queue"
 msgstr "%s 을(를) 대기열에 추가"
 
-msgid "ABRT has detected an unknown error.\n"
-"Please [create an issue](%s) at GitHub with below logs to help fix this problem."
-msgstr "ABRT가 알 수 없는 오류를 감지했습니다.\n"
+#, python-format
+msgid ""
+"ABRT has detected an unknown error.\n"
+"Please [create an issue](%s) at GitHub with below logs to help fix this "
+"problem."
+msgstr ""
+"ABRT가 알 수 없는 오류를 감지했습니다.\n"
 "이 문제를 해결하기 위해 아래 로그와 함께 [GitHub에서 문제를 보고](%s)해주세요."
+
+msgid "AI comment is not available for this roulette."
+msgstr ""
+
+msgid "AI response error"
+msgstr ""
 
 msgid "All messages are automatically translated to {0}."
 msgstr "모든 메시지는 자동으로 {0} (으)로 번역됩니다."
@@ -71,14 +100,29 @@ msgstr "이미 재생 중"
 msgid "Already running a REPL session in this channel. Exit it with `quit`."
 msgstr ""
 
-msgid "Alright you're ready! This is your board. You go %(ordinal)s! Please do not dismiss this message!"
+#, python-format
+msgid ""
+"Alright you're ready! This is your board. You go %(ordinal)s! Please do "
+"not dismiss this message!"
 msgstr "준비되셨군요! 이게 당신의 보드입니다. 당신은 %(ordinal)s입니다! 이 메세지를 무시하지 마세요!"
+
+msgid "An AI overview is not available for these articles."
+msgstr ""
 
 msgid "Arguments:"
 msgstr "매개변수:"
 
+msgid "Ask anything"
+msgstr ""
+
 msgid "Automatic Bug Reporting Tool"
 msgstr "자동 버그 보고 도구"
+
+msgid "Autoplay turned off"
+msgstr ""
+
+msgid "Autoplay turned on"
+msgstr ""
 
 msgid "Be warned: Canary can be unstable."
 msgstr "경고: Canary 버전은 불안정할 수 있습니다."
@@ -86,23 +130,28 @@ msgstr "경고: Canary 버전은 불안정할 수 있습니다."
 msgid "Cannot find target language(s) inputted"
 msgstr "입력한 대상 언어를 찾을 수 없습니다."
 
-msgid "Challenge accepted! %(first_member)s goes first and %(second_member)s goes second.\n\n"
+#, python-format
+msgid ""
+"Challenge accepted! %(first_member)s goes first and %(second_member)s "
+"goes second.\n"
+"\n"
 "It is now 🟦 %(first_member)s's turn"
-msgstr "도전 수락! %(first_member)s은(는) 첫 번째, %(second_member)s은(는) 두 번째입니다.\n\n"
+msgstr ""
+"도전 수락! %(first_member)s은(는) 첫 번째, %(second_member)s은(는) 두 번째입니다.\n"
+"\n"
 "지금은 🟦 %(first_member)s의 차례입니다."
 
 msgid "Challenge declined :("
 msgstr "챌린지가 거부되었습니다 :("
 
-msgid "Chat mode is not activated."
-msgstr "채팅 모드가 활성화되지 않았습니다."
+msgid "Choices"
+msgstr ""
 
-msgid "Chat mode is only available when you have access to the **MK Bot Support Server**."
-msgstr "채팅 모드는 **MK Bot 서포트 서버**에 액세스할 수 있는 경우에만 사용할 수 있습니다."
-
+#, python-format
 msgid "Chose %s"
 msgstr "%s을(를) 선택"
 
+#, python-format
 msgid "Command Error: %s"
 msgstr "명령어 오류: %s"
 
@@ -136,10 +185,12 @@ msgid "Deletes messages. (Requires Admin Permission)"
 msgstr "메세지를 삭제합니다. (관리자 권한 필요)"
 
 #, docstring
-msgid "Deletes messages. (Requires Admin Permission)\n"
+msgid ""
+"Deletes messages. (Requires Admin Permission)\n"
 "{commandPrefix}delete amount : deletes 'amount' number of messages\n"
 "{commandPrefix}delete all : deletes all(maximum 200) messages"
-msgstr "메세지를 삭제합니다. (관리자 권한 필요)\n"
+msgstr ""
+"메세지를 삭제합니다. (관리자 권한 필요)\n"
 "{commandPrefix}delete 개수 : '개수'만큼의 메세지들을 삭제합니다\n"
 "{commandPrefix}delete all : 메세지를 전부(최대 200) 삭제합니다"
 
@@ -151,8 +202,13 @@ msgstr "개발자 도구"
 msgid "Disables conversational translation mode."
 msgstr "대화형 번역 모드를 비활성화합니다."
 
+#, python-format
 msgid "Display language of %(member)s"
 msgstr "사용자 %(member)s의 표시 언어"
+
+#, docstring
+msgid "Enables D-Day widget."
+msgstr ""
 
 #, docstring
 msgid "Enables conversational translation mode."
@@ -173,7 +229,9 @@ msgid "Evaluates a code."
 msgstr ""
 
 #, docstring
-msgid "Evaluates a code.\n\n"
+msgid ""
+"Evaluates a code.\n"
+"\n"
 "Environment Variables:\n"
 "    `ctx`      - the command invocation context\n"
 "    `bot`      - the bot object\n"
@@ -187,6 +245,7 @@ msgid "Evaluates a code.\n\n"
 "    `discord`  - the discord.py library"
 msgstr ""
 
+#, python-format
 msgid "Everyone can contribute to MK Bot project on %s."
 msgstr "%s에서 누구나 MK Bot 프로젝트에 기여할 수 있습니다."
 
@@ -199,20 +258,31 @@ msgstr ""
 msgid "Exiting."
 msgstr ""
 
+#, fuzzy
+msgid "Failed to parse AI response. Please try again later."
+msgstr "채팅 모드 로드 중... 잠시 후 다시 시도하십시오."
+
 msgid "Feedback"
 msgstr "피드백"
 
+#, python-format
 msgid "For more information, See %s"
 msgstr "자세한 내용은 %s을(를) 참조하세요."
 
-msgid "Game currently in progress between %(player)s and %(enemy)s...\n\n"
+#, python-format
+msgid ""
+"Game currently in progress between %(player)s and %(enemy)s...\n"
+"\n"
 "**Guide**\n"
 "Red button → You hit the enemy ship successfully.\n"
 "Disabled blue button → Your hit missed the enemy ship.\n"
 "🌀 → The enemy's hit missed.\n"
 "💥 → The enemy hit your ship.\n"
-"If you accidentally dismissed your board, press the button below to bring it back. Note that it invalidates your previous board"
-msgstr "%(player)s와 %(enemy)s 사이에 현재 게임이 진행 중입니다.\n\n"
+"If you accidentally dismissed your board, press the button below to bring"
+" it back. Note that it invalidates your previous board"
+msgstr ""
+"%(player)s와 %(enemy)s 사이에 현재 게임이 진행 중입니다.\n"
+"\n"
 "**가이드**\n"
 "빨간색 버튼 → 귀하가 상대방의 배를 성공적으로 공격했습니다.\n"
 "비활성화된 파란색 버튼 → 귀하기 상대방의 배를 놓쳤습니다.\n"
@@ -223,34 +293,46 @@ msgstr "%(player)s와 %(enemy)s 사이에 현재 게임이 진행 중입니다.\
 msgid "General"
 msgstr "일반"
 
+#, docstring, fuzzy
+msgid "Give Feedback ▷"
+msgstr "피드백을 보냅니다."
+
 msgid "Hangman"
 msgstr "행맨"
 
 msgid "Help"
 msgstr "도움말"
 
-msgid "I think you told me about the `{command}` command, but I am not confident that I have understood you correctly.\n"
-"Please try rephrasing your instruction to me."
-msgstr ""
-
+#, python-format
 msgid "Installing... `%s`"
 msgstr ""
 
 msgid "Invalid Argument"
 msgstr "잘못된 매개변수"
 
+msgid "Invalid URL"
+msgstr ""
+
+msgid "Invalid category."
+msgstr ""
+
+msgid "Invalid date format. The required format is `<year/month/day>`"
+msgstr ""
+
 msgid "Invalid language"
 msgstr "유효하지 않은 언어"
 
-msgid "Invalid parameter. For more information, type `{commandPrefix}help tts`."
-msgstr "잘못된 매개 변수입니다. 자세한 내용을 보려면 `{commandPrefix}help tts`을(를) 입력하십시오."
+msgid "Invalid time format. The required format is `<hour>:<minute>`."
+msgstr ""
 
+#, python-format
 msgid "Invalid timezone: %s"
 msgstr "유효하지 않은 시간대: %s"
 
 msgid "It is not your turn yet."
 msgstr "아직 당신의 턴이 아닙니다"
 
+#, python-format
 msgid "It is now %(kind)s %(member)s's turn."
 msgstr "이제 %(kind)s %(member)s 차례입니다."
 
@@ -266,6 +348,7 @@ msgstr "무승부"
 msgid "It's not your turn"
 msgstr "귀하의 차례가 아닙니다."
 
+#, python-format
 msgid "Joined %s"
 msgstr "%s에 입장했습니다"
 
@@ -277,10 +360,12 @@ msgstr "명령어를 입력한 유저가 있는 음성채널에 입장합니다.
 msgid "Language"
 msgstr "언어"
 
-msgid "Language detected is not supported. \n"
+msgid ""
+"Language detected is not supported. \n"
 " ** Detected language: {srcLang} **\n"
 "use //help translate to find supported languages"
-msgstr "감지된 언어는 지원되지 않습니다. \n"
+msgstr ""
+"감지된 언어는 지원되지 않습니다. \n"
 " ** 감지된 언어: {srcLang} **\n"
 "지원되는 언어를 탐색하려면 //help translate 을(를) 입력하세요."
 
@@ -289,10 +374,16 @@ msgid "Launches an interactive REPL session."
 msgstr ""
 
 #, docstring
-msgid "Launches an interactive REPL session.\n\n"
-"The REPL will only recognise code as messages which start with a backtick.\n"
-"This includes codeblocks, and as such multiple lines can be evaluated.\n\n"
-"Use `exit()` or `quit` to exit the REPL session, prefixed with a backtick so they may be interpreted.\n\n"
+msgid ""
+"Launches an interactive REPL session.\n"
+"\n"
+"The REPL will only recognise code as messages which start with a "
+"backtick.\n"
+"This includes codeblocks, and as such multiple lines can be evaluated.\n"
+"\n"
+"Use `exit()` or `quit` to exit the REPL session, prefixed with a backtick"
+" so they may be interpreted.\n"
+"\n"
 "Environment Variables:\n"
 "    `ctx`      - the command invocation context\n"
 "    `bot`      - the bot object\n"
@@ -310,17 +401,22 @@ msgstr ""
 msgid "Leaves voice channel where the user who typed the command is in."
 msgstr "명령어를 입력한 유저가 있는 음성채널에서 퇴장합니다."
 
-msgid "Loading chat mode... Please try again later."
-msgstr "채팅 모드 로드 중... 잠시 후 다시 시도하십시오."
-
+#, python-format
 msgid "Loading... `%s`"
 msgstr ""
 
+#, python-format
 msgid "Local time of %(member)s (%(timezone)s)"
 msgstr "사용자 %(member)s의 로컬 시간 (%(timezone)s)"
 
 msgid "Logs out of Discord and closes all connections"
 msgstr "디스코드에서 로그아웃하고 모든 연결을 끊습니다"
+
+msgid "Lucky Pick"
+msgstr ""
+
+msgid "MK Bot can make mistakes. Check important info."
+msgstr ""
 
 #, docstring
 msgid "Minigame"
@@ -332,6 +428,16 @@ msgstr "Mulgyeol MK Bot은 오픈소스 로컬 호스트 디스코드 봇입니�
 #, docstring
 msgid "Music"
 msgstr "음악"
+
+#, docstring
+msgid "News"
+msgstr ""
+
+msgid "Next song will be automatically recommended"
+msgstr ""
+
+msgid "Next song will not be automatically recommended"
+msgstr ""
 
 msgid "No Search Word Error"
 msgstr "검색어 없음 오류"
@@ -348,18 +454,26 @@ msgstr "반응이 추가되지 않았습니다. 곡을 선택하기 위해 반�
 msgid "Not Playing Error"
 msgstr ""
 
+msgid "Notification time (Your time zone is {offset})"
+msgstr ""
+
 msgid "Now Playing"
 msgstr "지금 재생 중"
 
+#, python-format
 msgid "Now playing: %s"
 msgstr "지금 재생 중: %s"
 
 msgid "O won!"
 msgstr "O가 이겼습니다."
 
+msgid "Only one item provided. No roulette needed."
+msgstr ""
+
 msgid "Oops! Something went wrong."
 msgstr "어라! 뭔가 잘못됐네요."
 
+#, python-format
 msgid "Paused at: %s"
 msgstr "일시 중지됨: %s"
 
@@ -368,11 +482,13 @@ msgid "Pauses the song that is playing"
 msgstr "재생 중인 노래를 일시 정지합니다."
 
 #, docstring
-msgid "Pauses the song that is playing\n"
+msgid ""
+"Pauses the song that is playing\n"
 "{commandPrefix}pause\n"
 "{commandPrefix}pp\n"
 "Cannot pause the player if the player is already paused"
-msgstr "재생 중인 노래를 일시 정지합니다.\n"
+msgstr ""
+"재생 중인 노래를 일시 정지합니다.\n"
 "{commandPrefix}pause\n"
 "{commandPrefix}pp\n"
 "플레이어가 이미 일시 중지된 경우 플레이어를 일시 중지할 수 없습니다."
@@ -389,10 +505,14 @@ msgid "Play a game of Hangman"
 msgstr "행맨 게임을 플레이합니다"
 
 #, docstring
-msgid "Play a game of Hangman\n\n"
+msgid ""
+"Play a game of Hangman\n"
+"\n"
 "{commandPrefix}hangman\n"
 "{commandPrefix}hangman exit"
-msgstr "행맨 게임을 플레이합니다\n\n"
+msgstr ""
+"행맨 게임을 플레이합니다\n"
+"\n"
 "{commandPrefix}hangman\n"
 "{commandPrefix}hangman exit"
 
@@ -405,16 +525,22 @@ msgid "Play roulette"
 msgstr "룰렛 플레이"
 
 #, docstring
-msgid "Play roulette\n\n"
+msgid ""
+"Play roulette\n"
+"\n"
 "Examples:\n"
 "{commandPrefix}roulette @user1 @user2 @user3\n"
-"{commandPrefix}rou \"item 1\" \"item 2\"\n\n"
+"{commandPrefix}rou \"item 1\" \"item 2\"\n"
+"\n"
 "Note:\n"
 "This bot cannot be added to items."
-msgstr "룰렛 플레이\n\n"
+msgstr ""
+"룰렛 플레이\n"
+"\n"
 "예:\n"
 "{commandPrefix}roulette @user1 @user2 @user3\n"
-"{commandPrefix}rou \"항목 1\" \"항목 2\"\n\n"
+"{commandPrefix}rou \"항목 1\" \"항목 2\"\n"
+"\n"
 "참고:\n"
 "이 봇은 항목에 추가할 수 없습니다."
 
@@ -435,24 +561,29 @@ msgid "Plays the keyword searched or plays the song in queue"
 msgstr "검색된 키워드를 재생하거나 대기열에 있는 곡을 재생합니다."
 
 #, docstring
-msgid "Plays the keyword searched or plays the song in queue\n"
+msgid ""
+"Plays the keyword searched or plays the song in queue\n"
 "{commandPrefix}play \"keyword\"\n"
 "{commandPrefix}play\n"
 "{commandPrefix}p \"keyword\"\n"
 "{commandPrefix}p\n"
 "Searches the keyword in Youtube and puts it in queue\n"
-"If there is no keyword inputted and the player isn't playing anything, it starts the player"
-msgstr "검색된 키워드를 재생하거나 대기열에 있는 곡을 재생합니다.\n"
-"{commandPrefix}play \"keyword\"\n"
-"{commandPrefix}play\n"
-"{commandPrefix}p \"keyword\"\n"
-"{commandPrefix}p\n"
-"Youtube에서 키워드를 검색하여 대기열에 넣습니다\n"
-"입력 된 키워드가 없고 플레이어가 아무 것도 재생하지 않는 경우, 플레이어를 시작합니다."
+"If there is no keyword inputted and the player isn't playing anything, it"
+" starts the player\n"
+"\n"
+"{commandPrefix}play -auto \"keyword\"\n"
+"{commandPrefix}play -a \"keyword\"\n"
+"Turns autoplay on and automatically plays next song"
+msgstr ""
 
 msgid "Please Enter a word."
 msgstr "단어를 입력하세요."
 
+#, fuzzy
+msgid "Please enter your query."
+msgstr "단어를 입력하세요."
+
+#, python-format
 msgid "Please see the [Release Note](%s) for more information."
 msgstr "자세한 내용은 [릴리스 노트](%s)를 참조하십시오."
 
@@ -461,13 +592,18 @@ msgid "Poll command"
 msgstr "투표 명령어"
 
 #, docstring
-msgid "Poll command\n"
-"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll with three candidates. (do not use ,)\n"
+msgid ""
+"Poll command\n"
+"{commandPrefix}poll \"choose which?\" a b c : a, b, c Generate a poll "
+"with three candidates. (do not use ,)\n"
 "you can vote using reactions"
-msgstr "투표 명령어\n"
-"{commandPrefix}poll \"어느 것을 선택하시겠습니까?\" 가 나 다 : 가, 나, 다 세 개의 선택지가 있는 투표를 생성합니다. (,를 사용하지 마세요.)\n"
+msgstr ""
+"투표 명령어\n"
+"{commandPrefix}poll \"어느 것을 선택하시겠습니까?\" 가 나 다 : 가, 나, 다 세 개의 선택지가 있는 투표를 "
+"생성합니다. (,를 사용하지 마세요.)\n"
 "반응을 사용하여 투표 할 수 있습니다."
 
+#, python-format
 msgid "Pong in %sms"
 msgstr "핑 %sms"
 
@@ -481,20 +617,48 @@ msgstr "릴리스"
 msgid "Reopen Your Board"
 msgstr "보드 다시 열기"
 
+#, docstring
+msgid "Replace URL with its title."
+msgstr ""
+
 msgid "Report Issue"
 msgstr "문제 보고"
 
 msgid "Report broken or incorrect behaviour"
 msgstr "고장 또는 틀린 동작 신고"
 
-msgid "Roulette"
-msgstr "룰렛"
+#, docstring
+msgid "Roll a dice."
+msgstr ""
+
+msgid "Rolling a dice..."
+msgstr ""
 
 msgid "Roulette is running. Please wait."
 msgstr "룰렛이 돌고 있습니다. 잠시만 기다려주세요."
 
 #, docstring
 msgid "Run a command as another user optionally in another channel."
+msgstr ""
+
+#, docstring
+msgid "Search for news or set up news notifications."
+msgstr ""
+
+#, docstring
+msgid ""
+"Search for news or set up news notifications.\n"
+"\n"
+"{commandPrefix}news search microsoft\n"
+"{commandPrefix}news category IT/Science"
+msgstr ""
+
+#, docstring
+msgid "Search news by category or set up news notifications."
+msgstr ""
+
+#, docstring
+msgid "Search news by keyword or set up news notifications."
 msgstr ""
 
 #, docstring
@@ -506,15 +670,18 @@ msgid "Searches music in youtube"
 msgstr "YouTube에서 음악을 검색합니다."
 
 #, docstring
-msgid "Searches music in youtube\n"
+msgid ""
+"Searches music in youtube\n"
 "{commandPrefix}search \"keyword\"\n"
 "{commandPrefix}s \"keyword\"\n"
 "Shows 5 candidates that you can choose using emotes"
-msgstr "YouTube에서 음악을 검색합니다.\n"
+msgstr ""
+"YouTube에서 음악을 검색합니다.\n"
 "{commandPrefix}search \"keyword\"\n"
 "{commandPrefix}s \"keyword\"\n"
 "이모티콘을 사용하여 선택할 수 있는 5 가지 선택지를 보여줍니다."
 
+#, python-format
 msgid "Searching... `%s`"
 msgstr "검색 중... `%s`"
 
@@ -528,31 +695,49 @@ msgstr "피드백 타입 선택..."
 msgid "Sends feedback."
 msgstr "피드백을 보냅니다."
 
-msgid "Set up your board below. In order to set up your board, just press 2 points and a ship will automatically be created for you. You cannot have diagonal boats.\n\n"
-"There are 3 boats, 🚢, ⛵, and 🛶. You can only have one of each. They have the following lengths:\n"
+msgid ""
+"Set up your board below. In order to set up your board, just press 2 "
+"points and a ship will automatically be created for you. You cannot have "
+"diagonal boats.\n"
+"\n"
+"There are 3 boats, 🚢, ⛵, and 🛶. You can only have one of each. They have "
+"the following lengths:\n"
 "🚢 → 4\n"
 "⛵ → 3\n"
-"🛶 → 2\n\n"
-"You can press a button again to undo an in-progress placement. You cannot move boats once they have been placed. When you finish setting up all boats you will be ready to play!"
-msgstr "아래에서 보드를 설정합니다. 보드에서 2 포인트를 누르면 보트가 자동으로 생성됩니다. 대각선 보트는 가질 수 없습니다.\n\n"
+"🛶 → 2\n"
+"\n"
+"You can press a button again to undo an in-progress placement. You cannot"
+" move boats once they have been placed. When you finish setting up all "
+"boats you will be ready to play!"
+msgstr ""
+"아래에서 보드를 설정합니다. 보드에서 2 포인트를 누르면 보트가 자동으로 생성됩니다. 대각선 보트는 가질 수 없습니다.\n"
+"\n"
 "3척의 보트 🚢, ⛵, 🛶 가 있습니다. 각각 하나만 가질 수 있습니다. 길이는 다음과 같습니다.\n"
 "🚢 → 4\n"
 "⛵ → 3\n"
-"🛶 → 2\n\n"
-"버튼을 다시 눌러 진행 중인 배치를 실행 취소할 수 있습니다. 보트가 배치되면 이동할 수 없습니다. 모든 보트 설정을 마치면 플레이 할 준비가됩니다!"
+"🛶 → 2\n"
+"\n"
+"버튼을 다시 눌러 진행 중인 배치를 실행 취소할 수 있습니다. 보트가 배치되면 이동할 수 없습니다. 모든 보트 설정을 마치면 플레이"
+" 할 준비가됩니다!"
 
 #, docstring
 msgid "Sets or shows user's display language."
 msgstr "사용자의 표시 언어를 설정하거나 보여줍니다."
 
 #, docstring
-msgid "Sets or shows user's display language.\n\n"
+msgid ""
+"Sets or shows user's display language.\n"
+"\n"
 "{commandPrefix}language set en\n"
-"{commandPrefix}language set ko\n\n"
+"{commandPrefix}language set ko\n"
+"\n"
 "{commandPrefix}language show"
-msgstr "사용자의 표시 언어를 설정하거나 보여줍니다.\n\n"
+msgstr ""
+"사용자의 표시 언어를 설정하거나 보여줍니다.\n"
+"\n"
 "{commandPrefix}language set en\n"
-"{commandPrefix}language set ko\n\n"
+"{commandPrefix}language set ko\n"
+"\n"
 "{commandPrefix}language show"
 
 #, docstring
@@ -566,6 +751,9 @@ msgstr "사용자의 시간대를 설정합니다."
 msgid "Show local time"
 msgstr "로컬 시간 표시"
 
+msgid "Shows D-Day widget."
+msgstr ""
+
 msgid "Shows live world clock."
 msgstr "실시간 세계 시각을 표시합니다."
 
@@ -574,10 +762,12 @@ msgid "Shows songs in queue"
 msgstr "대기열에 있는 곡을 보여줍니다."
 
 #, docstring
-msgid "Shows songs in queue\n"
+msgid ""
+"Shows songs in queue\n"
 "{commandPrefix}queue\n"
 "{commandPrefix}q"
-msgstr "대기열에 있는 곡을 보여줍니다.\n"
+msgstr ""
+"대기열에 있는 곡을 보여줍니다.\n"
 "{commandPrefix}queue\n"
 "{commandPrefix}q"
 
@@ -607,32 +797,29 @@ msgstr "사용자의 시간대를 확인합니다."
 msgid "Simple minigames to play with others"
 msgstr "친구들과 놀 수 있는 간단한 미니게임들"
 
-msgid "Skipped %s"
-msgstr ""
-
 #, docstring
 msgid "Skips the song that is playing and plays the next song in queue"
 msgstr "재생 중인 곡을 건너뛰고 대기열에 있는 다음 곡을 재생합니다."
 
 #, docstring
-msgid "Skips the song that is playing and plays the next song in queue\n"
+msgid ""
+"Skips the song that is playing and plays the next song in queue\n"
 "{commandPrefix}skip\n"
 "{commandPrefix}ss"
-msgstr "재생 중인 곡을 건너뛰고 대기열의 다음 곡을 재생합니다.\n"
+msgstr ""
+"재생 중인 곡을 건너뛰고 대기열의 다음 곡을 재생합니다.\n"
 "{commandPrefix}skip\n"
 "{commandPrefix}ss"
 
 msgid "Slash Command:"
 msgstr "빗금 명령어:"
 
+#, python-format
 msgid "Slash commands are not set up for use in this guild(ID: %s)."
 msgstr "빗금 명령어는 이 서버(ID: %s)에서 사용할 수 있도록 설정되지 않았습니다."
 
 msgid "Song Queue"
 msgstr "음악 대기열"
-
-msgid "Song Skipped"
-msgstr "음악 건너뜀"
 
 msgid "Sorry, couldn't figure out what you wanted to do here"
 msgstr "여기서 무엇을 하려는지 알 수 없습니다."
@@ -652,17 +839,34 @@ msgid "Stops Player"
 msgstr "플레이어를 정지합니다."
 
 #, docstring
-msgid "Stops Player\n"
+msgid ""
+"Stops Player\n"
 "{commandPrefix}stop"
-msgstr "플레이어를 정지합니다.\n"
+msgstr ""
+"플레이어를 정지합니다.\n"
 "{commandPrefix}stop"
 
+msgid "Subscribe"
+msgstr ""
+
+msgid "Subscribe to News"
+msgstr ""
+
+msgid "Subscribed"
+msgstr ""
+
+#, fuzzy
+msgid "Successfully set D-Day widget."
+msgstr "실시간 시각 성공적 활성화되었습니다."
+
+#, python-format
 msgid "Successfully set display language of %(member)s to %(language)s"
 msgstr "사용자 %(member)s의 표시 언어를 %(language)s로 설정했습니다."
 
 msgid "Successfully set live clock."
 msgstr "실시간 시각 성공적 활성화되었습니다."
 
+#, python-format
 msgid "Successfully set timezone of %(member)s to %(timezone)s"
 msgstr "사용자 %(member)s의 시간대를 %(timezone)s로 설정했습니다"
 
@@ -681,31 +885,40 @@ msgstr ""
 msgid "TTS voice available"
 msgstr "TTS 음성 사용 가능"
 
-#, docstring
-msgid "TTS voice available\n"
-"{commandPrefix}tts [option] \"Content\" : Says the content in \"content\". You do not have to use Quotation marks even if there are spaces included in content.\n\n"
+#, docstring, fuzzy
+msgid ""
+"TTS voice available\n"
+"{commandPrefix}tts \"Content\" : Says the content in \"content\". You do "
+"not have to use Quotation marks even if there are spaces included in "
+"content.\n"
+"\n"
 "*Example*\n"
-"{commandPrefix}tts \"Content\"\n"
-"{commandPrefix}tts -m \"Content\"\n"
-"{commandPrefix}tts -w \"Content\": -m speaks in male voice and -w speaks in female voice. Default voice is male."
-msgstr "TTS 음성\n"
-"{commandPrefix}tts [option] \"내용\" : \"내용\"의 내용을 말합니다. 콘텐츠에 공백이 포함된 경우에도 따옴표를 사용할 필요가 없습니다.\n\n"
+"{commandPrefix}tts \"Content\""
+msgstr ""
+"TTS 음성\n"
+"{commandPrefix}tts [option] \"내용\" : \"내용\"의 내용을 말합니다. 콘텐츠에 공백이 포함된 경우에도 "
+"따옴표를 사용할 필요가 없습니다.\n"
+"\n"
 "*예*\n"
 "{commandPrefix}tts \"내용\"\n"
 "{commandPrefix}tts -m \"내용\"\n"
-"{commandPrefix}tts -w \"내용\": -m은 남성 음성으로 말하고 -w는 여성 음성으로 말합니다. 기본 음성은 남성입니다."
+"{commandPrefix}tts -w \"내용\": -m은 남성 음성으로 말하고 -w는 여성 음성으로 말합니다. 기본 음성은 "
+"남성입니다."
 
 #, docstring
 msgid "Terminates bot. (Requires Admin Permission)"
 msgstr "봇을 종료합니다. (관리자 권한 필요)"
 
+#, python-format
 msgid "Thanks for your feedback, %s!"
 msgstr "피드백 감사합니다!, %s"
 
 msgid "The lucky numbers are... :sunglasses:"
 msgstr "행운의 숫자는... :sunglasses:"
 
-msgid "The player doesn't have any song to play. Use {commandPrefix}search to add songs in queue"
+msgid ""
+"The player doesn't have any song to play. Use {commandPrefix}search to "
+"add songs in queue"
 msgstr "플레이어에 재생할 음악이 없습니다. {commandPrefix}search을(를) 사용하여 대기열에 음악을 추가하세요"
 
 msgid "The player is already playing"
@@ -714,8 +927,21 @@ msgstr "이미 재생 중입니다"
 msgid "The player isn't playing anything. Add a song to skip."
 msgstr ""
 
-msgid "The song queue is now empty. Add songs using {commandPrefix}play or {commandPrefix}search to play more"
-msgstr "음악 대기열이 비어 있습니다. 더 많은 노래를 재생하려면 {commandPrefix}play 또는 {commandPrefix}search을(를) 사용하여 노래를 추가하세요"
+msgid ""
+"The song queue is now empty. Add songs using {commandPrefix}play or "
+"{commandPrefix}search to play more"
+msgstr ""
+"음악 대기열이 비어 있습니다. 더 많은 노래를 재생하려면 {commandPrefix}play 또는 "
+"{commandPrefix}search을(를) 사용하여 노래를 추가하세요"
+
+#, fuzzy
+msgid ""
+"This command is an experimental feature and only available when you have "
+"access to the **MK Bot Support Server**."
+msgstr "채팅 모드는 **MK Bot 서포트 서버**에 액세스할 수 있는 경우에만 사용할 수 있습니다."
+
+msgid "This feature is not yet supported."
+msgstr ""
 
 msgid "This is a game between two other people, sorry."
 msgstr "이것은 다른 두 사람 사이의 게임입니다."
@@ -744,8 +970,12 @@ msgstr "이 보트는 차단될 것입니다."
 msgid "Timeout Error"
 msgstr "시간 초과 오류"
 
+#, python-format
 msgid "Timezone of %(member)s"
 msgstr "사용자 %(member)s의 시간대"
+
+msgid "Today is D-Day. 🎉"
+msgstr ""
 
 msgid "Translation Fail: Input Language Detection Failed"
 msgstr "번역 실패: 입력 언어 검색 실패"
@@ -759,15 +989,28 @@ msgstr "번역 성공 {srcLang} -> {result}"
 msgid "Translation Warning: {0}"
 msgstr "번역 경고: {0}"
 
-msgid "Type `/language set` or `{commandPrefix}language set` to change your display language."
-msgstr "귀하의 표시 언어를 변경하려면 `/language set` 또는 `{commandPrefix}language set`을(를) 입력하세요."
+msgid ""
+"Type `/language set` or `{commandPrefix}language set` to change your "
+"display language."
+msgstr ""
+"귀하의 표시 언어를 변경하려면 `/language set` 또는 `{commandPrefix}language set`을(를) "
+"입력하세요."
 
-msgid "Type {0} command for more info on a command.\n"
+msgid ""
+"Type {0} command for more info on a command.\n"
 "You can also type {0} category for more info on a category."
-msgstr "명령어에 대한 자세한 내용을 보려면 {0} 명령어 을(를) 입력하세요.\n"
+msgstr ""
+"명령어에 대한 자세한 내용을 보려면 {0} 명령어 을(를) 입력하세요.\n"
 "카테고리에 대한 자세한 내용을 보려면 {0} 카테고리 을(를) 입력할 수도 있습니다."
 
+#, python-format
 msgid "Unloading... `%s`"
+msgstr ""
+
+msgid "Unsubscribe"
+msgstr ""
+
+msgid "Unsubscribed"
 msgstr ""
 
 msgid "User"
@@ -776,6 +1019,7 @@ msgstr "사용자"
 msgid "Version"
 msgstr "버전"
 
+#, python-format
 msgid "Welcome to the %s release of MK Bot."
 msgstr "MK Bot이 %s (으)로 업데이트 되었습니다."
 
@@ -785,13 +1029,16 @@ msgstr "X가 먼저 입니다."
 msgid "X won!"
 msgstr "X가 이겼습니다."
 
+#, python-format
 msgid "You already have a boat that is %d units long."
 msgstr "이미 %d 단위 길이의 보트가 있습니다."
 
 msgid "You already have this piece"
 msgstr "당신은 이미 이 조각을 가지고 있습니다"
 
-msgid "You are not in any voice channel. Please join a voice channel to use Music bot."
+msgid ""
+"You are not in any voice channel. Please join a voice channel to use "
+"Music bot."
 msgstr "음성 채널에 속해 있지 않습니다. 음악 봇을 사용하려면 음성 채널에 참여하세요."
 
 msgid "You are not in any voice channel. Please join a voice channel to use TTS."
@@ -812,6 +1059,7 @@ msgstr "패배 :("
 msgid "You need more than two candidates!"
 msgstr "두 개 이상의 선택지가 필요합니다!"
 
+#, python-format
 msgid "You sunk their %(emoji)s!"
 msgstr "그들의 %(emoji)s를 가라앉혔습니다!"
 
@@ -821,29 +1069,29 @@ msgstr "승리!"
 msgid "You've already selected a piece, you can't select multiple pieces."
 msgstr "이미 조각을 선택했으며 여러 조각을 선택할 수 없습니다."
 
+#, python-format
 msgid "Your %(emoji)s was sunk :("
 msgstr "당신의 %(emoji)s는 가라앉았습니다... :("
 
+#, python-format
 msgid "Your (%(enemy)s) turn!"
 msgstr "당신(%(enemy)s)의 턴!"
 
+#, python-format
 msgid "Your display language has been changed to %s."
 msgstr "귀하의 표시 언어가 %s로 변경되었습니다."
 
 msgid "Your enemy is not ready yet, please wait until they are"
 msgstr "적이 아직 준비되지 않았습니다, 잠시 기다려주세요"
 
+msgid "[MK Bot]({url}) acted like {member}."
+msgstr ""
+
 msgid "[MK Bot]({url}) said on behalf of {author}"
 msgstr "[MK Bot]({url})이 {author}을(를) 대신하여 말했습니다."
 
-msgid "chose... %s!"
-msgstr "선택... %s!"
-
 msgid "first"
 msgstr "첫 번째"
-
-msgid "in Queue"
-msgstr "대기열에 추가"
 
 msgid "left {}"
 msgstr ""
@@ -854,37 +1102,114 @@ msgstr ""
 msgid "second"
 msgstr "두 번째"
 
-msgid "{title}\n"
+msgid ""
+"{title}\n"
 " Length: {length}"
-msgstr "{title}\n"
+msgstr ""
+"{title}\n"
 " 길이: {length}"
 
-msgid "{title} - {length}\n"
+msgid ""
+"{title} - {length}\n"
 "added in queue"
-msgstr "{title} - {length}\n"
+msgstr ""
+"{title} - {length}\n"
 "대기열에 추가됨"
+
+#, fuzzy
+msgid ""
+"📰 News search results for `{query}`\n"
+"\n"
+"{summary}"
+msgstr "🔍 `{query}`에 대한 구글 검색 결과"
 
 msgid "🔍 Google search results for `{query}`"
 msgstr "🔍 `{query}`에 대한 구글 검색 결과"
 
+#, python-format
 msgid "🔍 Search results for `%s`, choose in 30 seconds."
 msgstr "🔍 `%s`에 대한 검색 결과, 30초 안에 선택하세요."
 
+msgid ""
+"🔔 Here is the news🗞️ related to `{query}`\n"
+"\n"
+"{summary}"
+msgstr ""
+
+#, fuzzy
+msgid "🔔 No news was found for `{query}`"
+msgstr "🚫 `{query}`에 대한 검색 결과를 찾을 수 없습니다."
+
+#, python-format
 msgid "🔴 Failed to load `%s`"
 msgstr ""
 
 msgid "🚫 No results were found for `{query}`"
 msgstr "🚫 `{query}`에 대한 검색 결과를 찾을 수 없습니다."
 
+#, python-format
 msgid "🟡 Successfully installed `%s`, but failed to load."
 msgstr ""
 
+#, python-format
 msgid "🟢 Successfully installed `%s`."
 msgstr ""
 
+#, python-format
 msgid "🟢 Successfully loaded `%s`"
 msgstr ""
 
+#, python-format
 msgid "🟢 Successfully unloaded `%s`"
 msgstr ""
+
+#~ msgid "Chat mode is not activated."
+#~ msgstr "채팅 모드가 활성화되지 않았습니다."
+
+#~ msgid ""
+#~ "I think you told me about the "
+#~ "`{command}` command, but I am not "
+#~ "confident that I have understood you "
+#~ "correctly.\n"
+#~ "Please try rephrasing your instruction to me."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Invalid parameter. For more information, "
+#~ "type `{commandPrefix}help tts`."
+#~ msgstr "잘못된 매개 변수입니다. 자세한 내용을 보려면 `{commandPrefix}help tts`을(를) 입력하십시오."
+
+#~ msgid ""
+#~ "Plays the keyword searched or plays the song in queue\n"
+#~ "{commandPrefix}play \"keyword\"\n"
+#~ "{commandPrefix}play\n"
+#~ "{commandPrefix}p \"keyword\"\n"
+#~ "{commandPrefix}p\n"
+#~ "Searches the keyword in Youtube and puts it in queue\n"
+#~ "If there is no keyword inputted "
+#~ "and the player isn't playing anything,"
+#~ " it starts the player"
+#~ msgstr ""
+#~ "검색된 키워드를 재생하거나 대기열에 있는 곡을 재생합니다.\n"
+#~ "{commandPrefix}play \"keyword\"\n"
+#~ "{commandPrefix}play\n"
+#~ "{commandPrefix}p \"keyword\"\n"
+#~ "{commandPrefix}p\n"
+#~ "Youtube에서 키워드를 검색하여 대기열에 넣습니다\n"
+#~ "입력 된 키워드가 없고 플레이어가 아무 것도 재생하지 않는 경우, 플레이어를 시작합니다."
+
+#~ msgid "Roulette"
+#~ msgstr "룰렛"
+
+#~ msgid "Skipped %s"
+#~ msgstr ""
+
+#~ msgid "Song Skipped"
+#~ msgstr "음악 건너뜀"
+
+#~ msgid "chose... %s!"
+#~ msgstr "선택... %s!"
+
+#~ msgid "in Queue"
+#~ msgstr "대기열에 추가"
 
