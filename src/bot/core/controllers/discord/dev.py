@@ -208,6 +208,7 @@ class Dev(commands.Cog):
                 return
 
             executor = exec
+            code = None
             if cleaned.count("\n") == 0:
                 # single statement, potentially 'eval'
                 try:
@@ -236,10 +237,12 @@ class Dev(commands.Cog):
 
             try:
                 with redirect_stdout(stdout):
-                    if is_async(code):
+                    if code is not None and is_async(code):
                         result = await eval(code, env)
-                    else:
+                    elif code is not None:
                         result = executor(code, env)
+                    else:
+                        result = None
                     # if inspect.isawaitable(result):
                     #     result = await result
             except Exception:

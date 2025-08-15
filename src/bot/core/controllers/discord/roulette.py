@@ -153,6 +153,8 @@ async def roulette(ctx: commands.Context, *, items: str):
             await asyncio.sleep(1)
 
     ai_response = None
+    result = None
+    ai_comment = ""
 
     if gemini_enabled:
         ai_response = await ai_generating_task

@@ -43,9 +43,9 @@ google-genai = {extras = ["aiohttp"], version = "^1.27.0"}
 [tool.poetry.group.dev.dependencies]
 black = "22.3.0"
 debugpy = "^1.8.0"
-flake8 = "7.0.0"
+flake8 = "7.3.0"
 pre-commit = "2.17.0"
-pylint = "3.0.3"
+pylint = "3.3.8"
 pytest = "8.3.4"
 pytest-asyncio = "0.25.3"
 pytest-mock = "3.14.0"

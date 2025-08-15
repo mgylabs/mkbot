@@ -6,6 +6,7 @@ from mgylabs.utils.config import CONFIG
 log = logger.get_logger(__name__)
 
 gemini_enabled = True if CONFIG.geminiToken else False
+gemini = None
 
 if gemini_enabled:
     try:
@@ -16,7 +17,7 @@ if gemini_enabled:
 
 
 async def get_gemini_response(query: str):
-    if not gemini_enabled:
+    if not gemini_enabled or not gemini:
         return None
 
     response = await gemini.aio.models.generate_content(

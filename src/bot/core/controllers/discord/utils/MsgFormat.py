@@ -236,6 +236,7 @@ class MsgFormatter:
         )
 
         if show_req_user:
+            user_id = None
             if isinstance(ctx_or_iaction, commands.Context):
                 user_id = ctx_or_iaction.author.id
             elif isinstance(ctx_or_iaction, discord.Interaction):
