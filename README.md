@@ -3,7 +3,7 @@
 Mulgyeol MK Bot is an open source local-hosted discord bot.  
 Self-host discord bot on your own local Windows PC.
 
-[![python](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/downloads)
+[![python](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/downloads)
 [![Build and Test](https://github.com/mgylabs/mkbot/actions/workflows/build.yml/badge.svg)](https://github.com/mgylabs/mkbot/actions/workflows/build.yml)
 [![Crowdin](https://badges.crowdin.net/mkbot/localized.svg)](https://crowdin.com/project/mkbot)
 
@@ -47,7 +47,7 @@ Self-host discord bot on your own local Windows PC.
 #### Install dependencies
 
 - Visual Studio Code
-- Python 3.10
+- Python 3.12
 - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - Inno Setup 6.2
 - msbuild 16.5

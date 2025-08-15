@@ -189,8 +189,6 @@ async def roulette(ctx: commands.Context, *, items: str):
             embed.set_footer(
                 text=__("MK Bot can make mistakes. Check important info."),
             )
-
-            await msg.edit(embed=embed)
         else:
             embed.description = f"{Emoji.GenAI} " + __(
                 "AI comment is not available for this roulette."

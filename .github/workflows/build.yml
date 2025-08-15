@@ -12,7 +12,7 @@ on:
 # on: [push, pull_request]
 
 env:
-  DEFAULT_PYTHON: "3.10"
+  DEFAULT_PYTHON: "3.12"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
