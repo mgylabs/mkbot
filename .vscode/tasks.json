@@ -82,6 +82,67 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "Run mkbot.py (debug)",
+      "type": "shell",
+      "command": "poetry",
+      "args": [
+        "run",
+        "python",
+        "mkbot.py",
+        "--debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "panel": "new"
+      },
+      "problemMatcher": [
+        {
+          "pattern": {
+            "regexp": ".",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "."
+          }
+        }
+      ],
+      "isBackground": true,
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Stop mkbot.py (debug)",
+      "type": "shell",
+      "command": "echo ${input:terminate_mkbot}",
+      "presentation": {
+        "close": true
+      }
+    },
+    {
+      "label": "Restart mkbot.py (debug)",
+      "dependsOn": [
+        "Stop mkbot.py (debug)",
+        "Run mkbot.py (debug)"
+      ],
+      "dependsOrder": "sequence"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "terminate_mkbot",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "Run mkbot.py (debug)"
     }
   ]
 }

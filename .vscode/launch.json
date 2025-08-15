@@ -12,21 +12,22 @@
         "host": "127.0.0.1",
         "port": 5678
       },
+      "preLaunchTask": "Restart mkbot.py (debug)",
       "restart": true,
     },
-    {
-      "name": "Python: Discord Host",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/src/bot/discord_host.py",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}/src/bot",
-      "python": "${command:python.interpreterPath}",
-      "autoReload": {
-        "enable": true,
-      },
-      "justMyCode": true,
-    },
+    // {
+    //   "name": "Python: Discord Host",
+    //   "type": "python",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/src/bot/discord_host.py",
+    //   "console": "integratedTerminal",
+    //   "cwd": "${workspaceFolder}/src/bot",
+    //   "python": "${command:python.interpreterPath}",
+    //   "autoReload": {
+    //     "enable": true,
+    //   },
+    //   "justMyCode": true,
+    // },
     {
       "name": "Python: main.py",
       "type": "python",

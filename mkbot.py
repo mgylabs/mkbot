@@ -203,11 +203,8 @@ if __name__ == "__main__":
             cmd_args = [
                 "run",
                 "python",
-                "-m",
-                "debugpy",
-                "--connect",
-                "5678",
                 "src/bot/discord_host.py",
+                "--debugpy",
             ]
         else:
             cmd_args = ["run", "python", "src/bot/discord_host.py"]
@@ -216,11 +213,8 @@ if __name__ == "__main__":
         cmd = "python"
         if running_in_vscode() and "--debug" in sys.argv:
             cmd_args = [
-                "-m",
-                "debugpy",
-                "--connect",
-                "5678",
                 "src/bot/discord_host.py",
+                "--debugpy",
             ]
         else:
             cmd_args = ["src/bot/discord_host.py"]

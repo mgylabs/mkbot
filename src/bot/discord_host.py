@@ -2,9 +2,30 @@ import asyncio
 import os
 import pathlib
 import sys
+import time
 
 if __name__ == "__main__":
     os.chdir(pathlib.Path(__file__).parent.resolve())
+
+    if "--debugpy" in sys.argv:
+
+        import socket
+
+        import debugpy
+
+        print("Waiting for debugpy to be ready...")
+        while True:
+            try:
+                with socket.create_connection(("localhost", 5678), timeout=1):
+                    break
+            except socket.error:
+                time.sleep(2)
+
+        try:
+            debugpy.connect(("localhost", 5678))
+        except Exception as e:
+            print(f"Failed to connect to debugpy: {e}")
+            sys.exit(1)
 
     sys.path.append("../lib")
     from mgylabs.utils import logger
@@ -13,7 +34,6 @@ if __name__ == "__main__":
 
 import platform
 import threading
-import time
 import traceback
 import urllib.parse
 from typing import Union
