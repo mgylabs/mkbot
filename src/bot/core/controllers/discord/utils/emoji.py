@@ -14,3 +14,4 @@ class Emoji(metaclass=MetaEmoji):
     command = "<:command:1201509794897465354>"
     generating = "<a:generating:1398610240228032512>"
     GenAI = "<:GenAI:1398611276917248180>"
+    loading = "<a:loading:1406945257303703652>"

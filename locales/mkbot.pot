@@ -54,6 +54,11 @@ msgid "%s in Queue"
 msgstr ""
 
 msgid ""
+"*You've already made the choice. You're here to understand why you've made it.*\n"
+"-# -The Oracle in The Matrix"
+msgstr ""
+
+msgid ""
 "ABRT has detected an unknown error.\n"
 "Please [create an issue](%s) at GitHub with below logs to help fix this problem."
 msgstr ""
@@ -95,6 +100,9 @@ msgid "Autoplay turned on"
 msgstr ""
 
 msgid "Be warned: Canary can be unstable."
+msgstr ""
+
+msgid "Candy?"
 msgstr ""
 
 msgid "Cannot find target language(s) inputted"
@@ -349,7 +357,7 @@ msgstr ""
 msgid "Lucky Pick"
 msgstr ""
 
-msgid "MK Bot can make mistakes. Check important info."
+msgid "MK Bot can make mistakes. So double-check its responses."
 msgstr ""
 
 #, docstring
@@ -383,6 +391,9 @@ msgid "No description given"
 msgstr ""
 
 msgid "No reaction was added. Please add a reaction to choose a song"
+msgstr ""
+
+msgid "No result available for this button."
 msgstr ""
 
 msgid "Not Playing Error"
@@ -769,6 +780,12 @@ msgid "Terminates bot. (Requires Admin Permission)"
 msgstr ""
 
 msgid "Thanks for your feedback, %s!"
+msgstr ""
+
+msgid "The Oracle's Pick"
+msgstr ""
+
+msgid "The Oracle's Whisper"
 msgstr ""
 
 msgid "The lucky numbers are... :sunglasses:"

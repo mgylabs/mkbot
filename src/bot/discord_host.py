@@ -79,7 +79,7 @@ from release import ReleaseNotify
 log = logger.get_logger(__name__)
 i18n = I18nExtension()
 
-super_ui_scheduled_task = discord.ui.View._scheduled_task
+super_ui_scheduled_task = discord.ui.view.BaseView._scheduled_task
 
 
 @database.using_database
@@ -91,7 +91,7 @@ async def ui_scheduled_task(
     await super_ui_scheduled_task(self, item, interaction)
 
 
-discord.ui.View._scheduled_task = ui_scheduled_task
+discord.ui.view.BaseView._scheduled_task = ui_scheduled_task
 
 
 # @contextmanager

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import json
 import random
@@ -32,6 +34,202 @@ def is_discord_special_string(s: str) -> bool:
     ]
 
     return any(re.match(pattern, s) for pattern in patterns)
+
+
+class OracleActionButton(discord.ui.Button["RouletteView"]):
+    def __init__(
+        self,
+        label: str,
+        result: str = "",
+        comment: str = "",
+        enbled: bool = True,
+        emoji: str = None,
+    ):
+        super().__init__(label=label, style=discord.ButtonStyle.secondary, emoji=emoji)
+        self.label = label
+        self.result = result
+        self.comment = comment
+        self.disabled = not enbled
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        self.style = discord.ButtonStyle.primary
+        self.view.disable_all_buttons_in_rows()
+        await interaction.response.edit_message(view=self.view)
+
+        if self.result:
+            await self.view.update_oracle_result(self.result, self.comment)
+        else:
+            await interaction.response.send_message(
+                __("No result available for this button."), ephemeral=True
+            )
+            return
+
+        DiscordEventLogEntry.Add(
+            self.view.ctx,
+            "RouletteOracleButtonClick",
+            {
+                "button_label": self.label,
+                "result": self.result,
+                "comment": self.comment,
+            },
+        )
+
+
+class RouletteView(discord.ui.LayoutView):
+    def __init__(self, ctx: commands.Context):
+        super().__init__(timeout=60 * 5)
+        self.ctx = ctx
+        self.msg = None
+
+        self.container = discord.ui.Container()
+        self.header = discord.ui.TextDisplay("## Roulette")
+        self.container.add_item(self.header)
+        self.container.add_item(
+            discord.ui.Separator(spacing=discord.SeparatorSpacing.large)
+        )
+
+        self.result = discord.ui.TextDisplay(
+            f"### {Emoji.typing} {__('Lucky Pick')}\n{__('Preparing the roulette...')}"
+        )
+
+        self.container.add_item(self.result)
+        self.container.add_item(
+            discord.ui.Separator(spacing=discord.SeparatorSpacing.large)
+        )
+
+        self.choices = discord.ui.TextDisplay(
+            f"### :clipboard: {__("Choices")}\n {Emoji.generating} Generating..."
+        )
+
+        self.container.add_item(self.choices)
+
+        self.row = discord.ui.ActionRow()
+        self.candy_button = OracleActionButton(
+            __("Candy?"),
+            enbled=False,
+            emoji="🍬",
+        )
+        self.row.add_item(self.candy_button)
+        self.oracle_msg = discord.ui.TextDisplay(
+            __(
+                """*You've already made the choice. You're here to understand why you've made it.*\n-# -The Oracle in The Matrix"""
+            )
+        )
+
+        self.container.add_item(
+            discord.ui.Separator(spacing=discord.SeparatorSpacing.large)
+        )
+        self.whisper = discord.ui.TextDisplay(
+            f"### :woman_mage: {__("The Oracle's Whisper")}"
+        )
+
+        self.container.add_item(self.whisper)
+        self.container.add_item(self.row)
+        self.container.add_item(self.oracle_msg)
+
+        self.container.add_item(
+            discord.ui.Separator(spacing=discord.SeparatorSpacing.small)
+        )
+
+        footer = discord.ui.TextDisplay(
+            "-# "
+            + __("MK Bot can make mistakes. So double-check its responses.")
+            + " "
+            + "[{0}](https://discord.gg/XmANDWp7Na)".format(__("Give Feedback ▷"))
+        )
+
+        self.container.add_item(footer)
+
+        self.add_item(self.container)
+
+    def set_message(self, msg: discord.Message):
+        self.msg = msg
+
+    async def edit_message(self):
+        await self.msg.edit(view=self)
+
+    async def update_title_and_choices(self, title: str, choices: list[str]):
+        self.header.content = f"## Roulette\n{title}"
+        choices_str = ", ".join(
+            choice if is_discord_special_string(choice) else f"`{choice}`"
+            for choice in choices
+        )
+        self.choices.content = f"### :clipboard: {__('Choices')}\n{choices_str}"
+
+        self.result.content = (
+            f"### {Emoji.loading} {__('Lucky Pick')}\n{__('Roulette is running.')}"
+        )
+
+        await self.countdown(__("Lucky Pick"))
+
+    async def countdown(self, result_title: str):
+        for i in range(5, 0, -1):
+            self.result.content = (
+                f"### {Emoji.loading} {result_title}\n"
+                f"{__('Roulette is running.')} {__('%dsec left') % i}"
+            )
+            await self.edit_message()
+            await asyncio.sleep(1)
+
+    async def update_oracle_result(self, result, comment: str = ""):
+        result_title = __("The Oracle's Pick")
+
+        self.result.content = (
+            f"### {Emoji.loading} {result_title}\n{__('Roulette is running.')}"
+        )
+
+        await self.countdown(result_title)
+
+        await self.update_result(f":crystal_ball: {result_title}", result, comment)
+
+    async def update_result(self, result_title: str, result: str, comment: str = ""):
+
+        if is_discord_special_string(result):
+            base_content = f"### {result_title}\n{result}"
+        else:
+            base_content = f"### {result_title}\n```{result}```"
+
+        if comment:
+            self.result.content = base_content + f"\n{Emoji.generating} Generating..."
+
+        await self.edit_message()
+
+        if comment:
+            self.result.content = base_content + f"\n{Emoji.GenAI} {comment}"
+
+            await self.edit_message()
+
+    async def update_header(self, title: str):
+        self.header.content = f"## Roulette\n{title}"
+        await self.edit_message()
+
+    async def add_oracle_button(self, buttons: list[OracleActionButton]) -> None:
+
+        self.candy_button.label = "Generating..."
+        self.candy_button.emoji = Emoji.generating
+
+        await self.edit_message()
+
+        await asyncio.sleep(1)
+
+        self.row.clear_items()
+
+        # self.whisper.content = f"### :woman_mage: {__("The Oracle's Whisper")}"
+
+        if buttons:
+            for button in buttons:
+                self.row.add_item(button)
+
+        await self.edit_message()
+
+    def disable_all_buttons_in_rows(self):
+        for button in self.row.children:
+            button.disabled = True
+
+    async def on_timeout(self):
+        for item in self.children:
+            item.disabled = True
+        await self.edit_message()
 
 
 @commands.hybrid_command(aliases=["rou"])
@@ -71,13 +269,26 @@ async def roulette(ctx: commands.Context, *, items: str):
 
                     Your final response must be a JSON object with the following structure:
 
-                    json
-                    ```
+                    5. If the user might not be satisfied with the result, generate up to 3 alternative "message button" texts that represent possible different intentions the user could have had. For each of these buttons, provide:
+                    - A short and natural Korean label (like a button text).
+                    - A corresponding "result" (another option from the roulette).
+                    - A witty and fun Korean "comment" reacting to that alternative result.
+
+                    Your final response must be a JSON object with the following structure:
+
+                    ```json
                     {
-                        "title": "string",               // The title of the roulette
-                        "options": ["string", ...],      // The list of choices
-                        "result": "string",              // The selected choice
-                        "comment": "string"              // A witty and fun reaction to the result
+                        "title": "string",                // The title of the roulette
+                        "options": ["string", ...],       // The list of choices
+                        "result": "string",               // The selected choice
+                        "comment": "string",              // A witty and fun reaction to the result
+                        "alternatives": [                 // Up to 3 alternative choices
+                            {
+                                "button": "string",       // Text that appears on the button
+                                "result": "string",       // The option selected if this button is chosen
+                                "comment": "string"       // Witty reaction for this alternative
+                            }
+                        ]
                     }
                     ```
 
@@ -85,78 +296,11 @@ async def roulette(ctx: commands.Context, *, items: str):
             )
         )
 
-        input_field = {
-            "name": ":clipboard: " + __("Choices"),
-            "value": f"{Emoji.generating} Generating...",
-            "inline": False,
-        }
+        view = RouletteView(ctx)
+        msg = await ctx.send(view=view)
 
-        description = ""
+        view.set_message(msg)
 
-        output_field = {
-            "name": Emoji.typing + " " + __("Lucky Pick"),
-            "value": __("Preparing the roulette..."),
-            "inline": False,
-        }
-
-    else:
-        item_ls = shlex.split(items)
-        result = random.choice(item_ls)
-
-        if len(item_ls) == 1:
-            await ctx.send(
-                embed=MsgFormatter.get(
-                    ctx,
-                    "Roulette `✨BETA`",
-                    __("Only one item provided. No roulette needed."),
-                )
-            )
-            return
-
-        input_field = {
-            "name": ":clipboard: " + __("Choices"),
-            "value": ", ".join(
-                item if is_discord_special_string(item) else f"`{item}`"
-                for item in item_ls
-            ),
-            "inline": False,
-        }
-
-        description = f"{Emoji.GenAI} " + __(
-            "AI comment is not available for this roulette."
-        )
-
-        output_field = {
-            "name": Emoji.typing + " " + __("Lucky Pick"),
-            "value": __("Roulette is running."),
-            "inline": False,
-        }
-
-    embed = MsgFormatter.get(
-        ctx,
-        "Roulette `✨BETA`",
-        description=description,
-        fields=[output_field, input_field],
-    )
-
-    msg: discord.Message = await ctx.send(embed=embed)
-
-    async def countdown():
-        for i in range(5, 0, -1):
-            output_field["value"] = (
-                __("Roulette is running.") + " " + __("%dsec left") % i
-            )
-
-            embed.set_field_at(0, **output_field)
-
-            await msg.edit(embed=embed)
-            await asyncio.sleep(1)
-
-    ai_response = None
-    result = None
-    ai_comment = ""
-
-    if gemini_enabled:
         ai_response = await ai_generating_task
 
         if ai_response:
@@ -179,30 +323,81 @@ async def roulette(ctx: commands.Context, *, items: str):
             item_ls = data["options"]
             result = data["result"]
             ai_comment = data["comment"]
+            alternatives = data.get("alternatives", [])
 
-            embed.description = title
-            input_field["value"] = ", ".join(
-                item if is_discord_special_string(item) else f"`{item}`"
-                for item in item_ls
+            await view.update_title_and_choices(title, item_ls)
+
+            await view.update_result(f':dart: {__("Lucky Pick")}', result, ai_comment)
+            await view.add_oracle_button(
+                [
+                    OracleActionButton(
+                        button["button"], button["result"], button["comment"]
+                    )
+                    for button in alternatives
+                ]
+            )
+            DiscordEventLogEntry.Add(
+                ctx,
+                "RouletteResult",
+                {
+                    "result": result,
+                    "items": item_ls,
+                    "ai_response": ai_response,
+                },
             )
 
-            embed.set_field_at(1, **input_field)
+            return
 
-            embed.set_footer(
-                text=__("MK Bot can make mistakes. Check important info."),
+    item_ls = shlex.split(items)
+    result = random.choice(item_ls)
+
+    if len(item_ls) == 1:
+        await ctx.send(
+            embed=MsgFormatter.get(
+                ctx,
+                "Roulette",
+                __("Only one item provided. No roulette needed."),
             )
-        else:
-            embed.description = f"{Emoji.GenAI} " + __(
-                "AI comment is not available for this roulette."
+        )
+        return
+
+    input_field = {
+        "name": ":clipboard: " + __("Choices"),
+        "value": ", ".join(
+            item if is_discord_special_string(item) else f"`{item}`" for item in item_ls
+        ),
+        "inline": False,
+    }
+
+    description = f"{Emoji.GenAI} " + __(
+        "AI comment is not available for this roulette."
+    )
+
+    output_field = {
+        "name": Emoji.loading + " " + __("Lucky Pick"),
+        "value": __("Roulette is running."),
+        "inline": False,
+    }
+
+    embed = MsgFormatter.get(
+        ctx,
+        "Roulette",
+        description=description,
+        fields=[output_field, input_field],
+    )
+
+    msg: discord.Message = await ctx.send(embed=embed)
+
+    async def countdown():
+        for i in range(5, 0, -1):
+            output_field["value"] = (
+                __("Roulette is running.") + " " + __("%dsec left") % i
             )
 
-            item_ls = shlex.split(items)
-            result = random.choice(item_ls)
+            embed.set_field_at(0, **output_field)
 
-            input_field["value"] = ", ".join(
-                item if is_discord_special_string(item) else f"`{item}`"
-                for item in item_ls
-            )
+            await msg.edit(embed=embed)
+            await asyncio.sleep(1)
 
     countdown_task = asyncio.create_task(countdown())
     await countdown_task
@@ -210,34 +405,15 @@ async def roulette(ctx: commands.Context, *, items: str):
     DiscordEventLogEntry.Add(
         ctx,
         "RouletteResult",
-        {"result": result, "items": item_ls, "ai_response": ai_response},
+        {"result": result, "items": item_ls, "ai_response": None},
     )
 
-    if ai_response:
-        output_field["name"] = ":dart: " + __("Lucky Pick")
-        output_field["value"] = (
-            result if is_discord_special_string(result) else f"```{result}```"
-        ) + f"\n{Emoji.generating} Generating..."
-
-        embed.set_field_at(0, **output_field)
-
-        await msg.edit(embed=embed)
-
-        output_field["value"] = (
-            result
-            if is_discord_special_string(result)
-            else f"```{result}```" + f"\n{Emoji.GenAI} {ai_comment}"
-        )
-
-        await asyncio.sleep(1)
-    else:
-        output_field["name"] = ":dart: " + __("Lucky Pick")
-        output_field["value"] = (
-            result if is_discord_special_string(result) else f"```{result}```"
-        )
+    output_field["name"] = ":dart: " + __("Lucky Pick")
+    output_field["value"] = (
+        result if is_discord_special_string(result) else f"```{result}```"
+    )
 
     embed.set_field_at(0, **output_field)
-    embed.set_field_at(1, **input_field)
 
     await msg.edit(embed=embed)
 
