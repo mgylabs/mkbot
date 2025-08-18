@@ -118,9 +118,11 @@ class Button(discord.ui.Button["BoardView"]):
     def __init__(self, cell: Cell, x: int, y: int) -> None:
         super().__init__(
             label="\u200b",
-            style=discord.ButtonStyle.red
-            if cell.bomb_state
-            else discord.ButtonStyle.blurple,
+            style=(
+                discord.ButtonStyle.red
+                if cell.bomb_state
+                else discord.ButtonStyle.blurple
+            ),
             disabled=cell.bomb_state is not None,
             emoji=cell.display_emoji,
             row=y,
