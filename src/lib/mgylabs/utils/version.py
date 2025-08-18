@@ -10,6 +10,9 @@ class Version:
     MBDS_ID = 698477658367066182
     MBSS_ID = 1066518300114301078
 
+    OFFICIAL_STABLE_BOT_ID = 698478990280753174
+    OFFICIAL_CANARY_BOT_ID = 1052420606911590470
+
     def __init__(self, version_str, commit):
         version_str = version_str.split("-")
         self.commit = commit

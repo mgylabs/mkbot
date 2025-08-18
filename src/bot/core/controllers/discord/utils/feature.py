@@ -40,7 +40,10 @@ class Feature:
                     bot = ctx_or_iaction.bot
                     user = ctx_or_iaction.author
 
-                if cls.user_has_MBSS_access(bot, user.id):
+                if (
+                    cls.user_has_MBSS_access(bot, user.id)
+                    or bot.user.id == VERSION.OFFICIAL_CANARY_BOT_ID
+                ):
                     return await func(*args, **kwargs)
                 else:
                     await send(
