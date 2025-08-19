@@ -822,14 +822,16 @@ graph = ["objgraph (>=1.7.2)"]
 profile = ["gprof2dot (>=2022.7.29)"]
 
 [[package]]
-name = "discord.py"
-version = "2.6.0a5262+geb84d0dfc"
+name = "discord-py"
+version = "2.6.0"
 description = "A Python wrapper for the Discord API"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-files = []
-develop = false
+files = [
+    {file = "discord_py-2.6.0-py3-none-any.whl", hash = "sha256:3248291c31e69fb1c59b091c378b550cb919b3fb2b38139edd5cd6d9b3013f3f"},
+    {file = "discord_py-2.6.0.tar.gz", hash = "sha256:8aa0f017524734653e6ddddb7878e1cdf8c3868bd7d1a386c36cd8373e5fba02"},
+]
 
 [package.dependencies]
 aiohttp = ">=3.7.4,<4"
@@ -840,12 +842,6 @@ docs = ["imghdr-lts (==1.0.0) ; python_version >= \"3.13\"", "sphinx (==4.4.0)",
 speed = ["Brotli", "aiodns (>=1.1) ; sys_platform != \"win32\"", "cchardet (==2.1.7) ; python_version < \"3.10\"", "orjson (>=3.5.4)", "zstandard (>=0.23.0)"]
 test = ["coverage[toml]", "pytest", "pytest-asyncio", "pytest-cov", "pytest-mock", "typing-extensions (>=4.3,<5)", "tzdata ; sys_platform == \"win32\""]
 voice = ["PyNaCl (>=1.5.0,<1.6)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/Rapptz/discord.py.git"
-reference = "eb84d0dfcb0bfc77d1bff7cff519887f9272f3c7"
-resolved_reference = "eb84d0dfcb0bfc77d1bff7cff519887f9272f3c7"
 
 [[package]]
 name = "distlib"
@@ -3289,4 +3285,4 @@ release = ["mulgyeol-telemetry"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "f58148be7e0b11b3a9cf31bbd4f0da7459f1755c40ebd4901199c29342335777"
+content-hash = "98f1194c96ddb440431dba9c14593df3ae0513b2e551ae450c4bbc20a2d942a7"

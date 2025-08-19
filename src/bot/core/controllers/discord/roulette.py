@@ -136,11 +136,15 @@ class RouletteView(discord.ui.LayoutView):
             "-# "
             + __("MK Bot can make mistakes. So double-check its responses.")
             + (
-                " "
-                + "[{0}](https://discord.gg/XmANDWp7Na)".format(__("Give Feedback ▷"))
+                (
+                    " "
+                    + "[{0}](https://discord.gg/XmANDWp7Na)".format(
+                        __("Give Feedback ▷")
+                    )
+                )
+                if CONFIG.showFeedbackLink
+                else ""
             )
-            if CONFIG.showFeedbackLink
-            else ""
         )
 
         self.container.add_item(footer)

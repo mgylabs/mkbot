@@ -24,7 +24,7 @@ aiofiles = "0.8.0"
 alembic = "1.13.1"
 babel = "2.11.0"
 beautifulsoup4 = "4.12.3"
-discord-py = {git = "https://github.com/Rapptz/discord.py.git", rev = "eb84d0dfcb0bfc77d1bff7cff519887f9272f3c7"}
+discord-py = "2.6.0"
 mulgyeol-bot-framework = {git = "https://github.com/MycroftKang/mulgyeol-bot-framework.git", rev = "a63ebb1791558c04efff363b38012c290ae06bc5"}
 langdetect = "1.0.9"
 lxml = "5.1.0"
