@@ -13,6 +13,7 @@ from discord.ext import commands
 
 from mgylabs.i18n import __
 from mgylabs.utils import logger
+from mgylabs.utils.config import CONFIG
 from mgylabs.utils.LogEntry import DiscordEventLogEntry
 
 from .utils.emoji import Emoji
@@ -98,7 +99,7 @@ class RouletteView(discord.ui.LayoutView):
         )
 
         self.choices = discord.ui.TextDisplay(
-            f"### :clipboard: {__("Choices")}\n {Emoji.generating} Generating..."
+            f"### :clipboard: {__("Choices")}\n{Emoji.generating} Generating..."
         )
 
         self.container.add_item(self.choices)
@@ -134,8 +135,12 @@ class RouletteView(discord.ui.LayoutView):
         footer = discord.ui.TextDisplay(
             "-# "
             + __("MK Bot can make mistakes. So double-check its responses.")
-            + " "
-            + "[{0}](https://discord.gg/XmANDWp7Na)".format(__("Give Feedback ▷"))
+            + (
+                " "
+                + "[{0}](https://discord.gg/XmANDWp7Na)".format(__("Give Feedback ▷"))
+            )
+            if CONFIG.showFeedbackLink
+            else ""
         )
 
         self.container.add_item(footer)
@@ -185,9 +190,9 @@ class RouletteView(discord.ui.LayoutView):
     async def update_result(self, result_title: str, result: str, comment: str = ""):
 
         if is_discord_special_string(result):
-            base_content = f"### {result_title}\n{result}"
+            base_content = f"### {result_title}\n### {result}"
         else:
-            base_content = f"### {result_title}\n```{result}```"
+            base_content = f"### {result_title}\n## ```{result}```"
 
         if comment:
             self.result.content = base_content + f"\n{Emoji.generating} Generating..."
@@ -213,8 +218,6 @@ class RouletteView(discord.ui.LayoutView):
         await asyncio.sleep(1)
 
         self.row.clear_items()
-
-        # self.whisper.content = f"### :woman_mage: {__("The Oracle's Whisper")}"
 
         if buttons:
             for button in buttons:
