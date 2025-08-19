@@ -268,14 +268,13 @@ async def roulette(ctx: commands.Context, *, items: str):
 
                     3. Randomly select one of the options as the roulette result.
 
-                    4. Based on the result, write a witty, and humorous comment in Korean reacting to the selected option. Make it sound spontaneous, playful, and fun. Keep it under 2-3 sentences.
+                    4. Based on the result, write a witty and humorous comment in the **same language as the user_input**. The comment should be playful but not too light—it should also carry a subtle sense of meaning, reflection, or depth. Keep it under 2–3 sentences.
 
-                    Your final response must be a JSON object with the following structure:
-
-                    5. If the user might not be satisfied with the result, generate up to 3 alternative "message button" texts that represent possible different intentions the user could have had. For each of these buttons, provide:
-                    - A short and natural Korean label (like a button text).
-                    - A corresponding "result" (another option from the roulette).
-                    - A witty and fun Korean "comment" reacting to that alternative result.
+                    5. If the user might not be satisfied with the result, generate up to 3 alternative "message button" texts that represent possible different intentions the user could have had.
+                        - Do NOT simply repeat or directly mention the option text.
+                        - Instead, phrase each button naturally as a short sentence that reflects a mood, situation, or feeling.
+                        - Each button must still map to one of the available options via "result".
+                        - Provide a witty and meaningful comment for each alternative result, in the **same language as the user_input**.
 
                     Your final response must be a JSON object with the following structure:
 
@@ -284,12 +283,12 @@ async def roulette(ctx: commands.Context, *, items: str):
                         "title": "string",                // The title of the roulette
                         "options": ["string", ...],       // The list of choices
                         "result": "string",               // The selected choice
-                        "comment": "string",              // A witty and fun reaction to the result
+                        "comment": "string",              // A witty yet slightly meaningful reaction
                         "alternatives": [                 // Up to 3 alternative choices
                             {
-                                "button": "string",       // Text that appears on the button
+                                "button": "string",       // Expresses the user's inner thought, not the option directly
                                 "result": "string",       // The option selected if this button is chosen
-                                "comment": "string"       // Witty reaction for this alternative
+                                "comment": "string"       // Witty yet slightly meaningful reaction for this alternative
                             }
                         ]
                     }
