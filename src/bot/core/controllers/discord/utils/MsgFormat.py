@@ -130,7 +130,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
@@ -176,7 +176,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
@@ -204,7 +204,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",
@@ -246,7 +246,7 @@ class MsgFormatter:
 
         if CONFIG.showFeedbackLink:
             embed.add_field(
-                value="[{0}](https://discord.gg/XmANDWp7Na)".format(
+                value="[{0}](https://discord.gg/3RpDwjJCeZ)".format(
                     __("Give Feedback ▷")
                 ),
                 name="",

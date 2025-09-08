@@ -20,8 +20,11 @@ async def get_gemini_response(query: str):
     if not gemini_enabled or not gemini:
         return None
 
-    response = await gemini.aio.models.generate_content(
-        model="gemini-2.5-flash", contents=query
-    )
-
-    return response.text if response else None
+    try:
+        response = await gemini.aio.models.generate_content(
+            model="gemini-2.5-flash", contents=query
+        )
+        return response.text if response else None
+    except Exception as e:
+        log.error("Error getting response from Google Gemini: %s", e)
+        return None

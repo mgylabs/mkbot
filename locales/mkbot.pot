@@ -357,7 +357,7 @@ msgstr ""
 msgid "Lucky Pick"
 msgstr ""
 
-msgid "MK Bot can make mistakes. So double-check its responses."
+msgid "MK Bot uses AI. Check for mistakes."
 msgstr ""
 
 #, docstring

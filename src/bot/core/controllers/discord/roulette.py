@@ -134,11 +134,11 @@ class RouletteView(discord.ui.LayoutView):
 
         footer = discord.ui.TextDisplay(
             "-# "
-            + __("MK Bot can make mistakes. So double-check its responses.")
+            + __("MK Bot uses AI. Check for mistakes.")
             + (
                 (
                     " "
-                    + "[{0}](https://discord.gg/XmANDWp7Na)".format(
+                    + "[{0}](https://discord.gg/3RpDwjJCeZ)".format(
                         __("Give Feedback ▷")
                     )
                 )
