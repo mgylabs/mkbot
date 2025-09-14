@@ -37,22 +37,57 @@ def is_discord_special_string(s: str) -> bool:
     return any(re.match(pattern, s) for pattern in patterns)
 
 
+class OracleCandyButton(discord.ui.Button["RouletteView"]):
+    def __init__(self, label, emoji=None, enabled=False):
+        super().__init__(
+            label=label,
+            style=discord.ButtonStyle.secondary,
+            emoji=emoji,
+        )
+        self.disabled = not enabled
+        self.buttons = None
+
+    def add_buttons(self, buttons: list[OracleActionButton]):
+        self.buttons = buttons
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        if interaction.user != self.view.ctx.author:
+            await interaction.response.send_message(
+                __("You are not authorized to use this button."), ephemeral=True
+            )
+            return
+
+        self.label = "Generating..."
+        self.emoji = Emoji.generating
+
+        await interaction.response.edit_message(view=self.view)
+        await self.view.add_oracle_button(self.buttons)
+
+        DiscordEventLogEntry.Add(self.view.ctx, "RouletteCandyButtonClick")
+
+
 class OracleActionButton(discord.ui.Button["RouletteView"]):
     def __init__(
         self,
         label: str,
         result: str = "",
         comment: str = "",
-        enbled: bool = True,
+        enabled: bool = True,
         emoji: str = None,
     ):
         super().__init__(label=label, style=discord.ButtonStyle.secondary, emoji=emoji)
         self.label = label
         self.result = result
         self.comment = comment
-        self.disabled = not enbled
+        self.disabled = not enabled
 
     async def callback(self, interaction: discord.Interaction) -> None:
+        if interaction.user != self.view.ctx.author:
+            await interaction.response.send_message(
+                __("You are not authorized to use this button."), ephemeral=True
+            )
+            return
+
         self.style = discord.ButtonStyle.primary
         self.view.disable_all_buttons_in_rows()
         await interaction.response.edit_message(view=self.view)
@@ -105,10 +140,10 @@ class RouletteView(discord.ui.LayoutView):
         self.container.add_item(self.choices)
 
         self.row = discord.ui.ActionRow()
-        self.candy_button = OracleActionButton(
-            __("Candy?"),
-            enbled=False,
-            emoji="🍬",
+        self.candy_button = OracleCandyButton(
+            label=__("How do you feel?"),
+            emoji="💬",
+            enabled=False,
         )
         self.row.add_item(self.candy_button)
         self.oracle_msg = discord.ui.TextDisplay(
@@ -212,13 +247,15 @@ class RouletteView(discord.ui.LayoutView):
         self.header.content = f"## Roulette\n{title}"
         await self.edit_message()
 
+    async def enable_candy_button(self, buttons: list[OracleActionButton]):
+        if buttons:
+            self.candy_button.disabled = False
+            self.candy_button.label = __("Candy?")
+            self.candy_button.emoji = "🍬"
+            self.candy_button.add_buttons(buttons)
+            await self.edit_message()
+
     async def add_oracle_button(self, buttons: list[OracleActionButton]) -> None:
-
-        self.candy_button.label = "Generating..."
-        self.candy_button.emoji = Emoji.generating
-
-        await self.edit_message()
-
         await asyncio.sleep(1)
 
         self.row.clear_items()
@@ -334,7 +371,7 @@ async def roulette(ctx: commands.Context, *, items: str):
             await view.update_title_and_choices(title, item_ls)
 
             await view.update_result(f':dart: {__("Lucky Pick")}', result, ai_comment)
-            await view.add_oracle_button(
+            await view.enable_candy_button(
                 [
                     OracleActionButton(
                         button["button"], button["result"], button["comment"]
@@ -342,6 +379,7 @@ async def roulette(ctx: commands.Context, *, items: str):
                     for button in alternatives
                 ]
             )
+
             DiscordEventLogEntry.Add(
                 ctx,
                 "RouletteResult",

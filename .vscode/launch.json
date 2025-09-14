@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "Python: mkbot.py",
-      "type": "python",
+      "type": "debugpy",
       "request": "attach",
       "listen": {
         "host": "127.0.0.1",
@@ -30,7 +30,7 @@
     // },
     {
       "name": "Python: main.py",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/src/bot/main.py",
       "console": "integratedTerminal",
@@ -42,13 +42,13 @@
     },
     {
       "name": "Python: Attach using Process Id",
-      "type": "python",
+      "type": "debugpy",
       "request": "attach",
       "processId": "${command:pickProcess}"
     },
     {
       "name": "Python: Current File",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
