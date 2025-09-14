@@ -23,13 +23,14 @@ log = logger.get_logger(__name__)
 
 sleeper = Sleeper()
 
-clock_emoji = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"]
+# clock_emoji = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"]
+time_emoji = ["😴", "☀️", "🌤️", "🌙"]
 
 
 def get_clock_content(tz, offset):
     d = datetime.now(pytz.utc).astimezone(tz)
     ct = d.strftime("%I:%M %p")
-    return f"{clock_emoji[d.hour%12]} {ct} ({offset})"
+    return f"{time_emoji[d.hour // 6]} {ct} ({offset})"
 
 
 @database.using_database
