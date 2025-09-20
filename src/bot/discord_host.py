@@ -609,22 +609,28 @@ async def create_bot(return_error_level=False):
     async def usage():
         usage_helper()
 
-    for i in discord_extensions:
+    async def loading_extensions_task(extension_name):
+        nonlocal errorlevel
         try:
-            await bot.load_extension(i)
+            await bot.load_extension(extension_name)
         except Exception:
             traceback.print_exc()
-            if i != "core.install":
+            if extension_name != "core.install":
                 errorlevel += 1
 
-    try:
-        exts = api.get_enabled_extensions()
-        for i in exts:
-            sys.path.append(f"{api.extensions_path}/{i[0]}")
-            if i[1]:
-                await bot.load_extension(i[1])
-    except Exception:
-        traceback.print_exc()
+    asyncio.gather(*[loading_extensions_task(ext) for ext in discord_extensions])
+
+    async def loading_api_extension(ext):
+        try:
+            sys.path.append(f"{api.extensions_path}/{ext[0]}")
+            if ext[1]:
+                await bot.load_extension(ext[1])
+        except Exception:
+            traceback.print_exc()
+
+    asyncio.gather(
+        *[loading_api_extension(ext) for ext in api.get_enabled_extensions()]
+    )
 
     flag_checker.start()
     usage.start()
