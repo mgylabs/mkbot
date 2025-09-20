@@ -2,6 +2,7 @@ import contextvars
 import gettext
 from typing import Callable
 
+from discord.app_commands import locale_str
 from discord.ext import commands
 
 from mgylabs.utils import logger
@@ -84,6 +85,15 @@ class I18nExtension:
         return t.gettext(message)
 
     @classmethod
+    def namespaced_gettext(cls, message: str, locale=None, fallback=True):
+        t = cls.get_translation(locale, fallback)  # @IgnoreException
+
+        text = t.gettext(message)
+        namespace, translated = text.split("|", 1)
+
+        return translated
+
+    @classmethod
     def get_contextual_translation(cls, fallback=True):
         i18n = cls.default_i18n_instance
 
@@ -110,3 +120,22 @@ class I18nExtension:
     def contextual_ngettext(cls, msgid1: str, msgid2: str, n: int):
         t = cls.get_contextual_translation()
         return t.ngettext(msgid1, msgid2, n)
+
+    @classmethod
+    def contextual_namespaced_gettext(cls, message: str):
+        t = cls.get_contextual_translation()
+
+        text = t.gettext(message)
+        namespace, translated = text.split("|", 1)
+
+        return translated
+
+
+class NamespacedLocaleStr(locale_str):
+    def __init__(self, message: str, **kwargs):
+        super().__init__(message, **kwargs)
+
+    @property
+    def message(self) -> str:
+        namespace, msg = super().message.split("|", 1)
+        return msg

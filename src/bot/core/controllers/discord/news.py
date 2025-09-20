@@ -53,20 +53,24 @@ class SearchResult:
     async def fetch_content(self):
         headers = {"User-Agent": get_useragent()}
 
-        async with aiohttp.ClientSession(
-            headers=headers, raise_for_status=False
-        ) as session:
-            async with session.get(self.url) as response:
-                if response.status == 200:
-                    text = await response.text()
-                    soup = BeautifulSoup(text, "lxml")
-                    content_div = soup.find("div", {"class": "_article_body"})
-                    if content_div:
-                        self.content = content_div.get_text(strip=True)
+        try:
+            async with aiohttp.ClientSession(
+                headers=headers, raise_for_status=False
+            ) as session:
+                async with session.get(self.url) as response:
+                    if response.status == 200:
+                        text = await response.text()
+                        soup = BeautifulSoup(text, "lxml")
+                        content_div = soup.find("div", {"class": "_article_body"})
+                        if content_div:
+                            self.content = content_div.get_text(strip=True)
+                        else:
+                            self.content = None
                     else:
                         self.content = None
-                else:
-                    self.content = None
+        except Exception as e:
+            log.error(f"Error fetching content from {self.url}: {e}")
+            self.content = None
 
     def __repr__(self):
         return f"SearchResult(url={self.url}, title={self.title}, description={self.description}, press={self.press})"

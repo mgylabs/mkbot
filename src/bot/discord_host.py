@@ -60,7 +60,7 @@ from discord_ext import discord_extensions
 from mgylabs.db import database
 from mgylabs.db.database import run_migrations
 from mgylabs.db.paths import DB_URL, SCRIPT_DIR
-from mgylabs.i18n import __
+from mgylabs.i18n import __, s_locale_str
 from mgylabs.i18n.extension import I18nExtension
 from mgylabs.i18n.utils import get_user_locale_code, init_user_locale
 from mgylabs.services.telemetry_service import TelemetryReporter
@@ -143,8 +143,17 @@ class MKBotTranslator(Translator):
     async def translate(
         self, string: locale_str, locale: Locale, context: TranslationContextTypes
     ):
+        result = None
+
         try:
-            result = i18n.gettext(str(string), locale.value, False)  # @IgnoreException
+            if isinstance(string, s_locale_str):
+                result = i18n.namespaced_gettext(
+                    str(string), locale.value, False
+                )  # @IgnoreException
+            elif isinstance(string, locale_str):
+                result = i18n.gettext(
+                    str(string), locale.value, False
+                )  # @IgnoreException
         except Exception:
             result = None
 
