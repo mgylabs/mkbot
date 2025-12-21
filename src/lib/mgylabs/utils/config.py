@@ -49,6 +49,7 @@ class SettingItem:
 class Settings:
     discordToken = SettingItem("Your Token")
     discordAppCmdGuilds = SettingItem([])
+    disabledMsgCmdGuilds = SettingItem([])
     kakaoToken = SettingItem("Your Token")
     commandPrefix = SettingItem(".")
     messageColor = SettingItem("#FAA61A")

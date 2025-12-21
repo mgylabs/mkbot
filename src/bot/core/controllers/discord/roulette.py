@@ -59,6 +59,7 @@ class OracleCandyButton(discord.ui.Button["RouletteView"]):
 
         self.label = "Generating..."
         self.emoji = Emoji.generating
+        self.disabled = True
 
         await interaction.response.edit_message(view=self.view)
         await self.view.add_oracle_button(self.buttons)
@@ -391,6 +392,8 @@ async def roulette(ctx: commands.Context, *, items: str):
             )
 
             return
+        else:
+            await msg.delete()
 
     item_ls = shlex.split(items)
     result = random.choice(item_ls)

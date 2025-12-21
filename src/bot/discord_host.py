@@ -389,7 +389,12 @@ async def create_bot(return_error_level=False):
         if message.author == bot.user:
             return
 
-        if (message.channel.type.value == 1) and (CONFIG.disabledPrivateChannel):
+        if (message.channel.type == discord.ChannelType.private) and (
+            CONFIG.disabledPrivateChannel
+        ):
+            return
+
+        if message.guild and str(message.guild.id) in CONFIG.disabledMsgCmdGuilds:
             return
 
         ctx: commands.Context = await bot.get_context(message)
